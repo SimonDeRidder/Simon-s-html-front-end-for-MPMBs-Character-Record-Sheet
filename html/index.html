@@ -6,31 +6,80 @@
 <link rel="stylesheet" href="base.min.css"/>
 <link rel="stylesheet" href="fancy.min.css"/>
 <link rel="stylesheet" href="style.css"/>
-<script src="compatibility.min.js"></script>
-<script src="pdf2htmlEX.min.js"></script>
+<link rel="stylesheet" href="style2.css"/>
 <script>
-try{
-pdf2htmlEX.defaultViewer = new pdf2htmlEX.Viewer({});
-}catch(e){}
+    function includePage() {
+        var z, i, elmnt, file, xhttp;
+        z = document.getElementsByClassName("page");
+        for (i = 0; i < z.length; i++) {
+            elmnt = z[i];
+            file = elmnt.getAttribute("page-url");
+            if (file) {
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4) {
+                        if (this.status == 200) {
+                            elmnt.innerHTML = this.responseText;
+                        }
+                        if (this.status == 404) {
+                            elmnt.innerHTML = "Page not found.";
+                        }
+                        elmnt.removeAttribute("page-url");
+                        includePage();
+                    }
+                }
+                xhttp.open("GET", file, true);
+                xhttp.send();
+                return;
+            }
+        }
+    }
 </script>
-<title></title>
+<title>Character Sheet</title>
 </head>
 <body>
-<div id="sidebar">
-<div id="outline">
-</div>
-</div>
-<div id="page-container">
-<div id="pf1" class="pf w0 h0" data-page-no="1" data-page-url="page_stats.html"></div>
-<div id="pf2" class="pf w0 h0" data-page-no="2" data-page-url="page_features_equipment.html"></div>
-<div id="pf3" class="pf w0 h0" data-page-no="3" data-page-url="page_notes_feats.html"></div>
-<div id="pf4" class="pf w0 h0" data-page-no="4" data-page-url="page_appearance_background.html"></div>
-<div id="pf5" class="pf w0 h0" data-page-no="5" data-page-url="page_companion.html"></div>
-<div id="pf6" class="pf w0 h0" data-page-no="6" data-page-url="page_notes.html"></div>
-<div id="pf7" class="pf w27 h3a" data-page-no="7" data-page-url="page_reference.html"></div>
-</div>
-<div class="loading-indicator">
-<img alt="" src="pdf2htmlEX-64x64.png"/>
-</div>
+    <div id="button-container">
+        <button class="tablink" onclick="openPage('pf1', this)" id="defaultOpen">Stats</button>
+        <button class="tablink" onclick="openPage('pf2', this)">Features & Equipment</button>
+        <button class="tablink" onclick="openPage('pf3', this)">Notes & Feats</button>
+        <button class="tablink" onclick="openPage('pf4', this)">Background</button>
+        <button class="tablink" onclick="openPage('pf5', this)">Companion</button>
+        <button class="tablink" onclick="openPage('pf6', this)">Notes</button>
+        <button class="tablink" onclick="openPage('pf7', this)">Reference</button>
+    </div>
+    <br style="clear: both;" />
+    <div id="page-wrapper">
+        <div id="pf1" class="page" page-url="page_1/page_stats.html"></div>
+        <div id="pf2" class="page" page-url="page_features_equipment.html"></div>
+        <div id="pf3" class="page" page-url="page_notes_feats.html"></div>
+        <div id="pf4" class="page" page-url="page_appearance_background.html"></div>
+        <div id="pf5" class="page" page-url="page_companion.html"></div>
+        <div id="pf6" class="page" page-url="page_notes.html"></div>
+        <div id="pf7" class="page" page-url="page_reference.html"></div>
+    </div>
 </body>
+<script>
+    includePage();
+</script>
+<script>
+    function openPage(pageName, elmnt) {
+        // Hide all elements with class="tabcontent" by default */
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("page");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Remove the background color of all tablinks/buttons
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+        document.getElementById(pageName).style.display = "block";
+        elmnt.style.backgroundColor = "#ddd";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
 </html>

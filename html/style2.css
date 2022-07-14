@@ -77,7 +77,7 @@
 	position: absolute;
 	border: none;
 	background: none;
-	font-size: 9.6px;
+	font-size: 9.7px;
 	font-weight: bold;
 	text-align: center;
 	line-height: 9.3px;
@@ -97,8 +97,11 @@
 	border-width: 3px;
 	color: white;
 	background-color: #a8a8a8;
-	font-size: 8.25px;
+	font-size: 8px;
+	line-height: 7px;
 	padding: 0px;
+	cursor: pointer;
+	z-index: 2;
 }
 
 .inputfield {
@@ -110,6 +113,7 @@
 	color: var(--black);
 	font-family: sans-serif;
 	overflow: hidden;
+	resize: none;
 }
 
 .inputfield-notched {

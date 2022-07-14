@@ -1,7 +1,7 @@
 
 # %%
 
-with open("page_1/bg_stats.svg", 'rt') as f:
+with open("page_1/bg_inspiration.svg", 'rt') as f:
     lines_to_delete = f.readlines()
 
 # %%

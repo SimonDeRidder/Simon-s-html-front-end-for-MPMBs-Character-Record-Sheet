@@ -1,6 +1,6 @@
 <div class="page-container">
 
-
+<!--TODO: tooltips for buttons-->
 	<button class="button" style="right: 4px; top: 3px;">Show extra features</button><!-- TODO: connect -->
 
 
@@ -118,41 +118,105 @@
 	<div id="character_stats" class="pane" style="top: 195px;left: 323px;width: 300px;height: 308px;">
 		<img class="pane-bg" alt="" src="page_1/bg_stats.svg" style="width: 288px;left: 7px;top: 0.5px;height: 302px;">
 
-		<span class="textlabel-bold" style="top: 64px;left: 27.6px;width: 51px">MAXIMUM HIT POINTS</span>
+		<span class="textlabel-bold" style="top: 64px;left: 27.1px;width: 52px;">MAXIMUM HIT POINTS</span>
 		<span class="textlabel-bold" style="top: 64px;left: 123.0px;width: 62px">PROFICIENCY BONUS</span>
 		<span class="textlabel-bold" style="top: 64px;left: 233.7px;width: 36px">ARMOR CLASS</span>
+		<span class="textlabel-dimmed" style="top: 115.4px;left: 26.6px;font-size: 10.5px;">Temporary Hit Points:</span>
+		<span class="textlabel-bold" style="top: 170px;left: 13.8px;width: 188.7px">CURRENT HIT POINTS</span>
+		<span class="textlabel-bold" style="top: 170px;left: 209.22px;width: 78.8px">INITIATIVE</span>
+		<span class="textlabel" style="top: 203.2px;left: 13.8px;width: 78.4px;text-align: center;font-size: 8.7px">SUCCESSES</span>
+		<span class="textlabel" style="top: 250.7px;left: 13.8px;width: 78.4px;text-align: center;font-size: 8.7px">FAILURES</span>
+		<span class="textlabel-bold" style="top: 265.3px;left: 27.1px;width: 52px">DEATH SAVES</span>
+		<span class="textlabel-dimmed" style="top: 201.5px;left: 110.0px;font-size: 8px">LEVEL</span>
+		<span class="textlabel-dimmed" style="top: 201.5px;left: 144.9px;font-size: 8px">DIE</span>
+		<span class="textlabel-dimmed" style="top: 201.5px;left: 171.0px;font-size: 8px">USED</span>
+		<span class="textlabel-bold" style="top: 274.2px;left: 130.8px;width: 40px">HIT DICE</span>
+		<span class="textlabel-dimmed" style="top: 201.5px;left: 221.9px;font-size: 8px">ENCUMBERED</span>
+		<span class="textlabel-bold" style="top: 274.4px;left: 233.7px;width: 30px">SPEED</span>
+
+		<button class="button" style="left: 29px;top: 27.5px;font-size: 8px;line-height: 7px;"
+			aria-label="With this button you can set the value of the maximum hit points field to one of the calculated values:"
+			>
+			Set Max HP
+		</button><!-- TODO: connect -->
+		<button class="button" style="top: 170px;left: 170px;font-size: 8px;line-height: 7px;">Heal</button><!-- TODO: connect -->
+
+		<input id="character_stats_maximum_hit_points" class="inputfield" style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0;background-color: transparent" type="number"><!-- TODO: add change listener -->
+		<input id="character_stats_proficiency_bonus" class="inputfield" style="top: 37px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;text-align: center;padding: 0 0 0 0;background-color: transparent" type="number"><!-- TODO: add change listener -->
+		<input id="character_stats_armor_class" class="inputfield" style="top: 37px;left: 222px;font-size: 28px;width: 59.5px;height: 27px;text-align: center;padding: 0 0 0 0;background-color: transparent" type="number"><!-- TODO: add change listener -->
+
+		<input id="character_stats_temporary_hit_points" class="inputfield" style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0;" type="number"><!-- TODO: add change listener -->
+		<textarea id="character_stats_hit_points" class="inputfield" style="top: 132px;left: 26px;font-size: 14px;width: 160px;height: 35px;padding-top: 1px;"></textarea><!-- TODO: add change listener -->
+		<input id="character_stats_initiative" class="inputfield" style="top: 132px;left: 215.3px;font-size: 28px;width: 66.8px;height: 27px;text-align: center;padding: 0 0 0 0;background-color: transparent;" type="number"><!-- TODO: add change listener -->
+
+		<input id="character_stats_death_save_success_1" class="checkcircle" type="checkbox" style="top: 211.1px;left: 22.8px;width: 14px;height: 14px;">
+		<input id="character_stats_death_save_success_2" class="checkcircle" type="checkbox" style="top: 211.1px;left: 42.1px;width: 14px;height: 14px;">
+		<input id="character_stats_death_save_success_3" class="checkcircle" type="checkbox" style="top: 211.1px;left: 61.4px;width: 14px;height: 14px;">
+		<input id="character_stats_death_save_failure_1" class="checkcircle" type="checkbox" style="top: 232.2px;left: 22.8px;width: 14px;height: 14px;">
+		<input id="character_stats_death_save_failure_2" class="checkcircle" type="checkbox" style="top: 232.2px;left: 42.1px;width: 14px;height: 14px;">
+		<input id="character_stats_death_save_failure_3" class="checkcircle" type="checkbox" style="top: 232.2px;left: 61.4px;width: 14px;height: 14px;">
+
+		<!--TODO: fix clip-path-->
+		<input id="character_stats_hit_dice_1_level" class="inputfield-notched" style="top: 211px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
+		<input id="character_stats_hit_dice_1_die" class="inputfield-notched" style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
+		<input id="character_stats_hit_dice_1_used" class="inputfield-notched" style="top: 211px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
+		<input id="character_stats_hit_dice_2_level" class="inputfield-notched" style="top: 230px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
+		<input id="character_stats_hit_dice_2_die" class="inputfield-notched" style="top: 230px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
+		<input id="character_stats_hit_dice_2_used" class="inputfield-notched" style="top: 230px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
+		<input id="character_stats_hit_dice_3_level" class="inputfield-notched" style="top: 249px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
+		<input id="character_stats_hit_dice_3_die" class="inputfield-notched" style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
+		<input id="character_stats_hit_dice_3_used" class="inputfield-notched" style="top: 249px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
+
+		<input id="character_stats_encumbered_speed" class="inputfield" style="top: 211px;left: 215.2px;font-size: 10px;width: 66.7px;height: 12px;text-align: center;padding: 0 0 0 0" type="text">
+		<input id="character_stats_speed" class="inputfield" style="top: 225px;left: 215.2px;font-size: 20px;width: 66.7px;height: 50px;text-align: center;padding: 0 0 0 0" type="text">
 	</div>
 
 
+	<div id="character_armor" class="pane" style="top: 195px;left: 623px;width: 240px;height: 164px;">
+		<img class="pane-bg" alt="" src="page_1/bg_armor.svg" style="width: 224.3px;left: 8.5px;top: 1.4px;height: 155.28px;">
+
+		<span class="textlabel-dimmed" style="top: 9.5px;left: 23.9px;font-size: 8px">AC</span>
+		<span class="textlabel-dimmed" style="top: 9.5px;left: 85.8px;font-size: 8px">DESCRIPTION</span>
+		<span class="textlabel" style="top: 21.5px;left: 47px;font-size: 11.1px">Armor</span>
+		<span class="textlabel" style="top: 41.0px;left: 47px;font-size: 11.1px">Shield</span>
+		<span class="textlabel" style="top: 60.5px;left: 47px;font-size: 11.1px">Dex</span>
+		<span class="textlabel" style="top: 80.0px;left: 47px;font-size: 11.1px">Magic</span>
+		<span class="textlabel" style="top: 99.5px;left: 47px;font-size: 11.1px">Misc.</span>
+		<span class="textlabel" style="top: 119.0px;left: 47px;font-size: 11.1px">Misc.</span>
+		<span class="textlabel" style="top: 61.7px;left: 94.1px;font-size: 9.1px">Medium Armor</span>
+		<span class="textlabel" style="top: 61.7px;left: 170.5px;font-size: 9.1px">Heavy Armor</span>
+		<span class="textlabel-bold" style="top: 140.7px;left: 14.4px;width: 211.7px">ARMOR</span>
+
+		<input id="character_armor_ac_armor" class="inputfield-notched" style="top: 20px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="character_armor_ac_shield" class="inputfield-notched" style="top: 39.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="character_armor_ac_dex" class="inputfield-notched" style="top: 59.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="character_armor_ac_magic" class="inputfield-notched" style="top: 78.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="character_armor_ac_misc1" class="inputfield-notched" style="top: 98.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="character_armor_ac_misc2" class="inputfield-notched" style="top: 117.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+
+		<input id="character_armor_type" class="inputfield" list="armor_type_options" style="top: 20px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+			<datalist id="armor_type_options">
+				<option value="Leather">
+			</datalist>
+		<input id="character_armor_shield" class="inputfield"style="top: 39.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+		<input id="character_armor_medium" class="checkcircle" type="checkbox" style="top: 59px;left: 78.6px;">
+		<input id="character_armor_heavy" class="checkcircle" type="checkbox" style="top: 59px;left: 154.9px;">
+		<input id="character_armor_magic" class="inputfield"style="top: 78.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+		<input id="character_armor_misc1" class="inputfield"style="top: 98.0px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+		<input id="character_armor_misc2" class="inputfield"style="top: 117.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+	</div>
+
+
+	<div id="character_inspiration" class="pane" style="top: 359px;left: 623px;width: 240px;height: 51px;">
+		<img class="pane-bg" alt="" src="page_1/bg_inspiration.svg" style="width: 225.1px;left: 7.7px;top: 5.5px;">
+
+		<span class="textlabel-bold" style="top: 40.7px;left: 14.4px;width: 211.7px;color:red">INSPIRATION</span>
+	</div>
+
 	<img class="bf" alt="" src="page_1/bg_other.svg" />
-	<div class="t m0 x4 h2 y5 ff2 fs1 fc1 sc0 ls0 ws0">A<span class="_ _1"></span>C<span class="_ _3"> </span><span
-				class="ls1 ws1">DESCRIPTION</span></div>
-	<div class="t m0 x6 h1 y7 ff2 fs0 fc0 sc0 ls2 ws2">Armor</div>
-	<div class="t m0 x6 h1 ya ff2 fs0 fc0 sc0 ls2 ws2">Shield</div>
-	<div class="t m0 x6 h1 yd ff2 fs0 fc0 sc0 ls2 ws2">Dex</div>
-	<div class="t m0 x9 h4 ye ff2 fs3 fc0 sc0 ls4 ws0">Medium Armor<span class="_ _9"> </span>Heavy Armor</div>
-	<div class="t m0 x6 h1 y11 ff2 fs0 fc0 sc0 ls2 ws2">Magic</div>
-	<div class="t m0 x6 h1 y12 ff2 fs0 fc0 sc0 ls2 ws2">Misc</div>
-	<div class="t m0 xc h1 y13 ff2 fs0 fc1 sc0 ls0 ws0" style="z-index: 2;"><span class="fc9 sc0">Temporary Hit Points:</span><span
-				class="fc2"><span class="fc9 sc0"> </span></span></div>
-	<div class="t m0 x6 h1 y14 ff2 fs0 fc0 sc0 ls2 ws2">Misc</div>
-	<div class="t m0 xd h3 y16 ff3 fs2 fc0 sc0 ls0 ws0">ARMOR</div>
-	<div class="t m0 xe h3 y17 ff3 fs2 fc0 sc0 ls0 ws0" style="z-index: 2;"><span class="fc9 sc0">CURRENT HIT POINTS</span><span
-				class="_ _c"> </span><span class="fc9 sc0">INITIATIVE</span></div>
-	<div class="t m0 xe h3 y17 ff3 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">CURRENT HIT POINTS</span><span
-				class="_ _c"> </span><span class="fc9 sc0">INITIATIVE</span></div>
 	<div class="t m0 xf h3 y18 ff3 fs2 fc0 sc0 ls0 ws0">INSPIRA<span class="_ _1"></span>TION</div>
-	<div class="t m0 x10 h2 y19 ff2 fs1 fc0 sc0 ls0 ws0" style="z-index: 2;"><span class="fc9 sc0">SUCCESSES</span></div>
-	<div class="t m0 x11 h2 y1a ff2 fs1 fc1 sc0 ls1 ws1" style="z-index: 2;"><span class="fc9 sc0">LEVEL</span><span class="_ _d">
-		</span><span class="fc9 sc0">DIE</span><span class="_ _d"> </span><span class="fc9 sc0">USED</span><span
-				class="_ _e"> </span><span class="fc9 sc0">ENCUMBERED</span></div>
 	<div class="t m0 x12 h5 y1b ff3 fs1 fc0 sc0 ls0 ws0">ABILITY</div>
 	<div class="t m0 x12 h5 y1c ff3 fs1 fc0 sc0 ls0 ws0">SAVE DC</div>
-	<div class="t m0 x15 h2 y1f ff2 fs1 fc0 sc0 ls0 ws0" style="z-index: 2;"><span class="fc9 sc0">F</span><span class="fc9 sc0">AILURES</span></div>
-	<div class="t m0 x16 h3 y20 ff3 fs2 fc0 sc0 ls0 ws0" style="z-index: 2;">DEATH</div>
-	<div class="t m0 x17 h3 y21 ff3 fs2 fc0 sc0 ls0 ws0" style="z-index: 2;">SAVES</div>
-	<div class="t m0 x18 h3 y22 ff3 fs2 fc0 sc0 ls0 ws0" style="z-index: 2;">HIT DICE</div>
-	<div class="t m0 x19 h3 y21 ff3 fs2 fc0 sc0 ls0 ws0" style="z-index: 2;">SPEED</div>
 	<div class="t m0 x1a h2 y23 ff2 fs1 fc0 sc0 ls0 ws0">ARMOR</div>
 	<div class="t m0 x2 h1 y24 ff2 fs0 fc0 sc0 ls2 ws2">Light<span class="_ _f"> </span>Medium<span class="_ _f">
 		</span>Heavy<span class="_ _f"> </span>Shields</div>
@@ -232,13 +296,6 @@
 	</div>
 	<div class="c xa y75 w6 h14">
 		<div class="t m0 x2d h1 y76 ff4 fs0 fc5 sc0 ls0 ws0">Tool</div>
-	</div>
-	<div class="c x8 y77 w7 h11">
-		<div class="t m0 x2d h4 y46 ff4 fs3 fc3 sc0 ls0 ws0"><span class="fc9 sc0">Set </span><span
-					class="fc9 sc0">Max </span><span class="fc9 sc0">HP</span></div>
-	</div>
-	<div class="c x33 y78 w8 h11">
-		<div class="t m0 x2d h4 y46 ff4 fs3 fc3 sc0 ls0 ws0"><span class="fc9 sc0">Heal</span></div>
 	</div>
 	<div class="c x34 y79 w9 h14">
 		<div class="t m0 x2d h15 y4d ff6 fs10 fc5 sc0 ls0 ws0"> Common </div>

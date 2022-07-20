@@ -9,7 +9,13 @@
 
 @font-face {
 	font-family: scala-sans;
-	src: url('Scala_SansRegular_LF.ttf');
+	src: url('fonts/Scala_Sans_Regular_LF.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: scala-sans;
+	font-weight: bold;
+	src: url('fonts/Scala_Sans_Bold_LF.woff2') format('woff2');
 }
 
 /* index styles */

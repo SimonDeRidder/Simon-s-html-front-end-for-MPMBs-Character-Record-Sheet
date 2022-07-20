@@ -4,47 +4,8 @@
 }
 
 @font-face {
-    font-family: ff1;
-    src: url(f1.woff)format("woff");
-}
-
-.ff1 {
-    font-family: ff1;
-    line-height: 1.124000;
-    font-style: normal;
-    font-weight: normal;
-    visibility: visible;
-}
-
-@font-face {
-    font-family: ff2;
-    src: url(f2.woff)format("woff");
-}
-
-.ff2 {
-    font-family: ff2;
-    line-height: 1.124000;
-    font-style: normal;
-    font-weight: normal;
-    visibility: visible;
-}
-
-@font-face {
-    font-family: ff3;
-    src: url(f3.woff)format("woff");
-}
-
-.ff3 {
-    font-family: ff3;
-    line-height: 1.129000;
-    font-style: normal;
-    font-weight: normal;
-    visibility: visible;
-}
-
-@font-face {
     font-family: ff4;
-    src: url(f4.woff)format("woff");
+    src: url("fonts/f4.woff")format("woff");
 }
 
 .ff4 {
@@ -57,7 +18,7 @@
 
 @font-face {
     font-family: ff5;
-    src: url(f5.woff)format("woff");
+    src: url("fonts/f5.woff")format("woff");
 }
 
 .ff5 {
@@ -70,7 +31,7 @@
 
 @font-face {
     font-family: ff6;
-    src: url(f6.woff)format("woff");
+    src: url("fonts/f6.woff")format("woff");
 }
 
 .ff6 {
@@ -83,7 +44,7 @@
 
 @font-face {
     font-family: ff7;
-    src: url(f7.woff)format("woff");
+    src: url("fonts/f7.woff")format("woff");
 }
 
 .ff7 {
@@ -95,47 +56,8 @@
 }
 
 @font-face {
-    font-family: ff8;
-    src: url(f8.woff)format("woff");
-}
-
-.ff8 {
-    font-family: ff8;
-    line-height: 1.103516;
-    font-style: normal;
-    font-weight: normal;
-    visibility: visible;
-}
-
-@font-face {
-    font-family: ff9;
-    src: url(f9.woff)format("woff");
-}
-
-.ff9 {
-    font-family: ff9;
-    line-height: 1.103516;
-    font-style: normal;
-    font-weight: normal;
-    visibility: visible;
-}
-
-@font-face {
-    font-family: ffa;
-    src: url(fa.woff)format("woff");
-}
-
-.ffa {
-    font-family: ffa;
-    line-height: 0.895996;
-    font-style: normal;
-    font-weight: normal;
-    visibility: visible;
-}
-
-@font-face {
     font-family: ffb;
-    src: url(fb.woff)format("woff");
+    src: url("fonts/fb.woff")format("woff");
 }
 
 .ffb {
@@ -148,7 +70,7 @@
 
 @font-face {
     font-family: ffc;
-    src: url(fc.woff)format("woff");
+    src: url("fonts/fc.woff")format("woff");
 }
 
 .ffc {
@@ -161,7 +83,7 @@
 
 @font-face {
     font-family: ffd;
-    src: url(fd.woff)format("woff");
+    src: url("fonts/fd.woff")format("woff");
 }
 
 .ffd {
@@ -174,7 +96,7 @@
 
 @font-face {
     font-family: ffe;
-    src: url(fe.woff)format("woff");
+    src: url("fonts/fe.woff")format("woff");
 }
 
 .ffe {
@@ -187,7 +109,7 @@
 
 @font-face {
     font-family: fff;
-    src: url(ff.woff)format("woff");
+    src: url("fonts/ff.woff")format("woff");
 }
 
 .fff {
@@ -200,7 +122,7 @@
 
 @font-face {
     font-family: ff10;
-    src: url(f10.woff)format("woff");
+    src: url("fonts/f10.woff")format("woff");
 }
 
 .ff10 {
@@ -213,7 +135,7 @@
 
 @font-face {
     font-family: ff11;
-    src: url(f11.woff)format("woff");
+    src: url("fonts/f11.woff")format("woff");
 }
 
 .ff11 {
@@ -226,7 +148,7 @@
 
 @font-face {
     font-family: ff12;
-    src: url(f12.woff)format("woff");
+    src: url("fonts/f12.woff")format("woff");
 }
 
 .ff12 {
@@ -239,7 +161,7 @@
 
 @font-face {
     font-family: ff13;
-    src: url(f13.woff)format("woff");
+    src: url("fonts/f13.woff")format("woff");
 }
 
 .ff13 {
@@ -252,7 +174,7 @@
 
 @font-face {
     font-family: ff14;
-    src: url(f14.woff)format("woff");
+    src: url("fonts/f14.woff")format("woff");
 }
 
 .ff14 {
@@ -265,7 +187,7 @@
 
 @font-face {
     font-family: ff15;
-    src: url(f15.woff)format("woff");
+    src: url("fonts/f15.woff")format("woff");
 }
 
 .ff15 {
@@ -278,7 +200,7 @@
 
 @font-face {
     font-family: ff16;
-    src: url(f16.woff)format("woff");
+    src: url("fonts/f16.woff")format("woff");
 }
 
 .ff16 {
@@ -291,7 +213,7 @@
 
 @font-face {
     font-family: ff17;
-    src: url(f17.woff)format("woff");
+    src: url("fonts/f17.woff")format("woff");
 }
 
 .ff17 {
@@ -304,7 +226,7 @@
 
 @font-face {
     font-family: ff18;
-    src: url(f18.woff)format("woff");
+    src: url("fonts/f18.woff")format("woff");
 }
 
 .ff18 {
@@ -317,7 +239,7 @@
 
 @font-face {
     font-family: ff19;
-    src: url(f19.woff)format("woff");
+    src: url("fonts/f19.woff")format("woff");
 }
 
 .ff19 {
@@ -330,7 +252,7 @@
 
 @font-face {
     font-family: ff1a;
-    src: url(f1a.woff)format("woff");
+    src: url("fonts/f1a.woff")format("woff");
 }
 
 .ff1a {
@@ -343,7 +265,7 @@
 
 @font-face {
     font-family: ff1b;
-    src: url(f1b.woff)format("woff");
+    src: url("fonts/f1b.woff")format("woff");
 }
 
 .ff1b {
@@ -356,7 +278,7 @@
 
 @font-face {
     font-family: ff1c;
-    src: url(f1c.woff)format("woff");
+    src: url("fonts/f1c.woff")format("woff");
 }
 
 .ff1c {
@@ -369,7 +291,7 @@
 
 @font-face {
     font-family: ff1d;
-    src: url(f1d.woff)format("woff");
+    src: url("fonts/f1d.woff")format("woff");
 }
 
 .ff1d {
@@ -382,7 +304,7 @@
 
 @font-face {
     font-family: ff1e;
-    src: url(f1e.woff)format("woff");
+    src: url("fonts/f1e.woff")format("woff");
 }
 
 .ff1e {

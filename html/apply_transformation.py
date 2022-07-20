@@ -3,7 +3,8 @@ import re
 
 import numpy as np
 
-EXTRA_TRANSLATION = (-841.0, -486.0)
+FILE = "page_1/backgrounds/attacks.svg"
+EXTRA_TRANSLATION = (-440.0, -1184.0)
 TRANSFORM_PATTERN = re.compile(
 	r'\s*transform="matrix\(\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*\)"'
 )
@@ -73,8 +74,8 @@ def _transform_path(line: str) -> str:
 	return new_path
 
 
-with open("page_1/bg_inspiration2.svg", 'wt') as outf:
-	with open("page_1/bg_inspiration.svg", 'rt') as inpf:
+with open(FILE.replace('.svg', '2.svg'), 'wt') as outf:
+	with open(FILE, 'rt') as inpf:
 		for line_ in inpf.readlines():
 			new_line = line_
 			if re.match(PATH_PATTERN, line_) or re.match(USE_PATTERN, line_):

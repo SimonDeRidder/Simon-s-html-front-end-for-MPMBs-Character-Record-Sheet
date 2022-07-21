@@ -234,7 +234,7 @@ input[type=number] {
 	width: 10px;
 	height: 30px;
 	background-color: var(--input-background);
-	background-image: url("page_1/ammunition_checkboxes/arrow_unselected.svg");
+	background-image: url("img/page_1/ammunition_checkboxes/arrow_unselected.svg");
 	appearance: none;
 	-webkit-appearance: none;
 	outline: none;
@@ -244,5 +244,5 @@ input[type=number] {
 .pane .checkbox-ammunition-arrow:checked {
 	border: none;
 	background-color: transparent;
-	background-image: url("page_1/ammunition_checkboxes/arrow_selected.svg");
+	background-image: url("img/page_1/ammunition_checkboxes/arrow_selected.svg");
 }

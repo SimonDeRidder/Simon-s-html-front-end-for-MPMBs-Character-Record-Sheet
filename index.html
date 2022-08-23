@@ -5,80 +5,84 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 <link rel="stylesheet" href="base.min.css"/>
 <link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="ps_style.css" />
 <link rel="stylesheet" href="style2.css"/>
 <script>
-    function includePage() {
-        var z, i, elmnt, file, xhttp;
-        z = document.getElementsByClassName("page");
-        for (i = 0; i < z.length; i++) {
-            elmnt = z[i];
-            file = elmnt.getAttribute("page-url");
-            if (file) {
-                xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4) {
-                        if (this.status == 200) {
-                            elmnt.innerHTML = this.responseText;
-                        }
-                        if (this.status == 404) {
-                            elmnt.innerHTML = "Page not found.";
-                        }
-                        elmnt.removeAttribute("page-url");
-                        includePage();
-                    }
-                }
-                xhttp.open("GET", file, true);
-                xhttp.send();
-                return;
-            }
-        }
-    }
+	function includePage() {
+		var z, i, elmnt, file, xhttp;
+		z = document.getElementsByClassName("page");
+		for (i = 0; i < z.length; i++) {
+			elmnt = z[i];
+			file = elmnt.getAttribute("page-url");
+			if (file) {
+				xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4) {
+						if (this.status == 200) {
+							elmnt.innerHTML = this.responseText;
+						}
+						if (this.status == 404) {
+							elmnt.innerHTML = "Page not found.";
+						}
+						elmnt.removeAttribute("page-url");
+						includePage();
+					}
+				}
+				xhttp.open("GET", file, true);
+				xhttp.send();
+				return;
+			}
+		}
+	}
 </script>
 <title>Character Sheet</title>
 </head>
 <body>
-    <div id="button-container">
-        <button class="tablink" onclick="openPage('pf1', this)" id="defaultOpen">Stats</button>
-        <button class="tablink" onclick="openPage('pf2', this)">Features & Equipment</button>
-        <button class="tablink" onclick="openPage('pf3', this)">Notes & Feats</button>
-        <button class="tablink" onclick="openPage('pf4', this)">Background</button>
-        <button class="tablink" onclick="openPage('pf5', this)">Companion</button>
-        <button class="tablink" onclick="openPage('pf6', this)">Notes</button>
-        <button class="tablink" onclick="openPage('pf7', this)">Reference</button>
-    </div>
-    <br style="clear: both;" />
-    <div id="page-wrapper">
-        <div id="pf1" class="page" page-url="pages/page_stats.html"></div>
-        <div id="pf2" class="page" page-url="pages/page_features_equipment.html"></div>
-        <div id="pf3" class="page" page-url="pages/page_notes_feats.html"></div>
-        <div id="pf4" class="page" page-url="pages/page_appearance_background.html"></div>
-        <div id="pf5" class="page" page-url="pages/page_companion.html"></div>
-        <div id="pf6" class="page" page-url="pages/page_notes.html"></div>
-        <div id="pf7" class="page" page-url="pages/page_reference.html"></div>
-    </div>
+	<div id="button-container">
+		<button class="tablink" onclick="openPage('pf1', this)" id="defaultOpen">Stats</button>
+		<button class="tablink" onclick="openPage('pf2', this)">Features & Equipment</button>
+		<button class="tablink" onclick="openPage('pf3', this)">Notes & Feats</button>
+		<button class="tablink" onclick="openPage('pf4', this)">Background</button>
+		<button class="tablink" onclick="openPage('pf5', this)">Companion</button>
+		<button class="tablink" onclick="openPage('pf6', this)">Notes</button>
+		<button class="tablink" onclick="openPage('pf7', this)">Spells</button>
+		<button class="tablink" onclick="openPage('pf8', this)">Reference</button>
+	</div>
+	<br style="clear: both;" />
+	<div id="page-wrapper">
+		<div id="pf1" class="page" page-url="pages/page_stats.html"></div>
+		<div id="pf2" class="page" page-url="pages/page_features_equipment.html"></div>
+		<div id="pf3" class="page" page-url="pages/page_notes_feats.html"></div>
+		<div id="pf4" class="page" page-url="pages/page_appearance_background.html"></div>
+		<div id="pf5" class="page" page-url="pages/page_companion.html"></div>
+		<div id="pf6" class="page" page-url="pages/page_notes.html"></div>
+		<div id="pf7" class="page" page-url="pages/page_spells.html"></div>
+		<div id="pf8" class="page" page-url="pages/page_reference.html"></div>
+	</div>
 </body>
 <script>
-    includePage();
+	includePage();
 </script>
 <script>
-    function openPage(pageName, elmnt) {
-        // Hide all elements with class="tabcontent" by default */
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("page");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
+	function openPage(pageName, elmnt) {
+		// Hide all elements with class="tabcontent" by default */
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("page");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
 
-        // Remove the background color of all tablinks/buttons
-        tablinks = document.getElementsByClassName("tablink");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].style.backgroundColor = "";
-        }
-        document.getElementById(pageName).style.display = "block";
-        elmnt.style.backgroundColor = "#ddd";
-    }
+		// Remove the background color of all tablinks/buttons
+		tablinks = document.getElementsByClassName("tablink");
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].style.backgroundColor = "";
+		}
+		document.getElementById(pageName).style.display = "block";
+		elmnt.style.backgroundColor = "#ddd";
+	}
 
-    // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click();
+	// Get the element with id="defaultOpen" and click on it
+	document.getElementById("defaultOpen").click();
 </script>
+<script type="text/javascript" src="adapter.js"></script>
 </html>

@@ -1,8 +1,6 @@
-<div class="page-container">
+<div id="CSfront" class="field page-container">
 
-<!--TODO: tooltips for buttons etc-->
-	<button class="button" style="right: 4px; top: 3px;">Show extra features</button><!-- TODO: connect -->
-
+	<button id="Show_Buttons" class="button" style="right: 4px; top: 3px;">Show extra features</button>
 
 	<div id="character_general_info" class="pane" style="width: var(--page-width); height: 195px;">
 		<img class="pane-bg" alt="" src="img/bg_splashy_stripes.svg" style="width: var(--page-width); height: 195px;">
@@ -15,57 +13,63 @@
 		<span class="textlabel-dimmed" style="top: 145px; left: 777.1px;">Next Level</span>
 		<span class="textlabel" style="top: 155px; left: 101.5px;">CHARACTER NAME</span>
 
-		<input id="character_general_info_name" class="inputfield" style="top: 108px;left: 85px;font-size: 16pt;width: 150pt!important;height: 18pt;" type="text">
-		<input id="character_general_info_level" class="inputfield" style="top: 85px;left: 365px;font-size: 11pt;width: 12pt!important;height: 15pt;text-align: center;" type="number"><!-- TODO: add change listener -->
-		<input id="character_general_info_class" class="inputfield" style="top: 85px;left: 388px;font-size: 11pt;width: 199pt!important;height: 15pt;" type="text"><!-- TODO: add change listener -->
-		<input id="character_general_info_playername" class="inputfield" style="top: 85px;left: 660px;font-size: 11pt;width: 120pt!important;height: 15pt;" type="text">
-		<input id="character_general_info_background" class="inputfield" list="background_options" style="top: 124px;left: 365px;font-size: 11pt;width: 130pt!important;height: 15pt;"><!-- TODO: add change listener -->
+		<input id="PC_Name" class="field inputfield" style="top: 108px;left: 85px;font-size: 16pt;width: 150pt!important;height: 18pt;" type="text"> <!--TODO: find out whether and how this chould be "PC_Name.0"?-->
+		<input id="Character_Level" class="field inputfield" style="top: 85px;left: 365px;font-size: 11pt;width: 12pt!important;height: 15pt;text-align: center;" type="number">
+		<input id="Class_and_Levels" class="field inputfield" style="top: 85px;left: 388px;font-size: 11pt;width: 199pt!important;height: 15pt;" type="text">
+		<input id="Player_Name" class="field inputfield" style="top: 85px;left: 660px;font-size: 11pt;width: 120pt!important;height: 15pt;" type="text">
+
+		<input id="Background" class="field inputfield" list="background_options" style="top: 124px;left: 365px;font-size: 11pt;width: 130pt!important;height: 15pt;">
 			<datalist id="background_options">
 				<option value="Acolyte">
 			</datalist>
-		<input id="character_general_info_background_sub" class="inputfield" list="background_sub_options" style="top: 146px;left: 445px;font-size: 7pt;width: 70pt!important;height: 8pt;color: var(--text-dimmed);"><!-- TODO: add change listener -->
+		<input id="Background_Extra" class="field inputfield" list="background_sub_options" style="top: 146px;left: 445px;font-size: 7pt;width: 70pt!important;height: 8pt;color: var(--text-dimmed);">
 			<datalist id="background_sub_options">
 				<option value="Bacolyte">
 			</datalist>
-		<input id="character_general_info_race" class="inputfield" list="race_options" style="top: 124px;left: 545px;font-size: 11pt;width: 81pt!important;height: 15pt;"><!-- TODO: add change listener -->
+		<input id="Race" class="field inputfield" list="race_options" style="top: 124px;left: 545px;font-size: 11pt;width: 81pt!important;height: 15pt;">
 			<datalist id="race_options">
 				<option value="halfling">
 			</datalist>
-		<input id="character_general_info_xp" class="inputfield" style="top: 124px;left: 660px;font-size: 11pt;width: 32pt!important;height: 15pt;" type="number">
-		<input id="character_general_info_xp_add" class="inputfield" style="top: 124px;left: 730px;font-size: 11pt;width: 32pt!important;height: 15pt;" type="number">
-		<span class="textlabel-dimmed" style="top: 126px;left: 780px;font-size: 11pt;width: 44px;text-align: right;"></span>
+		<input id="Total_Experience" class="field inputfield" style="top: 124px;left: 660px;font-size: 11pt;width: 32pt!important;height: 15pt;" type="number">
+		<input id="Add Experience" class="field inputfield" style="top: 124px;left: 730px;font-size: 11pt;width: 32pt!important;height: 15pt;" type="number">
+		<span id="Next_level" class="field textlabel-dimmed" style="top: 126px;left: 780px;font-size: 11pt;width: 44px;text-align: right;"></span>
 
 		<button
-			class="textlabel"
+			id="HeaderIcon"
+			class="field textlabel"
 			style="top: 114px; left: 53px; overflow-wrap: normal; font-size: 2pt; width: 24pt; line-height: 1.3;"
 		>
 			CLICK HERE TO CHANGE THIS ICON
-		</button><!-- TODO: connect -->
-		<button class="button" style="top: 130px; left: 707.4px;">Add:</button><!-- TODO: connect -->
+		</button>
+		<button id="Add_Experience_Button" class="field button" style="top: 130px; left: 707.4px;">Add:</button>
 	</div>
 
 
 	<div id="character_attributes" class="pane" style="top: 195px; left:34px; width: 99px; height: 678.7px;">
 		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/attributes.svg" style="top: 1.5px;width: 91px;height: 678.7px">
-		<div class="textlabel-bold" style="top: 33px;left: 7px;width: 77px;">STRENGTH</div>
-		<div id="character_attirbutes_strength_modifier" class="textlabel" style="top: 48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
-		<div class="textlabel-bold" style="top: 141px;left: 7px;width: 77px;">DEXTERITY</div>
-		<div id="character_attirbutes_dexterity_modifier" class="textlabel" style="top: 156px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
-		<div class="textlabel-bold" style="top: 249px;left: 7px;width: 77px;">CONSTITUTION</div>
-		<div id="character_attirbutes_constitution_modifier" class="textlabel" style="top: 264px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
-		<div class="textlabel-bold" style="top: 357px;left: 7px;width: 77px;">INTELLIGENCE</div>
-		<div id="character_attirbutes_intelligence_modifier" class="textlabel" style="top: 372px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
-		<div class="textlabel-bold" style="top: 465px;left: 7px;width: 77px;">WISDOM</div>
-		<div id="character_attirbutes_wisdom_modifier" class="textlabel" style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
-		<div class="textlabel-bold" style="top: 570px;left: 7px;width: 77px;">CHARISMA</div>
-		<div id="character_attirbutes_charisma_modifier" class="textlabel" style="top: 585px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
 
-		<input id="character_attributes_strength" class="inputfield" style="top: 93px;left: 27px;font-size: 14pt;width: 25pt!important;height: 16pt;text-align: center;" type="number"/><!-- TODO: add change listener -->
-		<input id="character_attributes_dexterity" class="inputfield" style="top: 201px;left: 27px;font-size: 14pt;width: 25pt!important;height: 16pt;text-align: center;" type="number"/><!-- TODO: add change listener -->
-		<input id="character_attributes_constitution" class="inputfield" style="top: 309px;left: 27px;font-size: 14pt;width: 25pt!important;height: 16pt;text-align: center;" type="number"/><!-- TODO: add change listener -->
-		<input id="character_attributes_intelligence" class="inputfield" style="top: 417px;left: 27px;font-size: 14pt;width: 25pt!important;height: 16pt;text-align: center;" type="number"/><!-- TODO: add change listener -->
-		<input id="character_attributes_wisdom" class="inputfield" style="top: 525px;left: 27px;font-size: 14pt;width: 25pt!important;height: 16pt;text-align: center;" type="number"/><!-- TODO: add change listener -->
-		<input id="character_attributes_charisma" class="inputfield" style="top: 630px;left: 27px;font-size: 14pt;width: 25pt!important;height: 16pt;text-align: center;" type="number"/><!-- TODO: add change listener -->
+		<div class="textlabel-bold" style="top: 33px;left: 7px;width: 77px;">STRENGTH</div>
+		<div id="Str_Mod" class="field textlabel" style="top: 48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
+		<div class="textlabel-bold" style="top: 141px;left: 7px;width: 77px;">DEXTERITY</div>
+		<div id="Dex_Mod" class="field textlabel" style="top: 156px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
+		<div class="textlabel-bold" style="top: 249px;left: 7px;width: 77px;">CONSTITUTION</div>
+		<div id="Con_Mod" class="field textlabel" style="top: 264px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
+		<div class="textlabel-bold" style="top: 357px;left: 7px;width: 77px;">INTELLIGENCE</div>
+		<div id="Int_Mod" class="field textlabel" style="top: 372px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
+		<div class="textlabel-bold" style="top: 465px;left: 7px;width: 77px;">WISDOM</div>
+		<div id="Wis_Mod" class="field textlabel" style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
+		<div class="textlabel-bold" style="top: 573px;left: 7px;width: 77px;">CHARISMA</div>
+		<div id="Cha_Mod" class="field textlabel" style="top: 588px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
+		<div id="Text-HoS-Ability" class="field textlabel-bold" style="visibility: hidden;top: 681px;left: 7px;width: 77px;"></div>
+		<div id="HoS_Mod" class="field textlabel" style="visibility: hidden;top: 696px;left: 7px;font-size: 25pt;width: 77px;text-align: center;">0</div>
+
+		<input id="Str" class="field inputfield" style="top: 93px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
+		<input id="Dex" class="field inputfield" style="top: 201px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
+		<input id="Con" class="field inputfield" style="top: 309px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
+		<input id="Int" class="field inputfield" style="top: 417px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
+		<input id="Wis" class="field inputfield" style="top: 525px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
+		<input id="Cha" class="field inputfield" style="top: 633px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
+		<input id="HoS" class="field inputfield" style="visibility: hidden;top: 741px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
 	</div>
 
 
@@ -87,31 +91,31 @@
 			<span class="textlabel-dimmed rotate_m16" style="top: 0.3px;left: 7.2px">F</span>
 		</div>
 
-		<input id="character_saving_throw_proficiencies_str" class="checkcircle" type="checkbox" style="top: 10.4px;left: 14.9px;">
-		<input id="character_saving_throw_proficiencies_dex" class="checkcircle" type="checkbox" style="top: 30.0px;left: 14.9px;">
-		<input id="character_saving_throw_proficiencies_con" class="checkcircle" type="checkbox" style="top: 49.6px;left: 14.9px;">
-		<input id="character_saving_throw_proficiencies_int" class="checkcircle" type="checkbox" style="top: 10.4px;left: 101.6px;">
-		<input id="character_saving_throw_proficiencies_wis" class="checkcircle" type="checkbox" style="top: 30.0px;left: 101.6px;">
-		<input id="character_saving_throw_proficiencies_cha" class="checkcircle" type="checkbox" style="top: 49.6px;left: 101.6px;">
+		<input id="Str_ST_Prof" class="field checkcircle" type="checkbox" style="top: 10.4px;left: 14.9px;">
+		<input id="Dex_ST_Prof" class="field checkcircle" type="checkbox" style="top: 30.0px;left: 14.9px;">
+		<input id="Con_ST_Prof" class="field checkcircle" type="checkbox" style="top: 49.6px;left: 14.9px;">
+		<input id="Int_ST_Prof" class="field checkcircle" type="checkbox" style="top: 10.4px;left: 101.6px;">
+		<input id="Wis_ST_Prof" class="field checkcircle" type="checkbox" style="top: 30.0px;left: 101.6px;">
+		<input id="Cha_ST_Prof" class="field checkcircle" type="checkbox" style="top: 49.6px;left: 101.6px;">
 
-		<input id="character_saving_throw_modifier_str" class="inputfield-notched" style="top: 10.4px;left: 32px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text"><!-- TODO: add change listener -->
-		<input id="character_saving_throw_modifier_dex" class="inputfield-notched" style="top: 30.0px;left: 32px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text"><!-- TODO: add change listener -->
-		<input id="character_saving_throw_modifier_con" class="inputfield-notched" style="top: 49.6px;left: 32px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text"><!-- TODO: add change listener -->
-		<input id="character_saving_throw_modifier_int" class="inputfield-notched" style="top: 10.4px;left: 118.7px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text"><!-- TODO: add change listener -->
-		<input id="character_saving_throw_modifier_wis" class="inputfield-notched" style="top: 30.0px;left: 118.7px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text"><!-- TODO: add change listener -->
-		<input id="character_saving_throw_modifier_cha" class="inputfield-notched" style="top: 49.6px;left: 118.7px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text"><!-- TODO: add change listener -->
+		<input id="Str_ST_Mod" class="field inputfield-notched" style="top: 10.4px;left: 32px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text">
+		<input id="Dex_ST_Mod" class="field inputfield-notched" style="top: 30.0px;left: 32px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text">
+		<input id="Con_ST_Mod" class="field inputfield-notched" style="top: 49.6px;left: 32px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text">
+		<input id="Int_ST_Mod" class="field inputfield-notched" style="top: 10.4px;left: 118.7px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text">
+		<input id="Wis_ST_Mod" class="field inputfield-notched" style="top: 30.0px;left: 118.7px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text">
+		<input id="Cha_ST_Mod" class="field inputfield-notched" style="top: 49.6px;left: 118.7px;font-size: 14px;width: 21.3px!important;height: 13.3px;" type="text">
 
-		<input id="character_resistances_1" class="inputfield" list="resistances_options" style="top: 84.8px;left: 16px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="character_resistances_2" class="inputfield" list="resistances_options" style="top: 104.4px;left: 16px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="character_resistances_3" class="inputfield" list="resistances_options" style="top: 123.9px;left: 16px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="character_resistances_4" class="inputfield" list="resistances_options" style="top: 84.8px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="character_resistances_5" class="inputfield" list="resistances_options" style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="character_resistances_6" class="inputfield" list="resistances_options" style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;">
+		<input id="Resistance_Damage_Type_1" class="field inputfield" list="resistances_options" style="top: 84.8px;left: 16px;font-size: 12px;width: 73.6px;height: 14px;">
+		<input id="Resistance_Damage_Type_2" class="field inputfield" list="resistances_options" style="top: 104.4px;left: 16px;font-size: 12px;width: 73.6px;height: 14px;">
+		<input id="Resistance_Damage_Type_3" class="field inputfield" list="resistances_options" style="top: 123.9px;left: 16px;font-size: 12px;width: 73.6px;height: 14px;">
+		<input id="Resistance_Damage_Type_4" class="field inputfield" list="resistances_options" style="top: 84.8px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;">
+		<input id="Resistance_Damage_Type_5" class="field inputfield" list="resistances_options" style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;">
+		<input id="Resistance_Damage_Type_6" class="field inputfield" list="resistances_options" style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;">
 			<datalist id="resistances_options">
 				<option value="Acid">
 			</datalist>
 
-		<textarea id="character_other_resistances" class="inputfield" rows="6" style="top: 141px;left: 13px;width: 159.7px;height: 96px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+		<textarea id="Saving_Throw_advantages_-_disadvantages" class="field inputfield" rows="6" style="top: 141px;left: 13px;width: 159.7px;height: 96px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
 	</div>
 
 
@@ -134,40 +138,42 @@
 		<span class="textlabel-dimmed" style="top: 201.5px;left: 221.9px;font-size: 8px">ENCUMBERED</span>
 		<span class="textlabel-bold" style="top: 274.4px;left: 233.7px;width: 30px">SPEED</span>
 
-		<button class="button" style="left: 29px;top: 27.5px;font-size: 8px;line-height: 7px;"
+		<button id="Buttons-HP_Max" class="field button" style="left: 29px;top: 27.5px;font-size: 8px;line-height: 7px;"
 			aria-label="With this button you can set the value of the maximum hit points field to one of the calculated values:"
 			>
 			Set Max HP
-		</button><!-- TODO: connect -->
-		<button class="button" style="top: 170px;left: 168px;font-size: 8px;line-height: 7px;">Heal</button><!-- TODO: connect -->
+		</button>
+		<input id="HP_Max" class="field inputfield" style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0" type="number">
 
-		<input id="character_stats_maximum_hit_points" class="inputfield" style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0" type="number"><!-- TODO: add change listener -->
-		<input id="character_stats_proficiency_bonus" class="inputfield-noneditable" style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0" type="text"><!-- TODO: add change listener -->
-		<input id="character_stats_armor_class" class="inputfield-noneditable" style="top: 35px;left: 222px;font-size: 28px;width: 59.5px;height: 27px;padding: 0 0 0 0" type="number"><!-- TODO: add change listener -->
+		<input id="Proficiency_Bonus" class="field inputfield-noneditable" style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0" type="text">
 
-		<input id="character_stats_temporary_hit_points" class="inputfield" style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0;" type="number"><!-- TODO: add change listener -->
-		<textarea id="character_stats_hit_points" class="inputfield" style="top: 132px;left: 26px;font-size: 14px;width: 160px;height: 35px;padding-top: 1px;"></textarea><!-- TODO: add change listener -->
-		<input id="character_stats_initiative" class="inputfield-noneditable" style="top: 132px;left: 215.3px;font-size: 28px;width: 66.8px;height: 27px;padding: 0 0 0 0" type="text"><!-- TODO: add change listener -->
+		<input id="AC" class="field inputfield-noneditable" style="top: 35px;left: 222px;font-size: 28px;width: 59.5px;height: 27px;padding: 0 0 0 0" type="number">
 
-		<input id="character_stats_death_save_success_1" class="checkcircle" type="checkbox" style="top: 211.1px;left: 22.8px;width: 14px;height: 14px;">
-		<input id="character_stats_death_save_success_2" class="checkcircle" type="checkbox" style="top: 211.1px;left: 42.1px;width: 14px;height: 14px;">
-		<input id="character_stats_death_save_success_3" class="checkcircle" type="checkbox" style="top: 211.1px;left: 61.4px;width: 14px;height: 14px;">
-		<input id="character_stats_death_save_failure_1" class="checkcircle" type="checkbox" style="top: 232.2px;left: 22.8px;width: 14px;height: 14px;">
-		<input id="character_stats_death_save_failure_2" class="checkcircle" type="checkbox" style="top: 232.2px;left: 42.1px;width: 14px;height: 14px;">
-		<input id="character_stats_death_save_failure_3" class="checkcircle" type="checkbox" style="top: 232.2px;left: 61.4px;width: 14px;height: 14px;">
+		<input id="HP_Temp" class="field inputfield" style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0;" type="number">
+		<textarea id="HP_Current" class="field inputfield" style="top: 132px;left: 26px;font-size: 14px;width: 160px;height: 35px;padding-top: 1px;"></textarea>
+		<button id="Heal" class="field button" style="top: 170px;left: 168px;font-size: 8px;line-height: 7px;">Heal</button>
 
-		<input id="character_stats_hit_dice_1_level" class="inputfield-notched" style="top: 211px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
-		<input id="character_stats_hit_dice_1_die" class="inputfield-notched" style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
-		<input id="character_stats_hit_dice_1_used" class="inputfield-notched" style="top: 211px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
-		<input id="character_stats_hit_dice_2_level" class="inputfield-notched" style="top: 230px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
-		<input id="character_stats_hit_dice_2_die" class="inputfield-notched" style="top: 230px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
-		<input id="character_stats_hit_dice_2_used" class="inputfield-notched" style="top: 230px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
-		<input id="character_stats_hit_dice_3_level" class="inputfield-notched" style="top: 249px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
-		<input id="character_stats_hit_dice_3_die" class="inputfield-notched" style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
-		<input id="character_stats_hit_dice_3_used" class="inputfield-notched" style="top: 249px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
+		<input id="Initiative_bonus" class="field inputfield-noneditable" style="top: 132px;left: 215.3px;font-size: 28px;width: 66.8px;height: 27px;padding: 0 0 0 0" type="text">
 
-		<input id="character_stats_encumbered_speed" class="inputfield" style="top: 211px;left: 215.2px;font-size: 10px;width: 66.7px;height: 12px;text-align: center;padding: 0 0 0 0" type="text">
-		<input id="character_stats_speed" class="inputfield" style="top: 225px;left: 215.2px;font-size: 20px;width: 66.7px;height: 50px;text-align: center;padding: 0 0 0 0" type="text">
+		<input id="Death_Save_Succes1" class="field checkcircle" type="checkbox" style="top: 211.1px;left: 22.8px;width: 14px;height: 14px;">
+		<input id="Death_Save_Succes2" class="field checkcircle" type="checkbox" style="top: 211.1px;left: 42.1px;width: 14px;height: 14px;">
+		<input id="Death_Save_Succes3" class="field checkcircle" type="checkbox" style="top: 211.1px;left: 61.4px;width: 14px;height: 14px;">
+		<input id="Death_Save_Fail1" class="field checkcircle" type="checkbox" style="top: 232.2px;left: 22.8px;width: 14px;height: 14px;">
+		<input id="Death_Save_Fail2" class="field checkcircle" type="checkbox" style="top: 232.2px;left: 42.1px;width: 14px;height: 14px;">
+		<input id="Death_Save_Fail3" class="field checkcircle" type="checkbox" style="top: 232.2px;left: 61.4px;width: 14px;height: 14px;">
+
+		<input id="HD1_Level" class="field inputfield-notched" style="top: 211px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
+		<input id="HD1_Die" class="field inputfield-notched" style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
+		<input id="HD1_Used" class="field inputfield-notched" style="top: 211px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
+		<input id="HD2_Level" class="field inputfield-notched" style="top: 230px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
+		<input id="HD2_Die" class="field inputfield-notched" style="top: 230px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
+		<input id="HD2_Used" class="field inputfield-notched" style="top: 230px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
+		<input id="HD3_Level" class="field inputfield-notched" style="top: 249px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
+		<input id="HD3_Die" class="field inputfield-notched" style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
+		<input id="HD3_Used" class="field inputfield-notched" style="top: 249px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
+
+		<input id="Speed_encumbered" class="field inputfield" style="top: 211px;left: 215.2px;font-size: 10px;width: 66.7px;height: 12px;text-align: center;padding: 0 0 0 0" type="text">
+		<input id="Speed" class="field inputfield" style="top: 225px;left: 215.2px;font-size: 20px;width: 66.7px;height: 50px;text-align: center;padding: 0 0 0 0" type="text">
 	</div>
 
 
@@ -186,23 +192,23 @@
 		<span class="textlabel" style="top: 61.7px;left: 170.5px;font-size: 9.1px">Heavy Armor</span>
 		<span class="textlabel-bold" style="top: 140.7px;left: 14.4px;width: 211.7px">ARMOR</span>
 
-		<input id="character_armor_ac_armor" class="inputfield-notched" style="top: 20px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
-		<input id="character_armor_ac_shield" class="inputfield-notched" style="top: 39.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
-		<input id="character_armor_ac_dex" class="inputfield-notched" style="top: 59.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
-		<input id="character_armor_ac_magic" class="inputfield-notched" style="top: 78.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
-		<input id="character_armor_ac_misc1" class="inputfield-notched" style="top: 98.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
-		<input id="character_armor_ac_misc2" class="inputfield-notched" style="top: 117.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="AC_Armor_Bonus" class="field inputfield-notched" style="top: 20px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="AC_Shield_Bonus" class="field inputfield-notched" style="top: 39.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="AC_Dexterity_Modifier" class="field inputfield-notched" style="top: 59.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="AC_Magic" class="field inputfield-notched" style="top: 78.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="AC_Misc_Mod_1" class="field inputfield-notched" style="top: 98.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input id="AC_Misc_Mod_2" class="field inputfield-notched" style="top: 117.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
 
-		<input id="character_armor_type" class="inputfield" list="armor_type_options" style="top: 20px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+		<input id="AC_Armor_Description" class="field inputfield" list="armor_type_options" style="top: 20px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
 			<datalist id="armor_type_options">
 				<option value="Leather">
 			</datalist>
-		<input id="character_armor_shield" class="inputfield" style="top: 39.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
-		<input id="character_armor_medium" class="checkcircle" type="checkbox" style="top: 59px;left: 78.5px;">
-		<input id="character_armor_heavy" class="checkcircle" type="checkbox" style="top: 59px;left: 154.9px;">
-		<input id="character_armor_magic" class="inputfield" style="top: 78.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
-		<input id="character_armor_misc1" class="inputfield" style="top: 98.0px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
-		<input id="character_armor_misc2" class="inputfield" style="top: 117.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+		<input id="AC_Shield_Bonus_Description" class="field inputfield" style="top: 39.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+		<input id="Medium_Armor" class="field checkcircle" type="checkbox" style="top: 59px;left: 78.5px;">
+		<input id="Heavy_Armor" class="field checkcircle" type="checkbox" style="top: 59px;left: 154.9px;">
+		<input id="AC_Magic_Description" class="field inputfield" style="top: 78.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+		<input id="AC_Misc_Mod_1_Description" class="field inputfield" style="top: 98.0px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+		<input id="AC_Misc_Mod_2_Description" class="field inputfield" style="top: 117.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
 	</div>
 
 
@@ -211,30 +217,28 @@
 
 		<span class="textlabel-bold" style="top: 21.3px;left: 53.4px;width: 177px">INSPIRATION</span>
 
-		<input id="character_inspiration_value" class="inputfield" style="top: 10.4px;left: 15px;font-size: 14px;width: 28px;height: 28px;" type="number"><!--Is a check-box in pdf-->
+		<input id="Inspiration" class="field inputfield" style="top: 10.4px;left: 15px;font-size: 14px;width: 28px;height: 28px;" type="number"><!--Is a check-box in pdf-->
 	</div>
 
 
 	<div id="character_ability_save_dc" class="pane" style="top: 410px;left: 623px;width: 240px;height: 51px;">
 		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/ability_save_dc.svg" style="width: 225.1px;left: 7.7px;top: 6.2px;height: 39.01px">
-		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/ability_save_dc_2.svg" style="visibility: hidden;width: 225.1px;left: 7.7px;top: 6.2px;height: 39.01px">
+		<img id="Image-SaveDC" class="field pane-bg" alt="" src="img/page_stats/backgrounds/ability_save_dc_2.svg" style="visibility: hidden;width: 225.1px;left: 7.7px;top: 6.2px;height: 39.01px">
 
 		<div class="textlabel-bold" style="top: 15.5px;left: 72.6px;width: 40px;text-align: left;font-size: 8.6px;line-height: 10.4px;">ABILITY SAVE DC</div>
 		<!-- <div class="textlabel-bold" style="top: 15.5px;left: 88.5px;width: 64px;text-align: left;font-size: 8.6px;line-height: 10.4px;">ABILITY SAVE DC</div> -->
 
-		<input id="character_ability_save_dc_value" class="inputfield-noneditable" style="top: 11px;left: 14.5px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0" type="number">
-		<!-- <input id="character_ability_save_dc_value" class="inputfield-noneditable" style="top: 11px;left: 14.5px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0" type="number"> -->
-		<input id="character_ability_save_dc_2_value" class="inputfield-noneditable" style="visibility: hidden;top: 11px;left: 191px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0" type="number">
+		<input id="Spell_save_DC_1" class="field inputfield-noneditable" style="top: 11px;left: 14.5px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0" type="number">
+		<input id="Spell_save_DC_2" class="field inputfield-noneditable" style="visibility: hidden;top: 11px;left: 191px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0" type="number">
 
-		<input id="character_ability_save_dc_attribute" class="inputfield" list="ability_save_dc_options" style="top: 19px;font-size: 8px;font-weight: bold;height: 10px;left: 130px;text-align: center;width: 75px;">
-		<!-- <input id="character_ability_save_dc_attribute" class="inputfield" list="ability_save_dc_options" style="top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;"> -->
-		<input id="character_ability_save_dc_2_attribute" class="inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 121.5px;text-align: center;width: 54px;">
+		<input id="Spell_DC_1_Mod-0" class="field inputfield" list="ability_save_dc_options" style="top: 19px;font-size: 8px;font-weight: bold;height: 10px;left: 130px;text-align: center;width: 75px;">
+		<input id="Spell_DC_1_Mod-1" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;"> -->
+		<input id="Spell_DC_2_Mod" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 121.5px;text-align: center;width: 54px;">
 			<datalist id="ability_save_dc_options">
 				<option value="CHARISMA">
 			</datalist>
 
-		<button class="button" style="top: -6.4px;left: 94.3px;font-size: 8px;line-height: 7px">Show 2nd DC</button><!--TODO: find a way to switch/connect-->
-		<!-- <button class="button" style="top: -6.4px;left: 94.3px;font-size: 8px;line-height: 7px">Hide 2nd DC</button> -->
+		<button id="ShowHide_2nd_DC" class="field button" style="top: -6.4px;left: 94.3px;font-size: 8px;line-height: 7px">Show 2nd DC</button>
 	</div>
 
 
@@ -254,88 +258,90 @@
 		</div>
 		<div class="textlabel-bold" style="top: 390.1px;left: 11.6px;width: 165.5px">SKILLS</div>
 
-		<input id="character_skills_exp_0" class="checkcircle" type="checkbox" style="top: 16px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_1" class="checkcircle" type="checkbox" style="top: 35.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_2" class="checkcircle" type="checkbox" style="top: 55.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_3" class="checkcircle" type="checkbox" style="top: 74.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_4" class="checkcircle" type="checkbox" style="top: 94.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_5" class="checkcircle" type="checkbox" style="top: 113.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_6" class="checkcircle" type="checkbox" style="top: 133.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_7" class="checkcircle" type="checkbox" style="top: 152.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_8" class="checkcircle" type="checkbox" style="top: 172.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_9" class="checkcircle" type="checkbox" style="top: 191.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_10" class="checkcircle" type="checkbox" style="top: 211.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_11" class="checkcircle" type="checkbox" style="top: 230.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_12" class="checkcircle" type="checkbox" style="top: 250.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_13" class="checkcircle" type="checkbox" style="top: 269.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_14" class="checkcircle" type="checkbox" style="top: 289.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_15" class="checkcircle" type="checkbox" style="top: 308.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_16" class="checkcircle" type="checkbox" style="top: 328.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_17" class="checkcircle" type="checkbox" style="top: 347.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="character_skills_exp_extra" class="checkcircle" type="checkbox" style="top: 367.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Acr_Exp" class="field checkcircle" type="checkbox" style="top: 16px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Ani_Exp" class="field checkcircle" type="checkbox" style="top: 35.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Arc_Exp" class="field checkcircle" type="checkbox" style="top: 55.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Ath_Exp" class="field checkcircle" type="checkbox" style="top: 74.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Dec_Exp" class="field checkcircle" type="checkbox" style="top: 94.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="His_Exp" class="field checkcircle" type="checkbox" style="top: 113.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Ins_Exp" class="field checkcircle" type="checkbox" style="top: 133.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Inti_Exp" class="field checkcircle" type="checkbox" style="top: 152.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Inv_Exp" class="field checkcircle" type="checkbox" style="top: 172.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Med_Exp" class="field checkcircle" type="checkbox" style="top: 191.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Nat_Exp" class="field checkcircle" type="checkbox" style="top: 211.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Perc_Exp" class="field checkcircle" type="checkbox" style="top: 230.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Perf_Exp" class="field checkcircle" type="checkbox" style="top: 250.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Pers_Exp" class="field checkcircle" type="checkbox" style="top: 269.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Rel_Exp" class="field checkcircle" type="checkbox" style="top: 289.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Sle_Exp" class="field checkcircle" type="checkbox" style="top: 308.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Ste_Exp" class="field checkcircle" type="checkbox" style="top: 328.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Sur_Exp" class="field checkcircle" type="checkbox" style="top: 347.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input id="Too_Exp" class="field checkcircle" type="checkbox" style="top: 367.0px;left: 22.3px;width: 8px;height: 8px;">
 
-		<input id="character_skills_prof_0" class="checkcircle" type="checkbox" style="top: 18px;left: 15.2px;">
-		<input id="character_skills_prof_1" class="checkcircle" type="checkbox" style="top: 37.5px;left: 15.2px;">
-		<input id="character_skills_prof_2" class="checkcircle" type="checkbox" style="top: 57.0px;left: 15.2px;">
-		<input id="character_skills_prof_3" class="checkcircle" type="checkbox" style="top: 76.5px;left: 15.2px;">
-		<input id="character_skills_prof_4" class="checkcircle" type="checkbox" style="top: 96.0px;left: 15.2px;">
-		<input id="character_skills_prof_5" class="checkcircle" type="checkbox" style="top: 115.5px;left: 15.2px;">
-		<input id="character_skills_prof_6" class="checkcircle" type="checkbox" style="top: 135.0px;left: 15.2px;">
-		<input id="character_skills_prof_7" class="checkcircle" type="checkbox" style="top: 154.5px;left: 15.2px;">
-		<input id="character_skills_prof_8" class="checkcircle" type="checkbox" style="top: 174.0px;left: 15.2px;">
-		<input id="character_skills_prof_9" class="checkcircle" type="checkbox" style="top: 193.5px;left: 15.2px;">
-		<input id="character_skills_prof_10" class="checkcircle" type="checkbox" style="top: 213.0px;left: 15.2px;">
-		<input id="character_skills_prof_11" class="checkcircle" type="checkbox" style="top: 232.5px;left: 15.2px;">
-		<input id="character_skills_prof_12" class="checkcircle" type="checkbox" style="top: 252.0px;left: 15.2px;">
-		<input id="character_skills_prof_13" class="checkcircle" type="checkbox" style="top: 271.5px;left: 15.2px;">
-		<input id="character_skills_prof_14" class="checkcircle" type="checkbox" style="top: 291.0px;left: 15.2px;">
-		<input id="character_skills_prof_15" class="checkcircle" type="checkbox" style="top: 310.5px;left: 15.2px;">
-		<input id="character_skills_prof_16" class="checkcircle" type="checkbox" style="top: 330.0px;left: 15.2px;">
-		<input id="character_skills_prof_17" class="checkcircle" type="checkbox" style="top: 349.5px;left: 15.2px;">
-		<input id="character_skills_prof_extra" class="checkcircle" type="checkbox" style="top: 369.0px;left: 15.2px;">
+		<input id="Acr_Prof" class="field checkcircle" type="checkbox" style="top: 18px;left: 15.2px;">
+		<input id="Ani_Prof" class="field checkcircle" type="checkbox" style="top: 37.5px;left: 15.2px;">
+		<input id="Arc_Prof" class="field checkcircle" type="checkbox" style="top: 57.0px;left: 15.2px;">
+		<input id="Ath_Prof" class="field checkcircle" type="checkbox" style="top: 76.5px;left: 15.2px;">
+		<input id="Dec_Prof" class="field checkcircle" type="checkbox" style="top: 96.0px;left: 15.2px;">
+		<input id="His_Prof" class="field checkcircle" type="checkbox" style="top: 115.5px;left: 15.2px;">
+		<input id="Ins_Prof" class="field checkcircle" type="checkbox" style="top: 135.0px;left: 15.2px;">
+		<input id="Inti_Prof" class="field checkcircle" type="checkbox" style="top: 154.5px;left: 15.2px;">
+		<input id="Inv_Prof" class="field checkcircle" type="checkbox" style="top: 174.0px;left: 15.2px;">
+		<input id="Med_Prof" class="field checkcircle" type="checkbox" style="top: 193.5px;left: 15.2px;">
+		<input id="Nat_Prof" class="field checkcircle" type="checkbox" style="top: 213.0px;left: 15.2px;">
+		<input id="Perc_Prof" class="field checkcircle" type="checkbox" style="top: 232.5px;left: 15.2px;">
+		<input id="Perf_Prof" class="field checkcircle" type="checkbox" style="top: 252.0px;left: 15.2px;">
+		<input id="Pers_Prof" class="field checkcircle" type="checkbox" style="top: 271.5px;left: 15.2px;">
+		<input id="Rel_Prof" class="field checkcircle" type="checkbox" style="top: 291.0px;left: 15.2px;">
+		<input id="Sle_Prof" class="field checkcircle" type="checkbox" style="top: 310.5px;left: 15.2px;">
+		<input id="Ste_Prof" class="field checkcircle" type="checkbox" style="top: 330.0px;left: 15.2px;">
+		<input id="Sur_Prof" class="field checkcircle" type="checkbox" style="top: 349.5px;left: 15.2px;">
+		<input id="Too_Prof" class="field checkcircle" type="checkbox" style="top: 369.0px;left: 15.2px;">
 
-		<div id="character_skills_table" style="position:absolute;top:19px;left:40px;width: 120px;height: 346px;"><!--TODO: capture clicks and give sorting options etc-->
-			<input id="character_skills_modifier_0" class="inputfield-notched" style="top: 0.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_1" class="inputfield-notched" style="top: 19.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_2" class="inputfield-notched" style="top: 39.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_3" class="inputfield-notched" style="top: 58.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_4" class="inputfield-notched" style="top: 78.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_5" class="inputfield-notched" style="top: 97.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_6" class="inputfield-notched" style="top: 117.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_7" class="inputfield-notched" style="top: 136.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_8" class="inputfield-notched" style="top: 156.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_9" class="inputfield-notched" style="top: 175.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_10" class="inputfield-notched" style="top: 195.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_11" class="inputfield-notched" style="top: 214.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_12" class="inputfield-notched" style="top: 234.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_13" class="inputfield-notched" style="top: 253.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_14" class="inputfield-notched" style="top: 273.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_15" class="inputfield-notched" style="top: 292.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_16" class="inputfield-notched" style="top: 312.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="character_skills_modifier_17" class="inputfield-notched" style="top: 331.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<div id="SkillsClick" class="field" style="position:absolute;top:19px;left:40px;width: 120px;height: 346px;">
+			<input id="Acr" class="field inputfield-notched" style="top: 0.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Ani" class="field inputfield-notched" style="top: 19.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Arc" class="field inputfield-notched" style="top: 39.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Ath" class="field inputfield-notched" style="top: 58.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Dec" class="field inputfield-notched" style="top: 78.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="His" class="field inputfield-notched" style="top: 97.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Ins" class="field inputfield-notched" style="top: 117.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Inti" class="field inputfield-notched" style="top: 136.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Inv" class="field inputfield-notched" style="top: 156.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Med" class="field inputfield-notched" style="top: 175.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Nat" class="field inputfield-notched" style="top: 195.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Perc" class="field inputfield-notched" style="top: 214.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Perf" class="field inputfield-notched" style="top: 234.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Pers" class="field inputfield-notched" style="top: 253.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Rel" class="field inputfield-notched" style="top: 273.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Sle" class="field inputfield-notched" style="top: 292.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Ste" class="field inputfield-notched" style="top: 312.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input id="Sur" class="field inputfield-notched" style="top: 331.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
 
-			<div id="character_skills_label_0" class="textlabel" style="top: 1.3px;left: 27.7px;width: fit-content"><span>Acrobatics</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
-			<div id="character_skills_label_1" class="textlabel" style="top: 20.8px;left: 27.7px;width: fit-content"><span>Animal Handling</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
-			<div id="character_skills_label_2" class="textlabel" style="top: 40.3px;left: 27.7px;width: fit-content"><span>Arcana</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
-			<div id="character_skills_label_3" class="textlabel" style="top: 59.8px;left: 27.7px;width: fit-content"><span>Athletics</span> <span style="color: var(--text-dimmed)">(Str)</span></div>
-			<div id="character_skills_label_4" class="textlabel" style="top: 79.3px;left: 27.7px;width: fit-content"><span>Deception</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
-			<div id="character_skills_label_5" class="textlabel" style="top: 98.8px;left: 27.7px;width: fit-content"><span>History</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
-			<div id="character_skills_label_6" class="textlabel" style="top: 118.3px;left: 27.7px;width: fit-content"><span>Insight</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
-			<div id="character_skills_label_7" class="textlabel" style="top: 137.8px;left: 27.7px;width: fit-content"><span>Intimidation</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
-			<div id="character_skills_label_8" class="textlabel" style="top: 157.3px;left: 27.7px;width: fit-content"><span>Investigation</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
-			<div id="character_skills_label_9" class="textlabel" style="top: 176.8px;left: 27.7px;width: fit-content"><span>Medicine</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
-			<div id="character_skills_label_10" class="textlabel" style="top: 196.3px;left: 27.7px;width: fit-content"><span>Nature</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
-			<div id="character_skills_label_11" class="textlabel" style="top: 215.8px;left: 27.7px;width: fit-content"><span>Perception</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
-			<div id="character_skills_label_12" class="textlabel" style="top: 235.3px;left: 27.7px;width: fit-content"><span>Performance</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
-			<div id="character_skills_label_13" class="textlabel" style="top: 254.8px;left: 27.7px;width: fit-content"><span>Persuasion</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
-			<div id="character_skills_label_14" class="textlabel" style="top: 274.3px;left: 27.7px;width: fit-content"><span>Religion</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
-			<div id="character_skills_label_15" class="textlabel" style="top: 293.8px;left: 27.7px;width: fit-content"><span>Sleight of Hand</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
-			<div id="character_skills_label_16" class="textlabel" style="top: 313.3px;left: 27.7px;width: fit-content"><span>Stealth</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
-			<div id="character_skills_label_17" class="textlabel" style="top: 332.8px;left: 27.7px;width: fit-content"><span>Survival</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+			<div id="Text-SkillsNames" class="field">
+				<div id="character_skills_label_Acr" class="textlabel" style="top: 1.3px;left: 27.7px;width: fit-content"><span>Acrobatics</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
+				<div id="character_skills_label_Ani" class="textlabel" style="top: 20.8px;left: 27.7px;width: fit-content"><span>Animal Handling</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+				<div id="character_skills_label_Arc" class="textlabel" style="top: 40.3px;left: 27.7px;width: fit-content"><span>Arcana</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+				<div id="character_skills_label_Ath" class="textlabel" style="top: 59.8px;left: 27.7px;width: fit-content"><span>Athletics</span> <span style="color: var(--text-dimmed)">(Str)</span></div>
+				<div id="character_skills_label_Dec" class="textlabel" style="top: 79.3px;left: 27.7px;width: fit-content"><span>Deception</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
+				<div id="character_skills_label_His" class="textlabel" style="top: 98.8px;left: 27.7px;width: fit-content"><span>History</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+				<div id="character_skills_label_Ins" class="textlabel" style="top: 118.3px;left: 27.7px;width: fit-content"><span>Insight</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+				<div id="character_skills_label_Inti" class="textlabel" style="top: 137.8px;left: 27.7px;width: fit-content"><span>Intimidation</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
+				<div id="character_skills_label_Inv" class="textlabel" style="top: 157.3px;left: 27.7px;width: fit-content"><span>Investigation</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+				<div id="character_skills_label_Med" class="textlabel" style="top: 176.8px;left: 27.7px;width: fit-content"><span>Medicine</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+				<div id="character_skills_label_Nat" class="textlabel" style="top: 196.3px;left: 27.7px;width: fit-content"><span>Nature</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+				<div id="character_skills_label_Perc" class="textlabel" style="top: 215.8px;left: 27.7px;width: fit-content"><span>Perception</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+				<div id="character_skills_label_Perf" class="textlabel" style="top: 235.3px;left: 27.7px;width: fit-content"><span>Performance</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
+				<div id="character_skills_label_Pers" class="textlabel" style="top: 254.8px;left: 27.7px;width: fit-content"><span>Persuasion</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
+				<div id="character_skills_label_Rel" class="textlabel" style="top: 274.3px;left: 27.7px;width: fit-content"><span>Religion</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+				<div id="character_skills_label_Sle" class="textlabel" style="top: 293.8px;left: 27.7px;width: fit-content"><span>Sleight of Hand</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
+				<div id="character_skills_label_Ste" class="textlabel" style="top: 313.3px;left: 27.7px;width: fit-content"><span>Stealth</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
+				<div id="character_skills_label_Sur" class="textlabel" style="top: 332.8px;left: 27.7px;width: fit-content"><span>Survival</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+			</div>
 		</div>
 
-		<input id="character_skills_modifier_extra" class="inputfield-notched" style="top: 370.0px;left: 40px;font-size: 12px;width: 20px;height: 12px;" type="text">
-		<input id="character_skills_label_extra" class="inputfield" style="top: 371px;left: 66px;font-size: 10.6px;height: 11px;width: 105px;" type="text" value="Tool">
+		<input id="Too" class="field inputfield-notched" style="top: 370.0px;left: 40px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Too_Text" class="field inputfield" style="top: 371px;left: 66px;font-size: 10.6px;height: 11px;width: 105px;" type="text" value="Tool">
 	</div>
 
 
@@ -348,71 +354,71 @@
 		<span class="textlabel-dimmed" style="top: 17px;left: 250.2px;font-size: 8px">USED</span>
 		<span class="textlabel-bold" style="top: 188.1px;left: 13.1px;width: 275.3px">LIMITED FEATURES</span>
 
-		<input id="character_limited_features_0_feature" class="inputfield" style="top:  25.6px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="character_limited_features_1_feature" class="inputfield" style="top:  45.9px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="character_limited_features_2_feature" class="inputfield" style="top:  66.2px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="character_limited_features_3_feature" class="inputfield" style="top:  86.5px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="character_limited_features_4_feature" class="inputfield" style="top: 106.8px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="character_limited_features_5_feature" class="inputfield" style="top: 127.1px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="character_limited_features_6_feature" class="inputfield" style="top: 147.4px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="character_limited_features_7_feature" class="inputfield" style="top: 167.7px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
+		<input id="Limited_Feature_1" class="field inputfield" style="top:  25.6px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
+		<input id="Limited_Feature_2" class="field inputfield" style="top:  45.9px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
+		<input id="Limited_Feature_3" class="field inputfield" style="top:  66.2px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
+		<input id="Limited_Feature_4" class="field inputfield" style="top:  86.5px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
+		<input id="Limited_Feature_5" class="field inputfield" style="top: 106.8px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
+		<input id="Limited_Feature_6" class="field inputfield" style="top: 127.1px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
+		<input id="Limited_Feature_7" class="field inputfield" style="top: 147.4px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
+		<input id="Limited_Feature_8" class="field inputfield" style="top: 167.7px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
 
-		<input id="character_limited_features_0_max" class="inputfield" style="top:  25.6px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="character_limited_features_1_max" class="inputfield" style="top:  45.9px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="character_limited_features_2_max" class="inputfield" style="top:  66.2px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="character_limited_features_3_max" class="inputfield" style="top:  86.5px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="character_limited_features_4_max" class="inputfield" style="top: 106.8px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="character_limited_features_5_max" class="inputfield" style="top: 127.1px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="character_limited_features_6_max" class="inputfield" style="top: 147.4px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="character_limited_features_7_max" class="inputfield" style="top: 167.7px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
+		<input id="Limited_Feature_Max_Usages_1" class="field inputfield" style="top:  25.6px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
+		<input id="Limited_Feature_Max_Usages_2" class="field inputfield" style="top:  45.9px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
+		<input id="Limited_Feature_Max_Usages_3" class="field inputfield" style="top:  66.2px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
+		<input id="Limited_Feature_Max_Usages_4" class="field inputfield" style="top:  86.5px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
+		<input id="Limited_Feature_Max_Usages_5" class="field inputfield" style="top: 106.8px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
+		<input id="Limited_Feature_Max_Usages_6" class="field inputfield" style="top: 127.1px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
+		<input id="Limited_Feature_Max_Usages_7" class="field inputfield" style="top: 147.4px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
+		<input id="Limited_Feature_Max_Usages_8" class="field inputfield" style="top: 167.7px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
 
-		<input id="character_limited_features_0_recover" class="inputfield" style="top:  25.6px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="character_limited_features_1_recover" class="inputfield" style="top:  45.9px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="character_limited_features_2_recover" class="inputfield" style="top:  66.2px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="character_limited_features_3_recover" class="inputfield" style="top:  86.5px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="character_limited_features_4_recover" class="inputfield" style="top: 106.8px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="character_limited_features_5_recover" class="inputfield" style="top: 127.1px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="character_limited_features_6_recover" class="inputfield" style="top: 147.4px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="character_limited_features_7_recover" class="inputfield" style="top: 167.7px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_1" class="field inputfield" style="top:  25.6px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_2" class="field inputfield" style="top:  45.9px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_3" class="field inputfield" style="top:  66.2px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_4" class="field inputfield" style="top:  86.5px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_5" class="field inputfield" style="top: 106.8px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_6" class="field inputfield" style="top: 127.1px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_7" class="field inputfield" style="top: 147.4px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_8" class="field inputfield" style="top: 167.7px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
 		<datalist id="limited_features_recover_options">
 			<option value="SR">
 			<option value="LR">
 			<option value="Dawn">
 		</datalist>
 
-		<input id="character_limited_features_0_used" class="inputfield" style="top:  25.6px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="character_limited_features_1_used" class="inputfield" style="top:  45.9px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="character_limited_features_2_used" class="inputfield" style="top:  66.2px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="character_limited_features_3_used" class="inputfield" style="top:  86.5px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="character_limited_features_4_used" class="inputfield" style="top: 106.8px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="character_limited_features_5_used" class="inputfield" style="top: 127.1px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="character_limited_features_6_used" class="inputfield" style="top: 147.4px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="character_limited_features_7_used" class="inputfield" style="top: 167.7px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
+		<input id="Limited_Feature_Used_1" class="field inputfield" style="top:  25.6px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
+		<input id="Limited_Feature_Used_2" class="field inputfield" style="top:  45.9px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
+		<input id="Limited_Feature_Used_3" class="field inputfield" style="top:  66.2px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
+		<input id="Limited_Feature_Used_4" class="field inputfield" style="top:  86.5px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
+		<input id="Limited_Feature_Used_5" class="field inputfield" style="top: 106.8px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
+		<input id="Limited_Feature_Used_6" class="field inputfield" style="top: 127.1px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
+		<input id="Limited_Feature_Used_7" class="field inputfield" style="top: 147.4px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
+		<input id="Limited_Feature_Used_8" class="field inputfield" style="top: 167.7px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
 
-		<button id="character_limited_features_sr" class="button" style="top: 186px;left: 210.9px;font-size: 8px;line-height: 7px">SR</button>
-		<button id="character_limited_features_lr" class="button" style="top: 186px;left: 232px;font-size: 8px;line-height: 7px">LR</button>
-		<button id="character_limited_features_dawn" class="button" style="top: 186px;left: 252.2px;font-size: 8px;line-height: 7px">Dawn</button>
+		<button id="SR" class="field button" style="top: 186px;left: 210.9px;font-size: 8px;line-height: 7px">SR</button>
+		<button id="LR" class="field button" style="top: 186px;left: 232px;font-size: 8px;line-height: 7px">LR</button>
+		<button id="Dawn" class="field button" style="top: 186px;left: 252.2px;font-size: 8px;line-height: 7px">Dawn</button>
 
-		<button id="character_limited_features_0_btn" class="button" style="top:  29.25px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_limited_features_1_btn" class="button" style="top:  49.55px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_limited_features_2_btn" class="button" style="top:  69.85px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_limited_features_3_btn" class="button" style="top:  90.15px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_limited_features_4_btn" class="button" style="top: 110.45px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_limited_features_5_btn" class="button" style="top: 130.75px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_limited_features_6_btn" class="button" style="top: 151.05px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_limited_features_7_btn" class="button" style="top: 171.35px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Limited_Feature_1" class="field button" style="top:  29.25px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Limited_Feature_2" class="field button" style="top:  49.55px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Limited_Feature_3" class="field button" style="top:  69.85px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Limited_Feature_4" class="field button" style="top:  90.15px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Limited_Feature_5" class="field button" style="top: 110.45px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Limited_Feature_6" class="field button" style="top: 130.75px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Limited_Feature_7" class="field button" style="top: 151.05px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Limited_Feature_8" class="field button" style="top: 171.35px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
 	</div>
 
 
 	<div id="character_proficiencies" class="pane" style="top: 461px;left: 625px;width: 237px;height: 252px;">
 		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/proficiencies.svg" style="width: 225px;left: 5.8px;top: 2px;height: 250px;">
 
-		<div class="textlabel" style="top: 16.5px;left: 12.3px;width: 212px;text-align: center;font-size: 8.7px">ARMOR</div>
+		<div id="Text-Armor_Proficiencies" class="field textlabel" style="top: 16.5px;left: 12.3px;width: 212px;text-align: center;font-size: 8.7px">ARMOR</div><!--id not sure-->
 		<span class="textlabel" style="top: 25.5px;left: 33.4px;font-size: 11px">Light</span>
 		<span class="textlabel" style="top: 25.5px;left: 77px;font-size: 11px;">Medium</span>
 		<span class="textlabel" style="top: 25.5px;left: 136.1px;font-size: 11px;">Heavy</span>
 		<span class="textlabel" style="top: 25.5px;left: 184.9px;font-size: 11px;">Shields</span>
-		<div class="textlabel" style="top: 47.5px;left: 12.3px;width: 212px;text-align: center;font-size: 8.7px;">WEAPONS</div>
+		<div id="Text-Weapon_Proficiencies" class="field textlabel" style="top: 47.5px;left: 12.3px;width: 212px;text-align: center;font-size: 8.7px;">WEAPONS</div><!--id not sure-->
 		<span class="textlabel" style="top: 56.6px;left: 33.4px;font-size: 11px">Simple</span>
 		<span class="textlabel" style="top: 56.6px;left: 85.7px;font-size: 11px">Martial</span>
 		<span class="textlabel" style="top: 56.6px;left: 139px;font-size: 11px">Other Weapons:</span>
@@ -426,30 +432,30 @@
 			<span class="textlabel-dimmed rotate_m16" style="top: 0.3px;left: 7.2px">F</span>
 		</div>
 
-		<input id="character_proficiencies_armor_light" class="checkcircle" type="checkbox" style="top: 24.9px;left: 17.2px;">
-		<input id="character_proficiencies_armor_medium" class="checkcircle" type="checkbox" style="top: 24.9px;left: 61px;">
-		<input id="character_proficiencies_armor_heavy" class="checkcircle" type="checkbox" style="top: 24.9px;left: 119.8px;">
-		<input id="character_proficiencies_armor_shields" class="checkcircle" type="checkbox" style="top: 24.9px;left: 168.6px;">
+		<input id="Proficiency_Armor_Light" class="field checkcircle" type="checkbox" style="top: 24.9px;left: 17.2px;">
+		<input id="Proficiency_Armor_Medium" class="field checkcircle" type="checkbox" style="top: 24.9px;left: 61px;">
+		<input id="Proficiency_Armor_Heavy" class="field checkcircle" type="checkbox" style="top: 24.9px;left: 119.8px;">
+		<input id="Proficiency_Shields" class="field checkcircle" type="checkbox" style="top: 24.9px;left: 168.6px;">
 
-		<input id="character_proficiencies_weapons_simple" class="checkcircle" type="checkbox" style="top: 55.8px;left: 17.2px;">
-		<input id="character_proficiencies_weapons_martial" class="checkcircle" type="checkbox" style="top: 55.8px;left: 69.4px;">
-		<input id="character_proficiencies_weapons_other" class="checkcircle" type="checkbox" style="top: 55.8px;left: 122.8px;">
+		<input id="Proficiency_Weapon_Simple" class="field checkcircle" type="checkbox" style="top: 55.8px;left: 17.2px;">
+		<input id="Proficiency_Weapon_Martial" class="field checkcircle" type="checkbox" style="top: 55.8px;left: 69.4px;">
+		<input id="Proficiency_Weapon_Other" class="field checkcircle" type="checkbox" style="top: 55.8px;left: 122.8px;">
 
-		<input id="character_proficiencies_otherweapons" class="inputfield" style="top: 70px;left: 19px;font-size: 9.1px;height: 14px;width: 194px;" type="text">
+		<input id="Proficiency_Weapon_Other_Description" class="field inputfield" style="top: 70px;left: 19px;font-size: 9.1px;height: 14px;width: 194px;" type="text">
 
-		<input id="character_proficiencies_languages_0" class="inputfield" style="top: 110px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text" value="Common">
-		<input id="character_proficiencies_languages_1" class="inputfield" style="top: 130px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="character_proficiencies_languages_2" class="inputfield" style="top: 150px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="character_proficiencies_languages_3" class="inputfield" style="top: 170px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="character_proficiencies_languages_4" class="inputfield" style="top: 190px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="character_proficiencies_languages_5" class="inputfield" style="top: 210px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Language_1" class="field inputfield" style="top: 110px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text" value="Common">
+		<input id="Language_2" class="field inputfield" style="top: 130px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Language_3" class="field inputfield" style="top: 150px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Language_4" class="field inputfield" style="top: 170px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Language_5" class="field inputfield" style="top: 190px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Language_6" class="field inputfield" style="top: 210px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
 
-		<input id="character_proficiencies_tools_0" class="inputfield" style="top: 110px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="character_proficiencies_tools_1" class="inputfield" style="top: 130px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="character_proficiencies_tools_2" class="inputfield" style="top: 150px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="character_proficiencies_tools_3" class="inputfield" style="top: 170px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="character_proficiencies_tools_4" class="inputfield" style="top: 190px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="character_proficiencies_tools_5" class="inputfield" style="top: 210px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Tool_1" class="field inputfield" style="top: 110px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Tool_2" class="field inputfield" style="top: 130px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Tool_3" class="field inputfield" style="top: 150px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Tool_4" class="field inputfield" style="top: 170px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Tool_5" class="field inputfield" style="top: 190px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Tool_6" class="field inputfield" style="top: 210px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
 	</div>
 
 
@@ -461,47 +467,47 @@
 		<span class="textlabel-dimmed" style="top: 16.2px;left: 358.8px;font-size: 8px">REACTIONS</span>
 		<div class="textlabel-bold" style="top: 147px;left: 12.5px;width: 514.2px">ACTIONS</div>
 
-		<input id="character_actions_actions_0" class="inputfield" style="top: 25px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_actions_1" class="inputfield" style="top: 45px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_actions_2" class="inputfield" style="top: 65px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_actions_3" class="inputfield" style="top: 85px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_actions_4" class="inputfield" style="top: 105px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_actions_5" class="inputfield" style="top: 125px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Action_1" class="field inputfield" style="top: 25px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Action_2" class="field inputfield" style="top: 45px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Action_3" class="field inputfield" style="top: 65px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Action_4" class="field inputfield" style="top: 85px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Action_5" class="field inputfield" style="top: 105px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Action_6" class="field inputfield" style="top: 125px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
 
-		<input id="character_actions_bonusactions_0" class="inputfield" style="top: 25px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_bonusactions_1" class="inputfield" style="top: 45px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_bonusactions_2" class="inputfield" style="top: 65px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_bonusactions_3" class="inputfield" style="top: 85px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_bonusactions_4" class="inputfield" style="top: 105px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_bonusactions_5" class="inputfield" style="top: 125px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Bonus_Action_1" class="field inputfield" style="top: 25px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Bonus_Action_2" class="field inputfield" style="top: 45px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Bonus_Action_3" class="field inputfield" style="top: 65px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Bonus_Action_4" class="field inputfield" style="top: 85px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Bonus_Action_5" class="field inputfield" style="top: 105px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Bonus_Action_6" class="field inputfield" style="top: 125px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
 
-		<input id="character_actions_reactions_0" class="inputfield" style="top: 25px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_reactions_1" class="inputfield" style="top: 45px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_reactions_2" class="inputfield" style="top: 65px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_reactions_3" class="inputfield" style="top: 85px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_reactions_4" class="inputfield" style="top: 105px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="character_actions_reactions_5" class="inputfield" style="top: 125px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Reaction_1" class="field inputfield" style="top: 25px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Reaction_2" class="field inputfield" style="top: 45px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Reaction_3" class="field inputfield" style="top: 65px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Reaction_4" class="field inputfield" style="top: 85px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Reaction_5" class="field inputfield" style="top: 105px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Reaction_6" class="field inputfield" style="top: 125px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
 
-		<button id="character_actions_actions_0_btn" class="button" style="top: 28.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_actions_actions_1_btn" class="button" style="top: 48.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_actions_actions_2_btn" class="button" style="top: 68.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_actions_actions_3_btn" class="button" style="top: 88.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_actions_actions_4_btn" class="button" style="top: 108.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
-		<button id="character_actions_actions_5_btn" class="button" style="top: 128.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Action_1" class="field button" style="top: 28.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Action_2" class="field button" style="top: 48.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Action_3" class="field button" style="top: 68.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Action_4" class="field button" style="top: 88.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Action_5" class="field button" style="top: 108.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
+		<button id="Button-Action_6" class="field button" style="top: 128.5px;left: -3.4px;font-size: 8px;line-height: 4px;">&gt;</button>
 
-		<button id="character_actions_bonusactions_0_btn" class="button" style="top: 28.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_bonusactions_0_btn" class="button" style="top: 48.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_bonusactions_0_btn" class="button" style="top: 68.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_bonusactions_0_btn" class="button" style="top: 88.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_bonusactions_0_btn" class="button" style="top: 108.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_bonusactions_0_btn" class="button" style="top: 128.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Bonus_Action_1" class="field button" style="top: 28.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Bonus_Action_2" class="field button" style="top: 48.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Bonus_Action_3" class="field button" style="top: 68.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Bonus_Action_4" class="field button" style="top: 88.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Bonus_Action_5" class="field button" style="top: 108.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Bonus_Action_6" class="field button" style="top: 128.5px;left: 342px;font-size: 8px;line-height: 4px;">&lt;</button>
 
-		<button id="character_actions_reactions_0_btn" class="button" style="top: 28.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_reactions_1_btn" class="button" style="top: 48.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_reactions_2_btn" class="button" style="top: 68.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_reactions_3_btn" class="button" style="top: 88.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_reactions_4_btn" class="button" style="top: 108.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
-		<button id="character_actions_reactions_5_btn" class="button" style="top: 128.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Reaction_1" class="field button" style="top: 28.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Reaction_2" class="field button" style="top: 48.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Reaction_3" class="field button" style="top: 68.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Reaction_4" class="field button" style="top: 88.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Reaction_5" class="field button" style="top: 108.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
+		<button id="Button-Reaction_6" class="field button" style="top: 128.5px;left: 532px;font-size: 8px;line-height: 4px;">&lt;</button>
 	</div>
 
 
@@ -511,9 +517,9 @@
 		<span class="textlabel" style="top: 35px;left: 105px;font-size: 8.6px">PASSIVE WISDOM (PERCEPTION)</span>
 		<div class="textlabel-bold" style="top: 126px;left: 12.5px;width: 264.3px">SENSES</div>
 
-		<input id="character_senses_passive_perception" class="inputfield-noneditable" style="top: 26.5px;left: 31px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0" type="number" value="6">
+		<input id="Passive_Perception" class="field inputfield-noneditable" style="top: 26.5px;left: 31px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0" type="number" value="6">
 
-		<textarea id="character_senses_other" class="inputfield" rows="3" style="top: 63px;left: 15px;width: 255px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+		<textarea id="Vision" class="field inputfield" rows="3" style="top: 63px;left: 15px;width: 255px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
 	</div>
 
 
@@ -527,41 +533,64 @@
 		<span class="textlabel-dimmed" style="top: 10.5px;left: 247px;font-size: 8.3px">TOTAL</span>
 		<div class="textlabel-bold" style="top: 110px;left: 157.5px;width: 118.5px">AMMUNITION</div>
 
-		<input id="character_ammunition_0_type" class="inputfield" style="top: 20px;left: 17px;height: 15.3px;width: 77px;font-size: 11px;" type="text" list="ammunition_types">
-		<input id="character_ammunition_1_type" class="inputfield" style="top: 20px;left: 162px;height: 15.3px;width: 77px;font-size: 11px;" type="text" list="ammunition_types">
+		<input id="AmmoLeftDisplay-Name" class="field inputfield" style="top: 20px;left: 17px;height: 15.3px;width: 77px;font-size: 11px;" type="text" list="ammunition_types">
+		<input id="AmmoRightDisplay-Name" class="field inputfield" style="top: 20px;left: 162px;height: 15.3px;width: 77px;font-size: 11px;" type="text" list="ammunition_types">
 		<datalist id="ammunition_types">
 			<option value="Arrows">
 			<option value="Daggers">
 		</datalist>
 
-		<input id="character_ammunition_0_total" class="inputfield" style="top: 20px;left: 100px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center" type="number">
-		<input id="character_ammunition_1_total" class="inputfield" style="top: 20px;left: 245px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center" type="number">
+		<input id="AmmoLeftDisplay-Amount" class="field inputfield" style="top: 20px;left: 100px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center" type="number">
+		<input id="AmmoRightDisplay-Amount" class="field inputfield" style="top: 20px;left: 245px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center" type="number">
 
-		<button id="character_ammunition_0_reload" class="button" style="top: 38px;left: 95.5px;font-size: 8px;line-height: 6px;">Reload</button>
-		<button id="character_ammunition_1_reload" class="button" style="top: 38px;left: 241px;font-size: 8px;line-height: 6px;">Reload</button>
+		<button id="AmmoLeftDisplay-Reset" class="button" style="top: 38px;left: 95.5px;font-size: 8px;line-height: 6px;">Reload</button>
+		<button id="AmmoRightDisplay-Reset" class="button" style="top: 38px;left: 241px;font-size: 8px;line-height: 6px;">Reload</button>
 
 		<!--TODO: make other ammunition svgs and configurations to switch between with type input above-->
-		<div>
-			<input id="character_ammunition_0_inv_0" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  18px;">
-			<input id="character_ammunition_0_inv_1" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  28px;">
-			<input id="character_ammunition_0_inv_2" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  38px;">
-			<input id="character_ammunition_0_inv_3" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  48px;">
-			<input id="character_ammunition_0_inv_4" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  58px;">
-			<input id="character_ammunition_0_inv_5" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  68px;">
-			<input id="character_ammunition_0_inv_6" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  78px;">
-			<input id="character_ammunition_0_inv_7" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  88px;">
-			<input id="character_ammunition_0_inv_8" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  98px;">
-			<input id="character_ammunition_0_inv_9" class="checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 108px;">
-			<input id="character_ammunition_0_inv_10" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  18px;">
-			<input id="character_ammunition_0_inv_11" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  28px;">
-			<input id="character_ammunition_0_inv_12" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  38px;">
-			<input id="character_ammunition_0_inv_13" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  48px;">
-			<input id="character_ammunition_0_inv_14" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  58px;">
-			<input id="character_ammunition_0_inv_15" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  68px;">
-			<input id="character_ammunition_0_inv_16" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  78px;">
-			<input id="character_ammunition_0_inv_17" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  88px;">
-			<input id="character_ammunition_0_inv_18" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  98px;">
-			<input id="character_ammunition_0_inv_19" class="checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 108px;">
+		<div id="AmmoLeft" class="field">
+			<input id="AmmoLeft-Bullet-1" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  18px;">
+			<input id="AmmoLeft-Bullet-2" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  28px;">
+			<input id="AmmoLeft-Bullet-3" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  38px;">
+			<input id="AmmoLeft-Bullet-4" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  48px;">
+			<input id="AmmoLeft-Bullet-5" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  58px;">
+			<input id="AmmoLeft-Bullet-6" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  68px;">
+			<input id="AmmoLeft-Bullet-7" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  78px;">
+			<input id="AmmoLeft-Bullet-8" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  88px;">
+			<input id="AmmoLeft-Bullet-9" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left:  98px;">
+			<input id="AmmoLeft-Bullet-10" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 108px;">
+			<input id="AmmoLeft-Bullet-11" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  18px;">
+			<input id="AmmoLeft-Bullet-12" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  28px;">
+			<input id="AmmoLeft-Bullet-13" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  38px;">
+			<input id="AmmoLeft-Bullet-14" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  48px;">
+			<input id="AmmoLeft-Bullet-15" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  58px;">
+			<input id="AmmoLeft-Bullet-16" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  68px;">
+			<input id="AmmoLeft-Bullet-17" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  78px;">
+			<input id="AmmoLeft-Bullet-18" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  88px;">
+			<input id="AmmoLeft-Bullet-19" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left:  98px;">
+			<input id="AmmoLeft-Bullet-20" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 108px;">
+		</div>
+
+		<div id="AmmoRight" class="field">
+			<input id="AmmoRight-Bullet-1" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 163.5px;">
+			<input id="AmmoRight-Bullet-2" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 173.5px;">
+			<input id="AmmoRight-Bullet-3" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 183.5px;">
+			<input id="AmmoRight-Bullet-4" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 193.5px;">
+			<input id="AmmoRight-Bullet-5" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 203.5px;">
+			<input id="AmmoRight-Bullet-6" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 213.5px;">
+			<input id="AmmoRight-Bullet-7" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 223.5px;">
+			<input id="AmmoRight-Bullet-8" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 233.5px;">
+			<input id="AmmoRight-Bullet-9" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 243.5px;">
+			<input id="AmmoRight-Bullet-10" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 47px;left: 253.5px;">
+			<input id="AmmoRight-Bullet-11" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 163.5px;">
+			<input id="AmmoRight-Bullet-12" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 173.5px;">
+			<input id="AmmoRight-Bullet-13" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 183.5px;">
+			<input id="AmmoRight-Bullet-14" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 193.5px;">
+			<input id="AmmoRight-Bullet-15" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 203.5px;">
+			<input id="AmmoRight-Bullet-16" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 213.5px;">
+			<input id="AmmoRight-Bullet-17" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 223.5px;">
+			<input id="AmmoRight-Bullet-18" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 233.5px;">
+			<input id="AmmoRight-Bullet-19" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 243.5px;">
+			<input id="AmmoRight-Bullet-20" class="field checkbox-ammunition-arrow" type="checkbox" style="top: 77px;left: 253.5px;">
 		</div>
 	</div>
 
@@ -580,58 +609,58 @@
 		<div class="textlabel-bold" style="top: 257px;left: 13.6px;width: 512.7px">ATTACKS: WEAPONS &amp; CANTRIPS</div>
 
 		<div style="position: absolute;top: 23px;left: 20px;width: 501px;height: 36px">
-			<input id="character_attacks_0_name" class="inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
-			<input id="character_attacks_0_prof" class="inputfield" type="checkbox" style="top: 0px;left: 191px;">
-			<input id="character_attacks_0_ability" class="inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
-			<input id="character_attacks_0_range" class="inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
-			<input id="character_attacks_0_to_hit" class="inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text" value="+6">
-			<input id="character_attacks_0_damage" class="inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text" value="1d6+4">
-			<input id="character_attacks_0_damage_types" class="inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
-			<input id="character_attacks_0_description" class="inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
+			<input id="Attack-1-Weapon_Selection" class="field inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
+			<input id="Attack-1-Proficiency" class="field inputfield" type="checkbox" style="top: 0px;left: 191px;">
+			<input id="Attack-1-Mod" class="field inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
+			<input id="Attack-1-Range" class="field inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
+			<input id="Attack-1-To_Hit" class="field inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text" value="+6">
+			<input id="Attack-1-Damage" class="field inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text" value="1d6+4">
+			<input id="Attack-1-Damage_Type" class="field inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
+			<input id="Attack-1-Description" class="field inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
 		</div>
 
 		<div style="position: absolute;top: 71px;left: 20px;width: 501px;height: 36px">
-			<input id="character_attacks_1_name" class="inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
-			<input id="character_attacks_1_prof" class="inputfield" type="checkbox" style="top: 0px;left: 191px;">
-			<input id="character_attacks_1_ability" class="inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
-			<input id="character_attacks_1_range" class="inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
-			<input id="character_attacks_1_to_hit" class="inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
-			<input id="character_attacks_1_damage" class="inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text">
-			<input id="character_attacks_1_damage_types" class="inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
-			<input id="character_attacks_1_description" class="inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
+			<input id="Attack-2-Weapon_Selection" class="field inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
+			<input id="Attack-2-Proficiency" class="field inputfield" type="checkbox" style="top: 0px;left: 191px;">
+			<input id="Attack-2-Mod" class="field inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
+			<input id="Attack-2-Range" class="field inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
+			<input id="Attack-2-To_Hit" class="field inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
+			<input id="Attack-2-Damage" class="field inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text">
+			<input id="Attack-2-Damage_Type" class="field inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
+			<input id="Attack-2-Description" class="field inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
 		</div>
 
 		<div style="position: absolute;top: 119px;left: 20px;width: 501px;height: 36px">
-			<input id="character_attacks_2_name" class="inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
-			<input id="character_attacks_2_prof" class="inputfield" type="checkbox" style="top: 0px;left: 191px;">
-			<input id="character_attacks_2_ability" class="inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
-			<input id="character_attacks_2_range" class="inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
-			<input id="character_attacks_2_to_hit" class="inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
-			<input id="character_attacks_2_damage" class="inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text">
-			<input id="character_attacks_2_damage_types" class="inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
-			<input id="character_attacks_2_description" class="inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
+			<input id="Attack-3-Weapon_Selection" class="field inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
+			<input id="Attack-3-Proficiency" class="field inputfield" type="checkbox" style="top: 0px;left: 191px;">
+			<input id="Attack-3-Mod" class="field inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
+			<input id="Attack-3-Range" class="field inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
+			<input id="Attack-3-To_Hit" class="field inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
+			<input id="Attack-3-Damage" class="field inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text">
+			<input id="Attack-3-Damage_Type" class="field inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
+			<input id="Attack-3-Description" class="field inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
 		</div>
 
 		<div style="position: absolute;top: 167px;left: 20px;width: 501px;height: 36px">
-			<input id="character_attacks_3_name" class="inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
-			<input id="character_attacks_3_prof" class="inputfield" type="checkbox" style="top: 0px;left: 191px;">
-			<input id="character_attacks_3_ability" class="inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
-			<input id="character_attacks_3_range" class="inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
-			<input id="character_attacks_3_to_hit" class="inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
-			<input id="character_attacks_3_damage" class="inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text">
-			<input id="character_attacks_3_damage_types" class="inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
-			<input id="character_attacks_3_description" class="inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
+			<input id="Attack-4-Weapon_Selection" class="field inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
+			<input id="Attack-4-Proficiency" class="field inputfield" type="checkbox" style="top: 0px;left: 191px;">
+			<input id="Attack-4-Mod" class="field inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
+			<input id="Attack-4-Range" class="field inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
+			<input id="Attack-4-To_Hit" class="field inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
+			<input id="Attack-4-Damage" class="field inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text">
+			<input id="Attack-4-Damage_Type" class="field inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
+			<input id="Attack-4-Description" class="field inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
 		</div>
 
 		<div style="position: absolute;top: 215px;left: 20px;width: 501px;height: 36px">
-			<input id="character_attacks_4_name" class="inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
-			<input id="character_attacks_4_prof" class="inputfield" type="checkbox" style="top: 0px;left: 191px;">
-			<input id="character_attacks_4_ability" class="inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
-			<input id="character_attacks_4_range" class="inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
-			<input id="character_attacks_4_to_hit" class="inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
-			<input id="character_attacks_4_damage" class="inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text">
-			<input id="character_attacks_4_damage_types" class="inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
-			<input id="character_attacks_4_description" class="inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
+			<input id="Attack-5-Weapon_Selection" class="field inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;" type="text" list="attacks_names">
+			<input id="Attack-5-Proficiency" class="field inputfield" type="checkbox" style="top: 0px;left: 191px;">
+			<input id="Attack-5-Mod" class="field inputfield" style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
+			<input id="Attack-5-Range" class="field inputfield" style="top: 0px;left: 252.5px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
+			<input id="Attack-5-To_Hit" class="field inputfield-notched" style="top: 0px;left: 322.5px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
+			<input id="Attack-5-Damage" class="field inputfield-notched" style="top: 0px;left: 360px;font-size: 12px;width: 65px;height: 15px;pointer-events: none" type="text">
+			<input id="Attack-5-Damage_Type" class="field inputfield" style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;" type="text" list="attacks_damage_types">
+			<input id="Attack-5-Description" class="field inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;" type="text">
 		</div>
 
 		<datalist id="attacks_names">
@@ -647,15 +676,83 @@
 			<!--TODO-->>
 		</datalist>
 
-		<button id="character_attacks_0_btn" class="button" style="top: 35px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
-		<button id="character_attacks_1_btn" class="button" style="top: 83px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
-		<button id="character_attacks_2_btn" class="button" style="top: 131px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
-		<button id="character_attacks_3_btn" class="button" style="top: 179px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
-		<button id="character_attacks_4_btn" class="button" style="top: 227px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
+		<button id="Attack-Button-1" class="field button" style="top: 35px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
+		<button id="Attack-Button-2" class="field button" style="top: 83px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
+		<button id="Attack-Button-3" class="field button" style="top: 131px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
+		<button id="Attack-Button-4" class="field button" style="top: 179px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
+		<button id="Attack-Button-5" class="field button" style="top: 227px;left: -3px;font-size: 8px;line-height: 6px;">&gt;</button>
 	</div>
 
-	<span class="textlabel-dimmed" style="top: 1155px;left: 43px;font-size: 6.43px;font-weight: bold">MorePurpleMoreBetter's D&amp;D 5th edition Character Record Sheet v13.1.0 (Printer Friendly - Redesign)</span>
-	<span class="textlabel-dimmed" style="top: 1155px;left: 387px;font-size: 6.44px;font-weight: bold">
+	<span id="SheetInformation" class="field textlabel-dimmed" style="top: 1155px;left: 43px;font-size: 6.43px;font-weight: bold">MorePurpleMoreBetter's D&amp;D 5th edition Character Record Sheet v13.1.0 (Printer Friendly - Redesign)</span>
+	<span id="CopyrightInformationFront" class="field textlabel-dimmed" style="top: 1155px;left: 387px;font-size: 6.44px;font-weight: bold">
 		Made by Joost Wijnen (mpmb@flapkan.com); Web front-end by Simon De Ridder; Dragon Head by spikeilustra; Design inspired by Wizards of the Coast character sheet
 	</span>
+
+	<!-- Invisible fields (some are bluetext mods, sort these out later) -->
+	<div style="visibility:hidden">
+		<div id="SaveIMG-Patreon" class="field"></div>
+		<div id="Opening_Remember" class="field"></div>
+		<div id="League_Remember" class="field"></div>
+		<div id="Class_Features_Remember" class="field"></div>
+		<div id="SubClass_Remember" class="field"></div>
+		<div id="Race_Remember" class="field"></div>
+		<div id="AC_Stealth_Disadvantage" class="field"></div>
+		<div id="MoreProficiencies" class="field"></div>
+		<input id="Remarkable_Athlete" class="field inputfield" type="checkbox"/>
+		<input id="Jack_of_All_Trades" class="field inputfield" type="checkbox"/>
+		<div id="Proficiency_Bonus_Dice" class="field"></div>
+		<div id="Perc_Adv" class="field"></div><!--?-->
+		<div id="Perc_Dis" class="field"></div><!--?-->
+		<div id="Extra-Exhaustion_Level_1" class="field"></div>
+		<div id="Extra-Exhaustion_Level_2" class="field"></div>
+		<div id="Extra-Exhaustion_Level_3" class="field"></div>
+		<div id="Extra-Exhaustion_Level_4" class="field"></div>
+		<div id="Extra-Exhaustion_Level_5" class="field"></div>
+		<div id="Extra-Exhaustion_Level_6" class="field"></div>
+		<div id="Extra-Condition_1" class="field"></div>
+		<div id="Extra-Condition_3" class="field"></div>
+		<div id="Extra-Condition_4" class="field"></div>
+		<div id="Extra-Condition_5" class="field"></div>
+		<div id="Extra-Condition_6" class="field"></div>
+		<div id="Extra-Condition_7" class="field"></div>
+		<div id="Extra-Condition_8" class="field"></div>
+		<div id="Extra-Condition_9" class="field"></div>
+		<div id="Extra-Condition_10" class="field"></div>
+		<div id="Extra-Condition_11" class="field"></div>
+		<div id="Extra-Condition_12" class="field"></div>
+		<div id="Extra-Condition_13" class="field"></div>
+		<div id="Extra-Condition_14" class="field"></div>
+		<div id="Stealth_Disadv" class="field"></div>
+		<div id="Text-Header-Combat" class="field"></div>
+		<div id="Spell_DC_1_Bonus" class="field"></div>
+		<div id="Spell_DC_2_Bonus" class="field"></div>
+		<div id="Text-SkillsNames" class="field"></div>
+		<div id="Attack-Titles" class="field"></div>
+		<div id="d20warning" class="field"></div>
+		<div id="Text-SaveDC-1" class="field"></div>
+		<div id="HoS_ST_Bonus" class="field"></div>
+		<div id="DCI-Text" class="field"></div>
+		<div id="DCI-Title" class="field"></div>
+		<div id="Acr_Bonus" class="field"></div>
+		<div id="HoS_Mod" class="field"></div>
+		<div id="User_Script" class="field"></div>
+		<div id="User_Imported_Files-Stringified" class="field"></div>
+		<div id="Delimiter" class="field"></div>
+		<div id="Extra-Layers_Remember" class="field"></div>
+		<div id="AC_Armor_Weight" class="field"></div>
+		<div id="AC_Shield_Weight" class="field"></div>
+		<div id="HP_Max_Current" class="field"></div>
+		<div id="BlueText-Players_Make_All_Rolls" class="field"></div>
+		<div id="BlueText-Attack" class="field"></div>
+		<div id="BlueText-Attack-1-Weight" class="field"></div>
+		<div id="BlueText-Attack-2-Weight" class="field"></div>
+		<div id="BlueText-Attack-3-Weight" class="field"></div>
+		<div id="BlueText-Attack-4-Weight" class="field"></div>
+		<div id="BlueText-Attack-5-Weight" class="field"></div>
+		<div id="BlueText-Attack-1-Weight_Title" class="field"></div>
+		<div id="BlueText-Attack-2-Weight_Title" class="field"></div>
+		<div id="BlueText-Attack-3-Weight_Title" class="field"></div>
+		<div id="BlueText-Attack-4-Weight_Title" class="field"></div>
+		<div id="BlueText-Attack-5-Weight_Title" class="field"></div>
+	</div>
 </div>

@@ -1,5 +1,4 @@
-<!--CSBack
-don't forget to connect the following ids:
+<!--
 "Carrying_Capacity_Multiplier"
 "Platinum Pieces"
 "Gold Pieces"
@@ -13,247 +12,276 @@ don't forget to connect the following ids:
 "Adventuring Gear Weight " + i
 "Adventuring Gear Row 1"
 "Adventuring Gear Button " + i
-"Personality Trait"
-"Ideal"
-"Bond"
-"Flaw"
 "Weight_Carrying_Capacity.Field"
-"Class_Features"
 "Image.MagicItemAttuned." + fldNmbr
-"Background Menu"
 "Text.Header.Features"
-"Racial Traits"
-"Background Feature"
 "Text.Header.Proficiencies"
 "Text.Header.Background"
-"Personality Trait"
-"Ideal"
-"Bond"
-"Flaw"
 "Feat Name 1.1"
 "Valuables1"
 "Attuned Magic Items Title"
-"Display.Weighttxt.LbKg"
-"Race Features Menu"
-"Class Features Menu"
 "Equipment.menu"
 and connect `CurrentFeatureChoices` somehow (chosen class features)
 -->
 
-<div id="pf2" class="pf w0 h0">
-    <div class="pc pc2 w0 h0"><img class="bf" alt="" src="img/bg2.svg" />
-        <div class="t m0 x52 h3 yb5 ffb fs2 fc0 sc0 ls0 ws0">PERSONALITY TRAITS</div>
-        <div class="t m0 x53 h3 yb6 ffb fs2 fc0 sc0 ls0 ws0">IDEALS</div>
-        <div class="t m0 x53 h3 yb7 ffb fs2 fc0 sc0 ls0 ws0">BONDS</div>
-        <div class="t m0 x53 h3 yb8 ffb fs2 fc0 sc0 ls0 ws0">FLAWS</div>
-        <div class="t m0 x54 h1 yb9 ffc fs0 fc1 sc0 ls0 ws0">Feature Name:<span class="fc2"> </span></div>
-        <div class="t m0 x55 h3 yba ffb fs2 fc0 sc0 ls0 ws0">BACKGROUND FEATURE</div>
-        <div class="t m0 x32 h3 ybb ffb fs2 fc0 sc0 ls0 ws0">CLASS FEATURES<span class="_ _1e"> </span>RACIAL TRAITS
-        </div>
-        <div class="t m0 x13 h1 ybc ffc fs1 fc1 sc0 ls1 ws0">ADVENTURING GEAR<span class="_ _1f"> </span><span
-                  class="fs0 ls0">#<span class="_ _8"> </span></span>ADVENTURING GEAR<span class="_ _1f"> </span><span
-                  class="fs0 ls0">#<span class="_ _8"> </span></span>ADVENTURING GEAR<span class="_ _1f"> </span><span
-                  class="fs0 ls0">#</span></div>
-        <div class="t m0 x56 h2 ybd ffc fs1 fc0 sc0 ls0 ws0">CP</div>
-        <div class="t m0 x56 h2 ybe ffc fs1 fc0 sc0 ls0 ws0">SP</div>
-        <div class="t m0 x56 h2 ybf ffc fs1 fc0 sc0 ls0 ws0">EP</div>
-        <div class="t m0 x56 h2 yc0 ffc fs1 fc0 sc0 ls0 ws0">GP</div>
-        <div class="t m0 x56 h2 yc1 ffc fs1 fc0 sc0 ls0 ws0">PP</div>
-        <div class="t m0 x57 h2 yc2 ffc fs1 fc0 sc0 ls1 ws0">WEIGHT CARRIED</div>
-        <div class="t m0 x58 h2 yc3 ffc fs1 fc0 sc0 ls1 ws1"><span class="fc9 sc0">ENCUMBERED</span></div>
-        <div class="t m0 x59 h2 yc4 ffc fs1 fc0 sc0 ls1 ws0"><span class="fc9 sc0">HEAVILY ENCUMBERED</span></div>
-        <div class="t m0 x57 h2 yc5 ffc fs1 fc0 sc0 ls1 ws1">PUSH/DRAG/LIFT</div>
-        <div class="t m0 x5 h2 yc6 ffc fs1 fc1 sc0 ls1 ws1">SUBTOTAL<span class="_ _20"> </span>SUBTOTAL<span
-                  class="_ _20"> </span>SUBTOTAL</div>
-        <div class="t m0 x5a h3 yc7 ffb fs2 fc0 sc0 ls0 ws0">EQUIPMENT</div>
-        <div class="c x5b yc8 w18 h21">
-            <div class="t m0 x2e h22 yc9 ff4 fs16 fc7 sc0 ls0 ws0">LB</div>
-        </div>
-        <div class="c x5c yca w18 h23">
-            <div class="t m0 x2e h24 ycb ff4 fs17 fc7 sc0 ls0 ws0">LB</div>
-        </div>
-        <div class="c x9 yca w18 h23">
-            <div class="t m0 x2e h24 ycb ff4 fs17 fc7 sc0 ls0 ws0">LB</div>
-        </div>
-        <div class="c x5d ycc w19 h11">
-            <div class="t m0 x5e h4 y46 ff4 fs3 fc3 sc0 ls0 ws0">Add Features</div>
-        </div>
-        <div class="c x5f ycd w19 h25">
-            <div class="t m0 x60 h4 yce ff4 fs3 fc3 sc0 ls0 ws0">Add Equipment</div>
-        </div>
-        <div class="c x61 ycf w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd0 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd1 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd2 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd3 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd4 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd5 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd6 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd7 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd8 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yd9 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yda w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 ydb w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 ydc w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 ydd w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 yde w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 ydf w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x61 ye0 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 ycf w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd0 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd1 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd2 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd3 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd4 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd5 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd6 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd7 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd8 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yd9 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yda w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 ydb w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 ydc w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 ydd w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 yde w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 ydf w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x45 ye0 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 ycf w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd0 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd1 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd2 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd3 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd4 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd5 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd6 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd7 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd8 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yd9 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yda w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 ydb w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 ydc w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 yde w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 ydf w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x62 ye0 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x63 ye1 w1a h26">
-            <div class="t m0 x2d h2 ye2 ff4 fs1 fc7 sc0 ls0 ws0">ATTUNED MAGICAL ITEMS</div>
-        </div>
-        <div class="c x64 ye3 w1b h27">
-            <div class="t m0 x2e h28 ye4 ffd fs1 fc0 sc0 ls1 ws0">CARRYING CAPACITY</div>
-        </div>
-        <div class="c x46 ya4 w16 h19">
-            <div class="t m0 x2d h1a ya5 ff7 fs11 fc7 sc0 ls0 ws0">MorePurpleMoreBetter&apos;s D&amp;D 5th edition
-                Character Record Sheet v13.1.0 (Printer Friendly - Redesign)</div>
-        </div>
-        <div class="c x50 ya4 w16 h19">
-            <div class="t m0 x65 h1a ya5 ff7 fs11 fc7 sc0 ls0 ws0">Made by Joost Wijnen (mpmb@flapkan.com); Design
-                inspired by Wizards of the Coast character sheet</div>
-        </div>
-    </div>
-    <div class="pi" data-data='{"ctm":[1.500000,0.000000,0.000000,1.500000,0.000000,0.000000]}'></div>
+<div id="CSBack" class="field page-container">
+
+	<div id="features_features" class="pane" style="left: 25px;top: 25px;width: 480px;height: 765px">
+		<img class="pane-bg" alt="" src="img/page_features_equipment/backgrounds/features.svg" style="width: 470px;height: 754.5px;left: 6.5px;top: 8px;">
+
+		<span class="textlabel-bold" style="top: 746px;left: 14px;width: 453px">CLASS FEATURES</span>
+
+		<textarea id="Class_Features" class="field inputfield" rows="44" style="top: 13px;left: 20px;width: 440px;height: 725px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+
+		<button id="Class_Features_Menu" class="field button" style="top: -8px;left: 20px;visibility: hidden">Class Features Menu</button>
+	</div>
+
+
+	<div id="features_background_traits" class="pane" style="left: 505px;top: 25px;width: 366px;height: 393px;">
+		<img class="pane-bg" alt="" src="img/page_features_equipment/backgrounds/background_traits.svg" style="width: 341px;height: 378px;left: 12.5px;top: 8px;">
+
+		<span class="textlabel-bold" style="top: 101.5px;left: 25.5px;width: 315px">PERSONALITY TRAITS</span>
+		<span class="textlabel-bold" style="top: 187px;left: 25.5px;width: 315px">IDEALS</span>
+		<span class="textlabel-bold" style="top: 272.5px;left: 25.5px;width: 315px">BONDS</span>
+		<span class="textlabel-bold" style="top: 358px;left: 25.5px;width: 315px">FLAWS</span>
+
+		<textarea id="Personality_Trait" class="field inputfield" rows="4" style="top: 29px;left: 33.5px;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+		<textarea id="Ideal" class="field inputfield" rows="3" style="top: 130px;left: 33.5px;width: 295px;height: 48px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+		<textarea id="Bond" class="field inputfield" rows="3" style="top: 215.5px;left: 33.5px;width: 295px;height: 48px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+		<textarea id="Flaw" class="field inputfield" rows="3" style="top: 300.5px;left: 33.5px;width: 295px;height: 48px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+
+		<button id="Background_Menu" class="field button" style="top: 9.5px;left: 156.5px;">Add Features</button>
+	</div>
+
+
+	<div id="features_background_feature" class="pane" style="left: 505px;top: 418px;width: 366px;height: 170px;">
+		<img class="pane-bg" alt="" src="img/page_features_equipment/backgrounds/background_feature.svg" style="width: 341.3px;height: 160px;left: 12.55px;top: 4.5px;">
+
+		<span class="textlabel-bold" style="top: 146.3px;left: 18.7px;width: 329px">BACKGROUND FEATURE</span>
+		<span class="textlabel-dimmed" style="top: 20.5px;left: 24.7px">Feature Name:</span>
+
+		<input id="Background_Feature" class="field inputfield" list="background_feature_options" style="top: 19px;left: 91px;font-size: 12px;width: 247px;height: 13.3px;">
+		<datalist id="background_feature_options">
+		</datalist>
+		<textarea id="Background_Feature_Description" class="field inputfield" rows="6" style="top: 39.5px;left: 24.5px;width: 313.5px;height: 95px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+	</div>
+
+
+	<div id="features_racial_traits" class="pane" style="left: 505px;top: 588px;width: 366px;height: 206px;">
+		<img class="pane-bg" alt="" src="img/page_features_equipment/backgrounds/racial_traits.svg" style="width: 341.2px;left: 12.55px;top: 6px;height: 193.5px;">
+
+		<span class="textlabel-bold" style="top: 183.7px;left: 18.6px;width: 329px">RACIAL TRAITS</span>
+
+		<textarea id="Racial_Traits" class="field inputfield" rows="10" style="top: 10.7px;left: 24.5px;width: 313.5px;height: 165px;font-size: 10.2px;line-height: 16.52px;padding-top: 3.6px;"></textarea>
+
+		<button id="Race_Features_Menu" class="field button" style="top: 181px;left: 261.5px;visibility: hidden">Race Features Menu</button>
+	</div>
+
+
+	<div id="features_equipment" class="pane" style="left: 25px;top: 794px;width: 846px;height: 368px;">
+		<img class="pane-bg" alt="" src="img/page_features_equipment/backgrounds/equipment.svg" style="width: 826.4px;left: 7.5px;top: 7.6px;height: 352.8px;">
+
+		<span class="textlabel-bold" style="top: 344.4px;left: 13.5px;width: 814.5px">EQUIPMENT</span>
+		<span class="textlabel-dimmed" style="top: 19.5px;left: 21.9px;font-size: 8px">ADVENTURING GEAR</span>
+		<span class="textlabel-dimmed" style="top: 17.8px;left: 202px;font-size: 10px">#</span>
+		<span id="Display-Weighttxt-LbKg#0" class="field textlabel-dimmed" style="top: 19.3px;left: 222.4px;font-size: 8.3px">LB</span>
+		<span class="textlabel-dimmed" style="top: 19.5px;left: 260.4px;font-size: 8px">ADVENTURING GEAR</span>
+		<span class="textlabel-dimmed" style="top: 17.8px;left: 440.5px;font-size: 10px">#</span>
+		<span id="Display-Weighttxt-LbKg#1" class="field textlabel-dimmed" style="top: 19.3px;left: 461px;font-size: 8.3px">LB</span>
+		<span class="textlabel-dimmed" style="top: 19.5px;left: 498.9px;font-size: 8px">ADVENTURING GEAR</span>
+		<span class="textlabel-dimmed" style="top: 17.8px;left: 679px;font-size: 10px">#</span>
+		<span id="Display-Weighttxt-LbKg#21" class="field textlabel-dimmed" style="top: 19.3px;left: 699.5px;font-size: 8.3px">LB</span>
+		<span class="textlabel-dimmed" style="top: 266.7px;left: 499.5px;font-size: 8.5px">ATTUNED MAGICAL ITEMS</span>
+		<span class="textlabel-dimmed" style="top: 332px;left: 169.9px;font-size: 8.2px">SUBTOTAL</span>
+		<span class="textlabel-dimmed" style="top: 332px;left: 408.6px;font-size: 8.2px">SUBTOTAL</span>
+		<span class="textlabel-dimmed" style="top: 332px;left: 647.2px;font-size: 8.2px">SUBTOTAL</span>
+
+		<span class="textlabel" style="top: 24.8px;left: 819.3px;font-size: 8.3px">CP</span>
+		<span class="textlabel" style="top: 66.0px;left: 819.3px;font-size: 8.3px">SP</span>
+		<span class="textlabel" style="top: 107.2px;left: 819.3px;font-size: 8.3px">EP</span>
+		<span class="textlabel" style="top: 148.4px;left: 819.3px;font-size: 8.3px">GP</span>
+		<span class="textlabel" style="top: 189.6px;left: 819.3px;font-size: 8.3px">PP</span>
+	</div>
+
+
+	<div class="pc pc2 w0 h0">
+		<div class="t m0 x57 h2 yc2 ffc fs1 fc0 sc0 ls1 ws0">WEIGHT CARRIED</div>
+		<div class="t m0 x58 h2 yc3 ffc fs1 fc0 sc0 ls1 ws1"><span class="fc9 sc0">ENCUMBERED</span></div>
+		<div class="t m0 x59 h2 yc4 ffc fs1 fc0 sc0 ls1 ws0"><span class="fc9 sc0">HEAVILY ENCUMBERED</span></div>
+		<div class="t m0 x57 h2 yc5 ffc fs1 fc0 sc0 ls1 ws1">PUSH/DRAG/LIFT</div>
+		<div class="c x5f ycd w19 h25">
+			<div class="t m0 x60 h4 yce ff4 fs3 fc3 sc0 ls0 ws0">Add Equipment</div>
+		</div>
+		<div class="c x61 ycf w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd0 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd1 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd2 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd3 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd4 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd5 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd6 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd7 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd8 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yd9 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yda w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 ydb w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 ydc w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 ydd w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 yde w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 ydf w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x61 ye0 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 ycf w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd0 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd1 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd2 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd3 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd4 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd5 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd6 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd7 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd8 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yd9 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yda w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 ydb w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 ydc w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 ydd w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 yde w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 ydf w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x45 ye0 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 ycf w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd0 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd1 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd2 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd3 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd4 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd5 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd6 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd7 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd8 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yd9 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yda w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 ydb w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 ydc w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 yde w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 ydf w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x62 ye0 w13 h17">
+			<div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
+		</div>
+		<div class="c x64 ye3 w1b h27">
+			<div class="t m0 x2e h28 ye4 ffd fs1 fc0 sc0 ls1 ws0">CARRYING CAPACITY</div>
+		</div>
+		<div class="c x46 ya4 w16 h19">
+			<div class="t m0 x2d h1a ya5 ff7 fs11 fc7 sc0 ls0 ws0">MorePurpleMoreBetter&apos;s D&amp;D 5th edition
+				Character Record Sheet v13.1.0 (Printer Friendly - Redesign)</div>
+		</div>
+		<div class="c x50 ya4 w16 h19">
+			<div class="t m0 x65 h1a ya5 ff7 fs11 fc7 sc0 ls0 ws0">Made by Joost Wijnen (mpmb@flapkan.com); Design
+				inspired by Wizards of the Coast character sheet</div>
+		</div>
+	</div>
+	<div class="pi" data-data='{"ctm":[1.500000,0.000000,0.000000,1.500000,0.000000,0.000000]}'></div>
 </div>

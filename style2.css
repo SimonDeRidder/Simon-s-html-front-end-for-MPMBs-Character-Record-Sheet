@@ -5,6 +5,7 @@
 	--text-dimmed: #9b9b9b;
 	--input-background: rgba(231, 230, 255, 0.71);
 	--black: #0A0A0D;
+	--background: white;
 }
 
 @font-face {
@@ -20,7 +21,7 @@
 
 /* index styles */
 .tablink {
-	background-color: white;
+	background-color: var(--background);
 	color: #333;
 	border: none;
 	outline: none;
@@ -51,7 +52,7 @@
 /* page styles */
 .page-container {
 	position: relative;
-	background-color: white;
+	background-color: var(--background);
 	overflow: hidden;
 	margin: 0;
 	border: 0;
@@ -100,13 +101,13 @@
 	border-color: #7c7c7c;
 	border-style: solid;
 	border-width: 3px;
-	color: white;
+	color: var(--background);
 	background-color: #a8a8a8;
 	font-size: 8px;
 	line-height: 7px;
 	padding: 0px;
 	cursor: pointer;
-	z-index: 2;
+	z-index: 1;
 }
 
 .inputfield {
@@ -129,6 +130,18 @@
 	border: none;
 	border-width: 0px;
 	clip-path: polygon(15% 0, 100% 0%, 100% 76%, 85% 100%, 0% 100%, 0% 24%);
+	outline: none;
+	overflow: hidden;
+}
+
+.inputfield-notched-wide {
+	position: absolute;
+	text-align: center;
+	background-color: #DEDDDE;
+	color: var(--black);
+	border: none;
+	border-width: 0px;
+	clip-path: polygon(4% 0%, 100% 0%, 100% 80%, 96% 100%, 0% 100%, 0% 20%);
 	outline: none;
 	overflow: hidden;
 }
@@ -244,4 +257,10 @@ input[type=number] {
 	border: none;
 	background-color: transparent;
 	background-image: url("img/page_stats/ammunition_checkboxes/arrow_selected.svg");
+}
+
+.pane .whiteout {
+	border: none;
+	background-color: var(--background);
+	position: absolute;
 }

@@ -31,7 +31,7 @@ const app = {
 };
 this.info = {
 	SheetType: "printer friendly",
-	SheetVersion: "v13.1.0",
+	SheetVersion: "v13.1.2",
 };
 
 this.bookmarkRoot = {

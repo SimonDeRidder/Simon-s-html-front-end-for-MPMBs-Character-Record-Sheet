@@ -3,8 +3,9 @@ import re
 
 import numpy as np
 
-FILE = "page_1/backgrounds/attacks.svg"
-EXTRA_TRANSLATION = (-440.0, -1184.0)
+FILE = "img/page_features_equipment/backgrounds/temp.svg"
+EXTRA_TRANSLATION = (-0.0, -0.000162862)
+PRECISION = 5
 TRANSFORM_PATTERN = re.compile(
 	r'\s*transform="matrix\(\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*\)"'
 )
@@ -12,6 +13,8 @@ PATH_PATTERN = re.compile(r'^(<\s*path.*d\s*=\s*"\s*)([^"]+\s*)(".*)$')
 COORD_PATTERN = re.compile(r'(?:\s+|^)(-?[0-9]+\.?[0-9]*|[ACHLMQSTVZ])')
 COORD_TYPE_PATTERN = re.compile(r'[ACHLMQSTVZ]')
 USE_PATTERN = re.compile(r'^(\s*<use.*x=")([0-9\.]+)(" y=")([0-9\.]+)(.*)$')
+STROKE_WIDTH_PATTERN = re.compile(r'stroke-width\s*:\s*([0-9\.]+)')
+STYLE_PATTERN = re.compile(r'style\s*=\s*"')
 
 
 class CannotTransformError(Exception):
@@ -33,7 +36,7 @@ def _transform_path_d(d_str: str, tr_mat: np.ndarray, tr_tr: np.ndarray) -> str:
 				first_of_pair = token
 			else:
 				coords = [float(first_of_pair), float(token)]
-				tr_coords = np.round(np.dot(tr_mat, coords) + tr_tr, decimals=6)
+				tr_coords = np.round(np.dot(tr_mat, coords) + tr_tr, decimals=PRECISION)
 				new_str += f" {tr_coords[0]} {tr_coords[1]}"
 				first_of_pair = None
 
@@ -64,11 +67,18 @@ def _transform_path(line: str) -> str:
 			new_path = re.sub(TRANSFORM_PATTERN, "", new_path)
 		except CannotTransformError as err:
 			print(str(err))
+		scale = np.sqrt((transform_mat[0, 0]**2 + transform_mat[1, 1]**2) / 2.0)
+		stroke_width_match = re.search(STROKE_WIDTH_PATTERN, new_path)
+		if stroke_width_match:
+			stroke_width = float(stroke_width_match.group(1))
+			new_path = re.sub(STROKE_WIDTH_PATTERN, "stroke-width:" + str(stroke_width * scale), new_path)
+		else:
+			new_path = re.sub(STYLE_PATTERN, "style=\"stroke-width:" + str(scale) + ";", new_path)
 	else:
 		use_match = re.match(USE_PATTERN, new_path)
 		if use_match:
 			coords = [float(use_match.group(2)), float(use_match.group(4))]
-			tr_coords = np.round(np.dot(transform_mat, coords) + transform_tr, decimals=6)
+			tr_coords = np.round(np.dot(transform_mat, coords) + transform_tr, decimals=PRECISION)
 			new_path = f"{use_match.group(1)}{tr_coords[0]}{use_match.group(3)}{tr_coords[1]}{use_match.group(5)}\n"
 
 	return new_path

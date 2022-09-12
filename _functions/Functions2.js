@@ -1691,7 +1691,7 @@ async function ApplyWildshape() {
 
 	//add traits & features
 	var strTraits = "";
-	if (theCrea.wildshapeString) {
+	if (theCrea.wildshapeString !== undefined && typeof theCrea.wildshapeString === "string") {
 		strTraits = theCrea.wildshapeString;
 	} else {
 		//set senses

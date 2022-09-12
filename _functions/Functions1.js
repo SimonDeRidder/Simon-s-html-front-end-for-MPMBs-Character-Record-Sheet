@@ -2513,7 +2513,7 @@ async function FindRace(inputracetxt, novardialog, aOldRace) {
 				if (!IsNotImport) {
 					CurrentRace.abilitySave = CurrentRace.abilitySave[0];
 				} else {
-					CurrentRace.abilitySave = ReturnSpellcastingAbility(CurrentRace.name, CurrentRace.abilitySave, true);
+					CurrentRace.abilitySave = await ReturnSpellcastingAbility(CurrentRace.name, CurrentRace.abilitySave, true);
 				}
 				CurrentVars.raceAbilitySave = CurrentRace.abilitySave;
 				SetStringifieds("vars");

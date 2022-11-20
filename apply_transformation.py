@@ -3,8 +3,8 @@ import re
 
 import numpy as np
 
-FILE = "img/page_features_equipment/backgrounds/temp.svg"
-EXTRA_TRANSLATION = (-0.0, -0.000162862)
+FILE = "img/page_reference/backgrounds/tmp.svg"
+EXTRA_TRANSLATION = (-482.14766, -153.94891)
 PRECISION = 5
 TRANSFORM_PATTERN = re.compile(
 	r'\s*transform="matrix\(\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*\)"'

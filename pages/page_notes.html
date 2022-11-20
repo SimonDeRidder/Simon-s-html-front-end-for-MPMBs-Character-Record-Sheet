@@ -1,29 +1,31 @@
-<!--ASnotes
-don't forget to connect the following ids:
-NotesPrefix + "Notes.Left"
-NotesPrefix + "Notes.Right"
-"Notes.Left"
-"ASnotes"
-"Notes.Left"
-prefix + "Notes.Options"
--->
+<div id="ASnotes" class="field page-container">
 
-<div id="pf6" class="pf w0 h0">
-    <div class="pc pc6 w0 h0"><img class="bf" alt="" src="img/bg6.svg" />
-        <div class="c x2d ye5 w1c h29">
-            <div class="t m0 x90 h2b y173 ff18 fs2 fc0 sc0 ls0 ws0">NOTES<span class="_ _36"> </span>NOTES</div>
-        </div>
-        <div class="c x91 y174 w26 h36">
-            <div class="t m0 x3e h4 y160 ff4 fs3 fc3 sc0 ls0 ws0">Notes Page Options</div>
-        </div>
-        <div class="c x46 ya4 w16 h19">
-            <div class="t m0 x2d h1a ya5 ff7 fs11 fc7 sc0 ls0 ws0">MorePurpleMoreBetter&apos;s D&amp;D 5th edition
-                Character Record Sheet v13.1.2 (Printer Friendly)</div>
-        </div>
-        <div class="c x50 ya4 w16 h19">
-            <div class="t m0 x65 h1a ya5 ff7 fs11 fc7 sc0 ls0 ws0">Made by Joost Wijnen (mpmb@flapkan.com); Design
-                inspired by Wizards of the Coast character sheet</div>
-        </div>
-    </div>
-    <div class="pi" data-data='{"ctm":[1.500000,0.000000,0.000000,1.500000,0.000000,0.000000]}'></div>
+
+	<button id="Notes-Options" class="button" style="left: 406.5px;top: 10.5px;font-size: 8.5px;">Notes Page Options</button>
+
+
+	<div id="notes_left" class="pane" style="top: 26px;left: 26px;width: 421.6px;height: 1137px;">
+		<img class="pane-bg" alt="" src="img/page_notes/backgrounds/notes.svg" style="width: 403.6px;height: 1121.15px;top: 7.3px;left: 8.3px;">
+
+		<div class="textlabel-bold" style="top: 1112px;left: 14px;width: 392px;text-align:center">NOTES</div>
+
+		<textarea id="Notes-Left" class="field inputfield" rows="66" style="top: 12px;left: 20px;width: 376.5px;height: 1088px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+	</div>
+
+
+	<div id="notes_right" class="pane" style="top: 26px;left: 447.6px;width: 421.6px;height: 1137px;">
+		<img class="pane-bg" alt="" src="img/page_notes/backgrounds/notes.svg" style="width: 403.6px;height: 1121.15px;top: 7.3px;left: 8.3px;">
+
+		<div class="textlabel-bold" style="top: 1112px;left: 14px;width: 392px;text-align:center">NOTES</div>
+
+		<textarea id="Notes-Right" class="field inputfield" rows="66" style="top: 12px;left: 20px;width: 376.5px;height: 1088px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+	</div>
+
+
+	<span id="SheetInformation" class="field textlabel-dimmed" style="top: 1155px;left: 43px;font-size: 6.43px;font-weight: bold">
+		MorePurpleMoreBetter&apos;s D&amp;D 5th edition Character Record Sheet v13.1.2 (Printer Friendly)
+	</span>
+	<span id="CopyrightInformation" class="field textlabel-dimmed" style="top: 1155px;left: 565px;font-size: 6.44px;font-weight: bold">
+		Made by Joost Wijnen (mpmb@flapkan.com); Web front-end by Simon De Ridder
+	</span>
 </div>

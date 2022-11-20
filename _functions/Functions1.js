@@ -1304,6 +1304,7 @@ function FindArmor(input) {
 
 // Change the armor features
 function ApplyArmor(input) {
+	console.log(input);
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Applying armor...");

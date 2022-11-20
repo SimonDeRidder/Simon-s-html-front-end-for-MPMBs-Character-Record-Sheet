@@ -1,268 +1,528 @@
-<!-- ASComp
-don't forget to connect the following ids:
-prefix + "Comp.Type"
-prefix + "Comp.Use.AC"
-prefix + "Cnote.Left"
-prefix + "Cnote.Right"
-prefix + "Comp.Use.Traits"
-prefix + "Comp.Use.HP.Max"
-prefix + "Comp.Use.HP.Temp"
-prefix + "Comp.Use.HP.Die"
-prefix + "Comp.Use.HD.Level"
-prefix + "BlueText.Comp.Use.Ability." + ability + ".ST.Bonus"
-prefix + "BlueText.Comp.Use.Attack"
-prefix + "BlueText.Comp.Use.Proficiency Bonus Dice"
-prefix + "BlueText.Comp.Use.Skills." + skill + ".Prof"
-prefix + "BlueText.Comp.Use.Skills." + skill + ".Bonus"
-prefix + "Comp.Use.Attack.perAction"
-prefix + "Comp.Use.Speed"
-prefix + "Comp.Use.Traits"
-prefix + "Comp.Use.Attack." + c + ".Weapon_Selection"
-prefix + "Comp.Use.Attack." + c + ".Proficiency"
-prefix + "Comp.Use.Attack." + c + ".Description"
-prefix + "Comp.Use.Attack." + c + ".Mod"
-prefix + "Comp.Use.Attack." + c + ".Range"
-prefix + "Comp.Use.Attack." + c + ".Damage Type"
-prefix + "BlueText.Comp.Use.Attack." + c + ".To Hit Bonus"
-prefix + "BlueText.Comp.Use.Attack." + c + ".Damage Die"
-prefix + "Comp.Use.Ability." + ability + ".ST.Prof"
-prefix + "Comp.Use.Ability." + ability + ".ST.Mod"
-prefix + "Comp.Use.Ability." + ability + ".Mod"
-prefix + "Comp.Use.Skills." + skill + ".Prof"
-prefix + "Comp.Use.Skills." + skill + ".Exp"
-prefix + ".BlueText.Comp.Use.Skills." + skill + ".Bonus"
-prefix + "Comp.Use.Feature" (?)
-prefix + "Comp.Use.Features"
-prefix + "Comp.Desc.Name"
-"Comp.Desc.Age"
-"Comp.Desc.Height"
-"Comp.Desc.Weight"
-"Comp.Desc.Alignment"
-"Companion.Options"
-"AScomp"
-"Comp.Type"
-"Comp.Use.Ability.Str.Score"
-"Comp.Use.Skills.Acr.Mod"
-"Comp.Use.Attack.1.Weapon Selection"
-"Comp.Use.Combat.Init.Mod"
-"Comp.Use.Combat.Init.Mod"
-"Comp.Use.Speed"
-"Comp.Use.AC"
-"Comp.Use.HP.Current"
-"Comp.Use.Features"
-"Comp.Use.Proficiency Bonus"
-"Comp.Use.Traits"
-"Cnote.Left"
-prefix + "Comp.eqp.Display.Weighttxt"
-prefix + "Companion.Options"
-prefix + "Cnote.Options"
-prefix + "Buttons"
-prefix + "Comp.eqp."
-prefix + "Comp.eqpB"
-"Comp.img.Portrait"
-prefix + "Comp.img"
-prefix + "Comp.Race"
-prefixTo + "Text.Comp.Use.Skills." + skill + ".Prof"
+<div id="ASComp" class="field page-container">
 
-separate wildshape page (?):
-prefix + "Wildshape" ?
-prefix + "Wildshapes.Settings"
-"WSfront"
-"Wildshape.Race.1"
-"Wildshape.Race.2"
-"Wildshape.Race.3"
-"Wildshape.Race.4"
--->
+	<button id="Companion-Options" class="button" style="left: 565.5px;top: 29.5px;font-size: 8.7px;">Companion Options</button>
 
-<div id="pf5" class="pf w0 h0">
-    <div class="pc pc5 w0 h0"><img class="bf" alt="" src="img/bg5.svg" />
-        <div class="c x2d ye5 w1c h29">
-            <div class="t m0 x3 h1 y12e ff14 fs0 fc0 sc0 ls0 ws0"><span class="fc9 sc0">NAME</span></div>
-            <div class="t m0 x5 h1 y12f ff15 fs0 fc0 sc0 ls2 ws2"><span class="fc9 sc0">STR</span><span class="_ _4">
-                </span><span class="fc9 sc0">INT</span></div>
-            <div class="t m0 x78 h1 y130 ff15 fs0 fc1 sc0 ls0 ws0"><span class="fc9 sc0">Temporary HP:</span><span
-                      class="fc2"><span class="fc9 sc0"> </span></span></div>
-            <div class="t m0 x79 h2 y131 ff15 fs1 fc0 sc0 ls0 ws0"><span class="fc9 sc0">SUCCESSES</span></div>
-            <div class="t m0 x7 h3 y132 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">S</span><span
-                      class="fc9 sc0">T</span><span class="fc9 sc0">R</span><span class="ls3 ws3"><span
-                          class="fc9 sc0">EN</span></span><span class="fc9 sc0">G</span><span
-                      class="fc9 sc0">T</span><span class="fc9 sc0">H</span></div>
-            <div class="t m0 x5 h1 y133 ff15 fs0 fc0 sc0 ls2 ws2"><span class="fc9 sc0">DEX</span><span class="_ _5">
-                </span><span class="fc9 sc0">WIS</span></div>
-            <div class="t m0 x5 h1 y134 ff15 fs0 fc0 sc0 ls2 ws2"><span class="fc9 sc0">CON</span><span class="_ _6">
-                </span><span class="fc9 sc0">CHA</span></div>
-            <div class="t m0 x10 h3 y135 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">ARMOR</span></div>
-            <div class="t m0 x7a h3 y136 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">PROFICIENCY</span><span
-                      class="_ _2b"> </span><span class="fc9 sc0">MAXIMUM</span></div>
-            <div class="t m0 x15 h3 y137 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">CLASS</span></div>
-            <div class="t m0 x7b h3 y138 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">BONUS</span><span
-                      class="_ _2c"> </span><span class="fc9 sc0">HIT POINTS</span></div>
-            <div class="t m0 x7c h2 y139 ff15 fs1 fc0 sc0 ls0 ws0"><span class="fc9 sc0">F</span><span
-                      class="fc9 sc0">AILURES</span></div>
-            <div class="t m0 x14 h3 y13a ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">SAVING THROWS</span></div>
-            <div class="t m0 x34 h3 y13b ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">CURRENT HIT POINTS</span></div>
-            <div class="t m0 x7d h3 y13c ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">DEATH SAVES</span></div>
-            <div class="t m0 x36 h2 y13d ff15 fs1 fc1 sc0 ls1 ws0"><span class="fc9 sc0">ATTACK NAME</span><span
-                      class="_ _2d"> </span><span class="ws1"><span class="fc9 sc0">RANGE</span><span class="_ _18">
-                    </span></span><span class="fc9 sc0">TO HIT</span><span class="_ _d"> </span><span class="ws1"><span
-                          class="fc9 sc0">DAMAGE</span><span class="_ _19"> </span></span><span class="fc9 sc0">DAMAGE
-                    TYPE</span></div>
-            <div class="t m0 x7 h3 y13e ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">D</span><span
-                      class="ls3 ws3"><span class="fc9 sc0">EXTE</span></span><span class="fc9 sc0">R</span><span
-                      class="ls3 ws3"><span class="fc9 sc0">IT</span></span><span class="fc9 sc0">Y</span></div>
-            <div class="t m0 x36 h2 y13f ff15 fs1 fc1 sc0 ls1 ws1"><span class="fc9 sc0">DESCRIPTION</span></div>
-            <div class="t m0 x23 h3 y140 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">INITIATIVE</span><span
-                      class="_ _2e"> </span><span class="fc9 sc0">SPEED</span></div>
-            <div class="t m0 x23 h2 y141 ff15 fs1 fc1 sc0 ls1 ws1"><span class="fc9 sc0">LEVEL</span><span
-                      class="_ _2f"> </span><span class="fc9 sc0">USED</span></div>
-            <div class="t m0 x4a h2 y142 ff15 fs1 fc1 sc0 ls1 ws1"><span class="fc9 sc0">DIE</span></div>
-            <div class="t m1 x13 h3 y143 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">C</span><span
-                      class="fc9 sc0">O</span><span class="fc9 sc0">N</span><span class="fc9 sc0">S</span><span
-                      class="ls3 ws3"><span class="fc9 sc0">TIT</span></span><span class="fc9 sc0">U</span><span
-                      class="ls3 ws3"><span class="fc9 sc0">TI</span><span class="ls6 ws5"><span
-                              class="fc9 sc0">ON</span></span></span></div>
-            <div class="t m0 x67 h3 y144 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">ATTACKS</span></div>
-            <div class="t m0 x7e h3 y145 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">HIT DICE</span></div>
-            <div class="t m0 x7f h3 y146 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">PER ACTION</span></div>
-            <div class="t m0 x40 h3 y147 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">ATTACKS</span></div>
-            <div class="t m0 x13 h3 y148 ff16 fs2 fc0 sc0 ls3 ws3"><span class="fc9 sc0">INTEL</span><span
-                      class="ls0 ws0"><span class="fc9 sc0">L</span><span class="fc9 sc0">I</span><span
-                          class="fc9 sc0">G</span></span><span class="fc9 sc0">EN</span></div>
-            <div class="t m0 x49 h3 y149 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">C</span><span
-                      class="fc9 sc0">E</span></div>
-            <div class="t m0 x1d h3 y14a ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">W</span><span
-                      class="fc9 sc0">I</span><span class="ls7 ws6"><span class="fc9 sc0">SD</span></span><span
-                      class="fc9 sc0">O</span><span class="fc9 sc0">M</span></div>
-            <div class="t m0 x7 h3 y14b ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">C</span><span
-                      class="ls3 ws3"><span class="fc9 sc0">HARI</span></span><span class="fc9 sc0">S</span><span
-                      class="fc9 sc0">M</span><span class="fc9 sc0">A</span></div>
-            <div class="t m0 x80 h3 y14c ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">FEATURES</span><span
-                      class="_ _30"> </span><span class="fc9 sc0">TRAITS</span></div>
-            <div class="t m0 x1f h3 y14d ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">SKILLS</span></div>
-            <div class="t m0 x81 h2 y14e ff15 fs1 fc0 sc0 ls0 ws0"><span class="fc9 sc0">P</span><span
-                      class="fc9 sc0">ASSIVE </span><span class="fc9 sc0">WISDOM </span></div>
-            <div class="t m0 x82 h2 y14f ff15 fs1 fc0 sc0 ls0 ws0"><span class="fc9 sc0">(</span></div>
-            <div class="t m0 x83 h2 y14e ff15 fs1 fc0 sc0 ls0 ws0"><span class="fc9 sc0">PER</span><span
-                      class="fc9 sc0">CEPTION</span></div>
-            <div class="t m0 x84 h2 y14f ff15 fs1 fc0 sc0 ls0 ws0"><span class="fc9 sc0">)</span></div>
-            <div class="t m0 x23 h3 y150 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">SENSES</span></div>
-            <div class="t m0 x4a h3 y151 ff16 fs2 fc0 sc0 ls0 ws0"><span class="fc9 sc0">REMARKS</span><span
-                      class="_ _31"> </span><span class="fc9 sc0">NOTES</span></div>
-            <div class="t m2 x25 h6 y152 ff16 fs4 fc1 sc0 ls0 ws0"><span class="fc9 sc0">P</span></div>
-            <div class="t m2 x25 h6 y153 ff16 fs4 fc1 sc0 ls0 ws0"><span class="fc9 sc0">P</span></div>
-            <div class="t m4 x26 h8 y154 ff16 fs6 fc1 sc0 ls0 ws0"><span class="fc9 sc0">R</span></div>
-            <div class="t m4 x26 h8 y155 ff16 fs6 fc1 sc0 ls0 ws0"><span class="fc9 sc0">R</span></div>
-            <div class="t m6 x26 ha y156 ff16 fs8 fc1 sc0 ls0 ws0"><span class="fc9 sc0">O</span></div>
-            <div class="t m6 x26 ha y157 ff16 fs8 fc1 sc0 ls0 ws0"><span class="fc9 sc0">O</span></div>
-            <div class="t m8 x28 hc y158 ff16 fsa fc1 sc0 ls0 ws0"><span class="fc9 sc0">F</span></div>
-            <div class="t m8 x28 hc y159 ff16 fsa fc1 sc0 ls0 ws0"><span class="fc9 sc0">F</span></div>
-            <div class="t ma x23 he y15a ff16 fsc fc1 sc0 ls0 ws0"><span class="fc9 sc0">E</span></div>
-            <div class="t mb x2a hf y15b ff16 fsd fc1 sc0 ls0 ws0"><span class="fc9 sc0">X</span></div>
-            <div class="t mc x2b h10 y15c ff16 fse fc1 sc0 ls0 ws0"><span class="fc9 sc0">P</span></div>
-            <div class="t m0 x6f h1 y15d ff14 fs0 fc0 sc0 lsa ws9"><span class="fc9 sc0">RACE</span><span class="_ _32">
-                </span><span class="fc9 sc0">SIZE</span><span class="_ _33"> </span><span
-                      class="fc9 sc0">HEIGHT</span><span class="_ _34"> </span><span class="fc9 sc0">WEIGHT</span></div>
-            <div class="t m0 x6f h1 y15e ff14 fs0 fc0 sc0 ls0 ws0"><span class="fc9 sc0">TYPE</span><span class="_ _1f">
-                </span><span class="lsa ws9"><span class="fc9 sc0">AGE</span><span class="_ _35"> </span><span
-                          class="fc9 sc0">GENDER</span><span class="_ _24"> </span></span><span
-                      class="fc9 sc0">ALIGNMENT</span></div>
-        </div>
-        <div class="c x85 y15f w20 h36">
-            <div class="t m0 x60 h4 y160 ff4 fs3 fc3 sc0 ls0 ws0">Companion Options</div>
-        </div>
-        <div class="c x3 y161 w21 h36">
-            <div class="t m0 x2d h1 y162 ff4 fs0 fc5 sc0 ls0 ws0">COMPANION</div>
-        </div>
-        <div class="c xa y163 w5 h16">
-            <div class="t m0 x2d h1 y51 ff4 fs0 fc5 sc0 ls0 ws0">Acrobatics <span class="fc6">(Dex) </span></div>
-            <div class="t m0 x2d h4 y52 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y53 ff4 fs0 fc5 sc0 ls0 ws0">Animal Handling <span class="fc6">(Wis) </span></div>
-            <div class="t m0 x2d h4 y54 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y55 ff4 fs0 fc5 sc0 ls0 ws0">Arcana <span class="fc6">(Int) </span></div>
-            <div class="t m0 x2d h4 y56 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y57 ff4 fs0 fc5 sc0 ls0 ws0">Athletics <span class="fc6">(Str) </span></div>
-            <div class="t m0 x2d h4 y58 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y59 ff4 fs0 fc5 sc0 ls0 ws0">Deception <span class="fc6">(Cha) </span></div>
-            <div class="t m0 x2d h4 y5a ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y5b ff4 fs0 fc5 sc0 ls0 ws0">History <span class="fc6">(Int) </span></div>
-            <div class="t m0 x2d h4 y5c ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y5d ff4 fs0 fc5 sc0 ls0 ws0">Insight <span class="fc6">(Wis) </span></div>
-            <div class="t m0 x2d h4 y5e ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y5f ff4 fs0 fc5 sc0 ls0 ws0">Intimidation <span class="fc6">(Cha) </span></div>
-            <div class="t m0 x2d h4 y60 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y61 ff4 fs0 fc5 sc0 ls0 ws0">Investigation <span class="fc6">(Int) </span></div>
-            <div class="t m0 x2d h4 y62 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y63 ff4 fs0 fc5 sc0 ls0 ws0">Medicine <span class="fc6">(Wis) </span></div>
-            <div class="t m0 x2d h4 y64 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y65 ff4 fs0 fc5 sc0 ls0 ws0">Nature <span class="fc6">(Int) </span></div>
-            <div class="t m0 x2d h4 y66 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y67 ff4 fs0 fc5 sc0 ls0 ws0">Perception <span class="fc6">(Wis) </span></div>
-            <div class="t m0 x2d h4 y68 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y69 ff4 fs0 fc5 sc0 ls0 ws0">Performance <span class="fc6">(Cha) </span></div>
-            <div class="t m0 x2d h4 y6a ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y6b ff4 fs0 fc5 sc0 ls0 ws0">Persuasion <span class="fc6">(Cha) </span></div>
-            <div class="t m0 x2d h4 y6c ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y6d ff4 fs0 fc5 sc0 ls0 ws0">Religion <span class="fc6">(Int) </span></div>
-            <div class="t m0 x2d h4 y6e ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y6f ff4 fs0 fc5 sc0 ls0 ws0">Sleight of Hand <span class="fc6">(Dex) </span></div>
-            <div class="t m0 x2d h4 y70 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y71 ff4 fs0 fc5 sc0 ls0 ws0">Stealth <span class="fc6">(Dex) </span></div>
-            <div class="t m0 x2d h4 y72 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-            <div class="t m0 x2d h1 y73 ff4 fs0 fc5 sc0 ls0 ws0">Survival <span class="fc6">(Wis) </span></div>
-            <div class="t m0 x2d h4 y74 ff4 fs3 fc5 sc0 ls0 ws0"> </div>
-        </div>
-        <div class="c x86 y164 w7 h11">
-            <div class="t m0 x2d h4 y46 ff4 fs3 fc3 sc0 ls0 ws0">Set Max HP</div>
-        </div>
-        <div class="c x87 y165 w8 h11">
-            <div class="t m0 x2d h4 y46 ff4 fs3 fc3 sc0 ls0 ws0">Heal</div>
-        </div>
-        <div class="c x88 y166 wb h14">
-            <div class="t m0 x2d h2 y86 ff4 fs1 fc7 sc0 ls0 ws0">PROF ABILITY</div>
-        </div>
-        <div class="c x85 y167 wc h14">
-            <div class="t m0 x2d h15 y4d ff6 fs10 fc5 sc0 ls0 ws0"> </div>
-        </div>
-        <div class="c x89 y167 w22 h14">
-            <div class="t m0 x2d h15 y4d ff6 fs10 fc5 sc0 ls0 ws0"> </div>
-        </div>
-        <div class="c x85 y168 we h14">
-            <div class="t m0 x2d h15 y4d ff6 fs10 fc5 sc0 ls0 ws0"> </div>
-        </div>
-        <div class="c x89 y168 w23 h14">
-            <div class="t m0 x2d h15 y4d ff6 fs10 fc5 sc0 ls0 ws0"> </div>
-        </div>
-        <div class="c x85 y169 wc h14">
-            <div class="t m0 x2d h15 y4d ff6 fs10 fc5 sc0 ls0 ws0"> </div>
-        </div>
-        <div class="c x89 y169 w22 h14">
-            <div class="t m0 x2d h15 y4d ff6 fs10 fc5 sc0 ls0 ws0"> </div>
-        </div>
-        <div class="c x8a y16a w24 h37">
-            <div class="t m0 x8b h3 y16b ff17 fs2 fc0 sc0 ls0 ws0">COMPANION’S APPEARANCE</div>
-        </div>
-        <div class="c x4b y16c w25 h38">
-            <div class="t m0 x8c h39 y16d ff5 fs1c fc4 sc0 lsd wsc">CLICK HERE </div>
-            <div class="t m0 x8d h39 y16e ff5 fs1c fc4 sc0 lsd wsc">TO CHANGE </div>
-            <div class="t m0 x8e h39 y16f ff5 fs1c fc4 sc0 lsd wsc">THIS ICON</div>
-        </div>
-        <div class="c x8f y170 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x8f y171 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x8f y172 w13 h17">
-            <div class="t m0 x2d h4 y8f ff4 fs3 fc3 sc0 ls0 ws0">&gt;</div>
-        </div>
-        <div class="c x50 ya4 w16 h19">
-            <div class="t m0 x65 h1a ya5 ff7 fs11 fc7 sc0 ls0 ws0">Made by Joost Wijnen (mpmb@flapkan.com); Design
-                inspired by Wizards of the Coast character sheet</div>
-        </div>
-        <div class="c x46 ya4 w16 h19">
-            <div class="t m0 x2d h1a ya5 ff7 fs11 fc7 sc0 ls0 ws0">MorePurpleMoreBetter&apos;s D&amp;D 5th edition
-                Character Record Sheet v13.1.2 (Printer Friendly)</div>
-        </div>
-    </div>
-    <div class="pi" data-data='{"ctm":[1.500000,0.000000,0.000000,1.500000,0.000000,0.000000]}'></div>
+	<div id="companion_general" class="pane" style="left: 0px;width: var(--page-width);height: 190px;">
+		<img class="pane-bg" alt="" src="img/bg_splashy_stripes.svg" style="left:0.5px;width: var(--page-width);height: 195px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/header.svg" style="width: var(--page-width);height: 176.26px;">
+
+		<span class="textlabel" style="top: 164.5px;left: 102px">NAME</span>
+		<span class="textlabel" style="top: 105px;left: 364.7px">RACE</span>
+		<span class="textlabel" style="top: 105px;left: 493.5px">SIZE</span>
+		<span class="textlabel" style="top: 105px;left: 604.5px">HEIGHT</span>
+		<span class="textlabel" style="top: 105px;left: 715.5px">WEIGHT</span>
+		<span class="textlabel" style="top: 144px;left: 364.7px">TYPE</span>
+		<span class="textlabel" style="top: 144px;left: 493.5px">AGE</span>
+		<span class="textlabel" style="top: 144px;left: 604.5px">GENDER</span>
+		<span class="textlabel" style="top: 144px;left: 715.5px">ALIGNMENT</span>
+
+		<input id="Comp-Desc-Name" class="field inputfield" style="top: 107px;left: 55px;font-size: 16pt;width: 295px;height: 18pt;text-align: center;" type="text">
+		<input id="Comp-Race" class="field inputfield" style="top: 87px;left: 364px;width: 123px;height: 13pt;font-size: 10.6pt;" type="text" list="comp_race_options">
+		<datalist id="comp_race_options">
+			<option value="Abyssal Chicken">
+		</datalist>
+		<input id="Comp-Desc-Size" class="field inputfield" style="top: 87px;left: 493px;width: 106px;height: 13pt;font-size: 10.6pt;" type="text" list="size_options">
+		<datalist id="size_options">
+			<option value="Medium">
+		</datalist>
+		<input id="Comp-Desc-Height" class="field inputfield" style="top: 87px;left: 605px;font-size: 11pt;width: 104px;height: 17px;" type="text">
+		<input id="Comp-Desc-Weight" class="field inputfield" style="top: 87px;left: 715px;font-size: 11pt;width: 107px;height: 17px;" type="text">
+
+		<input id="Comp-Desc-MonsterType" class="field inputfield" style="top: 126px;left: 364px;width: 123px;height: 13pt;font-size: 10.6pt;" type="text" list="comp_monstertype_options">
+		<datalist id="comp_monstertype_options">
+			<option value="Aberration">
+		</datalist>
+		<input id="Comp-Desc-Age" class="field inputfield" style="top: 126px;left: 493px;width: 106px;height: 13pt;font-size: 10.6pt;" type="text">
+		<input id="Comp-Desc-Sex" class="field inputfield" style="top: 126px;left: 605px;font-size: 11pt;width: 104px;height: 17px;" type="text">
+		<input id="Comp-Desc-Alignment" class="field inputfield" style="top: 126px;left: 715px;font-size: 9.8pt;width: 107px;height: 17px;" type="text" list="comp_alignment_options">
+		<datalist id="comp_alignment_options">
+			<option value="Chaotic Neutral">
+		</datalist>
+
+		<input id="Comp-Type" class="field inputfield" style="top: 154px;left: 102px;font-size: 10.5px;width: 95px;padding: 0;background-color: transparent;" type="text" list="comp_type_options" value="COMPANION">
+		<datalist id="comp_type_options">
+			<option value="COMPANION">
+		</datalist>
+	</div>
+
+	<div id="companion_abilities" class="pane" style="top:190px;left: 27px;width: 106px;height: 693px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/abilities.svg" style="top: 6.5px;left: 6.8px;width: 92.2px;height: 679.2px;">
+
+		<div class="textlabel-bold" style="top:  39px;left: 15.5px;width: 74.8px">STRENGTH</div>
+		<div class="textlabel-bold" style="top: 147px;left: 15.5px;width: 74.8px">DEXTERITY</div>
+		<div class="textlabel-bold" style="top: 255px;left: 15.5px;width: 74.8px">CONSTITUTION</div>
+		<div class="textlabel-bold" style="top: 363px;left: 15.5px;width: 74.8px">INTELLIGENCE</div>
+		<div class="textlabel-bold" style="top: 471px;left: 15.5px;width: 74.8px">WISDOM</div>
+		<div class="textlabel-bold" style="top: 579px;left: 15.5px;width: 74.8px">CHARISMA</div>
+
+		<div id="Comp-Use-Ability-Str-Mod" class="field textlabel" style="top:  52px;left: 15.5px;font-size: 25pt;width: 74.8px;text-align: center;">0</div>
+		<div id="Comp-Use-Ability-Dex-Mod" class="field textlabel" style="top: 160px;left: 15.5px;font-size: 25pt;width: 74.8px;text-align: center;">0</div>
+		<div id="Comp-Use-Ability-Con-Mod" class="field textlabel" style="top: 268px;left: 15.5px;font-size: 25pt;width: 74.8px;text-align: center;">0</div>
+		<div id="Comp-Use-Ability-Int-Mod" class="field textlabel" style="top: 376px;left: 15.5px;font-size: 25pt;width: 74.8px;text-align: center;">0</div>
+		<div id="Comp-Use-Ability-Wis-Mod" class="field textlabel" style="top: 484px;left: 15.5px;font-size: 25pt;width: 74.8px;text-align: center;">0</div>
+		<div id="Comp-Use-Ability-Cha-Mod" class="field textlabel" style="top: 592px;left: 15.5px;font-size: 25pt;width: 74.8px;text-align: center;">0</div>
+
+		<input id="Comp-Use-Ability-Str-Score" class="field inputfield" style="top:  99px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center;" type="number"/>
+		<input id="Comp-Use-Ability-Dex-Score" class="field inputfield" style="top: 207px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center;" type="number"/>
+		<input id="Comp-Use-Ability-Con-Score" class="field inputfield" style="top: 315px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center;" type="number"/>
+		<input id="Comp-Use-Ability-Int-Score" class="field inputfield" style="top: 423px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center;" type="number"/>
+		<input id="Comp-Use-Ability-Wis-Score" class="field inputfield" style="top: 531px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center;" type="number"/>
+		<input id="Comp-Use-Ability-Cha-Score" class="field inputfield" style="top: 639px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center;" type="number"/>
+	</div>
+
+
+	<div id="companion_saving_throws" class="pane" style="top: 196px;left: 133px;width: 189px;height: 107px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/saving_throws.svg" style="top: 6.4px;left: 5px;width: 179.3px; height: 93px;">
+
+		<div class="textlabel-bold" style="top: 84.5px;left: 11.7px;width: 166.1px">SAVING THROWS</div>
+
+		<span class="textlabel" style="top:   19px;left:  63px">STR</span>
+		<span class="textlabel" style="top: 38.5px;left:  63px">DEX</span>
+		<span class="textlabel" style="top:   58px;left:  63px">CON</span>
+		<span class="textlabel" style="top:   19px;left: 149.7px">INT</span>
+		<span class="textlabel" style="top: 38.5px;left: 149.7px">WIS</span>
+		<span class="textlabel" style="top:   58px;left: 149.7px">CHA</span>
+
+		<div class="radiobox-hint" style="top: 12.5px;left: 14px">
+			<span class="textlabel-dimmed rotate_m118" style="top: 11.7px;left: 2.1px">P</span>
+			<span class="textlabel-dimmed rotate_m84" style="top: 8.0px;left: 1.0px">R</span>
+			<span class="textlabel-dimmed rotate_m50" style="top: 3.0px;left: 2.4px;">O</span>
+			<span class="textlabel-dimmed rotate_m16" style="top: 0.3px;left: 7.2px">F</span>
+		</div>
+
+		<input id="Comp-Use-Ability-Str-ST-Prof" class="field checkcircle" type="checkbox" style="top: 16.6px;left: 15.8px;">
+		<input id="Comp-Use-Ability-Dex-ST-Prof" class="field checkcircle" type="checkbox" style="top: 36.1px;left: 15.8px;">
+		<input id="Comp-Use-Ability-Con-ST-Prof" class="field checkcircle" type="checkbox" style="top: 55.6px;left: 15.8px;">
+		<input id="Comp-Use-Ability-Int-ST-Prof" class="field checkcircle" type="checkbox" style="top: 16.6px;left: 102.5px;">
+		<input id="Comp-Use-Ability-Wis-ST-Prof" class="field checkcircle" type="checkbox" style="top: 36.1px;left: 102.5px;">
+		<input id="Comp-Use-Ability-Cha-ST-Prof" class="field checkcircle" type="checkbox" style="top: 55.6px;left: 102.5px;">
+
+		<input id="Comp-Use-Ability-Str-ST-Mod" class="field inputfield-notched" type="text" style="top: 17px;  left: 34px;    font-size: 14px;width:21px;height:13.5px">
+		<input id="Comp-Use-Ability-Dex-ST-Mod" class="field inputfield-notched" type="text" style="top: 36.5px;left: 34px;    font-size: 14px;width:21px;height:13.5px">
+		<input id="Comp-Use-Ability-Con-ST-Mod" class="field inputfield-notched" type="text" style="top: 56px;  left: 34px;    font-size: 14px;width:21px;height:13.5px">
+		<input id="Comp-Use-Ability-Int-ST-Mod" class="field inputfield-notched" type="text" style="top: 17px;  left: 120.7px; font-size: 14px;width:21px;height:13.5px">
+		<input id="Comp-Use-Ability-Wis-ST-Mod" class="field inputfield-notched" type="text" style="top: 36.5px;left: 120.7px; font-size: 14px;width:21px;height:13.5px">
+		<input id="Comp-Use-Ability-Cha-ST-Mod" class="field inputfield-notched" type="text" style="top: 56px;  left: 120.7px; font-size: 14px;width:21px;height:13.5px">
+	</div>
+
+
+	<div id="companion_stats" class="pane" style="top: 194px;left: 323px;width: 538px;height: 111px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/stats.svg" style="top: 1.8px;left: 3.2px;width: 532.5px;height: 107.3px;">
+
+		<div class="textlabel-bold" style="top: 61.5px;left: 27.8px;width: 42.1px">ARMOR CLASS</div>
+		<div class="textlabel-bold" style="top: 61.5px;left: 107px;width: 78px">PROFICIENCY BONUS</div>
+		<div class="textlabel-bold" style="top: 61.5px;left: 217px;width: 61.5px">MAXIMUM HIT POINTS</div>
+		<div class="textlabel-bold" style="top: 82.5px;left: 298.5px;width: 140.5px">CURRENT HIT POINTS</div>
+		<div class="textlabel-bold" style="top: 82.5px;left: 456.5px;width: 67.2px">DEATH SAVES</div>
+		<span class="textlabel-dimmed" style="top: 20.5px;left: 305px">Temporary HP:</span>
+		<div class="textlabel" style="top: 21px;left: 456.5px;width: 67.2px;font-size: 8.8px;text-align: center;">SUCCESSES</div>
+		<div class="textlabel" style="top: 68.5px;left: 456.5px;width: 67.2px;font-size: 8.8px;text-align: center;">FAILURES</div>
+
+		<input id="Comp-Use-AC" class="field inputfield" style="top: 34px;left: 25.5px;font-size: 28px;width: 46.5px;height: 27px;padding: 0 0 0 0;text-align: center;" type="number">
+
+		<input id="Comp-Use-Proficiency_Bonus" class="field inputfield" style="top: 34px;left: 114.6px;font-size: 28px;width: 62.5px;height: 27px;padding: 0 0 0 0;text-align: center;" type="text">
+
+		<input id="Comp-Use-HP-Max" class="field inputfield" style="top: 34px;left: 214.5px;font-size: 28px;width: 66px;height: 27px;text-align: center;padding: 0 0 0 0" type="number">
+		<button id="Buttons-Comp-Use-HP-Max" class="field button" style="top: 25.9px;left: 223.5px;font-size: 8px;line-height: 7px;">Set Max HP</button>
+
+		<input id="Comp-Use-HP-Temp" class="field inputfield-notched-wide" style="top: 18px;left: 372px;font-size: 12px;width: 62px;height: 15px;text-align: center;padding: 0 0 0 0;" type="number">
+		<textarea id="Comp-Use-HP-Current" class="field inputfield" style="top: 38px;left: 303px;font-size: 14px;width: 127.5px;height: 35px;padding-top: 1px;"></textarea>
+		<button id="Comp-Heal" class="field button" style="top: 70px;left: 412px;font-size: 8px;line-height: 7px;">Heal</button>
+
+		<input id="Death_Save_Succes1" class="field checkcircle" type="checkbox" style="top: 28.7px;left: 459.7px;width: 14px;height: 14px;">
+		<input id="Death_Save_Succes2" class="field checkcircle" type="checkbox" style="top: 28.7px;left: 479.0px;width: 14px;height: 14px;">
+		<input id="Death_Save_Succes3" class="field checkcircle" type="checkbox" style="top: 28.7px;left: 498.4px;width: 14px;height: 14px;">
+		<input id="Death_Save_Fail1"   class="field checkcircle" type="checkbox" style="top: 49.8px;left: 459.7px;width: 14px;height: 14px;">
+		<input id="Death_Save_Fail2"   class="field checkcircle" type="checkbox" style="top: 49.8px;left: 479.0px;width: 14px;height: 14px;">
+		<input id="Death_Save_Fail3"   class="field checkcircle" type="checkbox" style="top: 49.8px;left: 498.4px;width: 14px;height: 14px;">
+	</div>
+
+
+	<div id="companion_properties" class="pane" style="top: 305px;left: 133px;width: 189px;height: 183px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/properties.svg" style="top: 5.5px;left: 6px;width: 177.5px;height: 170px;">
+
+		<div class="textlabel-bold" style="top: 73.5px;left: 19.7px;width: 66.9px">INITIATIVE</div>
+		<div class="textlabel-bold" style="top: 73.5px;left: 104.4px;width: 66.9px">SPEED</div>
+		<div class="textlabel-bold" style="top: 148.7px;left: 19.7px;width: 66.9px">HIT DICE</div>
+		<div class="textlabel-bold" style="top: 139.5px;left: 110px;width: 55.5px">ATTACKS PER ACTION</div>
+		<span class="textlabel-dimmed" style="top: 97.5px;left: 29px;font-size: 8.1px">LEVEL</span>
+		<span class="textlabel-dimmed" style="top: 97.5px;left: 59px;font-size: 8.1px">USED</span>
+		<span class="textlabel-dimmed" style="top: 132px;left: 25.7px;font-size: 8.1px">DIE</span>
+
+		<input id="Comp-Use-Combat-Init-Mod" class="field inputfield-noneditable" style="top: 40px;left: 19.7px;font-size: 28px;width: 67.1px;height: 27px;padding: 0 0 0 0" type="text">
+
+		<textarea id="Comp-Use-Speed" class="field inputfield" style="top: 26px;left: 104.4px;font-size: 14px;width: 62.8px;height: 44px;padding-top: 1px;text-align: center"></textarea>
+
+		<input id="Comp-Use-HD-Level" class="field inputfield-notched" style="top: 108px;left: 25px;font-size: 12px;width: 27px;height: 15px;text-align: center;padding: 0 0 0 0;" type="number">
+		<input id="Comp-Use-HD-Used" class="field inputfield-notched" style="top: 108px;left: 56px;font-size: 12px;width: 27px;height: 15px;text-align: center;padding: 0 0 0 0;" type="number">
+		<input id="Comp-Use-HD-Die" class="field inputfield-notched-wide" style="top: 127.5px;left: 40px;font-size: 12px;width: 43px;height: 16px;text-align: center;padding: 0 0 0 0;" type="text" value="1d4+1">
+
+		<input id="Comp-Use-Attack-perAction" class="field inputfield" style="top: 108px;left: 104.4px;font-size: 28px;width: 62.8px;height: 27px;text-align: center;" type="number">
+	</div>
+
+
+	<div id="companion_attacks" class="pane" style="top: 305px;left: 322px;width: 541px;height: 183px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/attacks.svg" style="top: 5.4px;left: 4.1px;width: 532px;height: 169.56px;">
+
+		<div class="textlabel-bold" style="top: 159.6px;left: 10px;width: 519.8px">ATTACKS</div>
+		<span class="textlabel-dimmed" style="top: 13.2px;left: 20px;font-size: 8.3px">ATTACK NAME</span>
+		<div id="Attack-Titles" class="field">
+			<span class="textlabel-dimmed" style="top: 13.2px;left: 217px;font-size: 8.3px">PROF</span>
+			<span class="textlabel-dimmed" style="top: 13.2px;left: 240px;font-size: 8.3px">ABILITY</span>
+		</div>
+		<span class="textlabel-dimmed" style="top: 13.2px;left: 274px;font-size: 8.3px">RANGE</span>
+		<span class="textlabel-dimmed" style="top: 13.2px;left: 346px;font-size: 8.3px">TO HIT</span>
+		<span class="textlabel-dimmed" style="top: 13.2px;left: 385px;font-size: 8.3px">DAMAGE</span>
+		<span class="textlabel-dimmed" style="top: 13.2px;left: 457px;font-size: 8.3px">DAMAGE TYPE</span>
+		<span class="textlabel-dimmed" style="top: 60px;left: 20px;font-size: 8.3px">DESCRIPTION</span>
+
+		<div style="position: absolute;top: 23px;left: 16px;width: 510px;height: 36px">
+			<input id="Comp-Use-Attack-1-Weapon_Selection" class="field inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 196px;" type="text" list="attacks_names">
+			<input id="Comp-Use-Attack-1-Proficiency" class="field inputfield" type="checkbox" style="top: 0px;left: 198px;">
+			<input id="Comp-Use-Attack-1-Mod" class="field inputfield" style="top: 0px;left: 216.5px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
+			<input id="Comp-Use-Attack-1-Range" class="field inputfield" style="top: 0px;left: 256px;font-size: 12px;height: 15px;width: 64px;text-align: center;" type="text">
+			<input id="Comp-Use-Attack-1-To_Hit" class="field inputfield-notched" style="top: 0px;left: 327px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
+			<input id="Comp-Use-Attack-1-Damage" class="field inputfield-notched-wide" style="top: 0px;left: 365px;font-size: 12px;width: 67px;height: 15px;pointer-events: none" type="text">
+			<input id="Comp-Use-Attack-1-Damage_Type" class="field inputfield" style="top: 0px;left: 438px;height: 15px;width: 68px;font-size: 12px;" type="text" list="attacks_damage_types">
+			<input id="Comp-Use-Attack-1-Description" class="field inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 506px;" type="text">
+
+			<button id="Comp-Use-Attack-Button-1" class="field button" style="top: 12.5px;left: -22px;font-size: 8px;line-height: 6px;">&gt;</button>
+		</div>
+
+		<div style="position: absolute;top: 74px;left: 16px;width: 510px;height: 36px">
+			<input id="Comp-Use-Attack-2-Weapon_Selection" class="field inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 196px;" type="text" list="attacks_names">
+			<input id="Comp-Use-Attack-2-Proficiency" class="field inputfield" type="checkbox" style="top: 0px;left: 198px;">
+			<input id="Comp-Use-Attack-2-Mod" class="field inputfield" style="top: 0px;left: 216.5px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
+			<input id="Comp-Use-Attack-2-Range" class="field inputfield" style="top: 0px;left: 256px;font-size: 12px;height: 15px;width: 65px;text-align: center;" type="text">
+			<input id="Comp-Use-Attack-2-To_Hit" class="field inputfield-notched" style="top: 0px;left: 327px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
+			<input id="Comp-Use-Attack-2-Damage" class="field inputfield-notched-wide" style="top: 0px;left: 365px;font-size: 12px;width: 67px;height: 15px;pointer-events: none" type="text">
+			<input id="Comp-Use-Attack-2-Damage_Type" class="field inputfield" style="top: 0px;left: 438px;height: 15px;width: 68px;font-size: 12px;" type="text" list="attacks_damage_types">
+			<input id="Comp-Use-Attack-2-Description" class="field inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 506px;" type="text">
+
+			<button id="Comp-Use-Attack-Button-2" class="field button" style="top: 12.5px;left: -22px;font-size: 8px;line-height: 6px;">&gt;</button>
+		</div>
+
+		<div style="position: absolute;top: 120px;left: 16px;width: 510px;height: 36px">
+			<input id="Comp-Use-Attack-3-Weapon_Selection" class="field inputfield" style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 196px;" type="text" list="attacks_names">
+			<input id="Comp-Use-Attack-3-Proficiency" class="field inputfield" type="checkbox" style="top: 0px;left: 198px;">
+			<input id="Comp-Use-Attack-3-Mod" class="field inputfield" style="top: 0px;left: 216.5px;height: 15px;width: 37px;font-size: 12px;padding: 1px 0px 1px 0.5px;" type="text" list="attacks_abilities">
+			<input id="Comp-Use-Attack-3-Range" class="field inputfield" style="top: 0px;left: 256px;font-size: 12px;height: 15px;width: 65px;text-align: center;" type="text">
+			<input id="Comp-Use-Attack-3-To_Hit" class="field inputfield-notched" style="top: 0px;left: 327px;font-size: 12px;width: 31.5px;height: 15px;pointer-events: none" type="text">
+			<input id="Comp-Use-Attack-3-Damage" class="field inputfield-notched-wide" style="top: 0px;left: 365px;font-size: 12px;width: 67px;height: 15px;pointer-events: none" type="text">
+			<input id="Comp-Use-Attack-3-Damage_Type" class="field inputfield" style="top: 0px;left: 438px;height: 15px;width: 68px;font-size: 12px;" type="text" list="attacks_damage_types">
+			<input id="Comp-Use-Attack-3-Description" class="field inputfield" style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 506px;" type="text">
+
+			<button id="Comp-Use-Attack-Button-3" class="field button" style="top: 12.5px;left: -22px;font-size: 8px;line-height: 6px;">&gt;</button>
+		</div>
+	</div>
+
+
+	<div id="companion_skills" class="pane" style="top: 488px;left: 133px;width: 189px;height: 395px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/skills.svg" style="top: 7.2px;left: 5.9px;width: 177.7px;height: 380px;">
+
+		<div class="textlabel-bold" style="top: 372.1px;left: 11.7px;width: 166px">SKILLS</div>
+		<div class="radiobox-hint" style="top: 12.5px;left: 13.5px;">
+			<span class="textlabel-dimmed rotate_m118" style="top: 11.7px;left: 2.1px">P</span>
+			<span class="textlabel-dimmed rotate_m84"  style="top:  8.0px;left: 1.0px">R</span>
+			<span class="textlabel-dimmed rotate_m50"  style="top:  3.0px;left: 2.4px">O</span>
+			<span class="textlabel-dimmed rotate_m16"  style="top:  0.3px;left: 7.2px">F</span>
+		</div>
+		<div class="radiobox-hint" style="top: 10.5px;left: 19.6px;">
+			<span class="textlabel-dimmed rotate_5"  style="top: 0.7px;left:  9.2px">E</span>
+			<span class="textlabel-dimmed rotate_41" style="top: 2.3px;left: 13.4px">X</span>
+			<span class="textlabel-dimmed rotate_77" style="top: 6.2px;left: 15.7px">P</span>
+		</div>
+
+		<input id="Comp-Use-Skills-Acr-Exp"  class="field checkcircle" type="checkbox" style="top:  14.5px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Ani-Exp"  class="field checkcircle" type="checkbox" style="top:  34.0px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Arc-Exp"  class="field checkcircle" type="checkbox" style="top:  53.5px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Ath-Exp"  class="field checkcircle" type="checkbox" style="top:  73.0px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Dec-Exp"  class="field checkcircle" type="checkbox" style="top:  92.5px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-His-Exp"  class="field checkcircle" type="checkbox" style="top: 112.0px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Ins-Exp"  class="field checkcircle" type="checkbox" style="top: 131.5px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Inti-Exp" class="field checkcircle" type="checkbox" style="top: 151.0px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Inv-Exp"  class="field checkcircle" type="checkbox" style="top: 170.5px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Med-Exp"  class="field checkcircle" type="checkbox" style="top: 190.0px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Nat-Exp"  class="field checkcircle" type="checkbox" style="top: 209.5px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Perc-Exp" class="field checkcircle" type="checkbox" style="top: 229.0px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Perf-Exp" class="field checkcircle" type="checkbox" style="top: 248.5px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Pers-Exp" class="field checkcircle" type="checkbox" style="top: 268.0px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Rel-Exp"  class="field checkcircle" type="checkbox" style="top: 287.5px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Sle-Exp"  class="field checkcircle" type="checkbox" style="top: 307.0px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Ste-Exp"  class="field checkcircle" type="checkbox" style="top: 326.5px;left: 22.9px;width: 8px;height: 8px;">
+		<input id="Comp-Use-Skills-Sur-Exp"  class="field checkcircle" type="checkbox" style="top: 346.0px;left: 22.9px;width: 8px;height: 8px;">
+
+		<input id="Comp-Use-Skills-Acr-Prof"  class="field checkcircle" type="checkbox" style="top:  16.6px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Ani-Prof"  class="field checkcircle" type="checkbox" style="top:  36.1px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Arc-Prof"  class="field checkcircle" type="checkbox" style="top:  55.6px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Ath-Prof"  class="field checkcircle" type="checkbox" style="top:  75.1px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Dec-Prof"  class="field checkcircle" type="checkbox" style="top:  94.6px;left: 15.6px;">
+		<input id="Comp-Use-Skills-His-Prof"  class="field checkcircle" type="checkbox" style="top: 114.1px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Ins-Prof"  class="field checkcircle" type="checkbox" style="top: 133.6px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Inti-Prof" class="field checkcircle" type="checkbox" style="top: 153.1px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Inv-Prof"  class="field checkcircle" type="checkbox" style="top: 172.6px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Med-Prof"  class="field checkcircle" type="checkbox" style="top: 192.1px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Nat-Prof"  class="field checkcircle" type="checkbox" style="top: 211.6px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Perc-Prof" class="field checkcircle" type="checkbox" style="top: 231.1px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Perf-Prof" class="field checkcircle" type="checkbox" style="top: 250.6px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Pers-Prof" class="field checkcircle" type="checkbox" style="top: 270.1px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Rel-Prof"  class="field checkcircle" type="checkbox" style="top: 289.6px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Sle-Prof"  class="field checkcircle" type="checkbox" style="top: 309.1px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Ste-Prof"  class="field checkcircle" type="checkbox" style="top: 328.6px;left: 15.6px;">
+		<input id="Comp-Use-Skills-Sur-Prof"  class="field checkcircle" type="checkbox" style="top: 348.1px;left: 15.6px;">
+
+		<input id="Comp-Use-Skills-Acr-Mod"  class="field inputfield-notched" style="top:  17.5px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Ani-Mod"  class="field inputfield-notched" style="top:  37.0px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Arc-Mod"  class="field inputfield-notched" style="top:  56.5px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Ath-Mod"  class="field inputfield-notched" style="top:  76.0px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Dec-Mod"  class="field inputfield-notched" style="top:  95.5px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-His-Mod"  class="field inputfield-notched" style="top: 115.0px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Ins-Mod"  class="field inputfield-notched" style="top: 134.5px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Inti-Mod" class="field inputfield-notched" style="top: 154.0px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Inv-Mod"  class="field inputfield-notched" style="top: 173.5px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Med-Mod"  class="field inputfield-notched" style="top: 193.0px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Nat-Mod"  class="field inputfield-notched" style="top: 212.5px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Perc-Mod" class="field inputfield-notched" style="top: 232.0px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Perf-Mod" class="field inputfield-notched" style="top: 251.5px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Pers-Mod" class="field inputfield-notched" style="top: 271.0px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Rel-Mod"  class="field inputfield-notched" style="top: 290.5px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Sle-Mod"  class="field inputfield-notched" style="top: 310.0px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Ste-Mod"  class="field inputfield-notched" style="top: 329.5px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+		<input id="Comp-Use-Skills-Sur-Mod"  class="field inputfield-notched" style="top: 349.0px;left: 42px;font-size: 12px;width: 20px;height: 12px;" type="text">
+
+		<div id="Text-SkillsNames" class="field" style="top: 17.6px;left: 40px;position: absolute;width: 135px;height: 347px;">
+			<div id="companion_skills_label_Acr"  class="textlabel" style="top:   1.3px;left: 27.7px;width: fit-content"><span>Acrobatics</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
+			<div id="companion_skills_label_Ani"  class="textlabel" style="top:  20.8px;left: 27.7px;width: fit-content"><span>Animal Handling</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+			<div id="companion_skills_label_Arc"  class="textlabel" style="top:  40.3px;left: 27.7px;width: fit-content"><span>Arcana</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+			<div id="companion_skills_label_Ath"  class="textlabel" style="top:  59.8px;left: 27.7px;width: fit-content"><span>Athletics</span> <span style="color: var(--text-dimmed)">(Str)</span></div>
+			<div id="companion_skills_label_Dec"  class="textlabel" style="top:  79.3px;left: 27.7px;width: fit-content"><span>Deception</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
+			<div id="companion_skills_label_His"  class="textlabel" style="top:  98.8px;left: 27.7px;width: fit-content"><span>History</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+			<div id="companion_skills_label_Ins"  class="textlabel" style="top: 118.3px;left: 27.7px;width: fit-content"><span>Insight</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+			<div id="companion_skills_label_Inti" class="textlabel" style="top: 137.8px;left: 27.7px;width: fit-content"><span>Intimidation</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
+			<div id="companion_skills_label_Inv"  class="textlabel" style="top: 157.3px;left: 27.7px;width: fit-content"><span>Investigation</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+			<div id="companion_skills_label_Med"  class="textlabel" style="top: 176.8px;left: 27.7px;width: fit-content"><span>Medicine</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+			<div id="companion_skills_label_Nat"  class="textlabel" style="top: 196.3px;left: 27.7px;width: fit-content"><span>Nature</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+			<div id="companion_skills_label_Perc" class="textlabel" style="top: 215.8px;left: 27.7px;width: fit-content"><span>Perception</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+			<div id="companion_skills_label_Perf" class="textlabel" style="top: 235.3px;left: 27.7px;width: fit-content"><span>Performance</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
+			<div id="companion_skills_label_Pers" class="textlabel" style="top: 254.8px;left: 27.7px;width: fit-content"><span>Persuasion</span> <span style="color: var(--text-dimmed)">(Cha)</span></div>
+			<div id="companion_skills_label_Rel"  class="textlabel" style="top: 274.3px;left: 27.7px;width: fit-content"><span>Religion</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
+			<div id="companion_skills_label_Sle"  class="textlabel" style="top: 293.8px;left: 27.7px;width: fit-content"><span>Sleight of Hand</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
+			<div id="companion_skills_label_Ste"  class="textlabel" style="top: 313.3px;left: 27.7px;width: fit-content"><span>Stealth</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
+			<div id="companion_skills_label_Sur"  class="textlabel" style="top: 332.8px;left: 27.7px;width: fit-content"><span>Survival</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
+		</div>
+	</div>
+
+
+	<div id="companion_features" class="pane" style="top: 488px;left: 322px;width: 236px;height: 322px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/features.svg" style="top: 7.3px;left: 4.7px;width: 223.7px;height: 306.16px;">
+
+		<div class="textlabel-bold" style="top: 298.1px;left: 10.5px;width: 212px">FEATURES</div>
+
+		<textarea id="Comp-Use-Features" class="field inputfield" rows="17" style="top: 11.1px;left: 16.5px;width: 196px;height: 279px;font-size: 10.2px;line-height: 16.52px;padding-top: 3.6px;"></textarea>
+	</div>
+
+
+	<div id="companion_traits" class="pane" style="top: 488px;left: 558px;width: 306px;height: 322px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/traits.svg" style="top: 7.3px;left: 6.5px;width: 293.6px;height: 306.2px;">
+
+		<div class="textlabel-bold" style="top: 298.1px;left: 12.3px;width: 282px">TRAITS</div>
+
+		<textarea id="Comp-Use-Traits" class="field inputfield" rows="17" style="top: 11.1px;left: 18.4px;width: 266px;height: 279px;font-size: 10.2px;line-height: 16.52px;padding-top: 3.6px;"></textarea>
+	</div>
+
+
+	<div id="companion_senses" class="pane" style="top: 883px;left: 36px;width: 286px;height: 124px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/senses.svg" style="top: 5.3px;left: 5px;width: 275.3px;height: 111.1px;">
+
+		<div class="textlabel-bold" style="top: 101px;left: 10.5px;width: 264px">SENSES</div>
+		<span class="textlabel" style="top: 32px;left: 106px;font-size: 8.6px;">PASSIVE WISDOM (PERCEPTION)</span>
+
+		<input id="Comp-Use-Skills-Perc-Pass-Mod" class="field inputfield-noneditable" style="top: 23px;left: 30px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0" type="number">
+
+		<textarea id="Comp-Use-Senses" class="field inputfield" rows="2" style="top: 60px;left: 13.5px;width: 254px;height: 30px;font-size: 10.2px;line-height: 16.52px;padding-top: 3.6px;"></textarea>
+	</div>
+
+
+	<div id="companion_appearance" class="pane" style="top: 1007px;left: 36px;width: 286px;height: 154px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/appearance.svg" style="top: 7.4px;left: 5px;width: 275.3px;height: 139.6px;">
+
+		<div class="textlabel-bold" style="top: 131.5px;left: 10.5px;width: 264px">REMARKS</div>
+
+		<textarea id="Cnote-Right" class="field inputfield" rows="7" style="top: 13px;left: 13.5px;width: 254px;height: 112px;font-size: 10.2px;line-height: 16.52px;padding-top: 2.3px;"></textarea>
+
+		<div id="Comp-img-Image" class="field" style="position: absolute;top: 14px;left: 14px;width: 257.2px;height: 126px;background-color: var(--background);"><!-- TODO: this should be a different background, fix it someday -->
+			<div class="textlabel-bold" style="top: 117.5px;left: -3.5px;width: 264px">COMPANION'S APPEARANCE</div>
+		</div>
+		<div id="Comp-img-Portrait" class="field" style="position: absolute;top: 12.5px;left: 14px;width: 257.2px;height: 120px;text-align: center;display: table;font-size: 10.5px;line-height: 9.2pt;cursor: pointer">
+			<span id="comp-img-placeholder" style="display:table-cell;vertical-align: middle">CLICK HERE<br>TO CHANGE<br>THIS ICON</span>
+		</div>
+	</div>
+
+
+	<div id="companion_notes" class="pane" style="top: 810px;left: 322px;width: 542px;height: 351px;">
+		<img class="pane-bg" alt="" src="img/page_companion/backgrounds/notes.svg" style="top: 6.5px;left: 4.8px;width: 531.5px;height: 337.5px;">
+
+		<div class="textlabel-bold" style="top: 328.8px;left: 10.5px;width: 520px">NOTES</div>
+
+		<textarea id="Cnote-Left" class="field inputfield" rows="19" style="top: 11.7px;left: 16.5px;width: 504.5px;height: 310px;font-size: 10.2px;line-height: 16.5px;padding-top: 2.3px;"></textarea>
+
+		<!--TODO: set proper background for equipment screen-->
+		<div id="Whiteout-Standard#4" class="field" style="visibility:hidden;top: 11.7px;left: 16.5px;width: 509px;position: absolute;height: 325px;background-color: var(--background);"></div>
+
+		<div id="temp-black-divider" style="visibility:hidden;position: absolute;top: 8px;left: 235px; width:2px;height: 335px;background-color: black"></div>
+
+		<div class="textlabel-bold" style="visibility:hidden;top: 328.8px;left: 10.5px;width: 223.5px">EQUIPMENT</div>
+		<div class="textlabel-bold" style="visibility:hidden;top: 328.8px;left: 238px;width: 292.5px">NOTES</div>
+		<span class="textlabel-dimmed" style="visibility:hidden;top: 14px;left: 21.9px;font-size: 8px">EQUIPMENT</span>
+		<span class="textlabel-dimmed" style="visibility:hidden;top: 13px;left: 182px;font-size: 10px">#</span>
+		<span id="Comp-eqp-Display-Weighttxt" class="field textlabel-dimmed" style="visibility:hidden;top: 14px;left: 202.4px;font-size: 8.3px">LB</span>
+		<span class="textlabel-dimmed" style="visibility:hidden;top: 308px;left: 151px;font-size: 8.2px">SUBTOTAL</span>
+
+		<input id="Comp-eqp-Gear_Row_1"  class="field inputfield" style="visibility:hidden;top:  27.00px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_2"  class="field inputfield" style="visibility:hidden;top:  43.51px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_3"  class="field inputfield" style="visibility:hidden;top:  60.02px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_4"  class="field inputfield" style="visibility:hidden;top:  76.53px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_5"  class="field inputfield" style="visibility:hidden;top:  93.04px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_6"  class="field inputfield" style="visibility:hidden;top: 109.55px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_7"  class="field inputfield" style="visibility:hidden;top: 126.06px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_8"  class="field inputfield" style="visibility:hidden;top: 142.57px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_9"  class="field inputfield" style="visibility:hidden;top: 159.08px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_10" class="field inputfield" style="visibility:hidden;top: 175.59px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_11" class="field inputfield" style="visibility:hidden;top: 192.10px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_12" class="field inputfield" style="visibility:hidden;top: 208.61px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_13" class="field inputfield" style="visibility:hidden;top: 225.12px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_14" class="field inputfield" style="visibility:hidden;top: 241.63px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_15" class="field inputfield" style="visibility:hidden;top: 258.14px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_16" class="field inputfield" style="visibility:hidden;top: 274.65px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+		<input id="Comp-eqp-Gear_Row_17" class="field inputfield" style="visibility:hidden;top: 291.16px;left: 19.8px;font-size: 12px;height: 13.7px;width: 152px;" type="text">
+
+		<input id="Comp-eqp-Gear_Amount_1"  class="field inputfield" style="visibility:hidden;top:  27.00px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_2"  class="field inputfield" style="visibility:hidden;top:  43.51px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_3"  class="field inputfield" style="visibility:hidden;top:  60.02px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_4"  class="field inputfield" style="visibility:hidden;top:  76.53px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_5"  class="field inputfield" style="visibility:hidden;top:  93.04px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_6"  class="field inputfield" style="visibility:hidden;top: 109.55px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_7"  class="field inputfield" style="visibility:hidden;top: 126.06px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_8"  class="field inputfield" style="visibility:hidden;top: 142.57px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_9"  class="field inputfield" style="visibility:hidden;top: 159.08px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_10" class="field inputfield" style="visibility:hidden;top: 175.59px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_11" class="field inputfield" style="visibility:hidden;top: 192.10px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_12" class="field inputfield" style="visibility:hidden;top: 208.61px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_13" class="field inputfield" style="visibility:hidden;top: 225.12px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_14" class="field inputfield" style="visibility:hidden;top: 241.63px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_15" class="field inputfield" style="visibility:hidden;top: 258.14px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_16" class="field inputfield" style="visibility:hidden;top: 274.65px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+		<input id="Comp-eqp-Gear_Amount_17" class="field inputfield" style="visibility:hidden;top: 291.16px;left: 176.5px;font-size: 12px;height: 13.7px;width: 14px;text-align:center" type="number">
+
+		<input id="Comp-eqp-Gear_Weight_1"  class="field inputfield" style="visibility:hidden;top:  27.00px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_2"  class="field inputfield" style="visibility:hidden;top:  43.51px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_3"  class="field inputfield" style="visibility:hidden;top:  60.02px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_4"  class="field inputfield" style="visibility:hidden;top:  76.53px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_5"  class="field inputfield" style="visibility:hidden;top:  93.04px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_6"  class="field inputfield" style="visibility:hidden;top: 109.55px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_7"  class="field inputfield" style="visibility:hidden;top: 126.06px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_8"  class="field inputfield" style="visibility:hidden;top: 142.57px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_9"  class="field inputfield" style="visibility:hidden;top: 159.08px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_10" class="field inputfield" style="visibility:hidden;top: 175.59px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_11" class="field inputfield" style="visibility:hidden;top: 192.10px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_12" class="field inputfield" style="visibility:hidden;top: 208.61px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_13" class="field inputfield" style="visibility:hidden;top: 225.12px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_14" class="field inputfield" style="visibility:hidden;top: 241.63px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_15" class="field inputfield" style="visibility:hidden;top: 258.14px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_16" class="field inputfield" style="visibility:hidden;top: 274.65px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+		<input id="Comp-eqp-Gear_Weight_17" class="field inputfield" style="visibility:hidden;top: 291.16px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right" type="number">
+
+		<input id="Comp-eqp-Gear_Weight_Subtotal" class="field inputfield-noneditable" style="visibility:hidden;top: 307.67px;left: 195px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right;color: var(--text-dimmed)" type="number">
+
+		<button id="Comp-eqpB-Gear_Button_1"  class="field button" style="visibility:hidden;top:  28.40px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_2"  class="field button" style="visibility:hidden;top:  44.91px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_3"  class="field button" style="visibility:hidden;top:  61.42px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_4"  class="field button" style="visibility:hidden;top:  77.93px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_5"  class="field button" style="visibility:hidden;top:  94.44px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_6"  class="field button" style="visibility:hidden;top: 110.95px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_7"  class="field button" style="visibility:hidden;top: 127.46px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_8"  class="field button" style="visibility:hidden;top: 143.97px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_9"  class="field button" style="visibility:hidden;top: 160.48px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_10" class="field button" style="visibility:hidden;top: 176.99px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_11" class="field button" style="visibility:hidden;top: 193.50px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_12" class="field button" style="visibility:hidden;top: 210.01px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_13" class="field button" style="visibility:hidden;top: 226.52px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_14" class="field button" style="visibility:hidden;top: 243.03px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_15" class="field button" style="visibility:hidden;top: 259.54px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_16" class="field button" style="visibility:hidden;top: 276.05px;left: -5px;">&gt;</button>
+		<button id="Comp-eqpB-Gear_Button_17" class="field button" style="visibility:hidden;top: 292.56px;left: -5px;">&gt;</button>
+
+		<textarea id="Comp-eqp-Notes" class="field inputfield" rows="19" style="visibility:hidden;top: 11.7px;left: 253px;width: 268px;height: 310px;font-size: 10.2px;line-height: 16.5px;padding-top: 2.3px;"></textarea>
+	</div>
+
+
+	<span id="SheetInformation" class="field textlabel-dimmed" style="top: 1155px;left: 43px;font-size: 6.43px;font-weight: bold">
+		MorePurpleMoreBetter&apos;s D&amp;D 5th edition Character Record Sheet v13.1.2 (Printer Friendly)
+	</span>
+	<span id="CopyrightInformation" class="field textlabel-dimmed" style="top: 1155px;left: 565px;font-size: 6.44px;font-weight: bold">
+		Made by Joost Wijnen (mpmb@flapkan.com); Web front-end by Simon De Ridder
+	</span>
+
+
+	<div style="visibility:hidden">
+		<div id="Companion-Remember" class="field"></div>
+		<div id="Companion-Layers-Remember" class="field"></div>
+		<div id="BlueText-Save_Modifiers_Title#0" class="field"></div>
+		<div id="BlueText-Save_Modifiers_Title#1" class="field"></div>
+		<div id="BlueText-Save_Modifiers_All_Text" class="field"></div>
+		<div id="BlueText-Comp-Use-Ability-All-ST-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Ability-Str-ST-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Ability-Dex-ST-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Ability-Con-ST-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Ability-Int-ST-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Ability-Wis-ST-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Ability-Cha-ST-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Proficiency_Bonus_Dice" class="field"></div>
+		<div id="BlueText-Proficiency_Bonus_Dice_Title" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-1-Weight_Title" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-2-Weight_Title" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-3-Weight_Title" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-1-Weight" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-2-Weight" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-3-Weight" class="field"></div>
+		<div id="BlueText-Attack-Modifiers_Title" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-1-To_Hit_Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-2-To_Hit_Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-3-To_Hit_Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-1-Damage_Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-2-Damage_Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-3-Damage_Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-1-Damage_Die" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-2-Damage_Die" class="field"></div>
+		<div id="BlueText-Comp-Use-Attack-3-Damage_Die" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-All-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Acr-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Ani-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Arc-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Ath-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Dec-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-His-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Ins-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Inti-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Inv-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Med-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Nat-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Perc-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Perf-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Pers-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Rel-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Sle-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Ste-Bonus" class="field"></div>
+		<div id="BlueText-Comp-Use-Skills-Sur-Bonus" class="field"></div>
+		<div id="BlueText-Skill_Modifiers_All_Text" class="field"></div>
+		<div id="BlueText-Skill_Modifiers_Title" class="field"></div>
+		<div id="Comp-Use-Combat-Init-Bonus" class="field"></div>
+		<div id="Comp.Use.Attack.1.Description_Tooltip" class="field"></div>
+		<div id="Comp.Use.Attack.2.Description_Tooltip" class="field"></div>
+		<div id="Comp.Use.Attack.3.Description_Tooltip" class="field"></div>
+		<div id="Image-calc_boxes" class="field"></div>
+		<div id="Image-calc_lines" class="field"></div>
+		<div id="Image-calc_lines-AScomp" class="field"></div>
+		<div id="Comp-Use-Skills-Perc-Pass-Bonus" class="field"></div>
+	</div>
 </div>

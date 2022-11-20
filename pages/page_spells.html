@@ -1,511 +1,183 @@
-<!--SSfront (and SSMore?)
-dont forget to connect ids:
-prefix + "spellshead.Text.header." + i(1-4)
-prefix + "spellshead.prepare." + i
-prefix + "BlueText.spellshead.prepare." + i
-prefix + "BlueText.spellshead.attack." + i
-prefix + "BlueText.spellshead.dc." + i
-prefix + "BlueText.spellshead"
-"spells.name.0"
-"spells.checkbox." + S
-"spellshead.Image.Title"
-"spellshead.Image.Header.Left"
-"spellshead.Image.Divider"
-"spellshead.Image.DividerFlip"
-"spellsdiv.Image.Title"
-"spellsdiv.Image.Header.Left"
-"spellsdiv.Image.Divider"
-"spellsdiv.Image.DividerFlip"
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".mid",
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".top1",
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".top2.1",
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".top2.2",
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".bottom1",
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".bottom2.1",
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".bottom2.2",
-"SpellSlots.Checkboxes.SpellPoints"
-prefix + "spells.check." + suffix,
-prefix + "spells.name." + suffix,
-prefix + "spells.description." + suffix,
-prefix + "spells.save." + suffix,
-prefix + "spells.school." + suffix,
-prefix + "spells.time." + suffix,
-prefix + "spells.range." + suffix,
-prefix + "spells.components." + suffix,
-prefix + "spells.duration." + suffix,
-prefix + "spells.book." + suffix,
-prefix + "spells.page." + suffix,
-prefix + "spells.remember." + suffix
-prefix + "spellshead.Image.Header.Left." + suffix,
-prefix + "spellshead.Text.header." + suffix,
-prefix + "spellshead.class." + suffix,
-prefix + "spellshead.ability." + suffix,
-prefix + "spellshead.prepare." + suffix,
-prefix + "spellshead.attack." + suffix,
-prefix + "spellshead.dc." + suffix,
-prefix + "BlueText.spellshead.prepare." + suffix,
-prefix + "BlueText.spellshead.attack." + suffix,
-prefix + "BlueText.spellshead.dc." + suffix,
-prefix + "spellshead.Image.prepare." + suffix, //10
-prefix + "spellsdiv.Image." + suffix,
-prefix + "spellsdiv.Text." + suffix,
-prefix + "spellsgloss.Image" + suffix,
-Image.SpellPoints
-prefixTo + "spellshead.Image.prepare.0"
-prefixTo + "spellshead.prepare.0"
-prefix + "Image.SpellSlots.Checkboxes." + SpellLVL
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".mid"
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".top1"
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".top2.1"
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".top2.2"
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".bottom1"
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".bottom2.1"
-prefix + "SpellSlots.Checkboxes.lvl" + SpellLVL + ".bottom2.2"
-"SpellSlots.CheckboxesSet.lvl" + (ss + 1)
--->
+<div id="SSfront" class="field page-container">
 
-<div id="pf7" class="pf ps_w0 ps_h0" data-page-no="7">
-    <div class="pc ps_w0 ps_h0">
-        <img class="bf" alt="" src="img/ps_bg7_alt3.svg" style="height: auto;top: 2px;left: 1.5px;width: 888px;">
-        <img class="bf" alt="" src="img/ps_bg7.svg" />
-        <div class="c ps_x0 ps_y0 ps_w1 ps_h1">
-            <div class="t m0 ps_x1 ps_h2 ps_y1 ps_ff1 ps_fs0 ps_fc0 ps_sc0 ps_ls0 ps_ws0">1<span class="ps_ff2">ST LEVEL<span class="_ ps__0">
-                    </span></span>2<span class="ps_ff2">ND LEVEL<span class="_ ps__1"> </span></span>3<span class="ps_ff2">RD
-                    LEVEL<span class="_ ps__0"> </span></span>4<span class="ps_ff2">TH LEVEL<span class="_ ps__2">
-                    </span></span>5<span class="ps_ff2">TH LEVEL<span class="_ ps__2"> </span></span>6<span class="ps_ff2">TH
-                    LEVEL<span class="_ ps__0"> </span></span>7<span class="ps_ff2">TH LEVEL<span class="_ ps__2">
-                    </span></span>8<span class="ps_ff2">TH LEVEL<span class="_ ps__0"> </span></span>9<span class="ps_ff2">TH
-                    LEVEL</span></div>
-            <div class="t m0 ps_x2 ps_h3 ps_y2 ps_ff1 ps_fs1 ps_fc0 ps_sc0 ps_ls0 ps_ws0">SPELL SLOTS</div>
-            <div class="t m0 ps_x3 ps_h4 ps_y3 ps_ff2 ps_fs2 ps_fc0 ps_sc0 ps_ls0 ps_ws0">CHARACTER NAME</div>
-        </div>
-        <div class="c ps_x4 ps_y4 ps_w2 ps_h5">
-            <div class="t m0 ps_x5 ps_h6 ps_y5 ps_ff3 ps_fs3 ps_fc1 ps_sc0 ps_ls0 ps_ws0">Zegran Avernai</div>
-        </div>
-        <div class="c ps_x6 ps_y6 ps_w3 ps_h7">
-            <div class="t m0 ps_x7 ps_h8 ps_y7 ps_ff4 ps_fs1 ps_fc0 ps_sc0 ps_ls0 ps_ws0">SPELLCASTING ABILITY<span class="_ ps__3"> </span>ATTACK
-                MODIFIER<span class="_ ps__4"> </span>SAVING THROW DC</div>
-        </div>
-        <div class="c ps_x8 ps_y8 ps_w4 ps_h9">
-            <div class="t m0 ps_x9 ps_ha ps_y9 ps_ff5 ps_fs4 ps_fc1 ps_sc0 ps_ls0 ps_ws0">ELF-TIEFLING SPELLS</div>
-        </div>
-        <div class="c ps_xa ps_ya ps_w5 ps_hb">
-            <div class="t m0 ps_x0 ps_hc ps_yb ps_ff3 ps_fs5 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> Charisma</div>
-        </div>
-        <div class="c ps_xb ps_ya ps_w6 ps_hb">
-            <div class="t m0 ps_xc ps_hc ps_yb ps_ff3 ps_fs5 ps_fc1 ps_sc0 ps_ls0 ps_ws0">+4</div>
-        </div>
-        <div class="c ps_xd ps_ya ps_w7 ps_hb">
-            <div class="t m0 ps_xe ps_hc ps_yb ps_ff3 ps_fs5 ps_fc1 ps_sc0 ps_ls0 ps_ws0">DC 12</div>
-        </div>
-        <div class="c ps_xf ps_yc ps_w8 ps_hd">
-            <div class="t m0 ps_x10 ps_he ps_yd ps_ff5 ps_fs2 ps_fc1 ps_sc0 ps_ls0 ps_ws0">CANTRIPS (0 LEVEL)</div>
-        </div>
-        <div class="c ps_x6 ps_ye ps_w9 ps_hf">
-            <div class="t m0 ps_x11 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">KN</div>
-        </div>
-        <div class="c ps_x12 ps_ye ps_wa ps_hf">
-            <div class="t m0 ps_x0 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">SPELL</div>
-        </div>
-        <div class="c ps_x10 ps_ye ps_wb ps_hf">
-            <div class="t m0 ps_x0 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">DESCRIPTION</div>
-        </div>
-        <div class="c ps_x13 ps_ye ps_wc ps_hf">
-            <div class="t m0 ps_x0 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">SAVE</div>
-        </div>
-        <div class="c ps_x14 ps_ye ps_wd ps_hf">
-            <div class="t m0 ps_x0 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> SCHOOL</div>
-        </div>
-        <div class="c ps_x15 ps_ye ps_we ps_hf">
-            <div class="t m0 ps_x0 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">TIME</div>
-        </div>
-        <div class="c ps_x16 ps_ye ps_wf ps_hf">
-            <div class="t m0 ps_x0 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">RANGE</div>
-        </div>
-        <div class="c ps_x17 ps_ye ps_w10 ps_hf">
-            <div class="t m0 ps_x0 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">COMP</div>
-        </div>
-        <div class="c ps_x18 ps_ye ps_w11 ps_hf">
-            <div class="t m0 ps_x0 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">DURATION</div>
-        </div>
-        <div class="c ps_x19 ps_ye ps_w12 ps_hf">
-            <div class="t m0 ps_x1a ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">B</div>
-        </div>
-        <div class="c ps_x1b ps_ye ps_w9 ps_hf">
-            <div class="t m0 ps_x11 ps_h10 ps_yf ps_ff5 ps_fs6 ps_fc1 ps_sc0 ps_ls0 ps_ws0">PG.</div>
-        </div>
-        <div class="c ps_x1c ps_y10 ps_w13 ps_h11">
-            <div class="t m0 ps_x0 ps_h12 ps_y11 ps_ff6 ps_fs7 ps_fc2 ps_sc0 ps_ls0 ps_ws0">A<span class="ps_fs8">T</span> </div>
-            <div class="t m0 ps_x0 ps_h12 ps_y12 ps_ff6 ps_fs7 ps_fc2 ps_sc0 ps_ls0 ps_ws0">W<span class="ps_fs8">ILL</span></div>
-            <div class="t m0 ps_x0 ps_h12 ps_y11 ps_ff6 ps_fs7 ps_fc3 ps_sc0 ps_ls0 ps_ws0">A<span class="ps_fs8">T</span> </div>
-            <div class="t m0 ps_x0 ps_h12 ps_y12 ps_ff6 ps_fs7 ps_fc3 ps_sc0 ps_ls0 ps_ws0">W<span class="ps_fs8">ILL</span></div>
-        </div>
-        <div class="c ps_x12 ps_y13 ps_w14 ps_h13">
-            <div class="t m0 ps_x0 ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0">Thaumaturgy</div>
-        </div>
-        <div class="c ps_x10 ps_y13 ps_wb ps_h13">
-            <div class="t m0 ps_x0 ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0">Minor wonder; my voice booms, flames flicker, tremors
-                in the ground, ominous sounds, etc.</div>
-        </div>
-        <div class="c ps_x13 ps_y13 ps_wc ps_h13">
-            <div class="t m0 ps_x0 ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0">—</div>
-        </div>
-        <div class="c ps_x14 ps_y13 ps_wd ps_h13">
-            <div class="t m0 ps_x0 ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> Trans</div>
-        </div>
-        <div class="c ps_x15 ps_y13 ps_we ps_h13">
-            <div class="t m0 ps_x0 ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0">1 a</div>
-        </div>
-        <div class="c ps_x16 ps_y13 ps_wf ps_h13">
-            <div class="t m0 ps_x0 ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0">30 ft</div>
-        </div>
-        <div class="c ps_x17 ps_y13 ps_w10 ps_h13">
-            <div class="t m0 ps_x0 ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0">V</div>
-        </div>
-        <div class="c ps_x18 ps_y13 ps_w11 ps_h13">
-            <div class="t m0 ps_x0 ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0">1 min (D)</div>
-        </div>
-        <div class="c ps_x19 ps_y13 ps_w12 ps_h13">
-            <div class="t m0 ps_x1a ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0">P</div>
-        </div>
-        <div class="c ps_x1b ps_y13 ps_w9 ps_h13">
-            <div class="t m0 ps_x0 ps_h14 ps_y14 ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0">282</div>
-        </div>
-        <div class="c ps_x6 ps_y15 ps_w15 ps_h15">
-            <div class="t ps_m1 ps_x1a ps_h16 ps_y16 ps_ff7 ps_fsa ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y15 ps_wd ps_h15">
-            <div class="t ps_m1 ps_x0 ps_h17 ps_y17 ps_ff3 ps_fsb ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y18 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y18 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y1b ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y1b ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y1d ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y1d ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y1f ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y1f ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y20 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y20 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y21 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y21 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y22 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y22 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y23 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y23 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y24 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y24 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y25 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y25 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y26 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y26 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y27 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y27 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y28 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y28 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y29 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y29 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y2a ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y2a ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y2b ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y2b ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y2c ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y2c ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y2d ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y2d ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y2e ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y2e ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y2f ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y2f ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y30 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y30 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y31 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y31 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y32 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y32 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y33 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y33 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y34 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y34 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y35 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y35 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y36 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y36 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y37 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y37 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y38 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y38 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y39 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y39 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y3a ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y3a ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y3c ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y3c ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y3d ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y3d ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y3e ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y3f ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y40 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y40 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y41 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y41 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y42 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y42 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y43 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y43 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y44 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y44 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y45 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y45 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y46 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y46 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y47 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y47 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y48 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y48 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y49 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y49 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y4a ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y4a ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y4b ps_w15 ps_h1b">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y4c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y4b ps_wd ps_h1b">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y4d ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y4d ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y4e ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y4e ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y4f ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y4f ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y50 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y50 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y51 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y19 ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y51 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y1a ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y52 ps_w15 ps_h18">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1e ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y52 ps_wd ps_h18">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x6 ps_y53 ps_w15 ps_h1a">
-            <div class="t ps_m2 ps_x1a ps_h19 ps_y1c ps_ff7 ps_fs4 ps_fc2 ps_sc0 ps_ls0 ps_ws0">&gt;</div>
-        </div>
-        <div class="c ps_x14 ps_y53 ps_wd ps_h1a">
-            <div class="t ps_m2 ps_x0 ps_h14 ps_y3b ps_ff3 ps_fs9 ps_fc1 ps_sc0 ps_ls0 ps_ws0"> </div>
-        </div>
-        <div class="c ps_x1d ps_y54 ps_w16 ps_h1c">
-            <div class="t ps_m2 ps_x0 ps_h1d ps_y55 ps_ff5 fsc ps_fc4 ps_sc0 ps_ls0 ps_ws0">MorePurpleMoreBetter&apos;s D&amp;D 5th edition
-                Character Record Sheet v13.1.2 (Printer Friendly); Spell Sheet 1/1</div>
-        </div>
-        <div class="c ps_x1e ps_y54 ps_w16 ps_h1c">
-            <div class="t ps_m2 ps_x1f ps_h1d ps_y55 ps_ff5 fsc ps_fc4 ps_sc0 ps_ls0 ps_ws0">Made by Joost Wijnen (mpmb@flapkan.com); Design
-                inspired by Wizards of the Coast character sheet</div>
-        </div>
-        <div class="c ps_x20 ps_y56 ps_w17 ps_h1e">
-            <div class="t ps_m2 ps_x21 ps_h2 ps_y57 ps_ff7 ps_fs0 ps_fc2 ps_sc0 ps_ls0 ps_ws0">Spell Sheet Options</div>
-        </div>
-    </div>
-    <div class="pi" data-data='{"ctm":[1.500000,0.000000,0.000000,1.500000,0.000000,0.000000]}'></div>
+	<div id="spell_sheet_header" class="pane" style="width: var(--page-width);height: 182px;">
+		<img class="pane-bg" alt="" src="img/bg_splashy_stripes.svg" style="top: 4px;width: var(--page-width);height: 174.2px">
+		<img class="pane-bg" alt="" src="img/page_spells/backgrounds/header.svg" style="top: 40px;left: 23.5px;width: 847.5px;height: 122.3px;">
+
+		<div class="textlabel-bold" style="top: 131.6px;left: 360.4px;width: 469.3px">SPELL SLOTS</div>
+		<span class="textlabel" style="top: 143px;left: 101.5px">CHARACTER NAME</span>
+		<span class="textlabel" style="top: 83.1px;left: 365.34px;font-size: 9px"><b>1</b>ST LEVEL</span>
+		<span class="textlabel" style="top: 83.1px;left: 417.48px;font-size: 9px"><b>2</b>ND LEVEL</span>
+		<span class="textlabel" style="top: 83.1px;left: 469.63px;font-size: 9px"><b>3</b>RD LEVEL</span>
+		<span class="textlabel" style="top: 83.1px;left: 521.77px;font-size: 9px"><b>4</b>TH LEVEL</span>
+		<span class="textlabel" style="top: 83.1px;left: 573.92px;font-size: 9px"><b>5</b>TH LEVEL</span>
+		<span class="textlabel" style="top: 83.1px;left: 626.06px;font-size: 9px"><b>6</b>TH LEVEL</span>
+		<span class="textlabel" style="top: 83.1px;left: 678.21px;font-size: 9px"><b>7</b>TH LEVEL</span>
+		<span class="textlabel" style="top: 83.1px;left: 730.35px;font-size: 9px"><b>8</b>TH LEVEL</span>
+		<span class="textlabel" style="top: 83.1px;left: 782.48px;font-size: 9px"><b>9</b>TH LEVEL</span>
+
+		<input id="zAdvLog-PC-Name" class="field inputfield" style="top: 105px;left: 72px;font-size: 12.5pt;width: 168pt;height: 14.5pt;text-align: center" type="text">
+
+		<input id="SpellSlots-Checkboxes-lvl1-top2-1"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 367px;   width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl1-top2-2"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 384.5px; width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl1-bottom2-1" class="field checkcircle" type="checkbox" style="top: 109px;  left: 367px;   width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl1-top2-2"    class="field checkcircle" type="checkbox" style="top: 109px;  left: 384.5px; width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl1-top1"      class="field checkcircle" type="checkbox" style="top: 92px;   left: 375.75px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl1-bottom1"   class="field checkcircle" type="checkbox" style="top: 109px;  left: 375.75px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl1-mid"       class="field checkcircle" type="checkbox" style="top: 100.5px;left: 375.75px;width: 11px;height: 11px;visibility: hidden">
+
+		<input id="SpellSlots-Checkboxes-lvl2-top2-1"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 419.14px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl2-top2-2"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 436.64px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl2-bottom2-1" class="field checkcircle" type="checkbox" style="top: 109px;  left: 419.14px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl2-top2-2"    class="field checkcircle" type="checkbox" style="top: 109px;  left: 436.64px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl2-top1"      class="field checkcircle" type="checkbox" style="top: 92px;   left: 427.89px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl2-bottom1"   class="field checkcircle" type="checkbox" style="top: 109px;  left: 427.89px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl2-mid"       class="field checkcircle" type="checkbox" style="top: 100.5px;left: 427.89px;width: 11px;height: 11px;visibility: hidden">
+
+		<input id="SpellSlots-Checkboxes-lvl3-top2-1"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 471.28px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl3-top2-2"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 488.78px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl3-bottom2-1" class="field checkcircle" type="checkbox" style="top: 109px;  left: 471.28px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl3-top2-2"    class="field checkcircle" type="checkbox" style="top: 109px;  left: 488.78px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl3-top1"      class="field checkcircle" type="checkbox" style="top: 92px;   left: 480.03px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl3-bottom1"   class="field checkcircle" type="checkbox" style="top: 109px;  left: 480.03px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl3-mid"       class="field checkcircle" type="checkbox" style="top: 100.5px;left: 480.03px;width: 11px;height: 11px;visibility: hidden">
+
+		<input id="SpellSlots-Checkboxes-lvl4-top2-1"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 523.42px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl4-top2-2"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 540.92px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl4-bottom2-1" class="field checkcircle" type="checkbox" style="top: 109px;  left: 523.42px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl4-top2-2"    class="field checkcircle" type="checkbox" style="top: 109px;  left: 540.92px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl4-top1"      class="field checkcircle" type="checkbox" style="top: 92px;   left: 532.17px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl4-bottom1"   class="field checkcircle" type="checkbox" style="top: 109px;  left: 532.17px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl4-mid"       class="field checkcircle" type="checkbox" style="top: 100.5px;left: 532.17px;width: 11px;height: 11px;visibility: hidden">
+
+		<input id="SpellSlots-Checkboxes-lvl5-top2-1"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 575.56px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl5-top2-2"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 593.06px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl5-bottom2-1" class="field checkcircle" type="checkbox" style="top: 109px;  left: 575.56px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl5-top2-2"    class="field checkcircle" type="checkbox" style="top: 109px;  left: 593.06px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl5-top1"      class="field checkcircle" type="checkbox" style="top: 92px;   left: 584.31px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl5-bottom1"   class="field checkcircle" type="checkbox" style="top: 109px;  left: 584.31px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl5-mid"       class="field checkcircle" type="checkbox" style="top: 100.5px;left: 584.31px;width: 11px;height: 11px;visibility: hidden">
+
+		<input id="SpellSlots-Checkboxes-lvl6-top2-1"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 627.70px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl6-top2-2"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 645.20px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl6-bottom2-1" class="field checkcircle" type="checkbox" style="top: 109px;  left: 627.70px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl6-top2-2"    class="field checkcircle" type="checkbox" style="top: 109px;  left: 645.20px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl6-top1"      class="field checkcircle" type="checkbox" style="top: 92px;   left: 636.45px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl6-bottom1"   class="field checkcircle" type="checkbox" style="top: 109px;  left: 636.45px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl6-mid"       class="field checkcircle" type="checkbox" style="top: 100.5px;left: 636.45px;width: 11px;height: 11px;visibility: hidden">
+
+		<input id="SpellSlots-Checkboxes-lvl7-top2-1"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 679.84px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl7-top2-2"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 697.34px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl7-bottom2-1" class="field checkcircle" type="checkbox" style="top: 109px;  left: 679.84px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl7-top2-2"    class="field checkcircle" type="checkbox" style="top: 109px;  left: 697.34px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl7-top1"      class="field checkcircle" type="checkbox" style="top: 92px;   left: 688.59px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl7-bottom1"   class="field checkcircle" type="checkbox" style="top: 109px;  left: 688.59px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl7-mid"       class="field checkcircle" type="checkbox" style="top: 100.5px;left: 688.59px;width: 11px;height: 11px;visibility: hidden">
+
+		<input id="SpellSlots-Checkboxes-lvl8-top2-1"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 731.98px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl8-top2-2"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 749.48px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl8-bottom2-1" class="field checkcircle" type="checkbox" style="top: 109px;  left: 731.98px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl8-top2-2"    class="field checkcircle" type="checkbox" style="top: 109px;  left: 749.48px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl8-top1"      class="field checkcircle" type="checkbox" style="top: 92px;   left: 740.73px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl8-bottom1"   class="field checkcircle" type="checkbox" style="top: 109px;  left: 740.73px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl8-mid"       class="field checkcircle" type="checkbox" style="top: 100.5px;left: 740.73px;width: 11px;height: 11px;visibility: hidden">
+
+		<input id="SpellSlots-Checkboxes-lvl9-top2-1"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 784.12px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl9-top2-2"    class="field checkcircle" type="checkbox" style="top: 92px;   left: 801.62px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl9-bottom2-1" class="field checkcircle" type="checkbox" style="top: 109px;  left: 784.12px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl9-top2-2"    class="field checkcircle" type="checkbox" style="top: 109px;  left: 801.62px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl9-top1"      class="field checkcircle" type="checkbox" style="top: 92px;   left: 792.87px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl9-bottom1"   class="field checkcircle" type="checkbox" style="top: 109px;  left: 792.87px;width: 11px;height: 11px;visibility: hidden">
+		<input id="SpellSlots-Checkboxes-lvl9-mid"       class="field checkcircle" type="checkbox" style="top: 100.5px;left: 792.87px;width: 11px;height: 11px;visibility: hidden">
+
+		<button id="Spells_Button" class="field button" style="top: 30px;left: 554px;font-size: 8.4px;">Spell Sheet Options</button>
+	</div>
+
+
+	<div id="spell_sheet_table" class="pane" style="top: 180px;left: 34px;width: 825px;height: 972px">
+
+		<div id="spellshead-Image-Header-Left-0" class="field" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 64px;">
+			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
+
+			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
+			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
+			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+
+			<input id="spellshead-Text-header-0" class="field inputfield" style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;" type="text">
+			<select id="spellshead-ability-0" class="field inputfield" style="top: 18px;left: 343px;font-size: 15px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;">
+				<option value="charisma">Charisma</option>
+				<option value="intelligence">Intelligence </option>
+			</select>
+			<input id="spellshead-attack-0" class="field inputfield-noneditable" style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px" type="text">
+			<input id="spellshead-dc-0" class="field inputfield-noneditable" style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px" type="text">
+
+			<div id="spellshead-Image-prepare-0" class="field" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;">
+				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
+
+				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+
+				<input id="spellshead-prepare-0" class="field inputfield-noneditable" style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px" type="number">
+			</div>
+		</div>
+
+		<div id="spellsdiv-Image-0" class="field" style="position: absolute;top: 64px;left: 0px;width: 825px;height: 32px;">
+			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/divider.svg" style="top: 0px;left: 0px;width: 825px;height: 32px;">
+
+			<input id="spellsdiv-Text-0" class="field inputfield" style="top: 8px;left: 205.2px;font-size: 10.6px;width: 410.5px;height: 14px;text-align: center;font-weight: bold;text-transform: uppercase;" type="text">
+		</div>
+
+		<div style="position: absolute;top: 96px;left: 0px;width:825px;height: 16px;">
+			<div id="spells-checkbox-0" class="field" style="position: absolute;top: 0px;left: 0px;width: 16px;height: 16px;text-align: center;cursor: pointer">
+				<span id="spells-check-0" class="button" style="position: absolute;width: 8px;height: 8px;left: 1px;top: 1px;font-size: 12px;">&gt;</span>
+			</div>
+			<input id="spells-name-0" class="field inputfield" style="top: 0px;left: 18px;font-size: 8.7px;width: 107.5px;height: 14px;font-weight: bold;padding: 1px 0px 1px 0px;" type="text" value="SPELL">
+			<input id="spells-description-0" class="field inputfield" style="top: 0px;left: 127px;font-size: 8.7px;width: 429px;height: 14px;font-weight: bold;padding: 1px 0px 1px 0px;" type="text" value=" DESCRIPTION">
+			<input id="spells-remember-0" class="field" style="visibility: hidden">
+			<input id="spells-save-0" class="field inputfield" style="top: 0px;left: 557.5px;font-size: 8.7px;width: 22px;height: 14px;font-weight: bold;padding: 1px 0px 1px 0px;" type="text" value="SAVE">
+			<input id="spells-school-0" class="field inputfield" style="top: 0px;left: 581px;font-size: 8.7px;width: 35px;height: 14px;font-weight: bold;padding: 1px 0px 1px 0px;" type="text" value="SCHOOL">
+			<input id="spells-time-0" class="field inputfield" style="top: 0px;left: 617.5px;font-size: 8.7px;width: 32px;height: 14px;font-weight: bold;padding: 1px 0px 1px 0px;" type="text" value="TIME">
+			<input id="spells-range-0" class="field inputfield" style="top: 0px;left: 651px;font-size: 8.7px;width: 49.5px;height: 14px;font-weight: bold;padding: 1px 0px 1px 0px;" type="text" value="RANGE">
+			<input id="spells-components-0" class="field inputfield" style="top: 0px;left: 702px;font-size: 8.7px;width: 28px;height: 14px;font-weight: bold;padding: 1px 0px 1px 0px;" type="text" value="COMP">
+			<input id="spells-duration-0" class="field inputfield" style="top: 0px;left: 731.5px;font-size: 8.7px;width: 61px;height: 14px;font-weight: bold;padding: 1px 0px 1px 0px;" type="text" value="DURATION">
+			<input id="spells-book-0" class="field inputfield" style="top: 0px;left: 794px;font-size: 8.7px;width: 9px;height: 14px;font-weight: bold" type="text" value="B">
+			<input id="spells-page-0" class="field inputfield" style="top: 0px;left: 808.5px;font-size: 8.7px;width: 12.5px;height: 14px;font-weight: bold" type="text" value="PG.">
+		</div>
+	</div>
+
+	<span id="SpellSheetInformation" class="field textlabel-dimmed" style="top: 1155px;left: 43px;font-size: 6.43px;font-weight: bold">
+		MorePurpleMoreBetter&apos;s D&amp;D 5th edition Character Record Sheet v13.1.2 (Printer Friendly)
+	</span>
+	<span id="CopyrightInformation" class="field textlabel-dimmed" style="top: 1155px;left: 565px;font-size: 6.44px;font-weight: bold">
+		Made by Joost Wijnen (mpmb@flapkan.com); Web front-end by Simon De Ridder
+	</span>
+
+	<!-- Invisible fields (some are bluetext mods, sort these out later) -->
+	<div style="visibility:hidden">
+		<div id="BlueText-spellshead-prepare-0" class="field"></div>
+		<div id="BlueText-spellshead-attack-0" class="field"></div>
+		<div id="BlueText-spellshead-dc-0" class="field"></div>
+		<div id="SpellSlots-Extra-lvl1" class="field"></div>
+		<div id="SpellSlots-Extra-lvl2" class="field"></div>
+		<div id="SpellSlots-Extra-lvl3" class="field"></div>
+		<div id="SpellSlots-Extra-lvl4" class="field"></div>
+		<div id="SpellSlots-Extra-lvl5" class="field"></div>
+		<div id="SpellSlots-Extra-lvl6" class="field"></div>
+		<div id="SpellSlots-Extra-lvl7" class="field"></div>
+		<div id="SpellSlots-Extra-lvl8" class="field"></div>
+		<div id="SpellSlots-Extra-lvl9" class="field"></div>
+		<div id="SpellSlots-CheckboxesSet-lvl1" class="field"></div>
+		<div id="SpellSlots-CheckboxesSet-lvl2" class="field"></div>
+		<div id="SpellSlots-CheckboxesSet-lvl3" class="field"></div>
+		<div id="SpellSlots-CheckboxesSet-lvl4" class="field"></div>
+		<div id="SpellSlots-CheckboxesSet-lvl5" class="field"></div>
+		<div id="SpellSlots-CheckboxesSet-lvl6" class="field"></div>
+		<div id="SpellSlots-CheckboxesSet-lvl7" class="field"></div>
+		<div id="SpellSlots-CheckboxesSet-lvl8" class="field"></div>
+		<div id="SpellSlots-CheckboxesSet-lvl9" class="field"></div>
+		<div id="SpellSlots.Checkboxes.SpellPoints" class="field"></div>
+		<div id="Image-DnDLogo-short" class="field"></div>
+		<div id="spellshead-class-0" class="field"></div>
+		<div id="spellsgloss-Image-0" class="field"></div>
+		<div id="Image-SpellPoints" class="field"></div>
+	</div>
 </div>

@@ -579,6 +579,7 @@ function DirectImport(consoleTrigger) {
 		// Set the excl./incl. sources
 		if (ImportField("CurrentSources.Stringified")) {
 			CurrentSources = eval(global.docTo.getField("CurrentSources.Stringified").value);
+			console.log(CurrentSources);
 			if (!CurrentSources.globalKnown) CurrentSources.globalKnown = []; // Doesn't exist in old versions
 			cleanExclSources();
 			var garbage = resourceExclusionSetting([]);

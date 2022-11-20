@@ -7,40 +7,111 @@
 <link rel="stylesheet" href="style.css"/>
 <link rel="stylesheet" href="ps_style.css" />
 <link rel="stylesheet" href="style2.css"/>
-<script>
-	function includePage() {
-		var z, i, elmnt, file, xhttp;
-		z = document.getElementsByClassName("page");
-		for (i = 0; i < z.length; i++) {
-			elmnt = z[i];
-			file = elmnt.getAttribute("page-url");
-			if (file) {
-				xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4) {
-						if (this.status == 200) {
-							elmnt.innerHTML = this.responseText;
-						}
-						if (this.status == 404) {
-							elmnt.innerHTML = "Page not found.";
-						}
-						elmnt.removeAttribute("page-url");
-						includePage();
-					}
+<script type="text/javascript">
+	class Queue {
+		constructor() {
+			this.elements = {};
+			this.head = 0;
+			this.tail = 0;
+		}
+		enqueue(element) {
+			this.elements[this.tail] = element;
+			this.tail++;
+		}
+		dequeue() {
+			const item = this.elements[this.head];
+			delete this.elements[this.head];
+			this.head++;
+			return item;
+		}
+		peek() {
+			return this.elements[this.head];
+		}
+		get length() {
+			return this.tail - this.head;
+		}
+		get isEmpty() {
+			return this.length === 0;
+		}
+	};
+
+	function addPrefix(element, prefix) {
+		let elementChildren = element.childNodes;
+		let elementQueue = new Queue();
+		for(i=0; i < elementChildren.length; i++)
+ 		{
+			if (elementChildren[i] instanceof HTMLElement) {
+				elementQueue.enqueue(elementChildren[i])
+			}
+		}
+
+		while (!elementQueue.isEmpty) {
+			let currentElement = elementQueue.dequeue();
+			let elementClass = currentElement.getAttribute('class');
+			if (elementClass) {
+				if (elementClass.includes("field")) {
+					currentElement.setAttribute('id', prefix + currentElement.getAttribute('id'));
 				}
-				xhttp.open("GET", file, true);
-				xhttp.send();
-				return;
+			}
+			let subElementChildren = currentElement.childNodes;
+			for(i=0; i < subElementChildren.length; i++)
+			{
+				if (subElementChildren[i] instanceof HTMLElement) {
+					elementQueue.enqueue(subElementChildren[i]);
+				}
 			}
 		}
 	}
+
+	function executeScriptElements(containerElement) {
+		const scriptElements = containerElement.querySelectorAll("script");
+
+		Array.from(scriptElements).forEach((scriptElement) => {
+			const clonedElement = document.createElement("script");
+			Array.from(scriptElement.attributes).forEach((attribute) => {
+				clonedElement.setAttribute(attribute.name, attribute.value);
+			});
+			clonedElement.text = scriptElement.text;
+			scriptElement.parentNode.replaceChild(clonedElement, scriptElement);
+		});
+	}
+
+	function includePage(page_id, prefix="") {
+		var z, i, elmnt, file, xhttp;
+		elmnt = document.getElementById(page_id);
+		file = elmnt.getAttribute("page-url");
+		if (file) {
+			xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4) {
+					if (this.status == 200) {
+						elmnt.innerHTML = this.responseText;
+						if (prefix) {
+							addPrefix(elmnt, prefix);
+						}
+						executeScriptElements(elmnt);
+					}
+					if (this.status == 404) {
+						elmnt.innerHTML = "Page not found.";
+					}
+					elmnt.removeAttribute("page-url");
+					includePage(page_id, prefix);
+				}
+			}
+			xhttp.open("GET", file, true);
+			xhttp.send();
+			return;
+		}
+	}
 </script>
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="js/event_manager.js"></script>
 <title>Character Sheet</title>
 </head>
 <body>
 	<div id="button-container">
-		<button class="tablink" onclick="openPage('pf1', this)">Stats</button>
-		<button class="tablink" onclick="openPage('pf2', this)" id="defaultOpen">Features & Equipment</button>
+		<button class="tablink" onclick="openPage('pf1', this)" id="defaultOpen">Stats</button>
+		<button class="tablink" onclick="openPage('pf2', this)">Features & Equipment</button>
 		<button class="tablink" onclick="openPage('pf3', this)">Notes & Feats</button>
 		<button class="tablink" onclick="openPage('pf4', this)">Background</button>
 		<button class="tablink" onclick="openPage('pf5', this)">Companion</button>
@@ -59,9 +130,61 @@
 		<div id="pf7" class="page" page-url="pages/page_spells.html"></div>
 		<div id="pf8" class="page" page-url="pages/page_reference.html"></div>
 	</div>
+
+	<!-- Data storage emulation fields. -->
+	<div style="visibility:hidden">
+		<div id="SaveIMG-Patreon" class="field"></div>
+		<div id="Opening_Remember" class="field"></div>
+		<div id="League_Remember" class="field"></div>
+		<div id="Class_Features_Remember" class="field"></div>
+		<div id="SubClass_Remember" class="field"></div>
+		<div id="Race_Remember" class="field"></div>
+		<div id="Adventuring_Gear_Remember" class="field"></div>
+		<div id="Gear_Location_Remember" class="field"></div>
+		<div id="Print_Remember" class="field"></div>
+		<div id="Str_Remember" class="field"></div>
+		<div id="Dex_Remember" class="field"></div>
+		<div id="Con_Remember" class="field"></div>
+		<div id="Int_Remember" class="field"></div>
+		<div id="Wis_Remember" class="field"></div>
+		<div id="Cha_Remember" class="field"></div>
+		<div id="HoS_Remember" class="field"></div>
+		<div id="BoxesLinesRemember" class="field"></div>
+		<div id="DateFormat_Remember" class="field"></div>
+		<div id="Unit_System" class="field"></div>
+		<div id="Decimal_Separator" class="field"></div>
+		<div id="Delimiter" class="field"></div>
+		<div id="d20warning" class="field"></div>
+		<div id="Highlighting" class="field"></div>
+		<div id="UseUnicode" class="field"></div>
+		<div id="User_Imported_Files-Stringified" class="field"></div>
+		<div id="ChangesDialogSkip-Stringified" class="field"></div>
+		<div id="CurrentSpells-Stringified" class="field" value="([])##########([])"></div>
+		<div id="CurrentSources-Stringified" class="field" value="Object(CurrentSources={globalExcl:[]})"></div>
+		<div id="CurrentEvals-Stringified" class="field" value="Object()"></div>
+		<div id="CurrentProfs-Stringified" class="field" value="Object()"></div>
+		<div id="CurrentVars-Stringified" class="field" value="Object()"></div>
+		<div id="CurrentFeatureChoices-Stringified" class="field"></div>
+		<div id="CurrentStats-Stringified" class="field"></div>
+	</div>
+
+	<!-- Assorted others. -->
+	<div style="visibility:hidden">
+		<div id="Color-Theme" class="field"></div>
+		<div id="Color-DragonHeads" class="field"></div>
+		<div id="Color-HPDragon" class="field"></div>
+		<div id="Color-DC" class="field"></div>
+	</div>
 </body>
 <script>
-	includePage();
+	includePage("pf1");
+	includePage("pf2");
+	includePage("pf3");
+	includePage("pf4");
+	includePage("pf5", prefix="P4-AScomp-");
+	includePage("pf6", prefix="P5-ASnotes-");
+	includePage("pf7");
+	includePage("pf8");
 </script>
 <script>
 	function openPage(pageName, elmnt) {
@@ -84,5 +207,5 @@
 	// Get the element with id="defaultOpen" and click on it
 	document.getElementById("defaultOpen").click();
 </script>
-<script type="text/javascript" src="adapter.js"></script>
+<script type="text/javascript" src="js/controller.js"></script>
 </html>

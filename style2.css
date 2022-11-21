@@ -120,7 +120,6 @@
 	background-color: var(--input-background);
 	border: none;
 	border-width: 0px;
-	z-index: 1;
 	color: var(--black);
 	font-family: 'scala-sans';
 	overflow: hidden;
@@ -268,4 +267,8 @@ input[type=number] {
 	border: none;
 	background-color: var(--background);
 	position: absolute;
+}
+
+.bluetext {
+	color: #4055FF;
 }

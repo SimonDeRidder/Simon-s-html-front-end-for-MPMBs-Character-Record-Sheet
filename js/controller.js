@@ -16,38 +16,38 @@
 
 const minVer = true;
 const app = {
-	setTimeOut: function(command /*str*/, millis /*int*/) {
+	setTimeOut: function (command /*str*/, millis /*int*/) {
 		setTimeout(command, millis);
 	},
 	thermometer: {  // combined status bar and load animation (TODO)
 		_text: "",  // TODO: use a status bar in stead
-		get text () {
+		get text() {
 			return this._text;
 		},
 		set text(new_text /*str*/) {
 			this._text = new_text;
 		},
-		end: function () {},
+		end: function () { },
 	},
-	addToolButton: function(
+	addToolButton: function (
 		cName /*str*/,
-		oIcon=null /*Icon Stream*/,
+		oIcon = null /*Icon Stream*/,
 		cExec /*str*/,
-		cEnable="true" /*str*/,
-		cMarked="false" /*str*/,
-		cTooltext="" /*str*/,
-		nPos=-1 /*number*/,
-		cLabel="" /*str*/,
+		cEnable = "true" /*str*/,
+		cMarked = "false" /*str*/,
+		cTooltext = "" /*str*/,
+		nPos = -1 /*number*/,
+		cLabel = "" /*str*/,
 	) {
 		// TODO: add a button to tool bar (make a tool bar)
 	},
-	alert: function(
+	alert: function (
 		cMsg /*str*/,
-		nIcon=0 /*int*/,
-		nType=0 /*int*/,
-		cTitle="Alert" /*str*/,
-		oDoc=null /*doc*/,  // parent
-		oCheckbox=null /*object*/,
+		nIcon = 0 /*int*/,
+		nType = 0 /*int*/,
+		cTitle = "Alert" /*str*/,
+		oDoc = null /*doc*/,  // parent
+		oCheckbox = null /*object*/,
 	) {
 		// TODO: create a modal with custom buttons
 	}
@@ -65,7 +65,7 @@ this.bookmarkRoot = {
 	],
 };
 
-this.getField = function(field_name /*str*/) /*AdapterClassFieldReference|null*/{
+this.getField = function (field_name /*str*/) /*AdapterClassFieldReference|null*/ {
 	let field_id = adapter_helper_convert_fieldname_to_id(field_name);
 	let element = document.getElementById(field_id);
 	if (element == null) {
@@ -73,7 +73,7 @@ this.getField = function(field_name /*str*/) /*AdapterClassFieldReference|null*/
 		return null;
 	}
 	return new AdapterClassFieldReference(
-		html_element=element
+		html_element = element
 	);
 };
 
@@ -81,7 +81,7 @@ this.calculateNow = function () {
 	// TODO: does nothing for now, we don't pause calculations (see also calcStop and calcCont)
 };
 
-this.resetForm = function(aFields=null /*fields*/) {
+this.resetForm = function (aFields = null /*fields*/) {
 	if (!aFields) {
 		console.log("warning: aFields is null in resetForm");
 	}
@@ -100,6 +100,33 @@ this.resetForm = function(aFields=null /*fields*/) {
 	});
 };
 
+
+
+function AFNumber_Format(nDec /*int*/, sepStyle /*int*/, negStyle /*int*/, currStyle /*int*/, strCurrency /*str*/, bCurrencyPrepend /*boolean*/) /*str*/{
+	// nDec = number of decimals
+	// sepStyle = separator style 0 = 1,234.56 / 1 = 1234.56 / 2 = 1.234,56 / 3 = 1234,56 /
+	// negStyle = 0 black minus / 1 red minus / 2 parens black / 3 parens red /
+	// currStyle = reserved
+	// strCurrency = string of currency to display
+	// bCurrencyPrepend = true = pre pend / false = post pend
+	let locale;
+	if (sepStyle < 2) {
+		locale = 'en-GB';
+	} else {
+		locale = 'nl-BE';
+	}
+	let options = {
+		maximumFractionDigits: nDec,
+		style: 'decimal',
+		useGrouping: ((sepStyle == 0) | (sepStyle == 2)),
+	}
+	if (strCurrency) {
+		options.currency = strCurrency;
+		options.style = 'currency';
+	}
+	event.value = Number(event.value.replace(',', '.').match(/\d+\.?\d*/)[0]).toLocaleString(locale, options);
+};
+
 // Adapter classes
 
 class AdapterClassFieldReference {
@@ -108,7 +135,7 @@ class AdapterClassFieldReference {
 		this.submitName = "";
 	}
 
-	get submitName () /*str*/ {
+	get submitName() /*str*/ {
 		let submitName_ = this.html_element.getAttribute('submitName');
 		if (!submitName_) {
 			return "";
@@ -116,11 +143,11 @@ class AdapterClassFieldReference {
 		return submitName_;
 	}
 
-	set submitName (new_submitName /*str*/) {
+	set submitName(new_submitName /*str*/) {
 		this.html_element.setAttribute('submitName', new_submitName);
 	}
 
-	get value () /*str*/ {
+	get value() /*str*/ {
 		let value_ = this.html_element.getAttribute('value');
 		if (!value_) {
 			return "";
@@ -128,7 +155,7 @@ class AdapterClassFieldReference {
 		return value_;
 	}
 
-	set value (new_value /*str*/) {
+	set value(new_value /*str*/) {
 		this.html_element.setAttribute('value', new_value);
 	}
 
@@ -137,7 +164,7 @@ class AdapterClassFieldReference {
 		return this.html_element.toSource();
 	}
 
-	isBoxChecked (nWidget /*int*/) /*boolean*/ {
+	isBoxChecked(nWidget /*int*/) /*boolean*/ {
 		if (nWidget > 0) {
 			console.log("warning: isBoxChecked nWidget > 0:", nWidget);
 		}
@@ -149,7 +176,7 @@ class AdapterClassFieldReference {
 		}
 	}
 
-	checkThisBox (nWidget /*int*/, bCheckIt=true /*boolean*/) {
+	checkThisBox(nWidget /*int*/, bCheckIt = true /*boolean*/) {
 		if (nWidget > 0) {
 			console.log("warning: checkThisBox nWidget > 0:", nWidget);
 		}
@@ -175,33 +202,33 @@ function initialCalculationEvents() {
 	eventManager.handle_event(EventType.AC_calculate);
 }
 
-loadScript('_functions/AbilityScores_old.js', function() {
-loadScript('_functions/AbilityScores.js', function() {
-loadScript('_functions/ClassSelection.js', function() {
-loadScript('_functions/DomParser.js', function() {
-loadScript('_functions/Functions0.js', function() {
-loadScript('import_utils/overwrite_Functions0.js', function() {
-loadScript('_functions/Functions1.js', function() {
-loadScript('_functions/Functions2.js', function() {
-loadScript('_functions/Functions3.js', function() {
-loadScript('_functions/FunctionsImport.js', function() {
-loadScript('_functions/FunctionsResources.js', function() {
-loadScript('_functions/FunctionsSpells.js', function() {
-loadScript('_functions/Shutdown.js', function() {
-loadScript('import_utils/overwrite_FunctionsSpells.js', function() {
-loadScript('_variables/Icons.js', function() {
-loadScript('_variables/Lists.js', function() {
-loadScript('_variables/ListsBackgrounds.js', function() {
-loadScript('_variables/ListsClasses.js', function() {
-loadScript('_variables/ListsCompanions.js', function() {
-loadScript('_variables/ListsCreatures.js', function() {
-loadScript('_variables/ListsFeats.js', function() {
-loadScript('_variables/ListsGear.js', function() {
-loadScript('_variables/ListsMagicItems.js', function() {
-loadScript('_variables/ListsPsionics.js', function() {
-loadScript('_variables/ListsRaces.js', function() {
-loadScript('_variables/ListsSources.js', function() {
-loadScript('_variables/ListsSpells.js', function() {
+loadScript('_functions/AbilityScores_old.js', function () {
+loadScript('_functions/AbilityScores.js', function () {
+loadScript('_functions/ClassSelection.js', function () {
+loadScript('_functions/DomParser.js', function () {
+loadScript('_functions/Functions0.js', function () {
+loadScript('import_utils/overwrite_Functions0.js', function () {
+loadScript('_functions/Functions1.js', function () {
+loadScript('_functions/Functions2.js', function () {
+loadScript('_functions/Functions3.js', function () {
+loadScript('_functions/FunctionsImport.js', function () {
+loadScript('_functions/FunctionsResources.js', function () {
+loadScript('_functions/FunctionsSpells.js', function () {
+loadScript('_functions/Shutdown.js', function () {
+loadScript('import_utils/overwrite_FunctionsSpells.js', function () {
+loadScript('_variables/Icons.js', function () {
+loadScript('_variables/Lists.js', function () {
+loadScript('_variables/ListsBackgrounds.js', function () {
+loadScript('_variables/ListsClasses.js', function () {
+loadScript('_variables/ListsCompanions.js', function () {
+loadScript('_variables/ListsCreatures.js', function () {
+loadScript('_variables/ListsFeats.js', function () {
+loadScript('_variables/ListsGear.js', function () {
+loadScript('_variables/ListsMagicItems.js', function () {
+loadScript('_variables/ListsPsionics.js', function () {
+loadScript('_variables/ListsRaces.js', function () {
+loadScript('_variables/ListsSources.js', function () {
+loadScript('_variables/ListsSpells.js', function () {
 loadScript('_functions/Startup.js', initialCalculationEvents);
 })})})})})})})})})})})})})})})})})})})})})})})})})})});
 

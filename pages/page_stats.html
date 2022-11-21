@@ -211,10 +211,35 @@
 			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;this.setAttribute('value', event.value);eventManager.handle_event(EventType.AC_calculate);"
 		>
 		<input id="AC_Shield_Bonus" class="field inputfield-notched" style="top: 39.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
-		<input id="AC_Dexterity_Modifier" class="field inputfield-notched" style="top: 59.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
-		<input id="AC_Magic" class="field inputfield-notched" style="top: 78.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
-		<input id="AC_Misc_Mod_1" class="field inputfield-notched" style="top: 98.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
-		<input id="AC_Misc_Mod_2" class="field inputfield-notched" style="top: 117.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;" type="number">
+		<input
+			id="AC_Dexterity_Modifier"
+			class="field inputfield-notched"
+			style="top: 59.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none;font-family: SegoeUI;"
+			type="number"
+			onchange="eventManager.handle_event(EventType.AC_calculate);"
+		>
+		<input
+			id="AC_Magic"
+			class="field inputfield-notched"
+			style="top: 78.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
+			type="number"
+			aria-label="Magic AC Bonus Modifier"
+			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;this.setAttribute('value', event.value);eventManager.handle_event(EventType.AC_calculate);""
+		>
+		<input
+			id="AC_Misc_Mod_1"
+			class="field inputfield-notched"
+			style="top: 98.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
+			type="number"
+			aria-label="1st Miscellaneous AC Bonus Modifier"
+		>
+		<input
+			id="AC_Misc_Mod_2"
+			class="field inputfield-notched"
+			style="top: 117.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
+			type="number"
+			aria-label="1st Miscellaneous AC Bonus Modifier"
+		>
 
 		<input
 			id="AC_Armor_Description"
@@ -222,6 +247,7 @@
 			list="armor_type_options"
 			style="top: 20px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;font-family: SegoeUI;"
 			aria-label="Armor AC"
+			spellcheck="true"
 			onchange="ApplyArmor(this.value);eventManager.handle_event(EventType.AC_calculate);"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
 		>
@@ -246,17 +272,36 @@
 		<input id="Medium_Armor" class="field checkcircle" type="checkbox" style="top: 59px;left: 78.5px;">
 		<input id="Medium_Armor_Max_Mod" class="field" type="number" style="visibility: hidden">
 		<input id="Heavy_Armor" class="field checkcircle" type="checkbox" style="top: 59px;left: 154.9px;">
-		<input id="AC_Magic_Description" class="field inputfield" style="top: 78.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
+		<input
+			id="AC_Magic_Description"
+			class="field inputfield"
+			style="top: 78.5px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;font-family: SegoeUI;overflow-x: scroll"
+			spellcheck="true"
+			onchange="event.value=this.value;event.target.name=this.id;formatACdescr();this.value=event.value;this.setAttribute('value', event.value);"
+		>
 		<input id="AC_Misc_Mod_1_Description" class="field inputfield" style="top: 98.0px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
 		<input id="AC_Misc_Mod_2_Description" class="field inputfield" style="top: 117.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;">
 
+		<!-- BlueText -->
+		<div id="AC Armor Weight Title" class="field textlabel bluetext" style="top: 10px;left: 232px;width: 38px;font-size: 8.7px;font-family: SegoeUI;visibility: hidden;text-align: center;">WEIGHT</div>
+		<input
+			id="AC_Armor_Weight"
+			class="field inputfield bluetext"
+			style="top: 20px;left: 235px;font-size: 10.5px;width: 25px;height: 13.3px;font-family: SegoeUI;visibility: hidden;"
+			aria-label="Armor's weight"
+			oninput="event.change=event.data?event.data:'';event.selStart=event.target.selectionStart;event.selEnd=event.target.selectionEnd;keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-1)+this.value.substring(event.selStart+1);} else {this.value=this.value.substring(0,event.selStart-1)+event.change+this.value.substring(event.selStart);}"
+			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;this.setAttribute('value', event.value);"
+			onclick="this.value=this.value.replace(/\D*$/, '');"
+		>
+
 		<script type="text/javascript">
-			// AC_Armor_Bonus
-			document.getElementById('AC_Armor_Bonus').addEventListener('onchange', function () {
-				ValidateBonus(true);
-				DisplayBonus();
-				console.log(event);
-			});
+			// AC Dexterity Modifier
+			eventManager.add_listener(
+				EventType.AC_Dex_Mod_calculate,
+				function () {
+					document.getElementById('AC_Dexterity_Modifier').setAttribute('value', calcMaxDexToAC());
+				},
+			);
 		</script>
 	</div>
 
@@ -797,7 +842,6 @@
 		<div id="User_Script" class="field"></div>
 		<div id="Extra-Layers_Remember" class="field"></div>
 		<div id="HoSRememberState" class="field"></div>
-		<div id="AC_Armor_Weight" class="field"></div>
 		<div id="AC_Shield_Weight" class="field"></div>
 		<div id="HP_Max_Current" class="field"></div>
 		<div id="Attack-1-Description_Tooltip" class="field"></div>

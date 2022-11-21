@@ -1,4 +1,4 @@
-const EventType = createEnum(['AC_calculate']);
+const EventType = createEnum(['AC_calculate', 'AC_Dex_Mod_calculate']);
 
 const eventManager = {
     _listeners: new Map(), /*EventType -> Array[function]*/

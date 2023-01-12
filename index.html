@@ -1,113 +1,118 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta charset="utf-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<link rel="stylesheet" href="base.min.css"/>
-<link rel="stylesheet" href="style.css"/>
-<link rel="stylesheet" href="ps_style.css" />
-<link rel="stylesheet" href="style2.css"/>
-<script type="text/javascript">
-	class Queue {
-		constructor() {
-			this.elements = {};
-			this.head = 0;
-			this.tail = 0;
-		}
-		enqueue(element) {
-			this.elements[this.tail] = element;
-			this.tail++;
-		}
-		dequeue() {
-			const item = this.elements[this.head];
-			delete this.elements[this.head];
-			this.head++;
-			return item;
-		}
-		peek() {
-			return this.elements[this.head];
-		}
-		get length() {
-			return this.tail - this.head;
-		}
-		get isEmpty() {
-			return this.length === 0;
-		}
-	};
-
-	function addPrefix(element, prefix) {
-		let elementChildren = element.childNodes;
-		let elementQueue = new Queue();
-		for(i=0; i < elementChildren.length; i++)
- 		{
-			if (elementChildren[i] instanceof HTMLElement) {
-				elementQueue.enqueue(elementChildren[i])
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<link rel="stylesheet" href="base.min.css" />
+	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="ps_style.css" />
+	<link rel="stylesheet" href="packages/contextmenujs/contextmenu.css" />
+	<link rel="stylesheet" href="style2.css" />
+	<script type="text/javascript">
+		class Queue {
+			constructor() {
+				this.elements = {};
+				this.head = 0;
+				this.tail = 0;
 			}
-		}
+			enqueue(element) {
+				this.elements[this.tail] = element;
+				this.tail++;
+			}
+			dequeue() {
+				const item = this.elements[this.head];
+				delete this.elements[this.head];
+				this.head++;
+				return item;
+			}
+			peek() {
+				return this.elements[this.head];
+			}
+			get length() {
+				return this.tail - this.head;
+			}
+			get isEmpty() {
+				return this.length === 0;
+			}
+		};
 
-		while (!elementQueue.isEmpty) {
-			let currentElement = elementQueue.dequeue();
-			let elementClass = currentElement.getAttribute('class');
-			if (elementClass) {
-				if (elementClass.includes("field")) {
+		function addPrefix(element, prefix) {
+			let elementChildren = element.childNodes;
+			let elementQueue = new Queue();
+			for (i = 0; i < elementChildren.length; i++) {
+				if (elementChildren[i] instanceof HTMLElement) {
+					elementQueue.enqueue(elementChildren[i])
+				}
+			}
+
+			while (!elementQueue.isEmpty) {
+				let currentElement = elementQueue.dequeue();
+				let elementClass = currentElement.getAttribute('class');
+				if ((elementClass && elementClass.includes("field")) || (currentElement.tagName.toLowerCase() == 'datalist')) {
 					currentElement.setAttribute('id', prefix + currentElement.getAttribute('id'));
+					if (currentElement.hasAttribute('list')) {
+						currentElement.setAttribute('list', prefix + currentElement.getAttribute('list'));
+					}
 				}
-			}
-			let subElementChildren = currentElement.childNodes;
-			for(i=0; i < subElementChildren.length; i++)
-			{
-				if (subElementChildren[i] instanceof HTMLElement) {
-					elementQueue.enqueue(subElementChildren[i]);
+				let subElementChildren = currentElement.childNodes;
+				for (i = 0; i < subElementChildren.length; i++) {
+					if (subElementChildren[i] instanceof HTMLElement) {
+						elementQueue.enqueue(subElementChildren[i]);
+					}
 				}
 			}
 		}
-	}
 
-	function executeScriptElements(containerElement) {
-		const scriptElements = containerElement.querySelectorAll("script");
+		function executeScriptElements(containerElement) {
+			const scriptElements = containerElement.querySelectorAll("script");
 
-		Array.from(scriptElements).forEach((scriptElement) => {
-			const clonedElement = document.createElement("script");
-			Array.from(scriptElement.attributes).forEach((attribute) => {
-				clonedElement.setAttribute(attribute.name, attribute.value);
+			Array.from(scriptElements).forEach((scriptElement) => {
+				const clonedElement = document.createElement("script");
+				Array.from(scriptElement.attributes).forEach((attribute) => {
+					clonedElement.setAttribute(attribute.name, attribute.value);
+				});
+				clonedElement.text = scriptElement.text;
+				scriptElement.parentNode.replaceChild(clonedElement, scriptElement);
 			});
-			clonedElement.text = scriptElement.text;
-			scriptElement.parentNode.replaceChild(clonedElement, scriptElement);
-		});
-	}
-
-	function includePage(page_id, prefix="") {
-		var z, i, elmnt, file, xhttp;
-		elmnt = document.getElementById(page_id);
-		file = elmnt.getAttribute("page-url");
-		if (file) {
-			xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4) {
-					if (this.status == 200) {
-						elmnt.innerHTML = this.responseText;
-						if (prefix) {
-							addPrefix(elmnt, prefix);
-						}
-						executeScriptElements(elmnt);
-					}
-					if (this.status == 404) {
-						elmnt.innerHTML = "Page not found.";
-					}
-					elmnt.removeAttribute("page-url");
-					includePage(page_id, prefix);
-				}
-			}
-			xhttp.open("GET", file, true);
-			xhttp.send();
-			return;
 		}
-	}
-</script>
-<script type="text/javascript" src="js/utils.js"></script>
-<script type="text/javascript" src="js/event_manager.js"></script>
-<title>Character Sheet</title>
+
+		function includePage(page_id, prefix = "") {
+			var z, i, elmnt, file, xhttp;
+			elmnt = document.getElementById(page_id);
+			file = elmnt.getAttribute("page-url");
+			if (file) {
+				xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function () {
+					if (this.readyState == 4) {
+						if (this.status == 200) {
+							elmnt.innerHTML = this.responseText;
+							if (prefix) {
+								addPrefix(elmnt, prefix);
+							}
+							executeScriptElements(elmnt);
+						}
+						if (this.status == 404) {
+							elmnt.innerHTML = "Page not found.";
+						}
+						elmnt.removeAttribute("page-url");
+						includePage(page_id, prefix);
+					}
+				}
+				xhttp.open("GET", file, true);
+				xhttp.send();
+				return;
+			}
+		}
+	</script>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/event_manager.js"></script>
+	<script type="text/javascript" src="js/dialog_manager.js"></script>
+	<script type="text/javascript" src="packages/contextmenujs/contextmenu.js"></script>
+	<script type="text/javascript" src="js/app_adapter.js"></script>
+	<title>Character Sheet</title>
 </head>
+
 <body>
 	<div id="button-container">
 		<button class="tablink" onclick="openPage('pf1', this)" id="defaultOpen">Stats</button>
@@ -126,6 +131,7 @@
 		<div id="pf3" class="page" page-url="pages/page_notes_feats.html"></div>
 		<div id="pf4" class="page" page-url="pages/page_appearance_background.html"></div>
 		<div id="pf5" class="page" page-url="pages/page_companion.html"></div>
+		<div id="pf5a" class="page" page-url="pages/page_wildshape.html"></div>
 		<div id="pf6" class="page" page-url="pages/page_notes.html"></div>
 		<div id="pf7" class="page" page-url="pages/page_spells.html"></div>
 		<div id="pf8" class="page" page-url="pages/page_reference.html"></div>
@@ -134,7 +140,7 @@
 	<!-- Data storage emulation fields. -->
 	<div style="visibility:hidden">
 		<div id="SaveIMG-Patreon" class="field"></div>
-		<div id="Opening_Remember" class="field"></div>
+		<div id="Opening_Remember" class="field" data-submit_name="9001"></div>
 		<div id="League_Remember" class="field"></div>
 		<div id="Class_Features_Remember" class="field"></div>
 		<div id="SubClass_Remember" class="field"></div>
@@ -151,19 +157,26 @@
 		<div id="HoS_Remember" class="field"></div>
 		<div id="BoxesLinesRemember" class="field"></div>
 		<div id="DateFormat_Remember" class="field"></div>
+		<div id="Companion-Remember" class="field"></div>
+
+		<div id="Template-extras-AScomp" class="field" value="P4.AScomp."></div>
+		<div id="Template-extras-ASnotes" class="field"></div>
+		<div id="Template-extras-WSfront" class="field" value=""></div>
+
 		<div id="Unit_System" class="field" value="imperial"></div>
 		<div id="Decimal_Separator" class="field"></div>
 		<div id="Delimiter" class="field"></div>
 		<div id="d20warning" class="field"></div>
 		<div id="Highlighting" class="field"></div>
 		<div id="UseUnicode" class="field"></div>
+
 		<div id="User_Imported_Files-Stringified" class="field"></div>
 		<div id="ChangesDialogSkip-Stringified" class="field"></div>
 		<div id="CurrentSpells-Stringified" class="field" value="([])##########([])"></div>
 		<div id="CurrentSources-Stringified" class="field" value="Object(CurrentSources={globalExcl:[]})"></div>
 		<div id="CurrentEvals-Stringified" class="field" value="Object()"></div>
-		<div id="CurrentProfs-Stringified" class="field" value="Object()"></div>
-		<div id="CurrentVars-Stringified" class="field" value="Object()"></div>
+		<div id="CurrentProfs-Stringified" class="field" value="new CurrentProfsAdapter()"></div>
+		<div id="CurrentVars-Stringified" class="field" value="Object(CurrentVars={manual:{}})"></div>
 		<div id="CurrentFeatureChoices-Stringified" class="field"></div>
 		<div id="CurrentStats-Stringified" class="field"></div>
 	</div>
@@ -181,8 +194,9 @@
 	includePage("pf2");
 	includePage("pf3");
 	includePage("pf4");
-	includePage("pf5", prefix="P4-AScomp-");
-	includePage("pf6", prefix="P5-ASnotes-");
+	includePage("pf5", prefix = "P4-AScomp-");
+	includePage("pf5a");
+	includePage("pf6", prefix = "P5-ASnotes-");
 	includePage("pf7");
 	includePage("pf8");
 </script>
@@ -208,4 +222,5 @@
 	document.getElementById("defaultOpen").click();
 </script>
 <script type="text/javascript" src="js/controller.js"></script>
+
 </html>

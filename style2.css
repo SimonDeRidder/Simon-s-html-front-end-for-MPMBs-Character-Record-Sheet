@@ -155,7 +155,6 @@
 	background-color: transparent;
 	border: none;
 	border-width: 0px;
-	z-index: 1;
 	color: var(--black);
 	font-family: 'scala-sans';
 	overflow: hidden;
@@ -245,22 +244,147 @@ input[type=number] {
 	background-color: var(--black);
 }
 
-.pane .checkbox-ammunition-arrow {
+.pane .checkbox-ammunition {
 	position: absolute;
-	width: 10px;
-	height: 30px;
 	background-color: var(--input-background);
-	background-image: url("img/page_stats/ammunition_checkboxes/arrow_unselected.svg");
 	appearance: none;
 	-webkit-appearance: none;
 	outline: none;
 	cursor: pointer;
+	margin: 0;
 }
 
-.pane .checkbox-ammunition-arrow:checked {
+.pane .checkbox-ammunition:checked {
 	border: none;
 	background-color: transparent;
-	background-image: url("img/page_stats/ammunition_checkboxes/arrow_selected.svg");
+}
+
+.pane .ammunition-arrow {
+	width: 10px;
+	height: 30px;
+	background-image: url("img/page_stats/ammunition/arrow_unchecked.svg");
+}
+
+.pane .ammunition-arrow:checked {
+	background-image: url("img/page_stats/ammunition/arrow_checked.svg");
+}
+
+.pane .ammunition-axe-top {
+	width: 10px;
+	height: 30px;
+	background-image: url("img/page_stats/ammunition/axe_unchecked.svg");
+	margin-right: -15px;
+	padding-right: 15px;
+}
+
+.pane .ammunition-axe-base {
+	width: 10px;
+	height: 30px;
+	background-image: url("img/page_stats/ammunition/axe_unchecked.svg");
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+	margin-left: -5px;
+	padding-left: 15px;
+}
+
+.pane .ammunition-axe-top:checked {
+	background-image: url("img/page_stats/ammunition/axe_checked.svg");
+	margin-right: -15px;
+	padding-right: 15px;
+}
+
+.pane .ammunition-axe-base:checked {
+	background-image: url("img/page_stats/ammunition/axe_checked.svg");
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+	margin-left: -5px;
+	padding-left: 15px;
+}
+
+.pane .ammunition-bullet {
+	width: 10px;
+	height: 12px;
+	background-image: url("img/page_stats/ammunition/bullet_unchecked.svg");
+}
+
+.pane .ammunition-bullet:checked {
+	background-image: url("img/page_stats/ammunition/bullet_checked.svg");
+}
+
+.pane .ammunition-dagger {
+	width: 10px;
+	height: 30px;
+	background-image: url("img/page_stats/ammunition/dagger_unchecked.svg");
+}
+
+.pane .ammunition-dagger:checked {
+	background-image: url("img/page_stats/ammunition/dagger_checked.svg");
+}
+
+.pane .ammunition-flask {
+	width: 10px;
+	height: 30px;
+	background-image: url("img/page_stats/ammunition/flask_unchecked.svg");
+}
+
+.pane .ammunition-flask:checked {
+	background-image: url("img/page_stats/ammunition/flask_checked.svg");
+}
+
+.pane .ammunition-hammer-top {
+	width: 10px;
+	height: 30px;
+	background-image: url("img/page_stats/ammunition/hammer_unchecked.svg");
+	margin-left: -2.5px;
+	padding-left: 10px;
+	margin-right: -2.5px;
+	padding-right: 5px;
+}
+
+.pane .ammunition-hammer-base {
+	width: 10px;
+	height: 30px;
+	background-image: url("img/page_stats/ammunition/hammer_unchecked.svg");
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+	margin-left: -2.5px;
+	padding-left: 10px;
+	margin-right: -2.5px;
+	padding-right: 5px;
+}
+
+.pane .ammunition-hammer-top:checked {
+	background-image: url("img/page_stats/ammunition/hammer_checked.svg");
+	margin-left: -2.5px;
+	padding-left: 10px;
+	margin-right: -2.5px;
+	padding-right: 5px;
+}
+
+.pane .ammunition-hammer-base:checked {
+	background-image: url("img/page_stats/ammunition/hammer_checked.svg");
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+	margin-left: -2.5px;
+	padding-left: 10px;
+	margin-right: -2.5px;
+	padding-right: 5px;
+}
+
+.pane .ammunition-spear {
+	width: 10px;
+	height: 30px;
+	background-image: url("img/page_stats/ammunition/spear_unchecked.svg");
+	margin-top: -20px;
+	padding-top: 50px;
+}
+
+.pane .ammunition-spear:checked {
+	background-image: url("img/page_stats/ammunition/spear_checked.svg");
 }
 
 .pane .whiteout {
@@ -271,4 +395,82 @@ input[type=number] {
 
 .bluetext {
 	color: #4055FF;
+}
+
+
+#modalCanvas {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.8);
+	z-index: 100;
+}
+
+#modalDialog {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	z-index: 101;
+	background-color: white;
+	border: 2px solid black;
+}
+
+#modalTitle {
+	border-bottom: 2px solid black;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#modalContent {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.modalDialogButtonsElement {
+	padding: 2px;
+	display: grid;
+	align-items: center;
+	text-align: center;
+}
+
+.modalDialogButton {
+	display: inline;
+}
+
+.modalDialogButton a.modalDialogButtonLink {
+	background-color: #bbbbbb;
+	border: 1px solid black;
+	padding: 2px;
+	text-decoration: none;
+	color: black;
+}
+
+.modalDialogButton a.modalDialogButtonLink:hover {
+	border-width: 2px;
+	padding: 1px;
+}
+
+.modalDialogButton a.modalDialogButtonLink:focus {
+	box-shadow: 0px 0px 0px 1px white inset;
+}
+
+#menu {
+	position: absolute;
+	background-color: #bbbbbb;
+	display: grid;
+}
+
+/* Context menu */
+
+.cm_container {
+	z-index: 1;
+}
+
+.cm_container li {
+	font-size: 9.3px;
 }

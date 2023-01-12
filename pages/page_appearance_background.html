@@ -18,16 +18,38 @@
 		<input id="PC_Name#2" class="field inputfield" style="top: 108px;left: 55px;font-size: 16pt;width: 227px;height: 24px;text-align: center;" type="text">
 
 		<input id="Sex" class="field inputfield" style="top: 88px;left: 364.5px;font-size: 11pt;width: 91px;height: 17px;" type="text">
-		<input id="Age" class="field inputfield" style="top: 88px;left: 461.5px;font-size: 11pt;width: 84.5px;height: 17px;" type="number">
+		<input
+			id="Age"
+			class="field inputfield"
+			style="top: 88px;left: 461.5px;width: 84.5px;height: 17px;font-size: 11pt;font-family: SegoeUI;overflow-x: scroll;"
+			spellcheck="true"
+			type="number"
+		/>
 		<input id="Size_Category" class="field inputfield" style="top: 88px;left: 552px;font-size: 11pt;width: 84.5px;height: 17px;" type="text" list="size_category_options">
 		<datalist id="size_category_options">
 			<option value="Medium">
 		</datalist>
 		<input id="Height" class="field inputfield" style="top: 88px;left: 642.5px;font-size: 11pt;width: 84px;height: 17px;" type="text">
 		<input id="Weight" class="field inputfield" style="top: 88px;left: 732.5px;font-size: 11pt;width: 90px;height: 17px;" type="text">
-		<input id="Alignment"   class="field inputfield" style="top: 127px;left: 364.5px;font-size: 11pt;width: 91px;height: 17px;" type="text" list="alignment_options">
+		<input
+			id="Alignment"
+			class="field inputfield"
+			style="top: 127px;left: 364.5px;width: 91px;height: 17px;font-size: 8.4pt;font-family: SegoeUI"
+			spellcheck="true"
+			type="text"
+			list="alignment_options"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+		/>
 		<datalist id="alignment_options">
+			<option value="Lawful Good">
+			<option value="Neutral Good">
+			<option value="Chaotic Good">
+			<option value="Lawful Neutral">
+			<option value="Neutral">
 			<option value="Chaotic Neutral">
+			<option value="Lawful Evil">
+			<option value="Neutral Evil">
+			<option value="Chaotic Evil">
 		</datalist>
 		<input id="Faith-Deity" class="field inputfield" style="top: 127px;left: 461.5px;font-size: 11pt;width: 84.5px;height: 17px;" type="text">
 		<input id="Hair_colour" class="field inputfield" style="top: 127px;left: 552px;font-size: 11pt;width: 84.5px;height: 17px;" type="text">

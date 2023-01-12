@@ -1,7 +1,7 @@
 
 # %%
 
-with open("img/page_reference/backgrounds/combat_actions.svg", 'rt') as f:
+with open("img/page_reference/backgrounds/attack_action.svg", 'rt') as f:
     lines_to_delete = f.readlines()
 
 # %%

@@ -174,15 +174,13 @@ this.getField = function (field_name /*str*/) /*AdapterClassFieldReference|null*
 	let field_id = adapter_helper_convert_fieldname_to_id(field_name);
 	let element = document.getElementById(field_id);
 	if (element == null) {
-		if (['AdvLog-Options'].includes(field_id)) {
+		if (['AdvLog.Options'].includes(field_id)) {
 			return null
 		} else {
 			throw "null element: " + field_id;
 		}
 	}
-	return new AdapterClassFieldReference(
-		html_element = element
-	);
+	return adapter_helper_reference_factory(element);
 };
 
 this.calculateNow = function () {
@@ -428,6 +426,33 @@ class AdapterClassFieldReference {
 	}
 }
 
+class AdapterClassFieldContainterReference {
+	constructor(html_element /*HTMLElement*/) {
+		this.html_element = html_element;
+	}
+
+	set submitName(new_submitName /*str*/) {
+		throw "set submitName called on field container"
+	}
+
+	set value(new_value /*str*/) {
+		throw "set value called on field container"
+	}
+
+	set userName(new_userName /*str*/) {
+		throw "set userName called on field container"
+	}
+
+	set display(newDisplay /*int*/) {
+		for (let i=0; i < this.html_element.children.length; i++) {
+			let childRef = adapter_helper_reference_factory(this.html_element.children[i]);
+			if (childRef) {
+				childRef.display = newDisplay;
+			}
+		}
+	}
+}
+
 class CurrentProfsAdapter {
 	constructor(skills) {
 		if (skills === undefined) {
@@ -446,11 +471,11 @@ class CurrentProfsAdapter {
 
 // Helper functions
 function adapter_helper_convert_fieldname_to_id(field_name /*str*/) /*str*/ {
-	return field_name.replace(/ /g, "_").replace(/[\./]/g, "-");
+	return field_name.replace(/ /g, "_");
 };
 
 function adapter_helper_convert_id_to_fieldname(id /*str*/) /*str*/ {
-	return id.replace(/_/g, " ").replace(/-/g, ".");  // TODO: fix inconsistency with '/' (or original '-')
+	return id.replace(/_/g, " ");
 };
 
 function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
@@ -511,3 +536,13 @@ function adapter_helper_get_number_field_selection() /*[int, int]*/ {
 	}
 	return [moveCount, moveCount + orig_len];
 };
+
+function adapter_helper_reference_factory(element /*HTMLElement*/) /*AdapterClassFieldReference|AdapterClassFieldContainterReference|null*/{
+	if (element.classList.contains('field')) {
+		return new AdapterClassFieldReference(html_element=element);
+	} else if (element.classList.contains('field-container')) {
+		return new AdapterClassFieldContainterReference(html_element=element);
+	} else {
+		return null;
+	}
+}

@@ -294,7 +294,7 @@ class AdapterClassFieldReference {
 
 	get value() /*str*/ {
 		let value_;
-		if (this.html_element.tagName.toLowerCase() == 'input') {
+		if (['input', 'select'].includes(this.html_element.tagName.toLowerCase())) {
 			value_ = this.html_element.value;
 		} else {
 			value_ = this.html_element.getAttribute('value');
@@ -310,7 +310,7 @@ class AdapterClassFieldReference {
 
 	set value(new_value /*str*/) {
 		let changed = false;
-		if (this.html_element.tagName.toLowerCase() == 'input') {
+		if (['input', 'select'].includes(this.html_element.tagName.toLowerCase())) {
 			if (this.html_element.value != new_value) {
 				changed = true;
 			}
@@ -368,6 +368,56 @@ class AdapterClassFieldReference {
 				this.html_element.classList.add('nonprintable');
 			}
 			this.html_element.dispatchEvent(new Event('displayShow'));
+		}
+	}
+
+	get type() /*str*/ {
+		switch(this.html_element.tagName.toLowerCase()) {
+			case 'button':
+				return 'button';
+			case 'select':
+				return 'combobox';
+			case 'input':
+				switch(this.html_element.type) {
+					case 'button':
+						return 'button';
+					case 'checkbox':
+						return 'checkbox';
+					case 'radio':
+						return 'radiobutton';
+					default:
+						if (this.html_element.getAttribute('list')) {
+							return 'combobox';
+						}
+						return 'text';
+				}
+			default:
+				return 'text';
+		}
+	}
+
+	get currentValueIndices() /*int*/ {
+		if (this.html_element.tagName.toLowerCase() == 'select') {
+			return this.html_element.selectedIndex;
+		} else if ((this.html_element.tagName.toLowerCase() == 'input') && (this.html_element.getAttribute('list'))) {
+			throw "get currentValueIndices on datalist-input " + String(this.html_element.id);
+		} else {
+			throw "get currentValueIndices on non-combobox " + String(this.html_element.id);
+		}
+	}
+
+	set currentValueIndices(newIndex /*int*/) {
+		if (this.html_element.tagName.toLowerCase() == 'select') {
+			this.html_element.selectedIndex = newIndex;
+		} else if ((this.html_element.tagName.toLowerCase() == 'input') && (this.html_element.getAttribute('list'))) {
+			let listElement = document.getElementById(this.html_element.getAttribute('list'));
+			if (listElement) {
+				this.html_element.value = listElement.children[newIndex].value;
+			} else {
+				throw "Cannot find datalist element " + String(this.html_element.getAttribute('list'));
+			}
+		} else {
+			throw "set currentValueIndices on non-combobox " + String(this.html_element.id);
 		}
 	}
 
@@ -454,17 +504,42 @@ class AdapterClassFieldContainterReference {
 }
 
 class CurrentProfsAdapter {
-	constructor(skills) {
-		if (skills === undefined) {
-			this.skill = {};
-		} else {
-			this.skill = skills;
-		}
+	constructor(
+		skills, armours, weapons, saves, resistances, languages, tools, savetxts, visions, speeds, specialarmours, carryingcapacitys, advantages
+	) {
+		this.skill = (skills === undefined) ? {} : skills;
+		this.armour = (armours === undefined) ? {} : armours;
+		this.weapon = (weapons === undefined) ? {} : weapons;
+		this.save = (saves === undefined) ? {} : saves;
+		this.resistance = (resistances === undefined) ? {} : resistances;
+		this.language = (languages === undefined) ? {} : languages;
+		this.tool = (tools === undefined) ? {} : tools;
+		this.savetxt = (savetxts === undefined) ? {} : savetxts;
+		this.vision = (visions === undefined) ? {} : visions;
+		this.speed = (speeds === undefined) ? {} : speeds;
+		this.specialarmour = (specialarmours === undefined) ? {} : specialarmours;
+		this.carryingcapacity = (carryingcapacitys === undefined) ? {} : carryingcapacitys;
+		this.advantage = (advantages === undefined) ? {} : advantages;
 	}
 
 	toSource() {
-		let skillStr = adapter_helper_recursive_toSource(this.skill);
-		return "new CurrentProfsAdapter(skills=" + skillStr + ")"
+		return (
+			"new CurrentProfsAdapter("
+			+ "skills=" + adapter_helper_recursive_toSource(this.skill)
+			+ "armours=" + adapter_helper_recursive_toSource(this.armour)
+			+ "weapons=" + adapter_helper_recursive_toSource(this.weapon)
+			+ "saves=" + adapter_helper_recursive_toSource(this.save)
+			+ "resistances=" + adapter_helper_recursive_toSource(this.resistance)
+			+ "languages=" + adapter_helper_recursive_toSource(this.language)
+			+ "tools=" + adapter_helper_recursive_toSource(this.tool)
+			+ "savetxts=" + adapter_helper_recursive_toSource(this.savetxt)
+			+ "visions=" + adapter_helper_recursive_toSource(this.vision)
+			+ "speeds=" + adapter_helper_recursive_toSource(this.speed)
+			+ "specialarmours=" + adapter_helper_recursive_toSource(this.specialarmour)
+			+ "carryingcapacitys=" + adapter_helper_recursive_toSource(this.carryingcapacity)
+			+ "advantages=" + adapter_helper_recursive_toSource(this.advantage)
+			+ ")"
+		)
 	}
 }
 

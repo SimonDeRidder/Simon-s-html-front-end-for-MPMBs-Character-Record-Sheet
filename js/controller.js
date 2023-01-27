@@ -1,13 +1,14 @@
 
 // TODO: connect Field "SelectFile" to a file picker for import
 // TODO: Make a field "Whiteout.Standard.0" that controls the lines in multi-line inputs fields (I think)
-// TODO: sort out "Ammo(Left/Right).(Top/Base).i" and relation to bullets (see LoadAmmo function)
 // TODO: connect "Color.Theme"
 // TODO: "SaveIMG.Header.Left." + colour, "SaveIMG.Divider." + colour
 // TODO: find a way to add tooltips for buttons etc
 // TODO: connect "Extra.Layers Button", "Buttons"
 // TODO: rename adapter_helper_* and AdapterClass* to more reasonable things
 // TODO: switch to <select> for all non-customisable dropdowns
+// TODO: figure out what to do with SetThisFldVal
+// TODO: connect thermoM to floating fade-out status message
 
 // Load functions
 
@@ -23,14 +24,12 @@ function loadScript(path /*str*/) /*Promise*/ {
 function initialCalculationEvents() {
 	// trigger AC calculation
 	document.getElementById('AC_Armor_Bonus').dispatchEvent(new Event('change'));
-	// trigger AC_Dexterity_Modifier calculation (and all skills)
+	// trigger AC_Dexterity_Modifier calculation (and all skills) (and Attack.i.To Hit)
 	document.getElementById('Dex_Mod').dispatchEvent(new Event('change'));
 	// trigger Adventuring_Gear_Location_Subtotal_* and Adventuring_Gear_Weight_Subtotal_* calculation
 	document.getElementById('Adventuring_Gear_Amount_1').dispatchEvent(new Event('change'));
 	document.getElementById('Adventuring_Gear_Amount_19').dispatchEvent(new Event('change'));
 	document.getElementById('Adventuring_Gear_Amount_37').dispatchEvent(new Event('change'));
-
-	ApplyAmmo('arrows', 'Left');
 }
 
 loadScript('_functions/AbilityScores_old.js')

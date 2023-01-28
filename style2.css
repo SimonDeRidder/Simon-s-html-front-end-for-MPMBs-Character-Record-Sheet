@@ -99,6 +99,7 @@
 	color: var(--text-dimmed);
 	border: none;
 	background: none;
+	font-size: 8px;
 }
 
 .button {

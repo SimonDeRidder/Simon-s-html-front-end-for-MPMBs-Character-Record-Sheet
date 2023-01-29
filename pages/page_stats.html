@@ -13,26 +13,26 @@
 		<span class="textlabel-dimmed" style="top: 145px; left: 777.1px;font-size: 10.6px">Next Level</span>
 		<span class="textlabel" style="top: 155px; left: 101.5px;">CHARACTER NAME</span>
 
-		<input id="PC_Name#0" class="field inputfield" style="top: 108px;left: 85px;font-size: 16pt;width: 150pt;height: 18pt;" type="text">
-		<input id="Character_Level" class="field inputfield" style="top: 85px;left: 365px;font-size: 11pt;width: 12pt;height: 15pt;text-align: center;" type="number">
-		<input id="Class_and_Levels" class="field inputfield" style="top: 85px;left: 388px;font-size: 11pt;width: 199pt;height: 15pt;" type="text">
-		<input id="Player_Name" class="field inputfield" style="top: 85px;left: 660px;font-size: 11pt;width: 120pt;height: 15pt;" type="text">
+		<input id="PC_Name#0" class="field inputfield" style="top: 108px;left: 85px;font-size: 16pt;width: 150pt;height: 18pt;font-family: 'scala-sans'" type="text">
+		<input id="Character_Level" class="field inputfield" style="top: 85px;left: 365px;font-size: 11pt;width: 12pt;height: 15pt;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Class_and_Levels" class="field inputfield" style="top: 85px;left: 388px;font-size: 11pt;width: 199pt;height: 15pt;font-family: 'scala-sans'" type="text">
+		<input id="Player_Name" class="field inputfield" style="top: 85px;left: 660px;font-size: 11pt;width: 120pt;height: 15pt;font-family: 'scala-sans'" type="text">
 
-		<input id="Background" class="field inputfield" list="background_options" style="top: 124px;left: 365px;font-size: 11pt;width: 130pt;height: 15pt;">
+		<input id="Background" class="field inputfield" list="background_options" style="top: 124px;left: 365px;font-size: 11pt;width: 130pt;height: 15pt;font-family: 'scala-sans'">
 			<datalist id="background_options">
 				<option value="Acolyte">
 			</datalist>
-		<input id="Background_Extra" class="field inputfield" list="background_sub_options" style="top: 146px;left: 445px;font-size: 7pt;width: 70pt;height: 8pt;color: var(--text-dimmed);">
+		<input id="Background_Extra" class="field inputfield" list="background_sub_options" style="top: 146px;left: 445px;font-size: 7pt;width: 70pt;height: 8pt;color: var(--text-dimmed);font-family: 'scala-sans'">
 			<datalist id="background_sub_options">
 				<option value="Bacolyte">
 			</datalist>
-		<input id="Race" class="field inputfield" list="race_options" style="top: 124px;left: 545px;font-size: 11pt;width: 81pt;height: 15pt;">
+		<input id="Race" class="field inputfield" list="race_options" style="top: 124px;left: 545px;font-size: 11pt;width: 81pt;height: 15pt;font-family: 'scala-sans'">
 		<datalist id="race_options"></datalist>
-		<input id="Total_Experience" class="field inputfield" style="top: 124px;left: 660px;font-size: 11pt;width: 32pt;height: 15pt;" type="number">
+		<input id="Total_Experience" class="field inputfield" style="top: 124px;left: 660px;font-size: 11pt;width: 32pt;height: 15pt;font-family: 'scala-sans'" type="number">
 		<input
 			id="Add_Experience"
 			class="field inputfield nonprintable"
-			style="top: 124px;left: 730px;font-size: 11pt;width: 32pt;height: 15pt;font-family: SegoeUI;color: #0056D3;text-align: center;overflow-x: scroll"
+			style="top: 124px;left: 730px;font-size: 11pt;width: 32pt;height: 15pt;color: #0056D3;text-align: center;overflow-x: scroll"
 			type="number"
 			aria-label="Experience points that are to be added to the total to the left."
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
@@ -68,21 +68,21 @@
 		<div class="textlabel-bold" style="top: 573px;left: 7px;width: 77px;">CHARISMA</div>
 		<div id="Text.HoS.Ability" class="field textlabel-bold" style="visibility: hidden;top: 681px;left: 7px;width: 77px;"></div>
 
-		<input id="Str" class="field inputfield" style="top: 93px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
-		<input id="Dex" class="field inputfield" style="top: 201px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
-		<input id="Con" class="field inputfield" style="top: 309px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
-		<input id="Int" class="field inputfield" style="top: 417px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
-		<input id="Wis" class="field inputfield" style="top: 525px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
-		<input id="Cha" class="field inputfield" style="top: 633px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
-		<input id="HoS" class="field inputfield" style="visibility: hidden;top: 741px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;" type="number"/>
+		<input id="Str" class="field inputfield" style="top:  93px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input id="Dex" class="field inputfield" style="top: 201px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input id="Con" class="field inputfield" style="top: 309px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input id="Int" class="field inputfield" style="top: 417px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input id="Wis" class="field inputfield" style="top: 525px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input id="Cha" class="field inputfield" style="top: 633px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input id="HoS" class="field inputfield" style="visibility: hidden;top: 741px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
 
-		<input id="Str_Mod" class="field inputfield-noneditable" style="top: 48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0" value="0"/>
-		<input id="Dex_Mod" class="field inputfield-noneditable" style="top: 156px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0" value="0"/>
-		<input id="Con_Mod" class="field inputfield-noneditable" style="top: 264px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0" value="0"/>
-		<input id="Int_Mod" class="field inputfield-noneditable" style="top: 372px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0" value="0"/>
-		<input id="Wis_Mod" class="field inputfield-noneditable" style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0" value="0"/>
-		<input id="Cha_Mod" class="field inputfield-noneditable" style="top: 588px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0" value="0"/>
-		<input id="HoS_Mod" class="field inputfield-noneditable" style="visibility: hidden;top: 696px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0" value="0"/>
+		<input id="Str_Mod" class="field inputfield-noneditable" style="top:  48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Dex_Mod" class="field inputfield-noneditable" style="top: 156px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Con_Mod" class="field inputfield-noneditable" style="top: 264px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Int_Mod" class="field inputfield-noneditable" style="top: 372px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Wis_Mod" class="field inputfield-noneditable" style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Cha_Mod" class="field inputfield-noneditable" style="top: 588px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="HoS_Mod" class="field inputfield-noneditable" style="visibility: hidden;top: 696px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
 	</div>
 
 
@@ -118,24 +118,24 @@
 		<input id="Wis_ST_Mod" class="field inputfield-notched" style="top: 30.0px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
 		<input id="Cha_ST_Mod" class="field inputfield-notched" style="top: 49.6px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
 
-		<input id="Resistance_Damage_Type_1" class="field inputfield" list="resistances_options" style="top: 84.8px;left: 16px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="Resistance_Damage_Type_2" class="field inputfield" list="resistances_options" style="top: 104.4px;left: 16px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="Resistance_Damage_Type_3" class="field inputfield" list="resistances_options" style="top: 123.9px;left: 16px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="Resistance_Damage_Type_4" class="field inputfield" list="resistances_options" style="top: 84.8px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="Resistance_Damage_Type_5" class="field inputfield" list="resistances_options" style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;">
-		<input id="Resistance_Damage_Type_6" class="field inputfield" list="resistances_options" style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;">
+		<input id="Resistance_Damage_Type_1" class="field inputfield" list="resistances_options" style="top:  84.8px;left:   16px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
+		<input id="Resistance_Damage_Type_2" class="field inputfield" list="resistances_options" style="top: 104.4px;left:   16px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
+		<input id="Resistance_Damage_Type_3" class="field inputfield" list="resistances_options" style="top: 123.9px;left:   16px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
+		<input id="Resistance_Damage_Type_4" class="field inputfield" list="resistances_options" style="top:  84.8px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
+		<input id="Resistance_Damage_Type_5" class="field inputfield" list="resistances_options" style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
+		<input id="Resistance_Damage_Type_6" class="field inputfield" list="resistances_options" style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
 			<datalist id="resistances_options">
 				<option value="Acid">
 			</datalist>
 
-		<textarea id="Saving_Throw_advantages_._disadvantages" class="field inputfield" rows="6" style="top: 141px;left: 13px;width: 159.7px;height: 96px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+		<textarea id="Saving_Throw_advantages_._disadvantages" class="field inputfield" rows="6" style="top: 141px;left: 13px;width: 159.7px;height: 96px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
 
 		<!-- Bluetext -->
 		<input
 			id="All_ST_Bonus"
 			class="field inputfield bluetext"
 			aria-label="All Saving Throws Bonus Modifier"
-			style="top: -12px;left: 62.3px;width: 18px;height: 13.3px;font-family: SegoeUI;text-align: center;visibility: hidden"
+			style="top: -12px;left: 62.3px;width: 18px;height: 13.3px;text-align: center;visibility: hidden"
 			value="0"
 			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;"
 		/>
@@ -166,17 +166,22 @@
 			>
 			Set Max HP
 		</button>
-		<input id="HP_Max" class="field inputfield" style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0" type="number">
+		<input id="HP_Max" class="field inputfield" style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
 
-		<input id="Proficiency_Bonus" class="field inputfield-noneditable" style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0" type="text">
+		<input id="Proficiency_Bonus" class="field inputfield-noneditable" style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
 
-		<input id="AC" class="field inputfield-noneditable" style="top: 35px;left: 222px;font-size: 28px;width: 59.5px;height: 27px;padding: 0 0 0 0;font-family: 'Segoe UI';" type="number">
+		<input
+			id="AC"
+			class="field inputfield-noneditable"
+			style="top: 35px;left: 222px;font-size: 28px;width: 59.5px;height: 27px;padding: 0 0 0 0"
+			type="number"
+		/>
 
-		<input id="HP_Temp" class="field inputfield" style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0;" type="number">
-		<textarea id="HP_Current" class="field inputfield" style="top: 132px;left: 26px;font-size: 14px;width: 160px;height: 35px;padding-top: 1px;"></textarea>
+		<input id="HP_Temp" class="field inputfield" style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
+		<textarea id="HP_Current" class="field inputfield" style="top: 132px;left: 26px;font-size: 14px;width: 160px;height: 35px;padding-top: 1px;font-family: 'scala-sans'"></textarea>
 		<button id="Heal" class="field button" style="top: 170px;left: 168px">Heal</button>
 
-		<input id="Initiative_bonus" class="field inputfield-noneditable" style="top: 132px;left: 215.3px;font-size: 28px;width: 66.8px;height: 27px;padding: 0 0 0 0" type="text">
+		<input id="Initiative_bonus" class="field inputfield-noneditable" style="top: 132px;left: 215.3px;font-size: 28px;width: 66.8px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
 
 		<input id="Death_Save_Succes1" class="field checkcircle" type="checkbox" style="top: 211.1px;left: 22.8px;width: 14px;height: 14px;">
 		<input id="Death_Save_Succes2" class="field checkcircle" type="checkbox" style="top: 211.1px;left: 42.1px;width: 14px;height: 14px;">
@@ -195,8 +200,8 @@
 		<input id="HD3_Die" class="field inputfield-notched" style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
 		<input id="HD3_Used" class="field inputfield-notched" style="top: 249px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
 
-		<input id="Speed_encumbered" class="field inputfield" style="top: 211px;left: 215.2px;font-size: 10px;width: 66.7px;height: 12px;text-align: center;padding: 0 0 0 0" type="text">
-		<input id="Speed" class="field inputfield" style="top: 225px;left: 215.2px;font-size: 20px;width: 66.7px;height: 50px;text-align: center;padding: 0 0 0 0" type="text">
+		<input id="Speed_encumbered" class="field inputfield" style="top: 211px;left: 215.2px;font-size: 10px;width: 66.7px;height: 12px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
+		<input id="Speed" class="field inputfield" style="top: 225px;left: 215.2px;font-size: 20px;width: 66.7px;height: 50px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
 		<script type="text/javascript">
 			// AC
 			[
@@ -295,7 +300,7 @@
 			id="AC_Armor_Description"
 			class="field inputfield"
 			list="armor_type_options"
-			style="top: 20px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;font-family: SegoeUI;overflow-x: scroll;"
+			style="top: 20px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;overflow-x: scroll;"
 			aria-label="Armor AC"
 			spellcheck="true"
 			onchange="ApplyArmor(this.value);eventManager.handle_event(EventType.AC_Armor_Description_change);"
@@ -321,7 +326,7 @@
 		<input
 			id="AC_Shield_Bonus_Description"
 			class="field inputfield"
-			style="top: 39.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;font-family: SegoeUI;overflow-x: scroll;"
+			style="top: 39.5px;left: 82px;font-size: 12px;width: 135px;height: 13.3px;overflow-x: scroll;"
 			aria-label="Shield AC"
 			spellcheck="true"
 			onchange="ApplyShield(this.value);eventManager.handle_event(EventType.AC_Shield_Bonus_Description_change);"
@@ -332,21 +337,21 @@
 		<input
 			id="AC_Magic_Description"
 			class="field inputfield"
-			style="top: 78.5px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;font-family: SegoeUI;overflow-x: scroll"
+			style="top: 78.5px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;overflow-x: scroll"
 			spellcheck="true"
 			onchange="event.value=this.value;event.target.name=this.id;formatACdescr();this.value=event.value"
 		>
 		<input
 			id="AC_Misc_Mod_1_Description"
 			class="field inputfield"
-			style="top: 98.0px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;font-family: SegoeUI;overflow-x: scroll"
+			style="top: 98.0px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;overflow-x: scroll"
 			spellcheck="true"
 			onchange="event.value=this.value;event.target.name=this.id;formatACdescr();this.value=event.value"
 		>
 		<input
 			id="AC_Misc_Mod_2_Description"
 			class="field inputfield"
-			style="top: 117.5px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;font-family: SegoeUI;overflow-x: scroll"
+			style="top: 117.5px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;overflow-x: scroll"
 			spellcheck="true"
 			onchange="event.value=this.value;event.target.name=this.id;formatACdescr();this.value=event.value"
 		>
@@ -358,7 +363,7 @@
 		<input
 			id="AC_Armor_Weight"
 			class="field inputfield bluetext"
-			style="top: 20px;left: 235px;font-size: 10.5px;width: 25px;height: 13.3px;font-family: SegoeUI;visibility: hidden;"
+			style="top: 20px;left: 235px;font-size: 10.5px;width: 25px;height: 13.3px;visibility: hidden;"
 			aria-label="Armor's weight"
 			value="0"
 			type="text"
@@ -369,7 +374,7 @@
 		<input
 			id="AC_Shield_Weight"
 			class="field inputfield bluetext"
-			style="top: 39.5px;left: 235px;font-size: 10.5px;width: 25px;height: 13.3px;font-family: SegoeUI;visibility: hidden;"
+			style="top: 39.5px;left: 235px;font-size: 10.5px;width: 25px;height: 13.3px;visibility: hidden;"
 			aria-label="Shield's weight"
 			value="0"
 			type="text"
@@ -410,7 +415,7 @@
 
 		<span class="textlabel-bold" style="top: 21.3px;left: 53.4px;width: 177px">INSPIRATION</span>
 
-		<input id="Inspiration" class="field inputfield" style="top: 10.4px;left: 15px;font-size: 14px;width: 28px;height: 28px;" type="number"><!--Is a check-box in pdf-->
+		<input id="Inspiration" class="field inputfield" style="top: 10.4px;left: 15px;font-size: 14px;width: 28px;height: 28px;font-family: 'scala-sans'" type="number"><!--Is a check-box in pdf-->
 	</div>
 
 
@@ -421,12 +426,12 @@
 		<div class="textlabel-bold" style="top: 15.5px;left: 72.6px;width: 40px;text-align: left;font-size: 8.6px;line-height: 10.4px;">ABILITY SAVE DC</div>
 		<!-- <div class="textlabel-bold" style="top: 15.5px;left: 88.5px;width: 64px;text-align: left;font-size: 8.6px;line-height: 10.4px;">ABILITY SAVE DC</div> -->
 
-		<input id="Spell_save_DC_1" class="field inputfield-noneditable" style="top: 11px;left: 14.5px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0" type="number">
-		<input id="Spell_save_DC_2" class="field inputfield-noneditable" style="visibility: hidden;top: 11px;left: 191px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0" type="number">
+		<input id="Spell_save_DC_1" class="field inputfield-noneditable" style="top: 11px;left: 14.5px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
+		<input id="Spell_save_DC_2" class="field inputfield-noneditable" style="visibility: hidden;top: 11px;left: 191px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
 
-		<input id="Spell_DC_1_Mod.0" class="field inputfield" list="ability_save_dc_options" style="top: 19px;font-size: 8px;font-weight: bold;height: 10px;left: 130px;text-align: center;width: 75px;">
-		<input id="Spell_DC_1_Mod.1" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;">
-		<input id="Spell_DC_2_Mod" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 121.5px;text-align: center;width: 54px;">
+		<input id="Spell_DC_1_Mod.0" class="field inputfield" list="ability_save_dc_options" style="top: 19px;font-size: 8px;font-weight: bold;height: 10px;left: 130px;text-align: center;width: 75px;font-family: 'scala-sans'">
+		<input id="Spell_DC_1_Mod.1" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;font-family: 'scala-sans'">
+		<input id="Spell_DC_2_Mod" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 121.5px;text-align: center;width: 54px;font-family: 'scala-sans'">
 			<datalist id="ability_save_dc_options">
 				<option value="CHARISMA">
 			</datalist>
@@ -610,13 +615,13 @@
 		</div>
 
 		<input id="Too" class="field inputfield-notched" style="top: 370.0px;left: 40px;font-size: 12px;width: 20px;height: 12px;" type="text">
-		<input id="Too_Text" class="field inputfield" style="top: 371px;left: 66px;font-size: 10.6px;height: 11px;width: 105px;" type="text" value="Tool">
+		<input id="Too_Text" class="field inputfield" style="top: 371px;left: 66px;font-size: 10.6px;height: 11px;width: 105px;font-family: 'scala-sans'" type="text" value="Tool">
 
 		<!-- BlueText -->
 		<input
 			id="Acr_Bonus"
 			class="field inputfield bluetext"
-			style="top: 19px;left: 153px;width: 20px;height: 12px;font-family: SegoeUI;text-align: center;visibility: hidden"
+			style="top: 19px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Acrobatics Bonus Modifier"
 			value="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Acr_Bonus_change)"
@@ -624,7 +629,7 @@
 		<input
 			id="All_Skills_Bonus"
 			class="field inputfield bluetext"
-			style="top: -5px;left: 40px;width: 20px;height: 12px;font-family: SegoeUI;text-align: center;visibility: hidden"
+			style="top: -5px;left: 40px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="All Skills Bonus Modifier"
 			value="0"
 			onchange="event.value=this.value;ValidateBonus(true);this.value=event.value;eventManager.handle_event(EventType.All_Skills_Bonus_change)"
@@ -632,7 +637,7 @@
 		<input
 			id="Ani_Bonus"
 			class="field inputfield bluetext"
-			style="top: 38.5px;left: 153px;width: 20px;height: 12px;font-family: SegoeUI;text-align: center;visibility: hidden"
+			style="top: 38.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Animal Handling Bonus Modifier"
 			value="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Ani_Bonus_change)"
@@ -640,7 +645,7 @@
 		<input
 			id="Arc_Bonus"
 			class="field inputfield bluetext"
-			style="top: 58px;left: 153px;width: 20px;height: 12px;font-family: SegoeUI;text-align: center;visibility: hidden"
+			style="top: 58px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Arcana Bonus Modifier"
 			value="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Arc_Bonus_change)"
@@ -648,7 +653,7 @@
 		<input
 			id="Ath_Bonus"
 			class="field inputfield bluetext"
-			style="top: 58px;left: 153px;width: 20px;height: 12px;font-family: SegoeUI;text-align: center;visibility: hidden"
+			style="top: 58px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Athletics Bonus Modifier"
 			value="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Ath_Bonus_change)"
@@ -758,46 +763,46 @@
 		<span class="textlabel-dimmed" style="top: 17px;left: 250.2px">USED</span>
 		<span class="textlabel-bold" style="top: 188.1px;left: 13.1px;width: 275.3px">LIMITED FEATURES</span>
 
-		<input id="Limited_Feature_1" class="field inputfield" style="top:  25.6px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="Limited_Feature_2" class="field inputfield" style="top:  45.9px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="Limited_Feature_3" class="field inputfield" style="top:  66.2px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="Limited_Feature_4" class="field inputfield" style="top:  86.5px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="Limited_Feature_5" class="field inputfield" style="top: 106.8px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="Limited_Feature_6" class="field inputfield" style="top: 127.1px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="Limited_Feature_7" class="field inputfield" style="top: 147.4px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
-		<input id="Limited_Feature_8" class="field inputfield" style="top: 167.7px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;" type="text">
+		<input id="Limited_Feature_1" class="field inputfield" style="top:  25.6px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_2" class="field inputfield" style="top:  45.9px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_3" class="field inputfield" style="top:  66.2px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_4" class="field inputfield" style="top:  86.5px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_5" class="field inputfield" style="top: 106.8px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_6" class="field inputfield" style="top: 127.1px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_7" class="field inputfield" style="top: 147.4px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_8" class="field inputfield" style="top: 167.7px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
 
-		<input id="Limited_Feature_Max_Usages_1" class="field inputfield" style="top:  25.6px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="Limited_Feature_Max_Usages_2" class="field inputfield" style="top:  45.9px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="Limited_Feature_Max_Usages_3" class="field inputfield" style="top:  66.2px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="Limited_Feature_Max_Usages_4" class="field inputfield" style="top:  86.5px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="Limited_Feature_Max_Usages_5" class="field inputfield" style="top: 106.8px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="Limited_Feature_Max_Usages_6" class="field inputfield" style="top: 127.1px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="Limited_Feature_Max_Usages_7" class="field inputfield" style="top: 147.4px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
-		<input id="Limited_Feature_Max_Usages_8" class="field inputfield" style="top: 167.7px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center" type="number">
+		<input id="Limited_Feature_Max_Usages_1" class="field inputfield" style="top:  25.6px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Max_Usages_2" class="field inputfield" style="top:  45.9px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Max_Usages_3" class="field inputfield" style="top:  66.2px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Max_Usages_4" class="field inputfield" style="top:  86.5px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Max_Usages_5" class="field inputfield" style="top: 106.8px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Max_Usages_6" class="field inputfield" style="top: 127.1px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Max_Usages_7" class="field inputfield" style="top: 147.4px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Max_Usages_8" class="field inputfield" style="top: 167.7px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
 
-		<input id="Limited_Feature_Recovery_1" class="field inputfield" style="top:  25.6px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="Limited_Feature_Recovery_2" class="field inputfield" style="top:  45.9px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="Limited_Feature_Recovery_3" class="field inputfield" style="top:  66.2px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="Limited_Feature_Recovery_4" class="field inputfield" style="top:  86.5px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="Limited_Feature_Recovery_5" class="field inputfield" style="top: 106.8px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="Limited_Feature_Recovery_6" class="field inputfield" style="top: 127.1px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="Limited_Feature_Recovery_7" class="field inputfield" style="top: 147.4px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
-		<input id="Limited_Feature_Recovery_8" class="field inputfield" style="top: 167.7px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_1" class="field inputfield" style="top:  25.6px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_2" class="field inputfield" style="top:  45.9px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_3" class="field inputfield" style="top:  66.2px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_4" class="field inputfield" style="top:  86.5px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_5" class="field inputfield" style="top: 106.8px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_6" class="field inputfield" style="top: 127.1px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_7" class="field inputfield" style="top: 147.4px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_8" class="field inputfield" style="top: 167.7px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
 		<datalist id="limited_features_recover_options">
 			<option value="SR">
 			<option value="LR">
 			<option value="Dawn">
 		</datalist>
 
-		<input id="Limited_Feature_Used_1" class="field inputfield" style="top:  25.6px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="Limited_Feature_Used_2" class="field inputfield" style="top:  45.9px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="Limited_Feature_Used_3" class="field inputfield" style="top:  66.2px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="Limited_Feature_Used_4" class="field inputfield" style="top:  86.5px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="Limited_Feature_Used_5" class="field inputfield" style="top: 106.8px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="Limited_Feature_Used_6" class="field inputfield" style="top: 127.1px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="Limited_Feature_Used_7" class="field inputfield" style="top: 147.4px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
-		<input id="Limited_Feature_Used_8" class="field inputfield" style="top: 167.7px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center" type="number">
+		<input id="Limited_Feature_Used_1" class="field inputfield" style="top:  25.6px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Used_2" class="field inputfield" style="top:  45.9px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Used_3" class="field inputfield" style="top:  66.2px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Used_4" class="field inputfield" style="top:  86.5px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Used_5" class="field inputfield" style="top: 106.8px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Used_6" class="field inputfield" style="top: 127.1px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Used_7" class="field inputfield" style="top: 147.4px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Used_8" class="field inputfield" style="top: 167.7px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
 
 		<button id="SR" class="field button" style="top: 186px;left: 210.9px">SR</button>
 		<button id="LR" class="field button" style="top: 186px;left: 232px">LR</button>
@@ -845,21 +850,21 @@
 		<input id="Proficiency_Weapon_Martial" class="field checkcircle" type="checkbox" style="top: 55.8px;left: 69.4px;">
 		<input id="Proficiency_Weapon_Other" class="field checkcircle" type="checkbox" style="top: 55.8px;left: 122.8px;">
 
-		<input id="Proficiency_Weapon_Other_Description" class="field inputfield" style="top: 70px;left: 19px;font-size: 9.1px;height: 14px;width: 194px;" type="text">
+		<input id="Proficiency_Weapon_Other_Description" class="field inputfield" style="top: 70px;left: 19px;font-size: 9.1px;height: 14px;width: 194px;font-family: 'scala-sans'" type="text">
 
-		<input id="Language_1" class="field inputfield" style="top: 110px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text" value="Common">
-		<input id="Language_2" class="field inputfield" style="top: 130px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="Language_3" class="field inputfield" style="top: 150px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="Language_4" class="field inputfield" style="top: 170px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="Language_5" class="field inputfield" style="top: 190px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="Language_6" class="field inputfield" style="top: 210px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Language_1" class="field inputfield" style="top: 110px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text" value="Common">
+		<input id="Language_2" class="field inputfield" style="top: 130px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input id="Language_3" class="field inputfield" style="top: 150px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input id="Language_4" class="field inputfield" style="top: 170px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input id="Language_5" class="field inputfield" style="top: 190px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input id="Language_6" class="field inputfield" style="top: 210px;left: 19px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
 
-		<input id="Tool_1" class="field inputfield" style="top: 110px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="Tool_2" class="field inputfield" style="top: 130px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="Tool_3" class="field inputfield" style="top: 150px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="Tool_4" class="field inputfield" style="top: 170px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="Tool_5" class="field inputfield" style="top: 190px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
-		<input id="Tool_6" class="field inputfield" style="top: 210px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;" type="text">
+		<input id="Tool_1" class="field inputfield" style="top: 110px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input id="Tool_2" class="field inputfield" style="top: 130px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input id="Tool_3" class="field inputfield" style="top: 150px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input id="Tool_4" class="field inputfield" style="top: 170px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input id="Tool_5" class="field inputfield" style="top: 190px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input id="Tool_6" class="field inputfield" style="top: 210px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
 	</div>
 
 
@@ -874,7 +879,7 @@
 		<input
 			id="Action_1"
 			class="field inputfield"
-			style="top: 25px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;"
+			style="top: 25px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -882,7 +887,7 @@
 		<input
 			id="Action_2"
 			class="field inputfield"
-			style="top: 45px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;"
+			style="top: 45px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -890,7 +895,7 @@
 		<input
 			id="Action_3"
 			class="field inputfield"
-			style="top: 65px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;"
+			style="top: 65px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -898,7 +903,7 @@
 		<input
 			id="Action_4"
 			class="field inputfield"
-			style="top: 85px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;"
+			style="top: 85px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -906,7 +911,7 @@
 		<input
 			id="Action_5"
 			class="field inputfield"
-			style="top: 105px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;"
+			style="top: 105px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -914,7 +919,7 @@
 		<input
 			id="Action_6"
 			class="field inputfield"
-			style="top: 125px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;"
+			style="top: 125px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -922,7 +927,7 @@
 		<input
 			id="Action_7"
 			class="field inputfield"
-			style="top: 25px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;visibility: hidden"
+			style="top: 25px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -930,7 +935,7 @@
 		<input
 			id="Action_8"
 			class="field inputfield"
-			style="top: 45px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;visibility: hidden"
+			style="top: 45px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -938,7 +943,7 @@
 		<input
 			id="Action_9"
 			class="field inputfield"
-			style="top: 65px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;visibility: hidden"
+			style="top: 65px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -946,7 +951,7 @@
 		<input
 			id="Action_10"
 			class="field inputfield"
-			style="top: 85px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;visibility: hidden"
+			style="top: 85px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -954,7 +959,7 @@
 		<input
 			id="Action_11"
 			class="field inputfield"
-			style="top: 105px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;visibility: hidden"
+			style="top: 105px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
@@ -962,25 +967,25 @@
 		<input
 			id="Action_12"
 			class="field inputfield"
-			style="top: 125px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;font-family: SegoeUI;overflow-x: scroll;visibility: hidden"
+			style="top: 125px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 
-		<input id="Bonus_Action_1" class="field inputfield" style="top: 25px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Bonus_Action_2" class="field inputfield" style="top: 45px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Bonus_Action_3" class="field inputfield" style="top: 65px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Bonus_Action_4" class="field inputfield" style="top: 85px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Bonus_Action_5" class="field inputfield" style="top: 105px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Bonus_Action_6" class="field inputfield" style="top: 125px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Bonus_Action_1" class="field inputfield" style="top:  25px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Bonus_Action_2" class="field inputfield" style="top:  45px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Bonus_Action_3" class="field inputfield" style="top:  65px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Bonus_Action_4" class="field inputfield" style="top:  85px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Bonus_Action_5" class="field inputfield" style="top: 105px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Bonus_Action_6" class="field inputfield" style="top: 125px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
 
-		<input id="Reaction_1" class="field inputfield" style="top: 25px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Reaction_2" class="field inputfield" style="top: 45px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Reaction_3" class="field inputfield" style="top: 65px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Reaction_4" class="field inputfield" style="top: 85px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Reaction_5" class="field inputfield" style="top: 105px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
-		<input id="Reaction_6" class="field inputfield" style="top: 125px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;" type="text">
+		<input id="Reaction_1" class="field inputfield" style="top:  25px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_2" class="field inputfield" style="top:  45px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_3" class="field inputfield" style="top:  65px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_4" class="field inputfield" style="top:  85px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_5" class="field inputfield" style="top: 105px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_6" class="field inputfield" style="top: 125px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
 
 		<button id="Button.Action_1" class="field button" style="top: 28.5px;left: -3.4px;line-height: 4px;">&gt;</button>
 		<button id="Button.Action_2" class="field button" style="top: 48.5px;left: -3.4px;line-height: 4px;">&gt;</button>
@@ -1011,9 +1016,9 @@
 		<span class="textlabel" style="top: 35px;left: 105px;font-size: 8.6px">PASSIVE WISDOM (PERCEPTION)</span>
 		<div class="textlabel-bold" style="top: 126px;left: 12.5px;width: 264.3px">SENSES</div>
 
-		<input id="Passive_Perception" class="field inputfield-noneditable" style="top: 26.5px;left: 31px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0" type="number">
+		<input id="Passive_Perception" class="field inputfield-noneditable" style="top: 26.5px;left: 31px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
 
-		<textarea id="Vision" class="field inputfield" rows="3" style="top: 63px;left: 15px;width: 255px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;"></textarea>
+		<textarea id="Vision" class="field inputfield" rows="3" style="top: 63px;left: 15px;width: 255px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
 	</div>
 
 
@@ -1030,7 +1035,7 @@
 		<input
 			id="AmmoLeftDisplay.Name"
 			class="field inputfield"
-			style="top: 20px;left: 17px;height: 15.3px;width: 77px;font-size: 9.5px;font-family: SegoeUI"
+			style="top: 20px;left: 17px;height: 15.3px;width: 77px;font-size: 9.5px"
 			type="text"
 			list="ammunition_types"
 			spellcheck="true"
@@ -1041,7 +1046,7 @@
 		<input
 			id="AmmoRightDisplay.Name"
 			class="field inputfield"
-			style="top: 20px;left: 162px;height: 15.3px;width: 77px;font-size: 9.5px;font-family: SegoeUI"
+			style="top: 20px;left: 162px;height: 15.3px;width: 77px;font-size: 9.5px"
 			type="text"
 			list="ammunition_types"
 			spellcheck="true"
@@ -1071,7 +1076,7 @@
 		<input
 			id="AmmoLeftDisplay.Amount"
 			class="field inputfield"
-			style="top: 20px;left: 100px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center;font-family: SegoeUI"
+			style="top: 20px;left: 100px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center"
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
@@ -1080,7 +1085,7 @@
 		<input
 			id="AmmoRightDisplay.Amount"
 			class="field inputfield"
-			style="top: 20px;left: 245px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center;font-family: SegoeUI"
+			style="top: 20px;left: 245px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center"
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
@@ -2206,7 +2211,7 @@
 		<input
 			id="AmmoLeftDisplay.Weight"
 			class="field inputfield bluetext"
-			style="top: -8px;left: 90px;width: 35px;height: 14px;font-family: SegoeUI;font-size: 10.6px;visibility: hidden;"
+			style="top: -8px;left: 90px;width: 35px;height: 14px;font-size: 10.6px;visibility: hidden;"
 			aria-label="Ammunition's weight"
 			value="0"
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
@@ -2215,7 +2220,7 @@
 		<input
 			id="AmmoRightDisplay.Weight"
 			class="field inputfield bluetext"
-			style="top: -8px;left: 235.5px;width: 35px;height: 14px;font-family: SegoeUI;font-size: 10.6px;visibility: hidden;"
+			style="top: -8px;left: 235.5px;width: 35px;height: 14px;font-size: 10.6px;visibility: hidden;"
 			aria-label="Ammunition's weight"
 			value="0"
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
@@ -2368,7 +2373,7 @@
 			<input
 				id="Attack.1.Weapon_Selection"
 				class="field inputfield"
-				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;font-family: SegoeUI"
+				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px"
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
@@ -2386,7 +2391,7 @@
 			<select
 				id="Attack.1.Mod"
 				class="field inputfield"
-				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px;font-family: SegoeUI"
+				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_1_Mod_change);"
 			>
@@ -2401,7 +2406,7 @@
 			<input
 				id="Attack.1.Range"
 				class="field inputfield"
-				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;overflow-x: scroll;"
 				spellcheck="true"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_1_Range_change);"
@@ -2421,7 +2426,7 @@
 			<input
 				id="Attack.1.Damage_Type"
 				class="field inputfield"
-				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;font-family: SegoeUI"
+				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
@@ -2430,7 +2435,7 @@
 			<input
 				id="Attack.1.Description"
 				class="field inputfield"
-				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;overflow-x: scroll;"
 				spellcheck="true"
 				aria-label="Description and notes"
 				type="text"
@@ -2439,7 +2444,7 @@
 			<input
 				id="Attack.1.Weapon"
 				class="field inputfield"
-				style="font-family: SegoeUI;overflow-x: scroll;visibility: hidden;"
+				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
 				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"
@@ -2450,7 +2455,7 @@
 			<input
 				id="Attack.2.Weapon_Selection"
 				class="field inputfield"
-				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;font-family: SegoeUI"
+				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px"
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
@@ -2468,7 +2473,7 @@
 			<select
 				id="Attack.2.Mod"
 				class="field inputfield"
-				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px;font-family: SegoeUI"
+				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_2_Mod_change);"
 			>
@@ -2483,7 +2488,7 @@
 			<input
 				id="Attack.2.Range"
 				class="field inputfield"
-				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;overflow-x: scroll;"
 				spellcheck="true"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_2_Range_change);"
@@ -2503,7 +2508,7 @@
 			<input
 				id="Attack.2.Damage_Type"
 				class="field inputfield"
-				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;font-family: SegoeUI"
+				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
@@ -2512,7 +2517,7 @@
 			<input
 				id="Attack.2.Description"
 				class="field inputfield"
-				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;overflow-x: scroll;"
 				spellcheck="true"
 				aria-label="Description and notes"
 				type="text"
@@ -2521,7 +2526,7 @@
 			<input
 				id="Attack.2.Weapon"
 				class="field inputfield"
-				style="font-family: SegoeUI;overflow-x: scroll;visibility: hidden;"
+				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
 				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"
@@ -2532,7 +2537,7 @@
 			<input
 				id="Attack.3.Weapon_Selection"
 				class="field inputfield"
-				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;font-family: SegoeUI"
+				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px"
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
@@ -2550,7 +2555,7 @@
 			<select
 				id="Attack.3.Mod"
 				class="field inputfield"
-				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px;font-family: SegoeUI"
+				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_3_Mod_change);"
 			>
@@ -2565,7 +2570,7 @@
 			<input
 				id="Attack.3.Range"
 				class="field inputfield"
-				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;overflow-x: scroll;"
 				spellcheck="true"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_3_Range_change);"
@@ -2585,7 +2590,7 @@
 			<input
 				id="Attack.3.Damage_Type"
 				class="field inputfield"
-				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;font-family: SegoeUI"
+				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
@@ -2594,7 +2599,7 @@
 			<input
 				id="Attack.3.Description"
 				class="field inputfield"
-				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;overflow-x: scroll;"
 				spellcheck="true"
 				aria-label="Description and notes"
 				type="text"
@@ -2603,7 +2608,7 @@
 			<input
 				id="Attack.3.Weapon"
 				class="field inputfield"
-				style="font-family: SegoeUI;overflow-x: scroll;visibility: hidden;"
+				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
 				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"
@@ -2614,7 +2619,7 @@
 			<input
 				id="Attack.4.Weapon_Selection"
 				class="field inputfield"
-				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;font-family: SegoeUI"
+				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px"
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
@@ -2632,7 +2637,7 @@
 			<select
 				id="Attack.4.Mod"
 				class="field inputfield"
-				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px;font-family: SegoeUI"
+				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_4_Mod_change);"
 			>
@@ -2647,7 +2652,7 @@
 			<input
 				id="Attack.4.Range"
 				class="field inputfield"
-				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;overflow-x: scroll;"
 				spellcheck="true"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_4_Range_change);"
@@ -2667,7 +2672,7 @@
 			<input
 				id="Attack.4.Damage_Type"
 				class="field inputfield"
-				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;font-family: SegoeUI"
+				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
@@ -2676,7 +2681,7 @@
 			<input
 				id="Attack.4.Description"
 				class="field inputfield"
-				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;overflow-x: scroll;"
 				spellcheck="true"
 				aria-label="Description and notes"
 				type="text"
@@ -2685,7 +2690,7 @@
 			<input
 				id="Attack.4.Weapon"
 				class="field inputfield"
-				style="font-family: SegoeUI;overflow-x: scroll;visibility: hidden;"
+				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
 				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"
@@ -2696,7 +2701,7 @@
 			<input
 				id="Attack.5.Weapon_Selection"
 				class="field inputfield"
-				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px;font-family: SegoeUI"
+				style="top: 0px;left: 0px;font-size: 12px;height: 15px;width: 185px"
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
@@ -2714,7 +2719,7 @@
 			<select
 				id="Attack.5.Mod"
 				class="field inputfield"
-				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px;font-family: SegoeUI"
+				style="top: 0px;left: 213px;height: 15px;width: 37px;font-size: 10px;padding: 1px 0px 1px 0.5px"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_5_Mod_change);"
 			>
@@ -2729,7 +2734,7 @@
 			<input
 				id="Attack.5.Range"
 				class="field inputfield"
-				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 0px;left: 252.5px;font-size: 9.5px;height: 15px;width: 64px;text-align: center;overflow-x: scroll;"
 				spellcheck="true"
 				type="text"
 				onchange="eventManager.handle_event(EventType.Attack_5_Range_change);"
@@ -2749,7 +2754,7 @@
 			<input
 				id="Attack.5.Damage_Type"
 				class="field inputfield"
-				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px;font-family: SegoeUI"
+				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
@@ -2758,7 +2763,7 @@
 			<input
 				id="Attack.5.Description"
 				class="field inputfield"
-				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 19px;left: 0px;font-size: 12px;height: 15px;width: 497px;overflow-x: scroll;"
 				spellcheck="true"
 				aria-label="Description and notes"
 				type="text"
@@ -2767,7 +2772,7 @@
 			<input
 				id="Attack.5.Weapon"
 				class="field inputfield"
-				style="font-family: SegoeUI;overflow-x: scroll;visibility: hidden;"
+				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
 				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"

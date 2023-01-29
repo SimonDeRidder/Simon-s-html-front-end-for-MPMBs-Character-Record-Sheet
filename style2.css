@@ -122,7 +122,7 @@
 	border: none;
 	border-width: 0px;
 	color: var(--black);
-	font-family: 'scala-sans';
+	font-family: SegoeUI;
 	overflow: hidden;
 	resize: none;
 }
@@ -157,7 +157,7 @@
 	border: none;
 	border-width: 0px;
 	color: var(--black);
-	font-family: 'scala-sans';
+	font-family: SegoeUI;
 	overflow: hidden;
 	resize: none;
 	pointer-events: none;

@@ -2221,7 +2221,7 @@ function getCurrentLevelByXP(level, exp) {
 }
 
 //Check if the level or XP entered matches the XP or level
-function CalcExperienceLevel() {
+async function CalcExperienceLevel() {
 	// initialise some variables
 	var Level = Number(What("Character Level"));
 	var exp = What("Total Experience");
@@ -2241,15 +2241,13 @@ function CalcExperienceLevel() {
 	var StringHigherXP = "This character is level " + Level + ", but already has " + exp + " experience points. This amount is enough to attain level " + LVLbyXP + ".\n\nYou can upgrade the level to " + LVLbyXP + ", downgrade the experience points to " + XPforLVL + ", or leave it as it is.";
 
 	var Experience_Dialog = {
-		result : false,
 		//when pressing the ok button
 		commit : function (dialog) {
-			this.result = Level > LVLbyXP ? "XPre" : "LVLr";
+			dialog.end(Level > LVLbyXP ? "XPre" : "LVLr");
 		},
 		//when pressing the other button
 		other : function (dialog) {
-			this.result = Level > LVLbyXP ? "LVLr" : "XPre";
-			dialog.end("ok");
+			dialog.end(Level > LVLbyXP ? "LVLr" : "XPre");
 		},
 		description : {
 			name : "EXPERIENCE POINTS DIALOG",
@@ -2281,8 +2279,8 @@ function CalcExperienceLevel() {
 		}
 	};
 
-	var dia = app.execDialog(Experience_Dialog);
-	switch (Experience_Dialog.result) {
+	let dia = await app.execDialog(Experience_Dialog);
+	switch (dia) {
 		case "LVLr":
 			Value("Character Level", LVLbyXP);
 			break;
@@ -3014,10 +3012,14 @@ function SetRacesdropdown(forceTooltips) {
 };
 
 //parse the results from the menu into an array
-function getMenu(menuname) {
+async function getMenu(menuname) {
 	try {
-		var temp = app.popUpMenuEx.apply(app, Menus[menuname]);
+		var temp = await app.popUpMenuEx.apply(app, Menus[menuname]);
 	} catch (err) {
+		if (err == "error: unknown context menu: make sure it is async") {  // TODO: remove when all done
+			throw err;
+		}
+		console.log(err);
 		var temp = null;
 	}
 	return temp === null ? ["nothing", "toreport"] : temp.toLowerCase().split("#");
@@ -3726,9 +3728,9 @@ function MakeInventoryLineMenu() {
 };
 
 //call the inventory line menu and do something with the results
-function InventoryLineOptions() {
+async function InventoryLineOptions() {
 
-	var MenuSelection = getMenu("gearline");
+	var MenuSelection = await getMenu("gearline");
 
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
@@ -8905,7 +8907,7 @@ function ReturnAttackFieldsArray(fldNmbr, prefix) {
 }
 
 //Make menu for the button on each Attack line and parse it to Menus.attacks
-function MakeAttackLineMenu_AttackLineOptions(MenuSelection, itemNmbr, prefix) {
+async function MakeAttackLineMenu_AttackLineOptions(MenuSelection, itemNmbr, prefix) {
 	var attackMenu = [];
 	if (!itemNmbr) itemNmbr = Number(event.target.name.slice(-1));
 	if (prefix === undefined && event.target && event.target.name) {
@@ -9008,7 +9010,9 @@ function MakeAttackLineMenu_AttackLineOptions(MenuSelection, itemNmbr, prefix) {
 		Menus.attacks = attackMenu;
 		if (MenuSelection == "justMenu") return;
 	}
-	MenuSelection = MenuSelection ? MenuSelection : getMenu("attacks");
+	if (!MenuSelection) {
+		MenuSelection = await getMenu("attacks");
+	}
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] != "attack") return;
 
 	// Start progress bar and stop calculations

@@ -3999,9 +3999,6 @@ function ParseSpellMenu() {
 	//start an array of the different menus
 	var spellsMenuArray = [AllSpellsMenu];
 
-	//now to do something that makes it possible to copy this object multiple times
-	var menuString = AllSpellsMenu.toSource();
-
 	var menuExtraTypes = [
 		["with a Checkbox", "checkbox"],
 		["with an 'Always Prepared' Checkbox", "markedbox"],
@@ -4012,7 +4009,7 @@ function ParseSpellMenu() {
 	]
 	//add a menu with a changed name
 	for (var e = 0; e < menuExtraTypes.length; e++) {
-		var aMenu = eval_ish(menuString);
+		var aMenu = newObj(AllSpellsMenu);
 		amendMenu(aMenu, menuExtraTypes[e][0], menuExtraTypes[e][1]);
 		spellsMenuArray.push(aMenu);
 	}

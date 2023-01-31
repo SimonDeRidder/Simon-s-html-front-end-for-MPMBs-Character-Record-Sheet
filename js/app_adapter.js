@@ -63,6 +63,7 @@ const app = {
 	execDialog: async function (monitor /*object*/, inheritDialog = null /*Dialog*/, parentDoc = this /*doc*/, resultCallback = null /*function*/) {
 		if (monitor.description.name != "EXPERIENCE POINTS DIALOG") {
 			// TODO: remove this if all execDialogs are converted
+			// New usage: make caller async, ensure callbacks are connected
 			throw "unknown execDialog caller";
 		}
 		if (inheritDialog != null) {
@@ -102,8 +103,10 @@ const app = {
 
 	popUpMenuEx: {
 		apply: async function(app /*this*/, aParams /*[Object]*/) {
-			if (!aParams[0].cName.startsWith("Put item on this line")) {  // TODO: remove when all done
-				throw "error: unknown context menu: make sure it is async";
+			if (!["Put item on this line"].includes(aParams[0].cName)) {  // TODO: remove when all done
+				if (!["Show things changing the attack automations"].includes(aParams[aParams.length-1].cName)) {
+					throw "error: unknown context menu: make sure it is async";
+				}
 			}
 			return new Promise((resolve, reject) => {
 				let menu = AdapterParsePopUpMenu(aParams, resolve);

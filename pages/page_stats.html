@@ -18,10 +18,19 @@
 		<input id="Class_and_Levels" class="field inputfield" style="top: 85px;left: 388px;font-size: 11pt;width: 199pt;height: 15pt;font-family: 'scala-sans'" type="text">
 		<input id="Player_Name" class="field inputfield" style="top: 85px;left: 660px;font-size: 11pt;width: 120pt;height: 15pt;font-family: 'scala-sans'" type="text">
 
-		<input id="Background" class="field inputfield" list="background_options" style="top: 124px;left: 365px;font-size: 11pt;width: 130pt;height: 15pt;font-family: 'scala-sans'">
-			<datalist id="background_options">
-				<option value="Acolyte">
-			</datalist>
+		<input
+			id="Background"
+			class="field inputfield"
+			list="background_options"
+			style="top: 124px;left: 365px;font-size: 11pt;width: 130pt;height: 15pt"
+			aria-label="Background"
+			spellcheck="true"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onchange="ApplyBackground(this.value);"
+		/>
+		<datalist id="background_options">
+			<option value="Acolyte">
+		</datalist>
 		<input id="Background_Extra" class="field inputfield" list="background_sub_options" style="top: 146px;left: 445px;font-size: 7pt;width: 70pt;height: 8pt;color: var(--text-dimmed);font-family: 'scala-sans'">
 			<datalist id="background_sub_options">
 				<option value="Bacolyte">
@@ -2360,8 +2369,7 @@
 		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/attacks.svg" style="left: 7.1px;top: 6px;width: 525.9px;height: 267px;">
 
 		<span class="textlabel-dimmed" style="top: 13.5px;left: 22.9px">ATTACK NAME</span>
-		<span class="textlabel-dimmed" style="top: 13.5px;left: 213.5px">PROF.</span>
-		<span class="textlabel-dimmed" style="top: 13.5px;left: 238px">ABILITY</span>
+		<span class="field textlabel-dimmed" style="top: 13.5px;left: 213.5px">PROF. ABILITY</span>
 		<span class="textlabel-dimmed" style="top: 13.5px;left: 272px">RANGE</span>
 		<span class="textlabel-dimmed" style="top: 13.5px;left: 343.5px">TO HIT</span>
 		<span class="textlabel-dimmed" style="top: 13.5px;left: 382.2px">DAMAGE</span>
@@ -2871,11 +2879,36 @@
 			<option value="Thunder">
 		</datalist>
 
-		<button id="Attack.Button.1" class="field button" style="top: 35px;left: -3px;line-height: 6px;">&gt;</button>
-		<button id="Attack.Button.2" class="field button" style="top: 83px;left: -3px;line-height: 6px;">&gt;</button>
-		<button id="Attack.Button.3" class="field button" style="top: 131px;left: -3px;line-height: 6px;">&gt;</button>
-		<button id="Attack.Button.4" class="field button" style="top: 179px;left: -3px;line-height: 6px;">&gt;</button>
-		<button id="Attack.Button.5" class="field button" style="top: 227px;left: -3px;line-height: 6px;">&gt;</button>
+		<button
+			id="Attack.Button.1"
+			class="field button nonprintable"
+			style="top:  35px;left: -3px;line-height: 6px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+		>&gt;</button>
+		<button
+			id="Attack.Button.2"
+			class="field button nonprintable"
+			style="top:  83px;left: -3px;line-height: 6px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+		>&gt;</button>
+		<button
+			id="Attack.Button.3"
+			class="field button nonprintable"
+			style="top: 131px;left: -3px;line-height: 6px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+		>&gt;</button>
+		<button
+			id="Attack.Button.4"
+			class="field button nonprintable"
+			style="top: 179px;left: -3px;line-height: 6px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+		>&gt;</button>
+		<button
+			id="Attack.Button.5"
+			class="field button nonprintable"
+			style="top: 227px;left: -3px;line-height: 6px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+		>&gt;</button>
 
 		<script type="text/javascript">
 			// Attack.i.To Hit (and Damage)

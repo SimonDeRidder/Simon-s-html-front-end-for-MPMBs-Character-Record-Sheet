@@ -181,3 +181,181 @@ async function InventoryLineOptions() {
 
 	thermoM(thermoTxt, true); // Stop progress bar
 };
+
+//Make menu for the button on each Attack line and parse it to Menus.attacks
+async function MakeAttackLineMenu_AttackLineOptions(MenuSelection, itemNmbr, prefix) {
+	var attackMenu = [];
+	if (!itemNmbr) itemNmbr = Number(event.target.name.slice(-1));
+	if (prefix === undefined && event.target && event.target.name) {
+		var QI = event.target.name.indexOf("Comp.") === -1;
+		prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	} else {
+		if (prefix && !CurrentWeapons.compKnown[prefix]) return;
+		var QI = prefix ? false : true;
+		if (!prefix) prefix = "";
+	}
+	var Q = QI ? "" : "Comp.Use.";
+	var maxItems = QI ? FieldNumbers.attacks : 3;
+
+	var Fields = ReturnAttackFieldsArray(itemNmbr, prefix);
+	var fldsBase = [
+		["", ".Weapon"], //0
+		["", ".To Hit"], //1
+		["", ".Damage"], //2
+		["", ".Weapon Selection"], //3
+		["", ".Proficiency"], //4
+		["", ".Mod"], //5
+		["", ".Range"], //6
+		["BlueText.", ".Weight"], //7
+		["", ".Damage Type"], //8
+		["BlueText.", ".To Hit Bonus"], //9
+		["BlueText.", ".Damage Bonus"], //10
+		["BlueText.", ".Damage Die"], //11
+		["", ".Description"], //12
+		["BlueText.", ".Weight Title"], //13
+	];
+	for (var i = 0; i < fldsBase.length; i++) {
+		Fields[i] = prefix + fldsBase[i][0] + Q + "Attack." + itemNmbr + fldsBase[i][1];
+	}
+
+	var theField = What( Fields[ CurrentVars.manual.attacks ? 0 : 3] );
+	var theWea = QI ? CurrentWeapons.known[itemNmbr - 1] : CurrentWeapons.compKnown[prefix][itemNmbr - 1];
+	var weaWeight = theWea[0] && WeaponsList[theWea[0]] ? WeaponsList[theWea[0]].weight :
+		theWea[0] && QI && CurrentCompRace[prefix] && CurrentCompRace[prefix].attacks ? CurrentCompRace[prefix].attacks[theWea[0]].weight :
+		What(Fields[7]);
+	var noUp = itemNmbr === 1;
+	var noDown = itemNmbr === maxItems;
+
+	if (!MenuSelection || MenuSelection === "justMenu") {
+		var menuLVL1 = function (array) {
+			for (var i = 0; i < array.length; i++) {
+				attackMenu.push({
+					cName : array[i][0],
+					cReturn : "attack#" + array[i][1],
+					bEnabled : array[i][2] !== undefined ? array[i][2] : true 
+				});
+			}
+		};
+		menuLVL1([
+			//[name, return, enabled]
+			["Move up", "up", !noUp],
+			["Move down", "down", !noDown],
+			["-", "-"],
+			[QI ? "Copy to Adventuring Gear (page 2)" : "Copy to Equipment section", "copytoequip", weaWeight],
+			["-", "-"],
+			["Insert empty attack", "insert", theField && !noDown],
+			["Delete attack", "delete"],
+			["Clear attack", "clear"]
+		]);
+
+		var menuLVL2 = function (name, array, markThis) {
+			var temp = {
+				cName : name[0],
+				oSubMenu : []
+			}
+			for (var i = 0; i < array.length; i++) {
+				temp.oSubMenu.push({
+					cName : array[i].capitalize(),
+					cReturn : "attack#" + name[1] + "#" + array[i],
+					bMarked : array[i] === markThis
+				})
+			}
+			attackMenu.push(temp);
+		};
+
+		// Add the colour menu
+		if (!typePF) {
+			attackMenu.push({ cName : "-" });
+			var ColorArray = ["black"];
+			for (var key in ColorList) ColorArray.push(key);
+			ColorArray.sort();
+			ColorArray.unshift("same as headers", "same as dragon heads", "-");
+			menuLVL2(["Outline Color", "colour"], ColorArray, What(Fields[13]));
+		}
+
+		// Add option to show dialog with calcChanges
+		if (QI) {
+			menuLVL1([
+				//[name, return, enabled]
+				["-", "-"],
+				["Show things changing the attack automations", "showcalcs", ObjLength(CurrentEvals.atkStr) || ObjLength(CurrentEvals.spellAtkStr) ? true : false]
+			]);
+		}
+
+		//set the complete menu as the global variable
+		Menus.attacks = attackMenu;
+		if (MenuSelection == "justMenu") return;
+	}
+	if (!MenuSelection) {
+		MenuSelection = await getMenu("attacks");
+	}
+	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] != "attack") return;
+
+	// Start progress bar and stop calculations
+	var thermoTxt = thermoM("Applying attack menu option...");
+	var findWeaps = false;
+	calcStop();
+
+	switch (MenuSelection[1]) {
+		case "up" :
+			if (noUp) return;
+		case "down" :
+			if (MenuSelection[1] === "down" && noDown) return;
+			thermoTxt = thermoM("Moving the attack " + MenuSelection[1] + "...", false);
+			IsNotWeaponMenu = false;
+			// Get the other fields
+			var otherNmbr = MenuSelection[1] === "down" ? itemNmbr + 1 : itemNmbr - 1;
+			var FieldsOth = ReturnAttackFieldsArray(otherNmbr, prefix);
+			// Now swap all the fields
+			for (var i = 0; i < Fields.length; i++) {
+				var exclObj = {
+					userName : i !== 12, // tooltip only for description
+					submitName : i === 4, // submitname only not for proficiency
+					defaultValue : !typePF && i === 13, // weight title keep default value
+					noCalc : true
+				};
+				copyField(Fields[i], FieldsOth[i], exclObj, true);
+				thermoM(i/(Fields.length)); //increment the progress dialog's progress
+			}
+			// Re-apply the attack colour, as this could've changed
+			if (!typePF) {
+				ApplyAttackColor(itemNmbr, undefined, Q, prefix);
+				ApplyAttackColor(otherNmbr, undefined, Q, prefix);
+			}
+			IsNotWeaponMenu = true;
+			findWeaps = true;
+			break;
+		case "copytoequip" :
+			thermoTxt = thermoM("Copying to Equipment section...", false);
+			AddToInv(QI ? "gear" : prefix + "comp", QI ? "r" : "l", What(Fields[3]), "", What(Fields[7]), "", false, false, false, true);
+			break;
+		case "insert" :
+			WeaponInsert(itemNmbr, prefix);
+			break;
+		case "delete" :
+			WeaponDelete(itemNmbr, prefix);
+			break;
+		case "clear" :
+			thermoTxt = thermoM("Clearing attack...", false);
+			WeaponClear(itemNmbr, prefix)
+			findWeaps = true;
+			break;
+		case "colour" :
+			thermoTxt = thermoM("Changing attack outline color...", false);
+			ApplyAttackColor(itemNmbr, MenuSelection[2], Q, prefix);
+			break;
+		case "showcalcs" :
+			var atkCalcStr = StringEvals(["atkStr", "spellAtkStr"]);
+			if (atkCalcStr) ShowDialog("Things Affecting the Attack Automation", atkCalcStr);
+			break;
+	}
+
+	//re-populate the CurrentWeapons variable because of the thing that just changed
+	if (findWeaps && QI) {
+		FindWeapons();
+	} else if (findWeaps) {
+		FindCompWeapons(undefined, prefix);
+	}
+
+	thermoM(thermoTxt, true); // Stop progress bar
+};

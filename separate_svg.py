@@ -1,8 +1,8 @@
 
 # %%
 
-with open("img/page_reference/backgrounds/attack_action.svg", 'rt') as f:
-    lines_to_delete = f.readlines()
+with open("img/page_reference/backgrounds/conditions.svg", 'rt', encoding='utf-8') as f:
+	lines_to_delete = f.readlines()
 
 # %%
 
@@ -10,10 +10,10 @@ relevant_lines_to_delete = [line for line in lines_to_delete if line.startswith(
 
 # %%
 
-with open("img/bg7_other.svg", 'wt') as outf:
-    with open("img/bg7.svg", 'rt') as inpf:
-        for line in inpf.readlines():
-            if line not in relevant_lines_to_delete:
-                outf.write(line)
+with open("img/bg7_other.svg", 'wt', encoding='utf-8') as outf:
+	with open("img/bg7.svg", 'rt', encoding='utf-8') as inpf:
+		for line in inpf.readlines():
+			if line not in relevant_lines_to_delete:
+				outf.write(line)
 
 # %%

@@ -2516,7 +2516,7 @@ eval : function(lvl, chc) {
 */
 
 removeeval : "Checkbox('Jack of All Trades', false);",
-removeeval : function(v) {
+removeeval : function(lvl, chc) {
 	RemoveString('Extra.Notes', 'Monk features:\n\u25C6 Lose Unarmored Defense, Martial Arts, and Unarmored Movement with armor/shields', true);
 },
 /*	removeeval // OPTIONAL //
@@ -2552,10 +2552,10 @@ removeeval : function(v) {
 	This attribute is processed first, before all other attributes are processed.
 */
 
-changeeval : "var monkSpd = function(n) {return '+' + (n < 2 ? 0 : n < 6 ? 10 : n < 10 ? 15 : n < 14 ? 20 : n < 18 ? 25 : 30);}(classes.known.monk.level); await SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, displName);",
-changeeval : async function(v) {
-	var monkSpd = '+' + (v[1] < 2 ? 0 : v[1] < 6 ? 10 : v[1] < 10 ? 15 : v[1] < 14 ? 20 : v[1] < 18 ? 25 : 30);
-	await SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, "Monk: Unarmored Movement");
+changeeval : "var monkSpd = function(n) {return '+' + (n < 2 ? 0 : n < 6 ? 10 : n < 10 ? 15 : n < 14 ? 20 : n < 18 ? 25 : 30);}(classes.known.monk.level); SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, displName);",
+changeeval : function(lvl, chc) {
+	var monkSpd = '+' + (lvl[1] < 2 ? 0 : lvl[1] < 6 ? 10 : lvl[1] < 10 ? 15 : lvl[1] < 14 ? 20 : lvl[1] < 18 ? 25 : 30);
+	SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, "Monk: Unarmored Movement");
 },
 /*	changeeval // OPTIONAL //
 	TYPE:	function or, for backwards-compatibility, string that is evaluated using eval()

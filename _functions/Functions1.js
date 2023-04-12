@@ -6254,7 +6254,7 @@ async function processClassFeatureExtraChoiceDependencies(lvlA, aClass, aFeature
 		// set or remove the class feature, depending on its level
 		await ClassFeatureOptions(
 			[aClass, aFeature, aDep.extrachoice, 'extra'],
-			lvlA[1] < minLvl ? 'remove' : false,
+			lvlA[1] < minLvl ? 'remove' : 'add',
 			aDep.extraname
 		);
 	}

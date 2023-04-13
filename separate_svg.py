@@ -1,7 +1,7 @@
 
 # %%
 
-with open("img/page_reference/backgrounds/conditions.svg", 'rt', encoding='utf-8') as f:
+with open("img/page_reference/backgrounds/light_vision.svg", 'rt', encoding='utf-8') as f:
 	lines_to_delete = f.readlines()
 
 # %%

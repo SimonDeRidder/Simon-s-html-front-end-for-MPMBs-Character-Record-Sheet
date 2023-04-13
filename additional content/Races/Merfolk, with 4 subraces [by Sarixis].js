@@ -179,8 +179,8 @@ RaceList["awakened merrow"] = {
 	improvements : "Awakened Merrow: +2 Strength, +2 Wisdom;",
 	scores : [2, 0, 0, 0, 2, 0],
 	trait : "Awakened Merrow (+2 Strength, +2 Wisdom)\nAmphibious: I can breathe air and water\nAquitect: I know the Shape Water cantrip. At 3rd level, I can cast Create or Destroy Water as a 2nd-level spell once per long rest. Wisdom is my spellcasting ability for these\nDevout: I have advantage on Intelligence (Religion) checks regarding human and oceanic deities",
-	eval : "AddACMisc(1, \"Tough Scales\", \"Tough Scales was gained from being an Awakened Merrow\")",
-	removeeval : "AddACMisc(0, \"Tough Scales\", \"Tough Scales was gained from being an Awakened Merrow\")",
+	eval : "await AddACMisc(1, \"Tough Scales\", \"Tough Scales was gained from being an Awakened Merrow\")",
+	removeeval : "await AddACMisc(0, \"Tough Scales\", \"Tough Scales was gained from being an Awakened Merrow\")",
 	spellcastingAbility : 5,
 	spellcastingBonus : {
 		name : "Aquitect (level 1)",

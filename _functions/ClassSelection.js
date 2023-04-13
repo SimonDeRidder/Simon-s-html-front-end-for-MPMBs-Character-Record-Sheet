@@ -14,7 +14,7 @@ function SetPositiveElement(objIn, element) {
 };
 
 //a dialog that allows immediate feedback on what a class' name will look like and create a comprehensive, complete string to put in the class field
-function SelectClass() {
+async function SelectClass() {
 	if (app.viewerVersion < 15) {
 		FunctionIsNotAvailable();
 		return;
@@ -25,10 +25,12 @@ function SelectClass() {
 			nIcon : 1,
 			cMsg : "Class processing has been turned off. Because of that, the class selection dialog won't work.\n\nWould you like to open the dialog to turn class processing back on?"
 		});
-		if (openManualDia == 4) SetToManual_Button();
+		if (openManualDia == 4) {
+			await SetToManual_Button();
+		}
 		if (CurrentVars.manual.classes) return;
 	}
-	if (CurrentSources.firstTime) OpeningStatement();
+	if (CurrentSources.firstTime) await OpeningStatement();
 	var theChar = What("PC Name") ? What("PC Name") : "your character";
 	var hasUAranger = false;
 	var ClassFld = What("Class and Levels");
@@ -306,7 +308,7 @@ function SelectClass() {
 			this.updateFull(dialog);
 		},
 		bAdR : function (dialog) { dialog.end("bAdR"); },
-		bSrc : function (dialog) { MakeSourceMenu_SourceOptions(); },
+		bSrc : async function (dialog) { await MakeSourceMenu_SourceOptions(); },
 		bCSS : function (dialog) { dialog.end("bCSS"); },
 		r0LV : function (dialog) { this.lvlChange(dialog, 0); },
 		r0TX : function (dialog) { this.textChange(dialog, 0); },
@@ -991,13 +993,13 @@ function SelectClass() {
 			txtFinal = "";
 			lvlFinal = 0;
 		} else {
-			var dia = app.execDialog(ClassSelection_Dialog);
+			var dia = await app.execDialog(ClassSelection_Dialog);
 			txtFinal = ClassSelection_Dialog.finalText;
 			lvlFinal = ClassSelection_Dialog.finalLevel;
 		}
 		if (dia === "bCSS") {
 			var remUArgr = hasUAranger;
-			resourceDecisionDialog();
+			await resourceDecisionDialog();
 			setClassesToDialog();
 			for (var c = 0; c < ClassSelection_Dialog.curSelec.length; c++) {
 				var sel = ClassSelection_Dialog.curSelec[c];
@@ -1044,18 +1046,18 @@ function SelectClass() {
 };
 
 //and On Click function for the Class and Levels field
-function ClickClasses() {
+async function ClickClasses() {
 	if (!CurrentVars.manual.classes && app.viewerVersion >= 15 && (!event.target.value || event.modifier || event.shift)) {
 		event.target.remVal = event.target.value;
 		tDoc.getField("Player Name").setFocus();
-		SelectClass();
+		await SelectClass();
 	};
 };
 
 // After changing the level field, ask which class to add a level to, or start multiclassing
-function AskMulticlassing(lvlAlreadyAdded) {
+async function AskMulticlassing(lvlAlreadyAdded) {
 	if (app.viewerVersion >= 15) {
-		SelectClass();
+		await SelectClass();
 		return;
 	};
 	var Multiclassing_Dialog = {
@@ -1305,7 +1307,7 @@ function AskMulticlassing(lvlAlreadyAdded) {
 
 	if (!AddAll || dResult === "") {
 		// not everything was applied yet, so lets ask what to do for the next level
-		AskMulticlassing(dResult === "" ? 0 : lvlAlreadyAdded? lvlAlreadyAdded + 1 : 1);
+		await AskMulticlassing(dResult === "" ? 0 : lvlAlreadyAdded? lvlAlreadyAdded + 1 : 1);
 		return;
 	}
 

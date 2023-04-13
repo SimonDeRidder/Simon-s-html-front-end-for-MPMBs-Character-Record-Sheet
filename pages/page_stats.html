@@ -13,8 +13,19 @@
 		<span class="textlabel-dimmed" style="top: 145px; left: 777.1px;font-size: 10.6px">Next Level</span>
 		<span class="textlabel" style="top: 155px; left: 101.5px;">CHARACTER NAME</span>
 
-		<input id="PC_Name#0" class="field inputfield" style="top: 108px;left: 85px;font-size: 16pt;width: 150pt;height: 18pt;font-family: 'scala-sans'" type="text">
-		<input id="Character_Level" class="field inputfield" style="top: 85px;left: 365px;font-size: 11pt;width: 12pt;height: 15pt;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="PC_Name" class="field inputfield" style="top: 108px;left: 85px;font-size: 16pt;width: 150pt;height: 18pt;font-family: 'scala-sans'" type="text">
+		<input
+			id="Character_Level"
+			class="field inputfield"
+			style="top: 85px;left: 365px;font-size: 11pt;width: 12pt;height: 15pt;text-align: center"
+			type="number"
+			aria-label="Fill out the total character level"
+			required
+			spellcheck="true"
+			onfocus="this.dataset.temp=this.value;"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(false, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="event.value=this.value;this.value=this.dataset.temp;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);levelFieldVal();this.value=event.value;"
+		/>
 		<input id="Class_and_Levels" class="field inputfield" style="top: 85px;left: 388px;font-size: 11pt;width: 199pt;height: 15pt;font-family: 'scala-sans'" type="text">
 		<input id="Player_Name" class="field inputfield" style="top: 85px;left: 660px;font-size: 11pt;width: 120pt;height: 15pt;font-family: 'scala-sans'" type="text">
 
@@ -31,10 +42,18 @@
 		<datalist id="background_options">
 			<option value="Acolyte">
 		</datalist>
-		<input id="Background_Extra" class="field inputfield" list="background_sub_options" style="top: 146px;left: 445px;font-size: 7pt;width: 70pt;height: 8pt;color: var(--text-dimmed);font-family: 'scala-sans'">
-			<datalist id="background_sub_options">
-				<option value="Bacolyte">
-			</datalist>
+		<input
+			id="Background_Extra"
+			class="field inputfield"
+			list="background_sub_options"
+			style="top: 146px;left: 445px;font-size: 7pt;width: 70pt;height: 8pt;color: var(--text-dimmed)"
+			spellcheck="true"
+			aria-label="First fill out a background in the field above."
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+		/>
+		<datalist id="background_sub_options">
+			<option value="">
+		</datalist>
 		<input id="Race" class="field inputfield" list="race_options" style="top: 124px;left: 545px;font-size: 11pt;width: 81pt;height: 15pt;font-family: 'scala-sans'">
 		<datalist id="race_options"></datalist>
 		<input id="Total_Experience" class="field inputfield" style="top: 124px;left: 660px;font-size: 11pt;width: 32pt;height: 15pt;font-family: 'scala-sans'" type="number">
@@ -82,16 +101,47 @@
 		<input id="Con" class="field inputfield" style="top: 309px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
 		<input id="Int" class="field inputfield" style="top: 417px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
 		<input id="Wis" class="field inputfield" style="top: 525px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
-		<input id="Cha" class="field inputfield" style="top: 633px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input
+			id="Cha"
+			class="field inputfield"
+			style="top: 633px;left: 27px;font-size: 13.3pt;width: 25pt;height: 16pt;text-align: center"
+			type="number"
+			min="0"
+			step="1"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="eventManager.handle_event(EventType.Cha_change)"
+		/>
 		<input id="HoS" class="field inputfield" style="visibility: hidden;top: 741px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
 
-		<input id="Str_Mod" class="field inputfield-noneditable" style="top:  48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
-		<input id="Dex_Mod" class="field inputfield-noneditable" style="top: 156px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
-		<input id="Con_Mod" class="field inputfield-noneditable" style="top: 264px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
-		<input id="Int_Mod" class="field inputfield-noneditable" style="top: 372px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
-		<input id="Wis_Mod" class="field inputfield-noneditable" style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
-		<input id="Cha_Mod" class="field inputfield-noneditable" style="top: 588px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
-		<input id="HoS_Mod" class="field inputfield-noneditable" style="visibility: hidden;top: 696px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Str_Mod" class="field isNumber inputfield-noneditable" style="top:  48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Dex_Mod" class="field isNumber inputfield-noneditable" style="top: 156px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Con_Mod" class="field isNumber inputfield-noneditable" style="top: 264px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Int_Mod" class="field isNumber inputfield-noneditable" style="top: 372px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input id="Wis_Mod" class="field isNumber inputfield-noneditable" style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input
+			id="Cha_Mod"
+			class="field isNumber inputfield-noneditable"
+			style="top: 580px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
+			type="text"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value}; eventManager.handle_event(EventType.Cha_Mod_change)"
+		/>
+		<input id="HoS_Mod" class="field isNumber inputfield-noneditable" style="visibility: hidden;top: 696px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+
+		<script type="text/javascript">
+			// Ability Mods
+			['Cha'].forEach(function(ability) {
+				eventManager.add_listener(
+					EventType[ability + '_change'],
+					function () {
+						event.target.name = ability + ' Mod';
+						CalcMod();
+						let mod_element = document.getElementById(ability + '_Mod');
+						mod_element.value = event.value;
+						mod_element.dispatchEvent(new Event('change'));
+					}
+				)
+			});
+		</script>
 	</div>
 
 
@@ -118,14 +168,26 @@
 		<input id="Con_ST_Prof" class="field checkcircle" type="checkbox" style="top: 49.6px;left: 14.9px;">
 		<input id="Int_ST_Prof" class="field checkcircle" type="checkbox" style="top: 10.4px;left: 101.6px;">
 		<input id="Wis_ST_Prof" class="field checkcircle" type="checkbox" style="top: 30.0px;left: 101.6px;">
-		<input id="Cha_ST_Prof" class="field checkcircle" type="checkbox" style="top: 49.6px;left: 101.6px;">
+		<input
+			id="Cha_ST_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 49.6px;left: 101.6px;"
+			onchange="eventManager.handle_event(EventType.Cha_ST_Prof_change)"
+		/>
 
 		<input id="Str_ST_Mod" class="field inputfield-notched" style="top: 10.4px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
 		<input id="Dex_ST_Mod" class="field inputfield-notched" style="top: 30.0px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
 		<input id="Con_ST_Mod" class="field inputfield-notched" style="top: 49.6px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
 		<input id="Int_ST_Mod" class="field inputfield-notched" style="top: 10.4px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
 		<input id="Wis_ST_Mod" class="field inputfield-notched" style="top: 30.0px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
-		<input id="Cha_ST_Mod" class="field inputfield-notched" style="top: 49.6px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
+		<input
+			id="Cha_ST_Mod"
+			class="field inputfield-notched"
+			style="top: 49.6px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none;"
+			type="text"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value}"
+		/>
 
 		<input id="Resistance_Damage_Type_1" class="field inputfield" list="resistances_options" style="top:  84.8px;left:   16px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
 		<input id="Resistance_Damage_Type_2" class="field inputfield" list="resistances_options" style="top: 104.4px;left:   16px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
@@ -146,8 +208,44 @@
 			aria-label="All Saving Throws Bonus Modifier"
 			style="top: -12px;left: 62.3px;width: 18px;height: 13.3px;text-align: center;visibility: hidden"
 			value="0"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.All_ST_Bonus_change)"
 		/>
+		<input
+			id="Cha_ST_Bonus"
+			class="field inputfield bluetext"
+			aria-label="Chraisma Saving Throw Bonus Modifier"
+			style="top: 49.6px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden"
+			value="0"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
+		/>
+		<script type="text/javascript">
+			// Ability Saving Throws
+			['Cha'].forEach(function(ability) {
+				[
+					EventType[ability + "_Mod_change"],
+					EventType[ability + "_ST_Prof_change"],
+					EventType.Proficiency_Bonus_change,
+					EventType.Proficiency_Bonus_Dice_change,
+					EventType[ability + "_ST_Bonus_change"],
+					EventType.All_ST_Bonus_change,
+					EventType.Extra_Condition_8_change,
+					EventType.Extra_Condition_9_change,
+					EventType.Extra_Condition_13_change,
+					EventType.Extra_Condition_14_change,
+				].forEach(function (event_type) {
+					eventManager.add_listener(
+						event_type,
+						function () {
+							event.target.name = ability + ' ST Mod';
+							CalcSave();
+							let st_mod_element = document.getElementById(ability + '_ST_Mod');
+							st_mod_element.value = event.value;
+							st_mod_element.dispatchEvent(new Event('change'));
+						}
+					)
+				});
+			});
+		</script>
 	</div>
 
 
@@ -170,11 +268,13 @@
 		<span class="textlabel-dimmed" style="top: 201.5px;left: 221.9px">ENCUMBERED</span>
 		<span class="textlabel-bold" style="top: 274.4px;left: 233.7px;width: 30px">SPEED</span>
 
-		<button id="Buttons.HP_Max" class="field button" style="left: 29px;top: 27.5px;font-size: 8px;line-height: 7px;"
+		<button
+			id="Buttons.HP_Max"
+			class="field button nonprintable"
+			style="left: 29px;top: 27.5px;font-size: 8px;line-height: 7px;"
 			aria-label="With this button you can set the value of the maximum hit points field to one of the calculated values:"
-			>
-			Set Max HP
-		</button>
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeHPMenu_HPOptions();"
+		>Set Max HP</button>
 		<input id="HP_Max" class="field inputfield" style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
 
 		<input id="Proficiency_Bonus" class="field inputfield-noneditable" style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
@@ -234,7 +334,9 @@
 					event_type,
 					function () {
 						CalcAC();
-						document.getElementById('AC').value = event.value;
+						let ACElement = document.getElementById('AC');
+						ACElement.value = event.value;
+						ACElement.dispatchEvent(new Event('change'));
 					}
 				)
 			});
@@ -411,7 +513,9 @@
 				eventManager.add_listener(
 					event_type,
 					function () {
-						document.getElementById('AC_Dexterity_Modifier').value = calcMaxDexToAC();
+						let ACDexModElement = document.getElementById('AC_Dexterity_Modifier');
+						ACDexModElement.value = calcMaxDexToAC();
+						ACDexModElement.dispatchEvent(new Event('change'));
 					}
 				);
 			});
@@ -470,28 +574,28 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 16px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Acr', true);eventManager.handle_event(EventType.Acr_Exp_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Acr', true);eventManager.handle_event(EventType.Acr_Exp_change);}"
 		/>
 		<input
 			id="Ani_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 35.5px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ani', true);eventManager.handle_event(EventType.Ani_Exp_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ani', true);eventManager.handle_event(EventType.Ani_Exp_change);}"
 		/>
 		<input
 			id="Arc_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 55.0px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Arc', true);eventManager.handle_event(EventType.Arc_Exp_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Arc', true);eventManager.handle_event(EventType.Arc_Exp_change);}"
 		/>
 		<input
 			id="Ath_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 74.5px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ath', true);eventManager.handle_event(EventType.Ath_Exp_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ath', true);eventManager.handle_event(EventType.Ath_Exp_change);}"
 		/>
 		<input id="Dec_Exp" class="field checkcircle" type="checkbox" style="top: 94.0px;left: 22.3px;width: 8px;height: 8px;">
 		<input id="His_Exp" class="field checkcircle" type="checkbox" style="top: 113.5px;left: 22.3px;width: 8px;height: 8px;">
@@ -514,28 +618,28 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 18px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Acr');eventManager.handle_event(EventType.Acr_Prof_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Acr');eventManager.handle_event(EventType.Acr_Prof_change);}"
 		/>
 		<input
 			id="Ani_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 37.5px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ani');eventManager.handle_event(EventType.Ani_Prof_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ani');eventManager.handle_event(EventType.Ani_Prof_change);}"
 		/>
 		<input
 			id="Arc_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 57.0px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Arc');eventManager.handle_event(EventType.Arc_Prof_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Arc');eventManager.handle_event(EventType.Arc_Prof_change);}"
 		/>
 		<input
 			id="Ath_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 76.5px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ath');eventManager.handle_event(EventType.Ath_Prof_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ath');eventManager.handle_event(EventType.Ath_Prof_change);}"
 		/>
 		<input id="Dec_Prof" class="field checkcircle" type="checkbox" style="top: 96.0px;left: 15.2px;">
 		<input id="His_Prof" class="field checkcircle" type="checkbox" style="top: 115.5px;left: 15.2px;">
@@ -754,7 +858,9 @@
 						 'Pers', 'Rel', 'Sle', 'Ste', 'Sur', 'Too'].forEach(function (skill) {
 							event.target.name = skill;
 							CalcSkill();
-							document.getElementById(skill).value = Number(event.value);
+							let skillElement = document.getElementById(skill);
+							skillElement.value = event.value;
+							skillElement.dispatchEvent(new Event('change'));
 						})
 					}
 				);
@@ -817,14 +923,102 @@
 		<button id="LR" class="field button" style="top: 186px;left: 232px">LR</button>
 		<button id="Dawn" class="field button" style="top: 186px;left: 252.2px">Dawn</button>
 
-		<button id="Button.Limited_Feature_1" class="field button" style="top:  29.25px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Limited_Feature_2" class="field button" style="top:  49.55px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Limited_Feature_3" class="field button" style="top:  69.85px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Limited_Feature_4" class="field button" style="top:  90.15px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Limited_Feature_5" class="field button" style="top: 110.45px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Limited_Feature_6" class="field button" style="top: 130.75px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Limited_Feature_7" class="field button" style="top: 151.05px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Limited_Feature_8" class="field button" style="top: 171.35px;left: -3.4px;line-height: 4px;">&gt;</button>
+		<button
+			id="Button.Limited_Feature_1"
+			class="field button nonprintable"
+			style="top:  29.25px;left: -3.4px;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(1);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_2"
+			class="field button nonprintable"
+			style="top:  49.55px;left: -3.4px;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(2);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_3"
+			class="field button nonprintable"
+			style="top:  69.85px;left: -3.4px;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(3);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_4"
+			class="field button nonprintable"
+			style="top:  90.15px;left: -3.4px;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(4);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_5"
+			class="field button nonprintable"
+			style="top: 110.45px;left: -3.4px;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(5);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_6"
+			class="field button nonprintable"
+			style="top: 130.75px;left: -3.4px;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(6);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_7"
+			class="field button nonprintable"
+			style="top: 151.05px;left: -3.4px;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(7);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_8"
+			class="field button nonprintable"
+			style="top: 171.35px;left: -3.4px;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(8);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_9"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(1);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_10"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(2);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_11"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(3);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_12"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(4);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_13"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(5);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_14"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(6);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_15"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(7);"
+		>&gt;</button>
+		<button
+			id="Button.Limited_Feature_16"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(8);"
+		>&gt;</button>
 	</div>
 
 
@@ -891,6 +1085,7 @@
 			style="top: 25px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -899,6 +1094,7 @@
 			style="top: 45px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -907,6 +1103,7 @@
 			style="top: 65px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -915,6 +1112,7 @@
 			style="top: 85px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -923,6 +1121,7 @@
 			style="top: 105px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -931,6 +1130,7 @@
 			style="top: 125px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -939,6 +1139,7 @@
 			style="top: 25px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -947,6 +1148,7 @@
 			style="top: 45px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -955,6 +1157,7 @@
 			style="top: 65px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -963,6 +1166,7 @@
 			style="top: 85px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -971,6 +1175,7 @@
 			style="top: 105px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 		<input
@@ -979,15 +1184,118 @@
 			style="top: 125px;left: 18px;font-size: 12.5px;height: 15px;width: 162px;overflow-x: scroll;visibility: hidden"
 			spellcheck="true"
 			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 
-		<input id="Bonus_Action_1" class="field inputfield" style="top:  25px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Bonus_Action_2" class="field inputfield" style="top:  45px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Bonus_Action_3" class="field inputfield" style="top:  65px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Bonus_Action_4" class="field inputfield" style="top:  85px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Bonus_Action_5" class="field inputfield" style="top: 105px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Bonus_Action_6" class="field inputfield" style="top: 125px;left: 187px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input
+			id="Bonus_Action_1"
+			class="field inputfield"
+			style="top: 25px;left: 187px;font-size: 12.5px;height: 15px;width: 162px"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_2"
+			class="field inputfield"
+			style="top: 45px;left: 187px;font-size: 12.5px;height: 15px;width: 162px"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_3"
+			class="field inputfield"
+			style="top: 65px;left: 187px;font-size: 12.5px;height: 15px;width: 162px"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_4"
+			class="field inputfield"
+			style="top: 85px;left: 187px;font-size: 12.5px;height: 15px;width: 162px"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_5"
+			class="field inputfield"
+			style="top: 105px;left: 187px;font-size: 12.5px;height: 15px;width: 162px"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_6"
+			class="field inputfield"
+			style="top: 125px;left: 187px;font-size: 12.5px;height: 15px;width: 162px"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_7"
+			class="field inputfield"
+			style="font-size: 12.5px;height: 15px;width: 162px;visibility: hidden;"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_8"
+			class="field inputfield"
+			style="font-size: 12.5px;height: 15px;width: 162px;visibility: hidden;"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_9"
+			class="field inputfield"
+			style="font-size: 12.5px;height: 15px;width: 162px;visibility: hidden;"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_10"
+			class="field inputfield"
+			style="font-size: 12.5px;height: 15px;width: 162px;visibility: hidden;"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_11"
+			class="field inputfield"
+			style="font-size: 12.5px;height: 15px;width: 162px;visibility: hidden;"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Bonus_Action_12"
+			class="field inputfield"
+			style="font-size: 12.5px;height: 15px;width: 162px;visibility: hidden;"
+			spellcheck="true"
+			type="text"
+			onfocus="if (this.value.trim() == '') {this.value = '';}"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
 
 		<input id="Reaction_1" class="field inputfield" style="top:  25px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
 		<input id="Reaction_2" class="field inputfield" style="top:  45px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
@@ -996,26 +1304,224 @@
 		<input id="Reaction_5" class="field inputfield" style="top: 105px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
 		<input id="Reaction_6" class="field inputfield" style="top: 125px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
 
-		<button id="Button.Action_1" class="field button" style="top: 28.5px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Action_2" class="field button" style="top: 48.5px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Action_3" class="field button" style="top: 68.5px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Action_4" class="field button" style="top: 88.5px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Action_5" class="field button" style="top: 108.5px;left: -3.4px;line-height: 4px;">&gt;</button>
-		<button id="Button.Action_6" class="field button" style="top: 128.5px;left: -3.4px;line-height: 4px;">&gt;</button>
+		<button
+			id="Button.Action_1"
+			class="field button nonprintable"
+			style="top:  28.5px;left: -3.4px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 1)"
+		>&gt;</button>
+		<button
+			id="Button.Action_2"
+			class="field button nonprintable"
+			style="top:  48.5px;left: -3.4px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 2)"
+		>&gt;</button>
+		<button
+			id="Button.Action_3"
+			class="field button nonprintable"
+			style="top:  68.5px;left: -3.4px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 3)"
+		>&gt;</button>
+		<button
+			id="Button.Action_4"
+			class="field button nonprintable"
+			style="top:  88.5px;left: -3.4px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 4)"
+		>&gt;</button>
+		<button
+			id="Button.Action_5"
+			class="field button nonprintable"
+			style="top: 108.5px;left: -3.4px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 5)"
+		>&gt;</button>
+		<button
+			id="Button.Action_6"
+			class="field button nonprintable"
+			style="top: 128.5px;left: -3.4px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 6)"
+		>&gt;</button>
+		<button
+			id="Button.Action_7"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 7)"
+		>&gt;</button>
+		<button
+			id="Button.Action_8"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 8)"
+		>&gt;</button>
+		<button
+			id="Button.Action_9"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 9)"
+		>&gt;</button>
+		<button
+			id="Button.Action_10"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 10)"
+		>&gt;</button>
+		<button
+			id="Button.Action_11"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 11)"
+		>&gt;</button>
+		<button
+			id="Button.Action_12"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Action', 12)"
+		>&gt;</button>
 
-		<button id="Button.Bonus_Action_1" class="field button" style="top: 28.5px;left: 342px;line-height: 4px;">&lt;</button>
-		<button id="Button.Bonus_Action_2" class="field button" style="top: 48.5px;left: 342px;line-height: 4px;">&lt;</button>
-		<button id="Button.Bonus_Action_3" class="field button" style="top: 68.5px;left: 342px;line-height: 4px;">&lt;</button>
-		<button id="Button.Bonus_Action_4" class="field button" style="top: 88.5px;left: 342px;line-height: 4px;">&lt;</button>
-		<button id="Button.Bonus_Action_5" class="field button" style="top: 108.5px;left: 342px;line-height: 4px;">&lt;</button>
-		<button id="Button.Bonus_Action_6" class="field button" style="top: 128.5px;left: 342px;line-height: 4px;">&lt;</button>
+		<button
+			id="Button.Bonus_Action_1"
+			class="field button nonprintable"
+			style="top:  28.5px;left: 342px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 1)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_2"
+			class="field button nonprintable"
+			style="top:  48.5px;left: 342px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 2)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_3"
+			class="field button nonprintable"
+			style="top:  68.5px;left: 342px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 3)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_4"
+			class="field button nonprintable"
+			style="top:  88.5px;left: 342px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 4)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_5"
+			class="field button nonprintable"
+			style="top: 108.5px;left: 342px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 5)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_6"
+			class="field button nonprintable"
+			style="top: 128.5px;left: 342px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 6)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_7"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 7)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_8"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 8)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_9"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 9)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_10"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 10)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_11"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 11)"
+		>&lt;</button>
+		<button
+			id="Button.Bonus_Action_12"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Bonus Action', 12)"
+		>&lt;</button>
 
-		<button id="Button.Reaction_1" class="field button" style="top: 28.5px;left: 532px;line-height: 4px;">&lt;</button>
-		<button id="Button.Reaction_2" class="field button" style="top: 48.5px;left: 532px;line-height: 4px;">&lt;</button>
-		<button id="Button.Reaction_3" class="field button" style="top: 68.5px;left: 532px;line-height: 4px;">&lt;</button>
-		<button id="Button.Reaction_4" class="field button" style="top: 88.5px;left: 532px;line-height: 4px;">&lt;</button>
-		<button id="Button.Reaction_5" class="field button" style="top: 108.5px;left: 532px;line-height: 4px;">&lt;</button>
-		<button id="Button.Reaction_6" class="field button" style="top: 128.5px;left: 532px;line-height: 4px;">&lt;</button>
+		<button
+			id="Button.Reaction_1"
+			class="field button nonprintable"
+			style="top: 28.5px;left: 532px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 1)"
+		>&lt;</button>
+		<button
+			id="Button.Reaction_2"
+			class="field button nonprintable"
+			style="top: 48.5px;left: 532px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 2)"
+		>&lt;</button>
+		<button
+			id="Button.Reaction_3"
+			class="field button nonprintable"
+			style="top: 68.5px;left: 532px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 3)"
+		>&lt;</button>
+		<button
+			id="Button.Reaction_4"
+			class="field button nonprintable"
+			style="top: 88.5px;left: 532px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 4)"
+		>&lt;</button>
+		<button
+			id="Button.Reaction_5"
+			class="field button nonprintable"
+			style="top: 108.5px;left: 532px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 5)"
+		>&lt;</button>
+		<button
+			id="Button.Reaction_6"
+			class="field button nonprintable"
+			style="top: 128.5px;left: 532px;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 6)"
+		>&lt;</button>
+		<button
+			id="Button.Reaction_7"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 7)"
+		>&lt;</button>
+		<button
+			id="Button.Reaction_8"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 8)"
+		>&lt;</button>
+		<button
+			id="Button.Reaction_9"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 9)"
+		>&lt;</button>
+		<button
+			id="Button.Reaction_10"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 10)
+		">&lt;</button>
+		<button
+			id="Button.Reaction_11"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 11)
+		">&lt;</button>
+		<button
+			id="Button.Reaction_12"
+			class="field button nonprintable"
+			style="visibility: hidden;line-height: 4px;"
+			onclick="MakeActionMenu_ActionOptions(null, 'Reaction', 12)
+		">&lt;</button>
 	</div>
 
 
@@ -2281,6 +2787,8 @@
 					theAmount.value = Number(theAmount.value) + 1;
 					current.value = Number(current.value) + 1;
 				}
+				theAmount.dispatchEvent(new Event('change'));
+				current.dispatchEvent(new Event('change'));
 				let maxAmount = document.getElementById(prefix + 'Display.MaxAmount')
 				event.target.name = adapter_helper_convert_id_to_fieldname(element.id);
 				if (
@@ -2938,7 +3446,9 @@
 							event.target.name = 'Attack.' + String(i) + '.To Hit';
 							CalcAttackDmgHit();
 							if (event.value !== undefined) {
-								document.getElementById('Attack.' + String(i) + '.To_Hit').value = event.value;
+								let toHitElement = document.getElementById('Attack.' + String(i) + '.To_Hit');
+								toHitElement.value = event.value;
+								toHitElement.dispatchEvent(new Event('change'));
 							}
 						}
 					);
@@ -2956,7 +3466,7 @@
 	<div style="visibility:hidden">
 		<div id="Passive_Perception_Bonus" class="field"></div>
 		<div id="Init_Bonus" class="field"></div>
-		<div id="MoreProficiencies" class="field"></div>
+		<div id="MoreProficiencies" class="field" value=""></div>
 		<input id="Remarkable_Athlete" class="field inputfield" type="checkbox"/>
 		<input id="Jack_of_All_Trades" class="field inputfield" type="checkbox"/>
 		<div id="Proficiency_Bonus_Dice" class="field"></div>

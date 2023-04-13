@@ -893,7 +893,7 @@ function SetSpellBluetext(aClass, type, newValue) {
 }
 
 //change the icon of the checkbox based on the value of this field (field validation)
-function SetSpellCheckbox() {
+async function SetSpellCheckbox() {
 	var type = event.target.name.indexOf("checkbox") !== -1 ? "checkbox" : "check";
 
 	if (type === "check") {
@@ -957,7 +957,7 @@ function SetSpellCheckbox() {
 		}
 	} else if (type === "checkbox") {
 		if (event.modifier || event.shift) { //if Shift/Ctrl/Cmd was pressed while clicking
-			MakeSpellLineMenu_SpellLineOptions();
+			await MakeSpellLineMenu_SpellLineOptions();
 		} else {
 			var theCheck = event.target.name.replace("checkbox", "check");
 			switch(What(theCheck).toLowerCase()) {
@@ -968,7 +968,7 @@ function SetSpellCheckbox() {
 				Value(theCheck, "checkedbox");
 				break;
 			 default :
-				MakeSpellLineMenu_SpellLineOptions();
+				await MakeSpellLineMenu_SpellLineOptions();
 			}
 		}
 	}
@@ -1171,7 +1171,7 @@ function CreateSpellObject(inputArray) {
 }
 
 // Find the spell that was typed in the list of the drop-down and select the right one
-function manualInputToSpellObj(dialog, id) {
+async function manualInputToSpellObj(dialog, id) {
 	var aResult = dialog.store()[id];
 	var idPrime = id.substr(0, 2);
 	var idIdx = Number(id.substr(2)) - 1;
@@ -1220,7 +1220,7 @@ function manualInputToSpellObj(dialog, id) {
 		if (partialMatch.names.length) {
 			var noSelect = "None (clear the drop-down)";
 			partialMatch.names.push(noSelect);
-			var ask = AskUserOptions("Select the spell", "The text you entered is a (partial) match for the following spells that the drop-down box contains." + (partialMatch.names.length === 2 ? acroDumb : ""), partialMatch.names, "radio", true);
+			var ask = await AskUserOptions("Select the spell", "The text you entered is a (partial) match for the following spells that the drop-down box contains." + (partialMatch.names.length === 2 ? acroDumb : ""), partialMatch.names, "radio", true);
 			if (partialMatch.refKeys[ask]) {
 				var askKey = partialMatch.refKeys[ask];
 				fndResult = listObj[2][askKey];
@@ -1250,7 +1250,7 @@ function manualInputToSpellObj(dialog, id) {
 }
 
 // Show a dialog with the spell's description
-function showSpellDescriptionDialog(fSpell, aClass, fullDescr, sourceStr) {
+async function showSpellDescriptionDialog(fSpell, aClass, fullDescr, sourceStr) {
 	if ((!fullDescr || !sourceStr) && fSpell) {
 		var aSpell = GetSpellObject(fSpell, aClass, false, true, true);
 		var fullDescr = aSpell.tooltip;
@@ -1264,7 +1264,7 @@ function showSpellDescriptionDialog(fSpell, aClass, fullDescr, sourceStr) {
 			fullDescr += sourceStr;
 		}
 	}
-	ShowDialog("Full spell description", fullDescr);
+	await ShowDialog("Full spell description", fullDescr);
 }
 
 // Function to add a found spell to the right location in the same dialog
@@ -2108,11 +2108,11 @@ function DefineSpellSheetDialogs(force, formHeight) {
 			});
 		},
 
-		bLoS : function(dialog) {
+		bLoS : async function(dialog) {
 			// Show a dialog with the spell's full description
 			var oResult = dialog.store();
 			var fSpell = spDias.fnFindSpell(oResult["AlLo"], this.listAl);
-			showSpellDescriptionDialog(fSpell, this.curCast);
+			await showSpellDescriptionDialog(fSpell, this.curCast);
 		},
 
 		bLoA : function (dialog) {
@@ -2335,11 +2335,11 @@ function DefineSpellSheetDialogs(force, formHeight) {
 			});
 		},
 
-		bLoS : function(dialog) {
+		bLoS : async function(dialog) {
 			// Show a dialog with the spell's full description
 			var oResult = dialog.store();
 			var fSpell = spDias.fnFindSpell(oResult["SpLo"], this.listSp);
-			showSpellDescriptionDialog(fSpell, this.curCast);
+			await showSpellDescriptionDialog(fSpell, this.curCast);
 		},
 
 		bLoA : function (dialog) {
@@ -2554,11 +2554,11 @@ function DefineSpellSheetDialogs(force, formHeight) {
 			});
 		},
 
-		bLoS : function(dialog) {
+		bLoS : async function(dialog) {
 			// Show a dialog with the spell's full description
 			var oResult = dialog.store();
 			var fSpell = spDias.fnFindSpell(oResult["SpLo"], this.listSp);
-			showSpellDescriptionDialog(fSpell, this.curCast);
+			await showSpellDescriptionDialog(fSpell, this.curCast);
 		},
 
 		bLoA : function (dialog) {
@@ -2757,8 +2757,8 @@ function DefineSpellSheetDialogs(force, formHeight) {
 					eval("spDias[" + diaName + "][" + boxID + "] = function (dialog) { this.search(dialog, '" + boxID + "'); };");
 				} else {
 					var doThisInFunction = function(thisID) {
-						spDias[diaName][thisID] = function(dialog) {
-							this.search(dialog, id = thisID);
+						spDias[diaName][thisID] = async function(dialog) {
+							await this.search(dialog, id = thisID);
 						}
 					}(boxID);
 				}
@@ -3744,7 +3744,7 @@ function MakeSpellMenu() {
 };
 
 //create the spell menu and do something with the menu and its results
-function MakeSpellMenu_SpellOptions(MenuSelection) {
+async function MakeSpellMenu_SpellOptions(MenuSelection) {
 	if (!MenuSelection) {
 		MakeSpellMenu();
 		//now call the menu
@@ -3795,7 +3795,7 @@ function MakeSpellMenu_SpellOptions(MenuSelection) {
 		DoTemplate("SSmore", "Remove");
 		break;
 	 case "source" :
-		resourceDecisionDialog();
+		await resourceDecisionDialog();
 		break;
 	 case "slots" :
 		if (MenuSelection[3] != "true") { //it wasn't marked, so something is about the change
@@ -3837,7 +3837,7 @@ function MakeSpellMenu_SpellOptions(MenuSelection) {
 		break;
 	 case "showcalcs" :
 		var sSpellEvals = StringEvals(["spellStr", "spellAtkStr"]);
-		if (sSpellEvals) ShowDialog("Things Affecting the Spell Automation", sSpellEvals);
+		if (sSpellEvals) await ShowDialog("Things Affecting the Spell Automation", sSpellEvals);
 		break;
 	};
 };
@@ -4115,7 +4115,7 @@ function findNextHeaderDivider(prefix, type) {
 }
 
 //make a menu for each spell line and do something with the results
-function MakeSpellLineMenu_SpellLineOptions() {
+async function MakeSpellLineMenu_SpellLineOptions() {
 	var SSmaxLine = function(inputPrefix) {
 		return inputPrefix.indexOf(".SSfront.") !== -1 ? FieldNumbers.spells[0] : FieldNumbers.spells[1];
 	}
@@ -4300,7 +4300,7 @@ function MakeSpellLineMenu_SpellLineOptions() {
 	switch (MenuSelection[0]) {
 	 case "popup" :
 		var sourceStr = Who(base.replace("checkbox", "book"));
-		showSpellDescriptionDialog(false, false, fullDescr, sourceStr);
+		await showSpellDescriptionDialog(false, false, fullDescr, sourceStr);
 		break;
 	 case "move up" :
 		thermoTxt = thermoM("Moving the spell up one row...", false);
@@ -5090,9 +5090,9 @@ function MakePreparedMenu_PreparedOptions(target) {
 }
 
 //revamp the whole sheet to become a "Complete Spell Sheet"
-function ChangeToCompleteSpellSheet(thisClass, FAQpath) {
+async function ChangeToCompleteSpellSheet(thisClass, FAQpath) {
 	if (minVer) return;
-	ResetAll(true, true);
+	await ResetAll(true, true);
 	thisClass = thisClass ? thisClass : "cleric";
 	tDoc.getTemplate("SSfront").spawn(0, true, false);
 	tDoc.deletePages({nStart: 1, nEnd: tDoc.numPages - 1});
@@ -5207,7 +5207,7 @@ function CreateBkmrksCompleteSpellSheet() {
 			}
 		},
 		"FAQ" : {
-			cExpr : "getFAQ();"
+			cExpr : "await getFAQ();"
 		},
 		"Get Latest Version" : {
 			cName : "Get Latest Version (current: v" + semVers + ")",

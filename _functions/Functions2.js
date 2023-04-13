@@ -157,7 +157,7 @@ function setCurrentCompRace(prefix, type, found) {
 }
 
 //add a creature to the companion page
-function ApplyCompRace(newRace, prefix, sCompType) {
+async function ApplyCompRace(newRace, prefix, sCompType) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
 	var bIsRaceFld = event.target && event.target.name && event.target.name.indexOf("Comp.Race") !== -1;
 	if (bIsRaceFld && newRace.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
@@ -184,7 +184,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		for (var c = 0; c < clearSubmitNames.length; c++) AddTooltip(clearSubmitNames[c], undefined, "");
 	}
 
-	var undoCreaturePresistents = function(prefix, objCrea) {
+	var undoCreaturePresistents = async function(prefix, objCrea) {
 		// remove special companion type
 		ApplyCompanionType(false, prefix); // also empties Companion.Remember field
 		// undo calcChanges (just calcChanges.hp)
@@ -199,7 +199,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		aHPsets[3] = "nothing";
 		AddTooltip(sHPfld, undefined, aHPsets.join());
 		// execute the function for level-dependent features and doing the removeeval
-		UpdateCompLevelFeatures(prefix, objCrea, strRaceEntry, 0);
+		await UpdateCompLevelFeatures(prefix, objCrea, strRaceEntry, 0);
 		// run callbacks
 		if (objCrea.typeFound === "creature") RunCreatureCallback(prefix, "creature", false);
 	}
@@ -215,7 +215,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 	var oldCrea = CurrentCompRace[prefix];
 	if (newRace === "") {
 		thermoTxt = thermoM("Resetting the companion page...", false); //change the progress dialog text
-		undoCreaturePresistents(prefix, oldCrea);
+		await undoCreaturePresistents(prefix, oldCrea);
 		CurrentCompRace[prefix] = {}; //reset the global variable to nothing
 		thermoM(1/3); //increment the progress dialog's progress
 		tDoc.resetForm(compFields); //reset all the fields
@@ -241,7 +241,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 	}
 
 	// Undo things from a previous race, if any
-	undoCreaturePresistents(prefix, oldCrea);
+	await undoCreaturePresistents(prefix, oldCrea);
 
 	// save the companion type
 	if (sCompType && CompanionList[sCompType]) {
@@ -268,7 +268,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		thermoM(1/11); //increment the progress dialog's progress
 
 		//set race's size
-		SetCreatureSize(prefix, strRaceEntryCap, aCrea.size);
+		await SetCreatureSize(prefix, strRaceEntryCap, aCrea.size);
 
 		//set race's type
 		Value(prefix + "Comp.Desc.MonsterType", "Humanoid");
@@ -485,7 +485,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		if (aCrea.header) Value(prefix + "Comp.Type", aCrea.header);
 
 		//add the size
-		SetCreatureSize(prefix, strRaceEntryCap, aCrea.size);
+		await SetCreatureSize(prefix, strRaceEntryCap, aCrea.size);
 
 		//set race's type
 		var sCompExplStr = oComp ? ", a special companion (" + oComp.name.toLowerCase() + "), " : "";
@@ -493,8 +493,8 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 			"Select creature type for the " + strRaceEntry + " on page " + iPageNo, // title
 			"The " + strRaceEntry + sCompExplStr + " on page " + iPageNo + " can be one of multiple creature types. It is up to you to choose which type will now be input in the dropdown on the companion page." // description
 		]
-		var sCreaType = isArray(aCrea.type) ? AskUserOptions(aCreaTypeDialogTxt[0], aCreaTypeDialogTxt[1], aCrea.type, "radio", true) : aCrea.type;
-		var sCreaSubtype = aCrea.subtype ? " (" + (isArray(aCrea.subtype) ? AskUserOptions(aCreaTypeDialogTxt[0].replace("type", "subtype"), aCreaTypeDialogTxt[1].replace(/type/ig, "subtype"), aCrea.subtype, "radio", true) : aCrea.subtype) + ")" : "";
+		var sCreaType = isArray(aCrea.type) ? await AskUserOptions(aCreaTypeDialogTxt[0], aCreaTypeDialogTxt[1], aCrea.type, "radio", true) : aCrea.type;
+		var sCreaSubtype = aCrea.subtype ? " (" + (isArray(aCrea.subtype) ? await AskUserOptions(aCreaTypeDialogTxt[0].replace("type", "subtype"), aCreaTypeDialogTxt[1].replace(/type/ig, "subtype"), aCrea.subtype, "radio", true) : aCrea.subtype) + ")" : "";
 		Value(prefix + "Comp.Desc.MonsterType", sCreaType + sCreaSubtype);
 
 		//set senses
@@ -615,7 +615,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		thermoM(9/10); //increment the progress dialog's progress
 
 		// Do the level-dependent features, as well as adding the features, traits, actions, and executing the 'eval'
-		UpdateCompLevelFeatures(prefix, aCrea, strRaceEntry);
+		await UpdateCompLevelFeatures(prefix, aCrea, strRaceEntry);
 
 		// Run callback functions, if any are present
 		RunCreatureCallback(prefix, "creature", true);
@@ -629,7 +629,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 }
 
 // Make menu for the button on the companion page and do something with the result
-function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
+async function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 	if (!prefix) prefix = getTemplPre(event.target.name, "AScomp", true);
 	var aVisLayers = eval_ish(What(prefix + "Companion.Layers.Remember"));
 	var creaCalcStr = StringEvals("creaStr");
@@ -820,7 +820,7 @@ function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 			var sRaceName = MenuSelection[3] ? MenuSelection[3].capitalize() : CreatureList[MenuSelection[4]].name;
 		case "change" :
 			if (MenuSelection[1] === "change") var sRaceName = What(prefix + "Comp.Race");
-			ApplyCompRace(sRaceName, prefix, MenuSelection[2]);
+			await ApplyCompRace(sRaceName, prefix, MenuSelection[2]);
 			break;
 		case "reset_page":
 			thermoTxt = thermoM("Resetting the companion page...", false); // Change the progress bar text
@@ -853,7 +853,7 @@ function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 			ShowCompanionLayer(prefix);
 			break;
 		case "showcalcs" :
-			ShowDialog("Things Affecting the Companion Automation", creaCalcStr);
+			await ShowDialog("Things Affecting the Companion Automation", creaCalcStr);
 			break;
 	}
 	thermoM(thermoTxt, true); // Stop progress bar
@@ -917,7 +917,7 @@ function SetCompanionListHeading(bAddRemove, prefix, sCompType, sFld) {
 }
 
 // do the eval for a creature
-function ApplyCreatureEval(prefix, objEval, arrLvl, sType, sName) {
+async function ApplyCreatureEval(prefix, objEval, arrLvl, sType, sName) {
 	if (!objEval[sType] || typeof objEval[sType] != 'function') return;
 	if (arrLvl === undefined) {
 		arrLvl = [
@@ -926,7 +926,7 @@ function ApplyCreatureEval(prefix, objEval, arrLvl, sType, sName) {
 		];
 	}
 	try {
-		return objEval[sType](prefix, arrLvl);
+		return await objEval[sType](prefix, arrLvl);
 	} catch (error) {
 		var iPageNo = tDoc.getField(prefix + 'Comp.Race').page + 1;
 		var eText = "The " + sType + ' for "' + sName + '" on page ' + iPageNo + " produced an error! Please contact the author of the feature to correct this issue and please include this error message:\n " + error;
@@ -938,7 +938,7 @@ function ApplyCreatureEval(prefix, objEval, arrLvl, sType, sName) {
 }
 
 // do the level-dependent features for the companion page
-function UpdateCompLevelFeatures(prefix, objCrea, useName, newLvl) {
+async function UpdateCompLevelFeatures(prefix, objCrea, useName, newLvl) {
 	/* Gather variables */
 	if (!objCrea) objCrea = CurrentCompRace[prefix];
 	if (objCrea.typeFound !== "creature") return; // only do this for CreatureList entries
@@ -1076,7 +1076,7 @@ function UpdateCompLevelFeatures(prefix, objCrea, useName, newLvl) {
 	// Process all the queued evals, in the order they were added
 	// This way, the main `eval` is processed first, but after all the strings are in the right location
 	for (var i = 0; i < arrToEval.length; i++) {
-		ApplyCreatureEval(prefix, arrToEval[i][0], [oldLvl, newLvl], arrToEval[i][1], arrToEval[i][2]);
+		await ApplyCreatureEval(prefix, arrToEval[i][0], [oldLvl, newLvl], arrToEval[i][1], arrToEval[i][2]);
 	}
 }
 
@@ -1122,7 +1122,7 @@ function RunCreatureCallback(sPrefix, sType, bAdd, fOverride, sOverrideNm) {
 
 // set a race on an empty companion page (or add a new page)
 // aCreaAdds is an array with arrays of 3 entries: [sRace (string), bRemoveWholePage (boolean), fCallBack (function)], but the 2nd and 3rd entries are optional
-function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
+async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 	if (!isArray(aCreaAdds)) aCreaAdds = [aCreaAdds];
 	var aChangeMsg = [];
 	var fCallBackError = false;
@@ -1162,7 +1162,7 @@ function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 			}
 			if (!prefix) prefix = DoTemplate('AScomp', 'Add');
 			if (!stopMatch) {
-				ApplyCompRace(sRace, prefix, sCompanionType);
+				await ApplyCompRace(sRace, prefix, sCompanionType);
 				doCallBack(aCallBack, prefix);
 				var sChangeMsgName = '"' + What(prefix + 'Comp.Race') + '"'; // Get it from the page in case the callback changed it.
 				if (sCompanionType) sChangeMsgName = CompanionList[sCompanionType].nameMenu + " " + sChangeMsgName;
@@ -1364,7 +1364,7 @@ function addCompEvals(evalObj, prefix, NameEntity, Add) {
 }
 
 //add a wildshape based on the selection and calculation settings
-function ApplyWildshape() {
+async function ApplyWildshape() {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
 	if (event.target && event.value.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
 
@@ -1463,7 +1463,7 @@ function ApplyWildshape() {
 	thermoM(2/10); //increment the progress dialog's progress
 
 	//add the size
-	SetCreatureSize([prefix, Fld], theCrea.name, theCrea.size);
+	await SetCreatureSize([prefix, Fld], theCrea.name, theCrea.size);
 
 	//set race's type
 	var typeString = theCrea.subtype ? theCrea.type + " (" + theCrea.subtype + ")" : theCrea.type;
@@ -2277,7 +2277,7 @@ function ApplyDCColorScheme(colour, DC) {
 }
 
 // Make menu for the button on each Action line and parse it to Menus.actions
-function MakeActionMenu_ActionOptions(MenuSelection, FldNm, itemNmbr) {
+async function MakeActionMenu_ActionOptions(MenuSelection, FldNm, itemNmbr) {
 	var actionMenu = [];
 	if (!itemNmbr) itemNmbr = parseFloat(event.target.name.slice(-2));
 	if (!FldNm) FldNm = event.target.name.match(/bonus action|reaction|action/i)[0];
@@ -2318,7 +2318,7 @@ function MakeActionMenu_ActionOptions(MenuSelection, FldNm, itemNmbr) {
 		Menus.actions = actionMenu;
 		if (MenuSelection == "justMenu") return;
 	}
-	var MenuSelection = MenuSelection ? MenuSelection : getMenu("actions");
+	var MenuSelection = MenuSelection ? MenuSelection : await getMenu("actions");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] != "action") return;
 
 	// Start progress bar and stop calculations
@@ -2510,11 +2510,10 @@ function MakeLimFeaMenu() {
 };
 
 //call the Limited Feature menu and do something with the results
-function LimFeaOptions() {
-	var MenuSelection = getMenu("limfea");
+async function LimFeaOptions(itemNmbr) {
+	var MenuSelection = await getMenu("limfea");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
-	var itemNmbr = parseFloat(event.target.name.slice(-2));
 	var maxNmbr = FieldNumbers.limfea;
 	var FieldNames = [
 		"Limited Feature ",
@@ -2963,7 +2962,7 @@ function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 };
 
 //Make menu for the options for hiding, adding, and removing templates (i.e. pages)
-function MakePagesMenu() {
+async function MakePagesMenu() {
 	//the functions for adding the base menu elements
 	var menuLvl1 = function (menu, array) {
 		for (var i = 0; i < array.length; i++) {
@@ -3068,7 +3067,7 @@ function MakePagesMenu() {
 	]);
 
 	//add a menu item for the text fields
-	MakeTextMenu_TextOptions("justMenu");
+	await MakeTextMenu_TextOptions("justMenu");
 	pagesMenu.push({
 		cName : "Text field options",
 		oSubMenu : Menus.texts
@@ -3121,13 +3120,13 @@ function MakePagesMenu() {
 		["Make the 7th ability score 'Sanity'", "sanity"]
 	]);
 	//1st page: add the menu for setting hp on the first page
-	MakeHPMenu_HPOptions("justMenu");
+	await MakeHPMenu_HPOptions("justMenu");
 	pageone.oSubMenu.push({
 		cName : "Hit Points",
 		oSubMenu : Menus.hp
 	});
 	//1st page: add the menu for setting skill order
-	MakeSkillsMenu_SkillsOptions("justMenu");
+	await MakeSkillsMenu_SkillsOptions("justMenu");
 	pageone.oSubMenu.push({
 		cName : "Skills",
 		oSubMenu : Menus.skills
@@ -3204,7 +3203,7 @@ function MakePagesMenu() {
 };
 
 //call the pages menu and do something with the results
-function PagesOptions() {
+async function PagesOptions() {
 	var MenuSelection = getMenu("pages");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	switch (MenuSelection[0]) {
@@ -3212,7 +3211,7 @@ function PagesOptions() {
 			Checkbox('Proficiency Bonus Dice', Number(MenuSelection[1]));
 			break;
 		case "playerallrolls":
-			setPlayersMakeAllRolls(Number(MenuSelection[1]));
+			await setPlayersMakeAllRolls(Number(MenuSelection[1]));
 			break;
 		case "bluetextfields":
 			ToggleBlueText();
@@ -3225,16 +3224,16 @@ function PagesOptions() {
 			DoTemplate(MenuSelection[1], MenuSelection[2]);
 			break;
 		case "advleague" :
-			AdventureLeagueOptions(MenuSelection);
+			await AdventureLeagueOptions(MenuSelection);
 			break;
 		case "ssheet" :
-			MakeSpellMenu_SpellOptions(MenuSelection);
+			await MakeSpellMenu_SpellOptions(MenuSelection);
 			break;
 		case "hp" :
-			MakeHPMenu_HPOptions(MenuSelection);
+			await MakeHPMenu_HPOptions(MenuSelection);
 			break;
 		case "skills" :
-			MakeSkillsMenu_SkillsOptions(MenuSelection);
+			await MakeSkillsMenu_SkillsOptions(MenuSelection);
 			break;
 		case "scores" :
 			if (MenuSelection[1] === "dialog") {
@@ -3254,13 +3253,13 @@ function PagesOptions() {
 			LayerVisibilityOptions(false, MenuSelection);
 			break;
 		case "text" :
-			MakeTextMenu_TextOptions(MenuSelection);
+			await MakeTextMenu_TextOptions(MenuSelection);
 			break;
 		case "color" :
 			ColoryOptions(MenuSelection);
 			break;
 		case "unicode" :
-			setUnicodeUse(MenuSelection[2]);
+			await setUnicodeUse(MenuSelection[2]);
 			break;
 	};
 };
@@ -4170,7 +4169,7 @@ function SetHPTooltip(resetHP, onlyComp, aPrefix) {
 	}
 };
 
-function MakeHPMenu_HPOptions(preSelect, prefix) {
+async function MakeHPMenu_HPOptions(preSelect, prefix) {
 	//define some variables
 	prefix = prefix === true ? getTemplPre(event.target.name, "AScomp", true) : prefix ? prefix : "";
 	var theFld = prefix ? prefix + "Comp.Use.HP.Max" : "HP Max";
@@ -4220,13 +4219,13 @@ function MakeHPMenu_HPOptions(preSelect, prefix) {
 	};
 
 	//now call the menu
-	var MenuSelection = preSelect ? preSelect : getMenu("hp");
+	var MenuSelection = preSelect ? preSelect : await getMenu("hp");
 	if (!MenuSelection || MenuSelection[0] === "nothing" || MenuSelection[4] === "marked") return;
 
 	if (MenuSelection[1] === "popup") {
 		var aName = What(prefix ? prefix + "Comp.Desc.Name" : "PC Name");
 		if (!aName) aName = !prefix ? "Main character" : What(prefix + "Comp.Race") ? What(prefix + "Comp.Race") : "Companion on page " + tDoc.getField(prefix + "Comp.Race").page;
-		ShowDialog(aName + " HP calculation", Who(theFld));
+		await ShowDialog(aName + " HP calculation", Who(theFld));
 	} else {
 		theInputs[3] = MenuSelection[1] === "auto" ? MenuSelection[3] : "nothing";
 		if (MenuSelection[2]) {
@@ -4327,7 +4326,7 @@ function UpdateFactionSymbols() {
 
 //make a menu for the text fields and text line options
 //after that, do something with the menu and its results
-function MakeTextMenu_TextOptions(input) {
+async function MakeTextMenu_TextOptions(input) {
 	var isBoxesLines = What("BoxesLinesRemember");
 
 	if (!input || input === "justMenu") {
@@ -4396,7 +4395,7 @@ function MakeTextMenu_TextOptions(input) {
 			ToggleWhiteout(true);
 			break;
 		 case "unicode" :
-			setUnicodeUse(MenuSelection[2]);
+			await setUnicodeUse(MenuSelection[2]);
 			break;
 		};
 	};
@@ -4600,9 +4599,9 @@ function UpdateDropdown(type, weapon) {
 	IsSetDropDowns = false;
 };
 
-function ChangeToCompleteAdvLogSheet(FAQpath) {
+async function ChangeToCompleteAdvLogSheet(FAQpath) {
 	if (minVer) return;
-	ResetAll(true, true, true); // also removes all custom scripts
+	await ResetAll(true, true, true); // also removes all custom scripts
 	tDoc.getField("AdvLog.Class and Levels").setAction("Calculate", "CalcAdvLogInfo();");
 	tDoc.getField("AdvLog.Class and Levels").setAction("Validate", "ValidateAdvLogInfo();");
 	tDoc.getField("AdvLog.Class and Levels").readonly = false;
@@ -4695,7 +4694,7 @@ function CreateBkmrksCompleteAdvLogSheet() {
 					color : ["RGB", 0.9098052978515625, 0.196075439453125, 0.48626708984375]
 				},
 				"Text Options" : {
-					cExpr : "MakeTextMenu_TextOptions();",
+					cExpr : "await MakeTextMenu_TextOptions();",
 					color : ["RGB", 0.8000030517578125, 0.6666717529296875, 0.1137237548828125]
 				},
 				"Flatten" : {
@@ -4714,7 +4713,7 @@ function CreateBkmrksCompleteAdvLogSheet() {
 			}
 		},
 		"FAQ" : {
-			cExpr : "getFAQ();"
+			cExpr : "await getFAQ();"
 		},
 		"Get Latest Version" : {
 			cName : "Get Latest Version (current: v" + semVers + ")",
@@ -4732,7 +4731,7 @@ function CreateBkmrksCompleteAdvLogSheet() {
 }
 
 //a function to change the sorting of the skills
-function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
+async function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
 	var sWho = Who("Text.SkillsNames");
 	var sList = Who("Acr Prof").replace(/^.*(\n|\r)*/, "");
 	var remAth = tDoc.getField("Remarkable Athlete").isBoxChecked(0);
@@ -4808,7 +4807,7 @@ function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
 			Checkbox('Remarkable Athlete', !remAth);
 			break;
 		case "dialog":
-			ShowDialog("Skill proficiency origins and options", sList);
+			await ShowDialog("Skill proficiency origins and options", sList);
 			break;
 		case "alphabeta":
 		case "abilities":
@@ -5996,7 +5995,7 @@ function SetOffHandAction() {
 };
 
 //a way to show a very long piece of text without the dialog overflowing the screen
-function ShowDialog(hdr, strng) {
+async function ShowDialog(hdr, strng) {
 	if (strng === "sources") { // ShowDialog("List of Sources, sorted by abbreviation", "sources");
 		strng = "";
 		var srcRef = {};
@@ -6088,7 +6087,7 @@ function ShowDialog(hdr, strng) {
 			}]
 		}
 	};
-	app.execDialog(ShowString_dialog);
+	await app.execDialog(ShowString_dialog);
 };
 
 //calculate the mod for the Dex field in the initiative section (field calculation)
@@ -6509,7 +6508,7 @@ function processActions(AddRemove, srcNm, itemArr, itemNm) {
 // a way to pass an array of tools to be processed by the SetProf function
 // [["Musical instrument", 3], ["Thieves' tools", "Dex"]]
 // "Land vehicles"
-function processTools(AddRemove, srcNm, itemArr) {
+async function processTools(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	if (!isArray(itemArr) || (itemArr.length === 2 && !isArray(itemArr[0]) && !isArray(itemArr[1]) && (!isNaN(itemArr[1]) || AbilityScores.fields[itemArr[1].substr(0,3).toLowerCase()]))) {
 		itemArr = [itemArr];
@@ -6523,13 +6522,13 @@ function processTools(AddRemove, srcNm, itemArr) {
 			var prof = subj;
 			var extra = false;
 		};
-		SetProf("tool", AddRemove, prof, srcNm, extra);
+		await SetProf("tool", AddRemove, prof, srcNm, extra);
 	};
 };
 
 // a way to pass an array of languages to be processed by the SetProf function
 // ["Elvish", 3] >> elvish and three other languages
-function processLanguages(AddRemove, srcNm, itemArr) {
+async function processLanguages(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	itemArr = isArray(itemArr) ? itemArr : [itemArr];
 	for (var i = 0; i < itemArr.length; i++) {
@@ -6544,13 +6543,13 @@ function processLanguages(AddRemove, srcNm, itemArr) {
 			var prof = "from " + srcNm;
 			var extra = subj;
 		};
-		SetProf("language", AddRemove, prof, srcNm, extra);
+		await SetProf("language", AddRemove, prof, srcNm, extra);
 	};
 };
 
 // a way to pass an array of vision string to be processed by the SetProf function
 // ["Darkvision", 60] >> Darkvision 60 ft
-function processVision(AddRemove, srcNm, itemArr) {
+async function processVision(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	if (!isArray(itemArr) || (itemArr.length === 2 && !isArray(itemArr[0]) && !isArray(itemArr[1]) && (!isNaN(itemArr[1]) || !isNaN(itemArr[1].substr(1))))) {
 		itemArr = [itemArr];
@@ -6567,46 +6566,46 @@ function processVision(AddRemove, srcNm, itemArr) {
 		};
 		if (!profsdone[prof]) { profsdone[prof] = 1; } else { profsdone[prof] += 1; };
 		var useScrNm = srcNm + (profsdone[prof] < 2 ? "" : " (" + profsdone[prof] + ")");
-		SetProf("vision", AddRemove, prof, useScrNm, extra);
+		await SetProf("vision", AddRemove, prof, useScrNm, extra);
 	};
 };
 
 // a way to pass an array of damage resistance strings or arrays to be processed by the SetProf function
 // ["Slashing", "Slash. (nonmagical)"] >> Slash. (nonmagical) or Slashing if another doesn't have the nonmagical clause
-function processResistance(AddRemove, srcNm, itemArr) {
+async function processResistance(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	if (!isArray(itemArr) || (itemArr.length === 2 && !isArray(itemArr[0]) && !isArray(itemArr[1]) && (/\(.*\)|\[.*\]/).test(itemArr[1]))) {
 		itemArr = [itemArr];
 	};
 	for (var i = 0; i < itemArr.length; i++) {
 		var theDmgres = isArray(itemArr[i]) ? itemArr[i] : [itemArr[i], false];
-		SetProf("resistance", AddRemove, theDmgres[0], srcNm, theDmgres[1]);
+		await SetProf("resistance", AddRemove, theDmgres[0], srcNm, theDmgres[1]);
 	}
 };
 
 // a way to pass an array of save proficiency strings to be processed by the SetProf function
 // ["Str", "Dex"]
-function processSaves(AddRemove, srcNm, itemArr) {
+async function processSaves(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	if (!isArray(itemArr)) itemArr = [itemArr];
 	for (var i = 0; i < itemArr.length; i++) {
-		SetProf("save", AddRemove, itemArr[i], srcNm);
+		await SetProf("save", AddRemove, itemArr[i], srcNm);
 	}
 };
 // a way to pass an array of advantage/disadvantage giving arrays strings to be processed by the SetProf function
 // ["Str", true] to give advantage on Strenght saves
 // ["Init", false]  to give disadvantage on Initiative checks
-function processAdvantages(AddRemove, srcNm, itemArr) {
+async function processAdvantages(AddRemove, srcNm, itemArr) {
 	if (!itemArr || !isArray(itemArr)) return;
 	if (itemArr.length == 2 && !isArray(itemArr[0])) itemArr = [itemArr];
 	for (var i = 0; i < itemArr.length; i++) {
-		SetProf("advantage", AddRemove, itemArr[i], srcNm);
+		await SetProf("advantage", AddRemove, itemArr[i], srcNm);
 	}
 };
 
 // a way to pass an array of skill proficiency strings to be processed by the SetProf function
 // ["Persuasion", "full"]
-function processSkills(AddRemove, srcNm, itemArr, descrTxt) {
+async function processSkills(AddRemove, srcNm, itemArr, descrTxt) {
 	// add or remove the descrTxt
 	var setDescr = false;
 	if (!AddRemove) {
@@ -6639,7 +6638,7 @@ function processSkills(AddRemove, srcNm, itemArr, descrTxt) {
 			aSkill = getSkillAbbr(aSkill.substring(0, 3));
 			if (!aSkill) continue; // skill not found, so do the next one
 		}
-		SetProf("skill", AddRemove, aSkill, srcNm, sExp);
+		await SetProf("skill", AddRemove, aSkill, srcNm, sExp);
 		if (setDescr) {
 			var tSkill = SkillsList.names[SkillsList.abbreviations.indexOf(aSkill)];
 			var eSkill = !sExp && !(/full|increment|only/i).test(sExp) ? "" : (/full/i).test(sExp) ? " expertise" : (/increment/i).test(sExp) ? " (expertise if already proficient)" : " expertise (only if already proficient)";
@@ -6679,7 +6678,7 @@ function setSkillTooltips(noPopUp) {
 	AddTooltip("SkillsClick", "Click here to change the order of the skills. You can select either alphabetic order or ordered by ability score." + (tooltipTxt ? "\n\n" + tooltipTxt : ""));
 }
 // manual trigger for clicking the skill proficiency/expertise (MouseUp) on the 1st page
-function applySkillClick(theSkill, isExp) {
+async function applySkillClick(theSkill, isExp) {
 	if (SkillsList.abbreviations.indexOf(theSkill) == -1) return;
 	var isCheck = event.target.isBoxChecked(0) ? true : false;
 	if (Who('Text.SkillsNames') !== 'alphabeta') {
@@ -6691,7 +6690,7 @@ function applySkillClick(theSkill, isExp) {
 	var alreadyProf = isCheck && CurrentProfs.skill[theSkill];
 	if ((!isExp && alreadyProf) || (isExp && alreadyProf && CurrentProfs.skill[theSkill + " Prof"])) return;
 	// apply the manual skill proficiency changes
-	SetProf("skill", isCheck, theSkill, "manualClick", setExp);
+	await SetProf("skill", isCheck, theSkill, "manualClick", setExp);
 	// if disabling manually, but set to enabled by the CurrentProfs variable, do an extra check to make sure it is manually disabled
 	if (!isCheck && event.target.isBoxChecked(0)) {
 		event.target.checkThisBox(0, false);
@@ -6700,12 +6699,12 @@ function applySkillClick(theSkill, isExp) {
 
 // a way to pass an array of weapon proficiency booleans to be processed by the SetProf function
 // [true, true, ["dagger", "sling"]] >> [simple, martial, [other array]]
-function processWeaponProfs(AddRemove, srcNm, itemArr) {
+async function processWeaponProfs(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	var weaponTypes = ["simple", "martial", "other"]
 	for (var i = 0; i < itemArr.length; i++) {
 		if (itemArr[i] && weaponTypes[i]) {
-			SetProf("weapon", AddRemove, weaponTypes[i], srcNm,
+			await SetProf("weapon", AddRemove, weaponTypes[i], srcNm,
 				i != 2 ? false : isArray(itemArr[i]) && itemArr[i].length ? itemArr[i] : itemArr[i] ? [itemArr[i]] : false
 			);
 		}
@@ -6713,15 +6712,15 @@ function processWeaponProfs(AddRemove, srcNm, itemArr) {
 };
 // a way to pass an array of armour proficiency booleans to be processed by the SetProf function
 // [true, true, false, false] >> [light, medium, heavy, shield]
-function processArmourProfs(AddRemove, srcNm, itemArr) {
+async function processArmourProfs(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	var armorTypes = ["light", "medium", "heavy", "shields"]
 	for (var i = 0; i < itemArr.length; i++) {
-		if (itemArr[i] && armorTypes[i]) SetProf("armour", AddRemove, armorTypes[i], srcNm);
+		if (itemArr[i] && armorTypes[i]) await SetProf("armour", AddRemove, armorTypes[i], srcNm);
 	}
 };
 // set the armour/weapon proficiency manually (field action)
-function setCheckboxProfsManual(theField) {
+async function setCheckboxProfsManual(theField) {
 	calcStop();
 	var fld = theField ? tDoc.getField(theField) : event.target;
 	var isActive = fld.isBoxChecked(0) === 1;
@@ -6731,10 +6730,10 @@ function setCheckboxProfsManual(theField) {
 	delete CurrentProfs[sort][type+"_manualon"];
 	delete CurrentProfs[sort][type+"_manualoff"];
 	if (normalState != isActive) CurrentProfs[sort][type+"_manual" + (isActive ? "on" : "off")] = true;
-	SetProf(sort, undefined, type, undefined, true);
+	await SetProf(sort, undefined, type, undefined, true);
 }
 // do something with the manually entered 'other' weapon proficiencies (field action)
-function setOtherWeaponProfsManual() {
+async function setOtherWeaponProfsManual() {
 	calcStop();
 	var set = CurrentProfs.weapon;
 	if (!set.otherWea) set.otherWea = { finalProfs : [], finalString : "", finalNamesNotManual : [], finalProfsNotManual : [] };
@@ -6774,20 +6773,20 @@ function setOtherWeaponProfsManual() {
 		delete iSet["Manually added"];
 		didChange = true;
 	}
-	if (didChange) SetProf("weapon", undefined, "other");
+	if (didChange) await SetProf("weapon", undefined, "other");
 }
 
 // A way to set the extra AC lines for magic / miscellaneous
-function processExtraAC(AddRemove, srcNm, itemArr, parentName) {
+async function processExtraAC(AddRemove, srcNm, itemArr, parentName) {
 	if (!itemArr) return;
 	if (!isArray(itemArr)) itemArr = [itemArr];
 	for (var i = 0; i < itemArr.length; i++) {
 		if (!itemArr[i].name) itemArr[i].name = parentName ? parentName : "Undefined";
-		SetProf("specialarmour", AddRemove, itemArr[i], srcNm, i.toString());
+		await SetProf("specialarmour", AddRemove, itemArr[i], srcNm, i.toString());
 	}
 }
 // Function is still present for backwards-compatibility. If 'useMod' == 0, remove
-function AddACMisc(useMod, useName, useText, useStopeval) {
+async function AddACMisc(useMod, useName, useText, useStopeval) {
 	var makeObject = {
 		name : useName,
 		mod : useMod,
@@ -6799,7 +6798,7 @@ function AddACMisc(useMod, useName, useText, useStopeval) {
 	if (!useMod && CurrentProfs.specialarmour[useName + extra]) {
 		makeObject.mod = CurrentProfs.specialarmour[useName + extra].mod;
 	}
-	SetProf("specialarmour", !!useMod, makeObject, useName, extra);
+	await SetProf("specialarmour", !!useMod, makeObject, useName, extra);
 }
 
 // ProfType can be: "armour", "weapon", "save", "savetxt", "resistance", "vision", "speed", "language", or "tool"
@@ -6807,7 +6806,7 @@ function AddACMisc(useMod, useName, useText, useStopeval) {
 // ProfObj is the proficiency that is gained/removed
 // ProfSrce is the name of the thing granting the proficiency
 // What "Extra" is, depends on ProfType
-function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
+async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 	ProfType = ProfType.toLowerCase();
 	var set = CurrentProfs[ProfType];
 	var ProfObjLC = typeof ProfObj == "string" ? clean(ProfObj, false, true).toLowerCase() : false;
@@ -6975,7 +6974,7 @@ function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 		if (ProfType == "weapon") {
 			if ((Extra || isOn != fldState) && Who("Proficiency Weapon Other Description")) {
 				// redo the other weapon proficiencies, as they might have changed now
-				SetProf("weapon", undefined, "other");
+				await SetProf("weapon", undefined, "other");
 				return;
 			} else if (Extra || isOn != fldState) {
 				// recalculate the attacks if the proficiency value changed
@@ -7093,7 +7092,7 @@ function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 						var theI = What(ProfType.capitalize() + " " + i);
 						if (theI) knownOpt.push(theI);
 					};
-					set[uID].choices = AskUserOptions(optType, ProfSrc, optSubj, knownOpt);
+					set[uID].choices = await AskUserOptions(optType, ProfSrc, optSubj, knownOpt);
 				} else if (global.docFrom && global.docFrom.CurrentProfs && global.docFrom.CurrentProfs[ProfType] && global.docFrom.CurrentProfs[ProfType][uID] && global.docFrom.CurrentProfs[ProfType][uID].choices) {
 					if (global.docFrom.CurrentProfs[ProfType][uID].choices.length === optNmbr) set[uID].choices = global.docFrom.CurrentProfs[ProfType][uID].choices;
 				};
@@ -7767,7 +7766,7 @@ function getHighestTotal(nmbrObj, notRound, replaceWalk, extraMods, prefix, with
 
 // open a dialog with a number of lines of choices and return the choices in an array; if knownOpt === "radio", show radio buttons instead, and return the entry selected
 // if notProficiencies is set to true, the optType will serve as the dialog header, and optSrc will serve as the multiline explanatory text
-function AskUserOptions(optType, optSrc, optSubj, knownOpt, notProficiencies, sBottomMsg) {
+async function AskUserOptions(optType, optSrc, optSubj, knownOpt, notProficiencies, sBottomMsg) {
 	if (!IsNotImport) return optSubj;
 	//first make the entry lines
 	var selectionLines = [];
@@ -7988,12 +7987,12 @@ function AskUserOptions(optType, optSrc, optSubj, knownOpt, notProficiencies, sB
 	if (knownOpt !== "radio") { for (var i = 0; i < optSubj.length; i++) {
 		theDialog["sl" + ("0" + i).slice(-2)] = Function("dialog", "this.check(dialog, " + i + ");");
 	}; };
-	app.execDialog(theDialog)
+	await app.execDialog(theDialog)
 	return theDialog.choices;
 };
 
 // Ask user for size options and return the index number; prefix == false (1st page); prefix is string (companion page); prefix is array [prefix, nr] (wild shape page)
-function SetCreatureSize(prefix, sName, aSizes) {
+async function SetCreatureSize(prefix, sName, aSizes) {
 	if (!isArray(aSizes)) aSizes = [aSizes];
 	var sNamePl = sName;
 	if (isArray(sName)) {
@@ -8012,7 +8011,7 @@ function SetCreatureSize(prefix, sName, aSizes) {
 	if (!prefix) sTooltip += "\n\nSelected size category will affect encumbrance on the second page.";
 	var bGoAsk = aSizes.length > 1;
 	if (bGoAsk) {
-		var sAsk = AskUserOptions("Select Size Category for " + sName, sNamePl + " can be multiple size categories. It is up to you to select which the sheet will use.", aOptions, "radio", true);
+		var sAsk = await AskUserOptions("Select Size Category for " + sName, sNamePl + " can be multiple size categories. It is up to you to select which the sheet will use.", aOptions, "radio", true);
 		if (oOptionsRef[sAsk]) {
 			PickDropdown(sFldNm, oOptionsRef[sAsk]);
 		} else {
@@ -8300,7 +8299,7 @@ function setCalcOrder() {
 	};
 };
 
-function MakeFaqMenu_FaqOptions(MenuSelection) {
+async function MakeFaqMenu_FaqOptions(MenuSelection) {
 	if (!MenuSelection || MenuSelection === "justMenu") {
 		var arrMenu = Menus.faq.concat({
 			cName : "-"
@@ -8320,7 +8319,7 @@ function MakeFaqMenu_FaqOptions(MenuSelection) {
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	switch (MenuSelection[0]) {
 		case "faq" :
-			getFAQ(MenuSelection);
+			await getFAQ(MenuSelection);
 			break;
 		case "contact" :
 			contactMpmbMenu(MenuSelection);
@@ -8329,7 +8328,7 @@ function MakeFaqMenu_FaqOptions(MenuSelection) {
 }
 
 // The function called when the FAQ button is pressed
-function getFAQ(input, delay) {
+async function getFAQ(input, delay) {
 	var MenuSelection = input ? input : getMenu("faq");
 	if (!MenuSelection || MenuSelection[0] != "faq") return;
 	switch (MenuSelection[1]) {
@@ -8341,10 +8340,10 @@ function getFAQ(input, delay) {
 			tDoc.exportDataObject({ cName: 'FAQ.pdf', nLaunch: 2 });
 			break;
 		case "ogl" :
-			ShowDialog("Open Gaming License, for use of the SRD", licenseOGL.join("\n\n"));
+			await ShowDialog("Open Gaming License, for use of the SRD", licenseOGL.join("\n\n"));
 			break;
 		case "gplv3" :
-			ShowDialog("GNU License, for the software by MPMB", licenseGPLV3.join("\n\n"));
+			await ShowDialog("GNU License, for the software by MPMB", licenseGPLV3.join("\n\n"));
 			break;
 	}
 };
@@ -8360,7 +8359,7 @@ function makeUnicodeMenu() {
 }
 
 // Do something with the menu
-function setUnicodeUse(enable, force) {
+async function setUnicodeUse(enable, force) {
 	enable = enable != "";
 	var isEnabled = What("UseUnicode") != "";
 	if (isEnabled !== enable || force) {
@@ -8380,7 +8379,7 @@ function setUnicodeUse(enable, force) {
 		UpdateDropdown("tooltips");
 		AbilityScores_Button(true);
 		setSkillTooltips(true);
-		MakeSkillsMenu_SkillsOptions(true, true);
+		await MakeSkillsMenu_SkillsOptions(true, true);
 		SetHPTooltip();
 		AtHigherLevels = "\n   " + toUni("At Higher Levels") + ": ";
 	}

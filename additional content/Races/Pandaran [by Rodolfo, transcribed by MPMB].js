@@ -40,8 +40,8 @@ RaceList["turtle spirit pandaren"] = {
 	improvements : "Pandaren, Servant of the Turtle Spirit: +2 Constitution, +2 Wisdom;",
 	scores : [0, 0, 2, 0, 2, 0],
 	trait : "Pandaren, Servant of the Turtle Spirit (+2 Constitution, +2 Wisdom)\nQuadruped: My speed is 40 ft if I walk on all fours (both hands empty). It costs 15 ft to stand up from this." + (typePF ? "\n" : " ") + "Favored Snack: I have adv. on attack & damage vs. plants.\nHerbivore: Whenever I eat meat, I have to make a DC 10 Con save or take 1d4 poison damage. Once per long rest, I can eat plants to heal 1d4 per level.\nBig Posture: When an ally within 15 ft succeeds on a Dex save that is DC 15 or higher to half the damage for a spell, it instead takes no damage of that spell.",
-	eval : "SetProf('save', true, 'Con', 'Pandaren');",
-	removeeval : "SetProf('save', false, 'Con', 'Pandaren');"
+	eval : "await SetProf('save', true, 'Con', 'Pandaren');",
+	removeeval : "await SetProf('save', false, 'Con', 'Pandaren');"
 };
 
 RaceList["yeti spirit pandaren"] = {
@@ -64,8 +64,8 @@ RaceList["yeti spirit pandaren"] = {
 	improvements : "Pandaren, Servant of the Yeti Spirit: +2 Strength, +2 Constitution;",
 	scores : [2, 0, 2, 0, 0, 0],
 	trait : "Pandaren, Servant of the Yeti Spirit (+2 Strength, +2 Constitution)\nQuadruped: My speed is 40 ft if I walk on all fours (both hands empty). It costs 15 ft to stand up from this." + (typePF ? "\n" : " ") + "Favored Snack: I have adv. on attack & damage vs. plants.\nHerbivore: Whenever I eat meat, I have to make a DC 10 Con save or take 1d4 poison damage. Once per long rest, I can eat plants to heal 1d4 per level.\nBig Posture: When an ally within 15 ft succeeds on a Dex save that is DC 15 or higher to half the damage for a spell, it instead takes no damage of that spell.",
-	eval : "SetProf('save', true, 'Con', 'Pandaren');",
-	removeeval : "SetProf('save', false, 'Con', 'Pandaren');"
+	eval : "await SetProf('save', true, 'Con', 'Pandaren');",
+	removeeval : "await SetProf('save', false, 'Con', 'Pandaren');"
 };
 
 RaceList["serpent spirit pandaren"] = {
@@ -88,8 +88,8 @@ RaceList["serpent spirit pandaren"] = {
 	improvements : "Pandaren, Servant of the Serpent Spirit: +2 Constitution, +2 Intelligence;",
 	scores : [0, 0, 2, 2, 0, 0],
 	trait : "Pandaren, Servant of the Serpent Spirit (+2 " + (typePF ? "Con, +2 Int" : "Constitution, +2 Intelligence") + ")\nQuadruped: My speed is 40 ft if I walk on all fours (both hands empty). It costs 15 ft to stand up from this." + (typePF ? "\n" : " ") + "Favored Snack: I have adv. on attack & damage vs. plants.\nHerbivore: Whenever I eat meat, I have to make a DC 10 Con save or take 1d4 poison damage. Once per long rest, I can eat plants to heal 1d4 per level.\nBig Posture: When an ally within 15 ft succeeds on a Dex save that is DC 15 or higher to half the damage for a spell, it instead takes no damage of that spell.",
-	eval : "SetProf('save', true, 'Con', 'Pandaren');",
-	removeeval : "SetProf('save', false, 'Con', 'Pandaren');"
+	eval : "await SetProf('save', true, 'Con', 'Pandaren');",
+	removeeval : "await SetProf('save', false, 'Con', 'Pandaren');"
 };
 
 RaceList["jaguar spirit pandaren"] = {
@@ -113,8 +113,8 @@ RaceList["jaguar spirit pandaren"] = {
 	improvements : "Pandaren, Servant of the Jaguar Spirit: +2 Dexterity, +2 Constitution;",
 	scores : [0, 2, 2, 0, 0, 0],
 	trait : "Pandaren, Servant of the Jaguar Spirit (+2 " + (typePF ? "Dex, +2 Con" : "Dexterity, +2 Constitution") + ")\nQuadruped: My speed is 40 ft if I walk on all fours (both hands empty). It costs 15 ft to stand up from this." + (typePF ? "\n" : " ") + "Favored Snack: I have adv. on attack & damage vs. plants.\nHerbivore: Whenever I eat meat, I have to make a DC 10 Con save or take 1d4 poison damage. Once per long rest, I can eat plants to heal 1d4 per level.\nBig Posture: When an ally within 15 ft succeeds on a Dex save that is DC 15 or higher to half the damage for a spell, it instead takes no damage of that spell.",
-	eval : "SetProf('save', true, 'Con', 'Pandaren');",
-	removeeval : "SetProf('save', false, 'Con', 'Pandaren');"
+	eval : "await SetProf('save', true, 'Con', 'Pandaren');",
+	removeeval : "await SetProf('save', false, 'Con', 'Pandaren');"
 };
 
 RaceList["fox spirit pandaren"] = {
@@ -138,6 +138,6 @@ RaceList["fox spirit pandaren"] = {
 	improvements : "Pandaren, Servant of the Fox Spirit: +2 Constitution, +2 Charisma;",
 	scores : [0, 0, 2, 0, 0, 2],
 	trait : "Pandaren, Servant of the Fox Spirit (+2 Constitution, +2 Charisma)\nQuadruped: My speed is 40 ft if I walk on all fours (both hands empty). It costs 15 ft to stand up from this." + (typePF ? "\n" : " ") + "Favored Snack: I have adv. on attack & damage vs. plants.\nHerbivore: Whenever I eat meat, I have to make a DC 10 Con save or take 1d4 poison damage. Once per long rest, I can eat plants to heal 1d4 per level.\nBig Posture: When an ally within 15 ft succeeds on a Dex save that is DC 15 or higher to half the damage for a spell, it instead takes no damage of that spell.",
-	eval : "SetProf('save', true, 'Con', 'Pandaren');",
-	removeeval : "SetProf('save', false, 'Con', 'Pandaren');"
+	eval : "await SetProf('save', true, 'Con', 'Pandaren');",
+	removeeval : "await SetProf('save', false, 'Con', 'Pandaren');"
 };

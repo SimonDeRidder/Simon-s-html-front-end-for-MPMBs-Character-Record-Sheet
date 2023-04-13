@@ -15,7 +15,7 @@ function UpdateTooSkillNoEvent() {
 
 
 //functions to call at startup (in the right order)
-function InitializeEverything(noButtons, noVars) {
+async function InitializeEverything(noButtons, noVars) {
 	if (!minVer) Hide("d20warning");
 	calcStop();
 	GetStringifieds(); //populate some variables stored in fields
@@ -30,7 +30,7 @@ function InitializeEverything(noButtons, noVars) {
 	if (!minVer) {
 		SetGearVariables();
 		setListsUnitSystem(false, true);
-		getDynamicFindVariables();
+		await getDynamicFindVariables();
 		UpdateTooSkillNoEvent();
 		SetRichTextFields();
 		MakeAdventureLeagueMenu();

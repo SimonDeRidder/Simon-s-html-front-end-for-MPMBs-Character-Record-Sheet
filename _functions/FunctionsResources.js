@@ -370,7 +370,7 @@ function resourceExclusionSetting(spellSources, noChanges, oldResults) {
 
 //a function that sets the global variable of excluded materials
 //inclA must be the same length as inclA_Names, and exclA must be the same length as exclA_Names
-function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
+async function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 	if (!atOpening && app.viewerVersion < 15) FunctionIsNotAvailable();
 	var isFirstTime = atReset ? atReset : CurrentSources.firstTime;
 	var spellSources = [];
@@ -622,7 +622,7 @@ function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 		bAmm : function (dialog) {resourceSelectionDialog("ammo"); this.updateDefExcl(dialog);},
 		bMag : function (dialog) {resourceSelectionDialog("magic item"); this.updateDefExcl(dialog);},
 		bLin : function (dialog) {if (this.sourceLink) app.launchURL(this.sourceLink, true)},
-		bSrc : function (dialog) { MakeSourceMenu_SourceOptions(); },
+		bSrc : async function (dialog) { await MakeSourceMenu_SourceOptions(); },
 		bMor : function (dialog) {
 			var MenuSelection = getMenu("importscripts");
 			if (MenuSelection !== undefined && MenuSelection[0] !== "nothing") {
@@ -935,7 +935,7 @@ function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 		CurrentSources = eval(remCS);
 	};
 	if (CallDialogue === "scrp") {
-		ImportScriptOptions(selectionDialogue.scrpMenu);
+		await ImportScriptOptions(selectionDialogue.scrpMenu);
 	} else if (CallDialogue === "ok" || forceDDupdate) {
 		// Start progress bar and stop calculations
 		var thermoTxt = thermoM("Applying the changes to the sources...");
@@ -943,7 +943,7 @@ function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 		UpdateDropdown("resources");
 
 		// Change how some things are now recognized by the sheet
-		getDynamicFindVariables();
+		await getDynamicFindVariables();
 
 		// Set the visibility of the Choose Feature and Racial Options button
 		ClassMenuVisibility();
@@ -1352,7 +1352,7 @@ function resourceSelectionDialog(type) {
 			this.exclActive = true;
 			this.inclActive = false;
 		},
-		bSrc : function (dialog) { MakeSourceMenu_SourceOptions(); },
+		bSrc : async function (dialog) { await MakeSourceMenu_SourceOptions(); },
 		description : {
 			name : theName.toUpperCase() + " SOURCE SELECTION DIALOG",
 			elements : [{
@@ -1534,7 +1534,7 @@ function stringSource(obj, verbosity, prefix, suffix) {
 };
 
 // make a menu off all the sources where clicking on them gets you to their linked URL
-function MakeSourceMenu_SourceOptions() {
+async function MakeSourceMenu_SourceOptions() {
 	var SourceMenu = [{
 		cName : "[clicking a source will open a web page]",
 		bEnabled : false
@@ -1635,7 +1635,7 @@ function MakeSourceMenu_SourceOptions() {
 
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	if (MenuSelection[1] === "dialogue") {
-		ShowDialog("List of Sources, sorted by abbreviation", "sources");
+		await ShowDialog("List of Sources, sorted by abbreviation", "sources");
 		return;
 	};
 	var theSrc = abbrObj.lowObj[MenuSelection[1]];

@@ -9,6 +9,7 @@
 // TODO: switch to <select> for all non-customisable dropdowns
 // TODO: figure out what to do with SetThisFldVal
 // TODO: connect thermoM to floating fade-out status message
+// TODO: revamp number formatting (keystroke[12] and format[12])
 
 // Load functions
 
@@ -30,6 +31,9 @@ function initialCalculationEvents() {
 	document.getElementById('Adventuring_Gear_Amount_1').dispatchEvent(new Event('change'));
 	document.getElementById('Adventuring_Gear_Amount_19').dispatchEvent(new Event('change'));
 	document.getElementById('Adventuring_Gear_Amount_37').dispatchEvent(new Event('change'));
+	// trigger ability mods calculation
+	document.getElementById('Cha').dispatchEvent(new Event('change'));
+	// TODO: Str, Dex, Con, Int, Wis, HoS (remoce Dex_Mod trigger after Dex to avoid doubles)
 }
 
 loadScript('_functions/AbilityScores_old.js')

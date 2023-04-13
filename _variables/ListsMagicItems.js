@@ -595,16 +595,16 @@ var Base_MagicItemsList = {
 		magicItemTable : "F",
 		description : "While I wear these boots, my steps make no sound, regardless of the surface I am moving across. I also have advantage on Dexterity (Stealth) checks that rely on moving silently.",
 		descriptionFull : "While you wear these boots, your steps make no sound, regardless of the surface you are moving across. You also have advantage on Dexterity (Stealth) checks that rely on moving silently.",
-		eval : function () {
+		eval : async function () {
 			for (var i = 0; i < CurrentMagicItems.known.length; i++) {
 				if (CurrentMagicItems.known[i].indexOf("cloak of elvenkind") !== -1 && tDoc.getField("Extra.Magic Item Attuned " + (1 + i)).isBoxChecked(0)) {
-					SetProf("advantage", true, ["Stealth", true], "Cloak and Boots of Elvenkind (magic items)");
+					await SetProf("advantage", true, ["Stealth", true], "Cloak and Boots of Elvenkind (magic items)");
 					break;
 				}
 			}
 		},
-		removeeval : function () {
-			SetProf("advantage", false, ["Stealth", true], "Cloak and Boots of Elvenkind (magic items)");
+		removeeval : async function () {
+			await SetProf("advantage", false, ["Stealth", true], "Cloak and Boots of Elvenkind (magic items)");
 		}
 	},
 	"boots of levitation" : { // contributed by AelarTheElfRogue
@@ -985,13 +985,13 @@ var Base_MagicItemsList = {
 		descriptionFull : "While you wear this cloak with its hood up, Wisdom (Perception) checks made to see you have disadvantage, and you have advantage on Dexterity (Stealth) checks made to hide, as the cloak's color shifts to camouflage you. Pulling the hood up or down requires an action.",
 		attunement : true,
 		action : [["action", " (hood up/down)"]],
-		eval : function () {
+		eval : async function () {
 			if (CurrentMagicItems.known.indexOf("boots of elvenkind") !== -1) {
-				SetProf("advantage", true, ["Stealth", true], "Cloak and Boots of Elvenkind (magic items)");
+				await SetProf("advantage", true, ["Stealth", true], "Cloak and Boots of Elvenkind (magic items)");
 			}
 		},
-		removeeval : function () {
-			SetProf("advantage", false, ["Stealth", true], "Cloak and Boots of Elvenkind (magic items)");
+		removeeval : async function () {
+			await SetProf("advantage", false, ["Stealth", true], "Cloak and Boots of Elvenkind (magic items)");
 		}
 	},
 	"cloak of protection" : {

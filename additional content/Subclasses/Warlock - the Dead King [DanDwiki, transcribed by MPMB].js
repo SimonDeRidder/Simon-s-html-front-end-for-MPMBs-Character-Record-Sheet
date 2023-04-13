@@ -92,7 +92,7 @@ AddSubClass("warlock", "the dead king", {
 });
 
 warlock_the_dead_king_functions = {
-	add : function(wlvl) {
+	add : async function(wlvl) {
 		if (wlvl < 6) return;
 		var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 		var prefix = false;
@@ -105,7 +105,7 @@ warlock_the_dead_king_functions = {
 			}
 		}
 		if (!prefix) prefix = DoTemplate('AScomp', 'Add');
-		var skelZomb = AskUserOptions('Select Undead Cohort', (sheetVersion > 12.999 ? 'The Warlock (the Dead King) class feature Undead Cohort offers a choice of undead cohort. Select it here to create a companion page for it. ' : '') + 'You can change the race later, but you will have to do it on the companion page made by this feature. You will not be able to create another companion page that works for this feature, so beware not to remove this companion page!', ['Skeleton', 'Zombie'], 'radio', true);
+		var skelZomb = await AskUserOptions('Select Undead Cohort', (sheetVersion > 12.999 ? 'The Warlock (the Dead King) class feature Undead Cohort offers a choice of undead cohort. Select it here to create a companion page for it. ' : '') + 'You can change the race later, but you will have to do it on the companion page made by this feature. You will not be able to create another companion page that works for this feature, so beware not to remove this companion page!', ['Skeleton', 'Zombie'], 'radio', true);
 		Value(prefix + 'Comp.Race', skelZomb);
 		var theType = tDoc.getField(prefix + 'Comp.Type');
 		theType.readonly = true;

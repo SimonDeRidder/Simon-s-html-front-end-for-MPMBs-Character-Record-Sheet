@@ -1,0 +1,78 @@
+Bluetext*   -   skipped for now
+Character Level
+
+// trigger events on change:
+"Con Mod": Con_Mod_change
+"Dec Bonus": Dec_Bonus_change
+"Dec Exp": Dec_Exp_change
+"Dec Prof": Dec_Prof_change
+"Dex Mod": Dex_Mod_change
+"Extra.Condition 8": Extra_Condition_8_change
+"Extra.Condition 9": Extra_Condition_9_change
+"Extra.Condition 13": Extra_Condition_13_change
+"Extra.Condition 14": Extra_Condition_14_change
+'Heavy Armor': Heavy_Armor_change
+"His Bonus": His_Bonus_change
+"His Exp": His_Exp_change
+"His Prof": His_Prof_change
+"HoS Mod": HoS_Mod_change
+"Init Bonus": Init_Bonus_change
+"Ins Bonus": Ins_Bonus_change
+"Ins Exp": Ins_Exp_change
+"Ins Prof": Ins_Prof_change
+"Int Mod": Int_Mod_change
+"Inti Bonus": Inti_Bonus_change
+"Inti Exp": Inti_Exp_change
+"Inti Prof": Inti_Prof_change
+"Inv Bonus": Inv_Bonus_change
+"Inv Exp": Inv_Exp_change
+"Inv Prof": Inv_Prof_change
+"Jack of All Trades": Jack_of_All_Trades_change
+"Med Bonus": Med_Bonus_change
+"Med Exp": Med_Exp_change
+"Med Prof": Med_Prof_change
+'Medium Armor': Medium_Armor_change
+"Medium Armor Max Mod": Medium_Armor_Max_Mod_change
+"Nat Bonus": Nat_Bonus_change
+"Nat Exp": Nat_Exp_change
+"Nat Prof": Nat_Prof_change
+"Passive Perception": Passive_Perception_change
+"Passive Perception Bonus": Passive_Perception_Bonus_change
+"Perc Bonus": Perc_Bonus_change
+"Perc Exp": Perc_Exp_change
+"Perc Prof": Perc_Prof_change
+"Perf Bonus": Perf_Bonus_change
+"Perf Exp": Perf_Exp_change
+"Perf Prof": Perf_Prof_change
+"Pers Bonus": Pers_Bonus_change
+"Pers Exp": Pers_Exp_change
+"Pers Prof": Pers_Prof_change
+"Proficiency Armor Heavy": Proficiency_Armor_Heavy_change
+"Proficiency Armor Light": Proficiency_Armor_Light_change
+"Proficiency Armor Medium": Proficiency_Armor_Medium_change
+"Proficiency Bonus": Proficiency_Bonus_change
+"Proficiency Bonus Dice": Proficiency_Bonus_Dice_change
+"Proficiency Shields": Proficiency_Shields_change
+"Rel Bonus": Rel_Bonus_change
+"Rel Exp": Rel_Exp_change
+"Rel Prof": Rel_Prof_change
+"Remarkable Athlete": Remarkable_Athlete_change
+"Sle Bonus": Sle_Bonus_change
+"Sle Exp": Sle_Exp_change
+"Sle Prof": Sle_Prof_change
+"Ste Bonus": Ste_Bonus_change
+"Ste Exp": Ste_Exp_change
+"Ste Prof": Ste_Prof_change
+"Str Mod": Str_Mod_change
+"Sur Bonus": Sur_Bonus_change
+"Sur Exp": Sur_Exp_change
+"Sur Prof": Sur_Prof_change
+"Text.SkillsNames": Text_SkillsNames_change
+"Too Bonus": Too_Bonus_change
+"Too Exp": Too_Exp_change
+"Too Prof": Too_Prof_change
+"Wis Mod": Wis_Mod_change
+"BlueText.Attack." + i + ".Damage Bonus": BlueText_Attack_<i:1-5>_Damage_Bonus_change
+"BlueText.Attack." + i + ".Damage Die": BlueText_Attack_<i:1-5>_Damage_Die_change
+"BlueText.Attack." + i + ".To Hit Bonus": BlueText_Attack_<i:1-5>_To_Hit_Bonus_change
+"BlueText.Players Make All Rolls": BlueText_Players_Make_All_Rolls_change

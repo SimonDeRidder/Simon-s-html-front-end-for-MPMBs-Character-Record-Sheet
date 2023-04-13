@@ -1,0 +1,6 @@
+keystroke1(true, true)	-	format1(0, 0, "")			Add_Experience
+keystroke1(true, false)	-	format1(0, '', 'mass')		AC_Armor_Weight
+keystroke1(false, false)								AmmoLeftDisplay.Amount
+format1(0, '', '')										Adventuring_Gear_Weight_Subtotal_Left
+keystroke1(true, false)	-	format2()		Carrying_Capacity_Multiplier (also has Number(value.replace(/,/, '.')))
+

@@ -3,8 +3,8 @@ import re
 
 import numpy as np
 
-FILE = "img/page_reference/backgrounds/tmp.svg"
-EXTRA_TRANSLATION = (-482.14766, -153.94891)
+FILE = "img/factions/the_zhentarim.svg"
+EXTRA_TRANSLATION = (0.0, 0.0)
 PRECISION = 5
 TRANSFORM_PATTERN = re.compile(
 	r'\s*transform="matrix\(\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*\)"'
@@ -29,7 +29,9 @@ def _transform_path_d(d_str: str, tr_mat: np.ndarray, tr_tr: np.ndarray) -> str:
 	for token in tokens:
 		if re.match(COORD_TYPE_PATTERN, token):
 			if first_of_pair is not None:
-				raise CannotTransformError(f"cannot parse d-string (uneven numbers before type specifier): '{d_str}'")
+				raise CannotTransformError(
+					f"cannot parse d-string (uneven numbers before type specifier): '{first_of_pair} {token}'\n{d_str=}"
+				)
 			new_str += ' ' + token
 		else:
 			if first_of_pair is None:
@@ -47,7 +49,7 @@ def _transform_path_d(d_str: str, tr_mat: np.ndarray, tr_tr: np.ndarray) -> str:
 
 
 def _transform_path(line: str) -> str:
-	transform_mat = np.array([[1, 0], [0, 1]])
+	transform_mat = np.array([[1.0, 0.0], [0.0, 1.0]])
 	transform_tr = np.array(EXTRA_TRANSLATION)
 	transform_match = re.search(TRANSFORM_PATTERN, line)
 	if transform_match:

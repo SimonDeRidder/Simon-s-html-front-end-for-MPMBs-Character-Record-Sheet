@@ -140,7 +140,7 @@ ClassList["shadowcaster"] = {
 				return n < 2 ? "" : n < 11 ? "Darkvision 30 ft" : "Devil's Sight 30 ft";
 			}),
 			vision : [["Darkvision", "fixed 30"], ["Darkvision", "+30"]],
-			changeeval : "if (ClassLevelUp.shadowcaster[2] >= 11 && ClassLevelUp.shadowcaster[1] < 11) { processVision(newClassLvl.shadowcaster >= 11, 'Shadowcaster: Umbral Sight', [[\"Devil's sight\", 30]]); }; "
+			changeeval : "if (ClassLevelUp.shadowcaster[2] >= 11 && ClassLevelUp.shadowcaster[1] < 11) { await processVision(newClassLvl.shadowcaster >= 11, 'Shadowcaster: Umbral Sight', [[\"Devil's sight\", 30]]); }; "
 		},
 		"cloak of shadows" : {
 			name : "Cloak of Shadows",
@@ -178,7 +178,7 @@ ClassList["shadowcaster"] = {
 			additional : levels.map(function(n) {
 				return n < 11 ? "" : n < 17 ? "1 meal per week" + (n < 13 ? "" : ", 1 hour sleep per day") : "don't need to eat, sleep, or breathe";
 			}),
-			changeeval : "if (ClassLevelUp.shadowcaster[2] >= 15 && ClassLevelUp.shadowcaster[1] < 15) { SetProf('savetxt', newClassLvl.shadowcaster >= 15, { immune : ['disease'] }, 'Shadowcaster: Sustaining Shadow'); }; "
+			changeeval : "if (ClassLevelUp.shadowcaster[2] >= 15 && ClassLevelUp.shadowcaster[1] < 15) { await SetProf('savetxt', newClassLvl.shadowcaster >= 15, { immune : ['disease'] }, 'Shadowcaster: Sustaining Shadow'); }; "
 		},
 		"mastered mysteries" : {
 			name : "Mastered Mysteries",

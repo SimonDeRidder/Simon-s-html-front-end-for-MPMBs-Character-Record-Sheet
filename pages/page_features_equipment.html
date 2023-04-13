@@ -21,10 +21,22 @@
 
 		<textarea id="Personality_Trait" class="field inputfield" rows="4" style="top: 29px;left: 33.5px;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
 		<textarea id="Ideal" class="field inputfield" rows="3" style="top: 130px;left: 33.5px;width: 295px;height: 48px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
-		<textarea id="Bond" class="field inputfield" rows="3" style="top: 215.5px;left: 33.5px;width: 295px;height: 48px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
+		<textarea
+			id="Bond"
+			class="field inputfield"
+			rows="3"
+			style="top: 215.5px;left: 33.5px;width: 295px;height: 48px;font-size: 9.4px;line-height: 16.5px;padding-top: 3.6px;overflow-y: scroll;"
+			spellcheck="true"
+		></textarea>
 		<textarea id="Flaw" class="field inputfield" rows="3" style="top: 300.5px;left: 33.5px;width: 295px;height: 48px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
 
-		<button id="Background_Menu" class="field button" style="top: 9.5px;left: 156.5px;">Add Features</button>
+		<button
+			id="Background_Menu"
+			class="field button nonprintable"
+			style="top: 9.5px;left: 156.5px;"
+			aria-label="After you've picked a background on the first page, click here to select a Trait, Ideal, Bond, or Flaw (this button does not print)."
+			onclick="MakeBackgroundMenu();BackgroundOptions();"
+		>Add Features</button>
 	</div>
 
 
@@ -34,10 +46,27 @@
 		<span class="textlabel-bold" style="top: 146.3px;left: 18.7px;width: 329px">BACKGROUND FEATURE</span>
 		<span class="textlabel-dimmed" style="top: 20.5px;left: 24.7px;font-size: 10.6px">Feature Name:</span>
 
-		<input id="Background_Feature" class="field inputfield" list="background_feature_options" style="top: 19px;left: 91px;font-size: 12px;width: 247px;height: 13.3px;font-family: 'scala-sans'">
+		<input
+			id="Background_Feature"
+			class="field inputfield"
+			list="background_feature_options"
+			style="top: 19px;left: 91px;font-size: 12px;width: 247px;height: 13.3px"
+			spellcheck="true"
+			aria-label="Select or type in the background feature you want to use and its text will be filled out below automatically."
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onchange="ApplyBackgroundFeature(self.value);"
+		/>
 		<datalist id="background_feature_options">
+			<option value="">
+			<option value="Shelter of the Faithful">
 		</datalist>
-		<textarea id="Background_Feature_Description" class="field inputfield" rows="6" style="top: 39.5px;left: 24.5px;width: 313.5px;height: 95px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
+		<textarea
+			id="Background_Feature_Description"
+			class="field inputfield"
+			rows="6"
+			style="top: 39.5px;left: 24.5px;width: 313.5px;height: 95.2px;font-size: 9.3px;line-height: 16.5px;padding-top: 3.4px;overflow: scroll;"
+			spellcheck="true"
+		></textarea>
 	</div>
 
 
@@ -2193,6 +2222,23 @@
 			onchange="event.value=this.value;format1();this.value=event.value"
 		/>
 
+		<!-- BlueText -->
+		<div
+			id="Carrying_Capacity_Multiplier_Title"
+			class="field textlabel bluetext"
+			style="top: 282.0px;left: 834px;width: 34px;text-align: center;font-size: 6.9px;visibility: hidden;"
+		>Carrying Capacity Multiplier</div>
+		<input
+			id="Carrying_Capacity_Multiplier"
+			class="field inputfield bluetext"
+			aria-label="Carrying Capacity Multiplier"
+			style="top: 307px;left: 840px;width: 20px;text-align: center;visibility: hidden;"
+			value="1"
+			type="text"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=(this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd)).replace(/,/, '.');} else {this.value=(this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd)).replace(/,/, '.');}}"
+			onchange="event.value=this.value;format2();this.value=event.value"
+		/>
+
 		<script type="text/javascript">
 			// Adventuring_Gear_Location_Subtotal_*
 			for (let subTotalInd=1; subTotalInd<=9; subTotalInd++) {
@@ -2209,7 +2255,9 @@
 							let loc_subt_id = 'Adventuring_Gear_Location.Subtotal_' + String(subTotalInd);
 							event.target.name = adapter_helper_convert_id_to_fieldname(loc_subt_id);
 							CalcCarriedLocation();
-							document.getElementById(loc_subt_id).value = event.value;
+							let locSubtElement = document.getElementById(loc_subt_id);
+							locSubtElement.value = event.value;
+							locSubtElement.dispatchEvent(new Event('change'));
 						}
 					)
 				});
@@ -2249,7 +2297,6 @@
 
 	<!-- Invisible fields (some are bluetext mods, sort these out later) -->
 	<div style="visibility:hidden">
-		<div id="Carrying_Capacity_Multiplier" class="field"></div>
 		<div id="Image.MagicItemAttuned.1" class="field"></div>
 		<div id="Image.MagicItemAttuned.2" class="field"></div>
 		<div id="Image.MagicItemAttuned.3" class="field"></div>

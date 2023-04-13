@@ -4,9 +4,9 @@ var ignoreSearchLength = false; // whether or not to consider the length of the 
 var ignoreDuplicates = false; // whether or not to allow duplicates of feats and magic items
 
 // A function to load all the variables not stored in the sheet, but generated dynamically
-function getDynamicFindVariables() {
+async function getDynamicFindVariables() {
 	FindClasses();
-	FindRace();
+	await FindRace();
 	FindCompRace();
 	FindWeapons();
 	FindCompWeapons();

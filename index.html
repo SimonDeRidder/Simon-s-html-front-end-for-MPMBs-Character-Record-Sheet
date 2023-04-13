@@ -37,7 +37,7 @@
 			}
 		};
 
-		function addPrefix(element, prefix) {
+		function editRecursive(element, page_number, prefix) {
 			let elementChildren = element.childNodes;
 			let elementQueue = new Queue();
 			for (i = 0; i < elementChildren.length; i++) {
@@ -50,10 +50,13 @@
 				let currentElement = elementQueue.dequeue();
 				let elementClass = currentElement.getAttribute('class');
 				if ((elementClass && elementClass.includes("field")) || (currentElement.tagName.toLowerCase() == 'datalist')) {
-					currentElement.setAttribute('id', prefix + currentElement.getAttribute('id'));
-					if (currentElement.hasAttribute('list')) {
-						currentElement.setAttribute('list', prefix + currentElement.getAttribute('list'));
+					if (prefix) {
+						currentElement.setAttribute('id', prefix + currentElement.getAttribute('id'));
+						if (currentElement.hasAttribute('list')) {
+							currentElement.setAttribute('list', prefix + currentElement.getAttribute('list'));
+						}
 					}
+					currentElement.dataset.page = page_number;
 				}
 				let subElementChildren = currentElement.childNodes;
 				for (i = 0; i < subElementChildren.length; i++) {
@@ -77,7 +80,7 @@
 			});
 		}
 
-		function includePage(page_id, prefix = "") {
+		function includePage(page_id, page_number, prefix = "") {
 			var z, i, elmnt, file, xhttp;
 			elmnt = document.getElementById(page_id);
 			file = elmnt.getAttribute("page-url");
@@ -87,9 +90,7 @@
 					if (this.readyState == 4) {
 						if (this.status == 200) {
 							elmnt.innerHTML = this.responseText;
-							if (prefix) {
-								addPrefix(elmnt, prefix);
-							}
+							editRecursive(elmnt, page_number, prefix);
 							executeScriptElements(elmnt);
 						}
 						if (this.status == 404) {
@@ -158,10 +159,14 @@
 		<div id="BoxesLinesRemember" class="field"></div>
 		<div id="DateFormat_Remember" class="field"></div>
 		<div id="Companion.Remember" class="field"></div>
+		<div id="WhiteoutRemember" class="field"></div>
 
 		<div id="Template.extras.AScomp" class="field" value="P4.AScomp."></div>
-		<div id="Template.extras.ASnotes" class="field"></div>
+		<div id="Template.extras.ASnotes" class="field" value=""></div>
 		<div id="Template.extras.WSfront" class="field" value=""></div>
+		<div id="Template.extras.SSfront" class="field" value=""></div>
+		<div id="Template.extras.SSmore" class="field" value=""></div>
+		<div id="Template.extras.ALlog" class="field" value=""></div>
 
 		<div id="Unit_System" class="field" value="imperial"></div>
 		<div id="Decimal_Separator" class="field"></div>
@@ -171,7 +176,7 @@
 		<div id="UseUnicode" class="field"></div>
 
 		<div id="User_Imported_Files.Stringified" class="field"></div>
-		<div id="ChangesDialogSkip.Stringified" class="field"></div>
+		<div id="ChangesDialogSkip.Stringified" class="field" value="new ChangesDialogSkipAdapter()"></div>
 		<div id="CurrentSpells.Stringified" class="field" value="([])##########([])"></div>
 		<div id="CurrentSources.Stringified" class="field" value="Object(CurrentSources={globalExcl:[]})"></div>
 		<div id="CurrentEvals.Stringified" class="field" value="Object()"></div>
@@ -190,15 +195,15 @@
 	</div>
 </body>
 <script>
-	includePage("pf1");
-	includePage("pf2");
-	includePage("pf3");
-	includePage("pf4");
-	includePage("pf5", prefix = "P4.AScomp.");
-	includePage("pf5a");
-	includePage("pf6", prefix = "P5.ASnotes.");
-	includePage("pf7");
-	includePage("pf8");
+	includePage("pf1", 1);
+	includePage("pf2", 2);
+	includePage("pf3", 3);
+	includePage("pf4", 4);
+	includePage("pf5", 5, prefix = "P4.AScomp.");
+	includePage("pf5a", 6);
+	includePage("pf6", 7, prefix = "P5.ASnotes.");
+	includePage("pf7", 8);
+	includePage("pf8", 9);
 </script>
 <script>
 	function openPage(pageName, elmnt) {

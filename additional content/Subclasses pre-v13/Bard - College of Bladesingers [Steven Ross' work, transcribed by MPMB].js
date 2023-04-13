@@ -65,8 +65,8 @@ AddSubClass("bard", "college of bladesingers", {
 				"To gain this bonus, my movement has to take me away from where I started my turn",
 				"This bonus applies to any opportunity attacks suffered during the movement"
 			]),
-			eval : "AddACMisc(2, 'Dance of Defense', \"I have +2 AC when not wearing heavy armor or wielding a shield, and while I'm not grappled, incapacitated, prone, or restrained\", \"ACshield || tDoc.getField('Heavy Armor').isBoxChecked(0)\");",
-			removeeval : "AddACMisc(0, 'Dance of Defense', \"I have +2 AC when not wearing heavy armor or wielding a shield, and while I'm not grappled, incapacitated, prone, or restrained\");"
+			eval : "await AddACMisc(2, 'Dance of Defense', \"I have +2 AC when not wearing heavy armor or wielding a shield, and while I'm not grappled, incapacitated, prone, or restrained\", \"ACshield || tDoc.getField('Heavy Armor').isBoxChecked(0)\");",
+			removeeval : "await AddACMisc(0, 'Dance of Defense', \"I have +2 AC when not wearing heavy armor or wielding a shield, and while I'm not grappled, incapacitated, prone, or restrained\");"
 		},
 		"subclassfeature6" : {
 			name : "Song of Celerity",

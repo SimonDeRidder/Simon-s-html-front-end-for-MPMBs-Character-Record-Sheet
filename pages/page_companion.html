@@ -1,4 +1,4 @@
-<div id="ASComp" class="field page-container">sans
+<div id="ASComp" class="field page-container">
 
 	<button id="Companion-Options" class="button" style="left: 565.5px;top: 29.5px;font-size: 8.7px;">Companion Options</button>
 
@@ -122,7 +122,13 @@
 		<input id="Comp.Use.Proficiency_Bonus" class="field inputfield" style="top: 34px;left: 114.6px;font-size: 28px;width: 62.5px;height: 27px;padding: 0 0 0 0;text-align: center;font-family: 'scala-sans'" type="text">
 
 		<input id="Comp.Use.HP.Max" class="field inputfield" style="top: 34px;left: 214.5px;font-size: 28px;width: 66px;height: 27px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
-		<button id="Buttons.Comp.Use.HP.Max" class="field button" style="top: 25.9px;left: 223.5px">Set Max HP</button>
+		<button
+			id="Buttons.Comp.Use.HP.Max"
+			class="field button nonprintable"
+			style="top: 25.9px;left: 223.5px"
+			aria-label="With this button you can set the value of the maximum hit point fields to one of the calculated values:"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeHPMenu_HPOptions(false, true);"
+		>Set Max HP</button>
 
 		<input id="Comp.Use.HP.Temp" class="field inputfield-notched-wide" style="top: 18px;left: 372px;font-size: 12px;width: 62px;height: 15px;text-align: center;padding: 0 0 0 0;" type="number">
 		<textarea id="Comp.Use.HP.Current" class="field inputfield" style="top: 38px;left: 303px;font-size: 14px;width: 127.5px;height: 35px;padding-top: 1px;font-family: 'scala-sans'"></textarea>

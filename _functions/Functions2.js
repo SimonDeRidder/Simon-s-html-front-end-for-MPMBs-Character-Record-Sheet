@@ -8454,7 +8454,7 @@ async function MakeFaqMenu_FaqOptions(MenuSelection) {
 
 // The function called when the FAQ button is pressed
 async function getFAQ(input, delay) {
-	var MenuSelection = input ? input : getMenu("faq");
+	var MenuSelection = input ? input : await getMenu("faq");
 	if (!MenuSelection || MenuSelection[0] != "faq") return;
 	switch (MenuSelection[1]) {
 		case "online" :

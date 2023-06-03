@@ -1,5 +1,5 @@
 Bluetext*   -   skipped for now
-Character Level
+Class Features Menu -   done
 
 // trigger events on change:
 "Con Mod": Con_Mod_change

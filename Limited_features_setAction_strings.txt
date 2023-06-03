@@ -1,0 +1,16 @@
+'event.value = Math.max(1 + ' + extr + \", What('Cha Mod') + \" + extr + ');'
+"event.value = Math.max(1, What('Int Mod'));"
+"event.value = Math.max(1, What('Int Mod'));",
+"event.value = Math.max(1, Math.floor(What('Int Mod')/2));",
+"event.value = Math.max(1, What('Int Mod'));"
+"event.value = ''; event.target.setAction('Calculate', ''); event.target.submitName = '';"
+"event.value = How('Proficiency Bonus');"
+"event.value = Math.max(1, What('Wis Mod'));"
+"event.value = event.value.toString().replace(/ ?per ?/i, '');"
+"event.value = Math.max(1, tDoc.getField('Proficiency Bonus').submitName);"
+"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var useMult = isNaN(Number(usages)) || !Number(usages) ? 1 : Math.pow(10, usages); var charLvl = What('Character Level'); var total = (Math.round(charLvl * useMult) * 10); total = total > 1000000 ? total / 1000000 + 'M' : total > 1000 ? total / 1000 + 'k' : total; event.value = total + ' gp';"
+"event.value = Math.floor(classes.known['dawnforgedcast-alchemist'].level/2) + What('Int Mod');"
+"event.value = Math.floor(classes.known['dawnforgedcast-alchemist'].level/2) + 3 + tDoc.getField('Int Mod').value;"
+"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var DCmod = Number(usages) * 5; event.value = (isNaN(Number(usages)) || usages === '') ? 'DC\u2003\u2003' : 'DC ' + Number(10 + DCmod);"
+["", "", "", "", "", "", "", "", "", "", "", "", "", "", "event.value = What('Wis Mod') + 5;", "event.value = What('Wis Mod') + 5;", "event.value = What('Wis Mod') + 5;", "event.value = What('Wis Mod') + 6;", "event.value = What('Wis Mod') + 6;", "event.value = What('Wis Mod') + 6;"]
+

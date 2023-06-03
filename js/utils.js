@@ -35,3 +35,24 @@ function addElementNode(
 	parent.appendChild(el);
 	return el;
 }
+
+
+function getAccessedFieldIds(code /*String*/) /*Set[String]*/ {
+	const patterns = [/What\(([^\)]+)\)/g, /tdoc.getField\(([^\)]+)\)/g];
+	let all_matches = [];
+	for (let pattern of patterns) {
+		let matches = [...code.matchAll(pattern)];
+		for (let match of matches) {
+			if (match[1].startsWith("'") && match[1].endsWith("'") && !match[1].slice(1, -1).includes("'")) {
+				all_matches.push(match[1].slice(1, -1));
+			} else {
+				throw "Non-literal encountered in matches for getAccessedFieldIds: " + match;
+			}
+		}
+	}
+	let accessedFieldIds = new Set();
+	for (let match of all_matches) {
+		accessedFieldIds.add(adapter_helper_convert_fieldname_to_id(match));
+	}
+	return accessedFieldIds;
+}

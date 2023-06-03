@@ -1779,7 +1779,7 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 				break;
 			}
 			if (enoughLevel) {
-				var newSubClass = PleaseSubclass(tempClass, classesTemp[tempClass].string);
+				var newSubClass = await PleaseSubclass(tempClass, classesTemp[tempClass].string);
 				if (newSubClass) {
 					classesTemp[tempClass].subclass = newSubClass[0];
 					classesTemp[tempClass].string = newSubClass[1];
@@ -3013,7 +3013,9 @@ function SetRacesdropdown(forceTooltips) {
 
 //parse the results from the menu into an array
 async function getMenu(menuname) {
-	if (!["actions", "attacks", "background", "gearline", "hp", "limfea"].includes(menuname)) {  // TODO: remove when all done
+	if (
+		!["actions", "attacks", "background", "gearline", "hp", "limfea", "importscripts", "faq", "sources", "classfeatures"].includes(menuname)
+		) {  // TODO: remove when all done
 		throw "error: unknown context menu: '" + menuname + "', make sure it is async";
 	}
 	try {
@@ -6050,7 +6052,7 @@ async function ClassFeatureOptions(Input, AddRemove, ForceExtraname) {
 	var MenuSelection = Input;
 	if (!Input) {
 		MakeClassMenu(true);
-		MenuSelection = getMenu("classfeatures");
+		MenuSelection = await getMenu("classfeatures");
 	}
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[4] == "stop") return cleanTempClassesKnown();
 

@@ -436,13 +436,13 @@ async function SelectClass() {
 								font : "dialog",
 								bold : true,
 								height : 20,
-								char_width : 3,
+								char_width : 5,
 								name : "Level"
 							}, {
 								item_id : "r0LV",
 								type : "edit_text",
 								height : 23,
-								char_width : 2,
+								char_width : 4,
 								SpinEdit : true
 							}]
 						}, {
@@ -539,7 +539,7 @@ async function SelectClass() {
 						}, {
 							item_id : "r1LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r1TX",
@@ -575,7 +575,7 @@ async function SelectClass() {
 						}, {
 							item_id : "r2LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r2TX",
@@ -611,7 +611,7 @@ async function SelectClass() {
 						}, {
 							item_id : "r3LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r3TX",
@@ -647,7 +647,7 @@ async function SelectClass() {
 						}, {
 							item_id : "r4LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r4TX",
@@ -683,7 +683,7 @@ async function SelectClass() {
 						}, {
 							item_id : "r5LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r5TX",
@@ -719,7 +719,7 @@ async function SelectClass() {
 						}, {
 							item_id : "r6LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r6TX",
@@ -743,7 +743,7 @@ async function SelectClass() {
 							char_width : 6
 						}]
 					}, {
-						item_id : "r2VW", // row 7
+						item_id : "r7VW", // row 7
 						type : "view",
 						align_children : "align_distribute",
 						elements : [{
@@ -755,7 +755,7 @@ async function SelectClass() {
 						}, {
 							item_id : "r7LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r7TX",
@@ -779,7 +779,7 @@ async function SelectClass() {
 							char_width : 6
 						}]
 					}, {
-						item_id : "r2VW", // row 8
+						item_id : "r8VW", // row 8
 						type : "view",
 						align_children : "align_distribute",
 						elements : [{
@@ -791,7 +791,7 @@ async function SelectClass() {
 						}, {
 							item_id : "r8LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r8TX",
@@ -815,7 +815,7 @@ async function SelectClass() {
 							char_width : 6
 						}]
 					}, {
-						item_id : "r2VW", // row 9
+						item_id : "r9VW", // row 9
 						type : "view",
 						align_children : "align_distribute",
 						elements : [{
@@ -827,7 +827,7 @@ async function SelectClass() {
 						}, {
 							item_id : "r9LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r9TX",
@@ -1036,7 +1036,7 @@ async function SelectClass() {
 		if (!(/\d/).test(txtFinal)) txtFinal += " " + lvlFinal;
 		// update the class field
 		if (ClassFld !== txtFinal) { // text changed
-			delete tDoc.getField("Class and Levels").remVal;
+			tDoc.getField("Class and Levels").deleteRemVal();
 			Value("Class and Levels", txtFinal);
 		} else { // text stayed the same, so just update the class level
 			classes.totallevel = lvlFinal;
@@ -1316,7 +1316,7 @@ async function AskMulticlassing(lvlAlreadyAdded) {
 	var newClassText = classes.parsed.map( function (n) { return n.join(" ") }).join(", ")
 	// update the class field
 	if (What("Class and Levels") !== newClassText) { // text changed
-		delete tDoc.getField("Class and Levels").remVal;
+		tDoc.getField("Class and Levels").deleteRemVal();
 		Value("Class and Levels", newClassText);
 	} else { // text stayed the same, so just update the class level
 		classes.totallevel = CharLVL;
@@ -1325,7 +1325,7 @@ async function AskMulticlassing(lvlAlreadyAdded) {
 };
 
 //show a dialog when the subclass is not set but the level is high enough to need a subclass
-function PleaseSubclass(aClass, classString) {
+async function PleaseSubclass(aClass, classString) {
 	if (!IsNotImport || What("SubClass Remember").indexOf(aClass) !== -1) return;
 
 	var aclass = ClassList[aClass];
@@ -1490,7 +1490,7 @@ function PleaseSubclass(aClass, classString) {
 		}
 	};
 
-	var theDialog = app.execDialog(SubclassSelect_Dialog);
+	var theDialog = await app.execDialog(SubclassSelect_Dialog);
 	if (theDialog === "ok" && SubclassSelect_Dialog.result > -1) {
 		var selection = aclassObj[aclassArray[SubclassSelect_Dialog.result]];
 		var newName = ClassSubList[selection].fullname ? ClassSubList[selection].fullname : aclass.name + " (" + ClassSubList[selection].subname + ")";

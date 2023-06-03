@@ -411,7 +411,7 @@ input[type=number] {
 	z-index: 100;
 }
 
-#modalDialog {
+.modalDialog {
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -422,14 +422,14 @@ input[type=number] {
 	border: 2px solid black;
 }
 
-#modalTitle {
+.modalTitle {
 	border-bottom: 2px solid black;
 	padding-bottom: 5px;
 	padding-left: 5px;
 	padding-right: 5px;
 }
 
-#modalContent {
+.modalContent {
 	padding-left: 5px;
 	padding-right: 5px;
 }
@@ -443,6 +443,8 @@ input[type=number] {
 
 .modalDialogButton {
 	display: inline;
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 .modalDialogButton a.modalDialogButtonLink {
@@ -471,7 +473,7 @@ input[type=number] {
 /* Context menu */
 
 .cm_container {
-	z-index: 1;
+	z-index: 201;
 }
 
 .cm_container li {

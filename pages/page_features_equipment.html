@@ -5,10 +5,22 @@
 
 		<span class="textlabel-bold" style="top: 746px;left: 14px;width: 453px">CLASS FEATURES</span>
 
-		<textarea id="Class_Features" class="field inputfield" rows="44" style="top: 13px;left: 20px;width: 440px;height: 725px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
+		<textarea
+			id="Class_Features"
+			class="field inputfield"
+			rows="44"
+			style="top: 13px;left: 20px;width: 440px;height: 725px;font-size: 9.4px;line-height: 16.5px;padding-top: 3.6px"
+			spellcheck="true"
+		></textarea>
 
-		<button id="Class_Features_Menu" class="field button" style="top: -8px;left: 20px;visibility: hidden">Class Features Menu</button>
-	</div>
+		<button
+			id="Class_Features_Menu"
+			class="field button"
+			style="top: -8px;left: 20px"
+			aria-label="If a class feature offers you a choice, you can click this button to pick one of the options (this button does not print)."
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ClassFeatureOptions();"
+		>Class Features Menu</button>
+	</div><!--;visibility: hidden"-->
 
 
 	<div id="features_background_traits" class="pane" style="left: 505px;top: 25px;width: 366px;height: 393px;">
@@ -1575,7 +1587,7 @@
 		</div>
 
 
-		<button id="Equipment.Menu" class="field button" style="top: 342px;left: 29px;">Add Equipment</button>
+		<button id="Equipment.menu" class="field button" style="top: 342px;left: 29px;">Add Equipment</button>
 
 		<button id="Adventuring_Gear_Button_1"  class="field button nonprintable" style="top:  32.00px;left: -4px;" onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();">&gt;</button>
 		<button id="Adventuring_Gear_Button_2"  class="field button nonprintable" style="top:  48.61px;left: -4px;" onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();">&gt;</button>
@@ -2313,6 +2325,5 @@
 		<div id="Text.Header.Proficiencies" class="field"></div>
 		<div id="Text.Header.Background" class="field"></div>
 		<div id="Valuables1" class="field"></div>
-		<div id="CurrentFeatureChoices" class="field"></div>
 	</div>
 </div>

@@ -2224,7 +2224,7 @@ async function AddUserScript(retResDia) {
 		}
 	} while (tries < 5);
 
-	var getDialog = function() {
+	var getDialog = async function() {
 		var diaMax = Math.max(theUserScripts.length, diaIteration);
 		var moreDialogues = diaMax > diaIteration;
 		var AddUserScript_dialog = {
@@ -2435,7 +2435,7 @@ async function AddUserScript(retResDia) {
 			setDialogName(AddUserScript_dialog, "OKbt", "type", "ok_cancel");
 			setDialogName(AddUserScript_dialog, "OKbt", "ok_name", "Go to Next Dialog >>");
 		};
-		var theDialog = app.execDialog(AddUserScript_dialog);
+		var theDialog = await app.execDialog(AddUserScript_dialog);
 		theUserScripts[diaIteration - 1] = AddUserScript_dialog.script;
 		if (clean(AddUserScript_dialog.script, [" ", "\t"]).slice(-1) === "}") theUserScripts[diaIteration - 1] += ";\n";
 		if (theDialog === "ok" && moreDialogues) theDialog = "next";
@@ -2443,7 +2443,7 @@ async function AddUserScript(retResDia) {
 	};
 
 	do {
-		var askForScripts = getDialog();
+		var askForScripts = await getDialog();
 		if (askForScripts === "bpre") {
 			diaIteration -= 1;
 		} else if (askForScripts === "bfaq") {
@@ -2841,11 +2841,11 @@ function FixAutoSelForceChoices(pObj, sExtraname, cObj) {
 }
 
 // side-loading a file and adding it to the field for safe-keeping
-function ImportUserScriptFile(filePath) {
+async function ImportUserScriptFile(filePath) {
 	// open the dialog to select the file or URL
-	var iFileStream = filePath ? util.readFileIntoStream(filePath) : util.readFileIntoStream();
+	var iFileStream = filePath ? await util.readFileIntoStream(filePath) : await util.readFileIntoStream();
 	if (!iFileStream) return false;
-	var iFileCont = util.stringFromStream(iFileStream);
+	var iFileCont = await util.stringFromStream(iFileStream);
 	if ((/<(!DOCTYPE )?html/i).test(iFileCont)) {
 		// Import is probably an HTML file, lets try and get the JavaScript from it in case it's from GitHub or PasteBin
 		var htmlAttr = {
@@ -2988,9 +2988,9 @@ async function ImportScriptFileDialog(retResDia) {
 				});
 			};
 		},
-		bAdd: function(dialog) {
-			ImportUserScriptFile();
-			var dialogObj = {};
+		bAdd: async function(dialog) {
+			await ImportUserScriptFile();
+			dialogObj = {};
 			for (var scriptFile in CurrentScriptFiles) {
 				dialogObj[scriptFile] = -1;
 			};
@@ -3021,6 +3021,7 @@ async function ImportScriptFileDialog(retResDia) {
 			};
 			if (deleteIt) {
 				delete allElem[fndElem];
+				dialogObj = allElem;
 				dialog.load({ scrF : allElem });
 			}
 		},
@@ -3111,7 +3112,7 @@ async function ImportScriptFileDialog(retResDia) {
 						name : "How to get/make the JavaScript files to enter here?",
 						elements : [{
 							type : "view",
-							alignmen : "align_fill",
+							alignment : "align_fill",
 							align_children : "align_row",
 							width : 730,
 							elements : [{
@@ -3183,7 +3184,7 @@ async function ImportScriptFileDialog(retResDia) {
 
 
 	do {
-		var scriptFilesDialog = app.execDialog(AddScriptFiles_dialog);
+		var scriptFilesDialog = await app.execDialog(AddScriptFiles_dialog);
 		if (scriptFilesDialog === "bfaq") {
 			await getFAQ(["faq", "pdf"]);
 		} else if (scriptFilesDialog === "bcon") {
@@ -3219,7 +3220,7 @@ async function ImportScriptFileDialog(retResDia) {
 
 // Open the menu to import materials
 async function ImportScriptOptions(input) {
-	var MenuSelection = input ? input : getMenu("importscripts");
+	var MenuSelection = input ? input : await getMenu("importscripts");
 	if (MenuSelection === undefined || MenuSelection[0] === "nothing") return;
 	switch (MenuSelection[2]) {
 		case "file" :

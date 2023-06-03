@@ -24,9 +24,18 @@
 			spellcheck="true"
 			onfocus="this.dataset.temp=this.value;"
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(false, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;this.value=this.dataset.temp;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);levelFieldVal();this.value=event.value;"
+			onchange="event.value=this.value;this.value=this.dataset.temp?this.dataset.temp:0;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);levelFieldVal();this.value=event.value;"
 		/>
-		<input id="Class_and_Levels" class="field inputfield" style="top: 85px;left: 388px;font-size: 11pt;width: 199pt;height: 15pt;font-family: 'scala-sans'" type="text">
+		<input
+			id="Class_and_Levels"
+			class="field inputfield"
+			style="top: 85px;left: 388px;font-size: 11pt;width: 199pt;height: 15pt"
+			type="text"
+			aria-label="Classes"
+			spellcheck="true"
+			onclick="event.target.value=this.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;ClickClasses();this.dataset.remVal=event.target.remVal"
+			onchange="event.target.remVal=this.dataset.remVal == 'undefined' ? undefined : this.dataset.remVal;event.value=this.value;classesFieldVal();this.value=event.value;if (event.target.remVal === undefined) {delete this.dataset.remVal;}"
+		/>
 		<input id="Player_Name" class="field inputfield" style="top: 85px;left: 660px;font-size: 11pt;width: 120pt;height: 15pt;font-family: 'scala-sans'" type="text">
 
 		<input
@@ -196,10 +205,10 @@
 		<input id="Resistance_Damage_Type_5" class="field inputfield" list="resistances_options" style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
 		<input id="Resistance_Damage_Type_6" class="field inputfield" list="resistances_options" style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
 			<datalist id="resistances_options">
-				<option value="Acid">
+				<option value="Acid">Acid</option>
 			</datalist>
 
-		<textarea id="Saving_Throw_advantages_._disadvantages" class="field inputfield" rows="6" style="top: 141px;left: 13px;width: 159.7px;height: 96px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
+		<textarea id="Saving_Throw_advantages_/_disadvantages" class="field inputfield" rows="6" style="top: 141px;left: 13px;width: 159.7px;height: 96px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
 
 		<!-- Bluetext -->
 		<input
@@ -363,7 +372,7 @@
 			id="AC_Armor_Bonus"
 			class="field inputfield-notched"
 			style="top: 20px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
-			type="number"
+			type="text"
 			aria-label="Base Armor Class"
 			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Armor_Bonus_change);"
 		>
@@ -542,11 +551,17 @@
 		<input id="Spell_save_DC_1" class="field inputfield-noneditable" style="top: 11px;left: 14.5px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
 		<input id="Spell_save_DC_2" class="field inputfield-noneditable" style="visibility: hidden;top: 11px;left: 191px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
 
-		<input id="Spell_DC_1_Mod.0" class="field inputfield" list="ability_save_dc_options" style="top: 19px;font-size: 8px;font-weight: bold;height: 10px;left: 130px;text-align: center;width: 75px;font-family: 'scala-sans'">
-		<input id="Spell_DC_1_Mod.1" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;font-family: 'scala-sans'">
+		<input id="Spell_DC_1_Mod#0" class="field inputfield" list="ability_save_dc_options" style="top: 19px;font-size: 8px;font-weight: bold;height: 10px;left: 130px;text-align: center;width: 75px;font-family: 'scala-sans'">
+		<input id="Spell_DC_1_Mod#1" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;font-family: 'scala-sans'">
 		<input id="Spell_DC_2_Mod" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 121.5px;text-align: center;width: 54px;font-family: 'scala-sans'">
 			<datalist id="ability_save_dc_options">
-				<option value="CHARISMA">
+				<option value=""></option>
+				<option value="Str Mod">STRENGTH</option>
+				<option value="Dex Mod">DEXTERITY</option>
+				<option value="Con Mod">CONSTITUTION</option>
+				<option value="Int Mod">INTELLIGENCE</option>
+				<option value="Wis Mod">WISDOM</option>
+				<option value="Cha Mod">CHARISMA</option>
 			</datalist>
 
 		<button id="ShowHide_2nd_DC" class="field button" style="top: -6.4px;left: 94.3px">Show 2nd DC</button>
@@ -886,15 +901,31 @@
 		<input id="Limited_Feature_6" class="field inputfield" style="top: 127.1px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
 		<input id="Limited_Feature_7" class="field inputfield" style="top: 147.4px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
 		<input id="Limited_Feature_8" class="field inputfield" style="top: 167.7px;left: 19px;font-size: 10.6px;height: 15.3px;width: 143px;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_9" class="field inputfield" style="height: 15.3px;width: 143px;visibility: hidden;" type="text">
+		<input id="Limited_Feature_10" class="field inputfield" style="height: 15.3px;width: 143px;visibility: hidden;" type="text">
+		<input id="Limited_Feature_11" class="field inputfield" style="height: 15.3px;width: 143px;visibility: hidden;" type="text">
+		<input id="Limited_Feature_12" class="field inputfield" style="height: 15.3px;width: 143px;visibility: hidden;" type="text">
+		<input id="Limited_Feature_13" class="field inputfield" style="height: 15.3px;width: 143px;visibility: hidden;" type="text">
+		<input id="Limited_Feature_14" class="field inputfield" style="height: 15.3px;width: 143px;visibility: hidden;" type="text">
+		<input id="Limited_Feature_15" class="field inputfield" style="height: 15.3px;width: 143px;visibility: hidden;" type="text">
+		<input id="Limited_Feature_16" class="field inputfield" style="height: 15.3px;width: 143px;visibility: hidden;" type="text">
 
-		<input id="Limited_Feature_Max_Usages_1" class="field inputfield" style="top:  25.6px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
-		<input id="Limited_Feature_Max_Usages_2" class="field inputfield" style="top:  45.9px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
-		<input id="Limited_Feature_Max_Usages_3" class="field inputfield" style="top:  66.2px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
-		<input id="Limited_Feature_Max_Usages_4" class="field inputfield" style="top:  86.5px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
-		<input id="Limited_Feature_Max_Usages_5" class="field inputfield" style="top: 106.8px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
-		<input id="Limited_Feature_Max_Usages_6" class="field inputfield" style="top: 127.1px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
-		<input id="Limited_Feature_Max_Usages_7" class="field inputfield" style="top: 147.4px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
-		<input id="Limited_Feature_Max_Usages_8" class="field inputfield" style="top: 167.7px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Max_Usages_1" class="field inputfield" style="top:  25.6px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_Max_Usages_2" class="field inputfield" style="top:  45.9px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_Max_Usages_3" class="field inputfield" style="top:  66.2px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_Max_Usages_4" class="field inputfield" style="top:  86.5px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_Max_Usages_5" class="field inputfield" style="top: 106.8px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_Max_Usages_6" class="field inputfield" style="top: 127.1px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_Max_Usages_7" class="field inputfield" style="top: 147.4px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_Max_Usages_8" class="field inputfield" style="top: 167.7px;left: 169px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;font-family: 'scala-sans'" type="text">
+		<input id="Limited_Feature_Max_Usages_9" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;" type="text">
+		<input id="Limited_Feature_Max_Usages_10" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;" type="text">
+		<input id="Limited_Feature_Max_Usages_11" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;" type="text">
+		<input id="Limited_Feature_Max_Usages_12" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;" type="text">
+		<input id="Limited_Feature_Max_Usages_13" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;" type="text">
+		<input id="Limited_Feature_Max_Usages_14" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;" type="text">
+		<input id="Limited_Feature_Max_Usages_15" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;" type="text">
+		<input id="Limited_Feature_Max_Usages_16" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;" type="text">
 
 		<input id="Limited_Feature_Recovery_1" class="field inputfield" style="top:  25.6px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
 		<input id="Limited_Feature_Recovery_2" class="field inputfield" style="top:  45.9px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
@@ -904,6 +935,14 @@
 		<input id="Limited_Feature_Recovery_6" class="field inputfield" style="top: 127.1px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
 		<input id="Limited_Feature_Recovery_7" class="field inputfield" style="top: 147.4px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
 		<input id="Limited_Feature_Recovery_8" class="field inputfield" style="top: 167.7px;left: 209px;font-size: 10.6px;height: 15.3px;width: 33px;font-family: 'scala-sans'" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_9" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;visibility: hidden;" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_10" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;visibility: hidden;" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_11" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;visibility: hidden;" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_12" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;visibility: hidden;" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_13" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;visibility: hidden;" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_14" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;visibility: hidden;" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_15" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;visibility: hidden;" type="text" list="limited_features_recover_options">
+		<input id="Limited_Feature_Recovery_16" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 33px;visibility: hidden;" type="text" list="limited_features_recover_options">
 		<datalist id="limited_features_recover_options">
 			<option value="SR">
 			<option value="LR">
@@ -3470,6 +3509,7 @@
 		<input id="Remarkable_Athlete" class="field inputfield" type="checkbox"/>
 		<input id="Jack_of_All_Trades" class="field inputfield" type="checkbox"/>
 		<div id="Proficiency_Bonus_Dice" class="field"></div>
+		<div id="Proficiency_Bonus_Modifier" class="field"></div>
 		<div id="Perc_Adv" class="field"></div><!--?-->
 		<div id="Perc_Dis" class="field"></div><!--?-->
 		<div id="Extra.Exhaustion_Level_1" class="field"></div>
@@ -3515,7 +3555,6 @@
 		<div id="Ste_Bonus" class="field"></div>
 		<div id="Sur_Bonus" class="field"></div>
 		<div id="Too_Bonus" class="field"></div>
-		<div id="User_Script" class="field"></div>
 		<div id="Extra.Layers_Remember" class="field"></div>
 		<div id="HoSRememberState" class="field"></div>
 		<div id="HP_Max_Current" class="field"></div>

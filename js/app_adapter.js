@@ -61,10 +61,34 @@ const app = {
 		}
 	},
 
-	execDialog: async function (monitor /*object*/, inheritDialog = null /*Dialog*/, parentDoc = this /*doc*/, resultCallback = null /*function*/) {
+	execDialog: async function (
+		monitor /*object*/,
+		inheritDialog = null /*Dialog*/,
+		parentDoc = this /*doc*/,
+		resultCallback = null /*function*/,
+	) {
 		if (
 			![
-				"EXPERIENCE POINTS DIALOG", "ASK USER DIALOG", "SIMPLE TEXT DIALOG", "CLASS SELECTION DIALOG"
+				"EXPERIENCE POINTS DIALOG",
+				"ASK USER DIALOG",
+				"SIMPLE TEXT DIALOG",
+				"CLASS SELECTION DIALOG",
+				"SOURCE SELECTION DIALOG",
+				"IMPORT CUSTOM SCRIPT DIALOG",
+				"MANUAL CUSTOM SCRIPT DIALOG",
+				"CLASSES OR ARCHETYPES SOURCE SELECTION DIALOG",
+				"BACKGROUNDS SOURCE SELECTION DIALOG",
+				"WEAPONS/ATTACKS SOURCE SELECTION DIALOG",
+				"MAGIC ITEMS SOURCE SELECTION DIALOG",
+				"SPELLS SOURCE SELECTION DIALOG",
+				"SPECIAL COMPANION OPTIONS SOURCE SELECTION DIALOG",
+				"PLAYER RACES SOURCE SELECTION DIALOG",
+				"BACKGROUND FEATURES SOURCE SELECTION DIALOG",
+				"AMMUNITION SOURCE SELECTION DIALOG",
+				"ARMORS SOURCE SELECTION DIALOG",
+				"FEATS SOURCE SELECTION DIALOG",
+				"CREATURES SOURCE SELECTION DIALOG",
+				"SUBCLASS SELECTION DIALOG",
 			].includes(monitor.description.name)
 		) {
 			// TODO: remove this if all execDialogs are converted
@@ -109,6 +133,11 @@ const app = {
 		)
 	},
 
+	launchURL: function(cURL /*String*/, bNewFrame /*boolean*/) {
+		let target = bNewFrame ? '_blank' : '_self';
+		window.open(cURL, target, 'noreferrer');
+	},
+
 	popUpMenuEx: {
 		apply: async function (app /*this*/, aParams /*[Object]*/) {
 			return new Promise((resolve, reject) => {
@@ -128,10 +157,15 @@ const display = {
 };
 
 
+console.println = console.log;
+console.show = console.log;
+
 AdapterParsePopUpMenu = function (aParams, resolve) {
 	let menu = []
 	for (let i = 0; i < aParams.length; i++) {
-		if (aParams[i].cName == '-') {
+		if (aParams[i] === undefined) {
+			continue;
+		} else if (aParams[i].cName == '-') {
 			menu.push({
 				type: ContextMenu.DIVIDER,
 			});
@@ -182,15 +216,7 @@ this.getField = function (field_name /*str*/) /*AdapterClassFieldReference|Adapt
 		return adapter_helper_get_saveimg_field(field_name.replace(/^SaveIMG\./, ''))
 	}
 	let field_id = adapter_helper_convert_fieldname_to_id(field_name);
-	let element = document.getElementById(field_id);
-	if (element == null) {
-		if (['AdvLog.Options'].includes(field_id)) {
-			return null
-		} else {
-			throw "null element: " + field_id;
-		}
-	}
-	return adapter_helper_reference_factory(element, field_id);
+	return adapter_helper_reference_factory(field_id);
 };
 
 this.calculateNow = function () {
@@ -230,6 +256,18 @@ this.resetForm = function (aFields = null /*fields*/) {
 };
 
 
+this.exportDataObject = function(data /*Object*/) {
+	//creating an invisible element
+	var element = document.createElement('a');
+	element.setAttribute('href', "documents/" + data.cName);
+	element.setAttribute('download', data.cName);
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);
+	// window.location.href = "documents/" + data.cName;
+}
+
+
 function AFNumber_Format(nDec /*int*/, sepStyle /*int*/, negStyle /*int*/, currStyle /*int*/, strCurrency /*str*/, bCurrencyPrepend /*boolean*/) /*str*/ {
 	// nDec = number of decimals
 	// sepStyle = separator style 0 = 1,234.56 / 1 = 1234.56 / 2 = 1.234,56 / 3 = 1234,56 /
@@ -261,6 +299,62 @@ function AFNumber_Format(nDec /*int*/, sepStyle /*int*/, negStyle /*int*/, currS
 };
 
 
+const util = {
+	readFileIntoStream: async function(cDIPath /*String*/, bEncodeBase64 /*bool*/) /*AdapterClassReadStream*/ {
+		if (bEncodeBase64) {
+			throw "readFileIntoStream with bEncodeBase64 not implemented.";
+		}
+		if (cDIPath) {
+			throw "readFileIntoStream with cDIPath not implemented.";
+		} else {
+			[file_handle] = await window.showOpenFilePicker({multiple: false});
+		}
+		return new AdapterClassReadStream(await file_handle.getFile());
+	},
+
+	stringFromStream: async function(oStream /*AdapterClassReadStream*/) /*String*/ {
+		if (oStream.constructor.name != 'AdapterClassReadStream') {
+			throw "stringFromStream not implemented for type " + oStream.constructor.name;
+		}
+		return await oStream.read();
+	},
+
+	printd: function(cFormat /*String|Number*/, oDate /*Date*/, bXFAPicture /*boolean*/) /*String*/ {
+		if (typeof cFormat == 'Number') {
+			throw "printd with Number-type cFormat not implemented";
+		}
+		if (bXFAPicture) {
+			throw "printd with bXFAPicture not implemented";
+		}
+		return (
+			cFormat
+			.replace(/(?<!\\)mmmm/g, '#$$$$#')
+			.replace(/(?<!\\)mmm/g, '#$$$#')
+			.replace(/(?<!\\)mm/g, ("0" + (oDate.getMonth() + 1)).slice(-2))
+			.replace(/(?<!\\)m/g, String(oDate.getMonth() + 1))
+			.replace(/(?<!\\)dddd/g, '#%%%%#')
+			.replace(/(?<!\\)ddd/g, '#%%%#')
+			.replace(/(?<!\\)dd/g, ("0" + oDate.getDate()).slice(-2))
+			.replace(/(?<!\\)d/g, String(oDate.getDate()))
+			.replace(/(?<!\\)yyyy/g, String(oDate.getFullYear()))
+			.replace(/(?<!\\)yy/g, String(oDate.getFullYear()).slice(-2))
+			.replace(/(?<!\\)HH/g, ("0" + oDate.getHours()).slice(-2))
+			.replace(/(?<!\\)H/g, String(oDate.getHours()))
+			.replace(/(?<!\\)hh/g, ("0" + (((oDate.getHours() + 11) % 12) - 1)).slice(-2))
+			.replace(/(?<!\\)h/g, String(((oDate.getHours() + 11) % 12) - 1))
+			.replace(/(?<!\\)ss/g, ("0" + oDate.getSeconds()).slice(-2))
+			.replace(/(?<!\\)s/g, String(oDate.getSeconds()))
+			.replace(/(?<!\\)tt/g, (oDate.getHours() >=12 ? 'pm' : 'am'))
+			.replace(/(?<!\\)t/g, (oDate.getHours() >=12 ? 'p' : 'a'))
+			.replace(/#$$$$#/g, oDate.toString().split(' ')[1])
+			.replace(/#$$$#/g, oDate.toString().split(' ')[1].slice(0, 3))
+			.replace(/#%%%%#/g, oDate.toString().split(' ')[0])
+			.replace(/#%%%#/g, oDate.toString().split(' ')[0].slice(0, 3))
+		);
+	}
+};
+
+
 // standard overrides/additions
 
 
@@ -282,32 +376,47 @@ Array.prototype.toSource = function () /*str*/ {
 }
 
 
+Object.defineProperty(Object.prototype, 'toSource', {
+	value: function() {
+		return adapter_helper_recursive_toSource(this);
+	},
+	enumerable: false,
+});
+
 
 // Adapter classes
 
 class AdapterClassFieldReference {
-	constructor(html_element /*HTMLElement*/) {
-		this.html_element = html_element;
+	constructor(html_elements /*[HTMLElement]*/) {
+		this.html_elements = html_elements;
 	}
 
-	get submitName() /*str*/ {
-		let submitName_ = this.html_element.dataset.submit_name;
+	get submitName() /*String*/ {
+		let submitName_ = this.html_elements[0].dataset.submit_name;
 		if (!submitName_) {
 			return "";
 		}
 		return submitName_;
 	}
 
-	set submitName(new_submitName /*str*/) {
-		this.html_element.dataset.submit_name = new_submitName;
+	set submitName(new_submitName /*String*/) {
+		this.html_elements[0].dataset.submit_name = new_submitName;
 	}
 
-	get value() /*str*/ {
+	get name() /*String*/ {
+		let id_ = this.html_elements[0].id.replace(/#\d$/, '');
+		if (!id_) {
+			return "";
+		}
+		return adapter_helper_convert_id_to_fieldname(id_);
+	}
+
+	get value() /*String*/ {
 		let value_;
-		if (['input', 'select', 'textarea'].includes(this.html_element.tagName.toLowerCase())) {
-			value_ = this.html_element.value;
+		if (['input', 'select', 'textarea'].includes(this.html_elements[0].tagName.toLowerCase())) {
+			value_ = this.html_elements[0].value;
 		} else {
-			value_ = this.html_element.getAttribute('value');
+			value_ = this.html_elements[0].getAttribute('value');
 		}
 		if (value_ === undefined) {
 			return "";
@@ -316,10 +425,10 @@ class AdapterClassFieldReference {
 			!isNaN(value_)
 			&& (
 				(
-					this.html_element.hasAttribute('type')
-					&& this.html_element.getAttribute('type').toLowerCase() == 'number'
+					this.html_elements[0].hasAttribute('type')
+					&& this.html_elements[0].getAttribute('type').toLowerCase() == 'number'
 				)
-				|| this.html_element.classList.contains('isNumber')
+				|| this.html_elements[0].classList.contains('isNumber')
 			)
 		) {
 			return Number(value_);
@@ -329,24 +438,24 @@ class AdapterClassFieldReference {
 
 	set value(new_value /*str*/) {
 		let changed = false;
-		if (['input', 'select', 'textarea'].includes(this.html_element.tagName.toLowerCase())) {
-			if (this.html_element.value != new_value) {
+		if (['input', 'select', 'textarea'].includes(this.html_elements[0].tagName.toLowerCase())) {
+			if (this.html_elements[0].value != new_value) {
 				changed = true;
 			}
-			this.html_element.value = new_value;
+			this.html_elements[0].value = new_value;
 		} else {
-			if (this.html_element.getAttribute('value') != new_value) {
+			if (this.html_elements[0].getAttribute('value') != new_value) {
 				changed = true;
 			}
-			this.html_element.setAttribute('value', new_value);
+			this.html_elements[0].setAttribute('value', new_value);
 		}
 		if (changed) {
-			this.html_element.dispatchEvent(new Event('change'));
+			this.html_elements[0].dispatchEvent(new Event('change'));
 		}
 	}
 
 	get userName() /*str*/ {
-		let userName_ = this.html_element.getAttribute('aria-label');
+		let userName_ = this.html_elements[0].getAttribute('aria-label');
 		if (!userName_) {
 			return "";
 		}
@@ -354,15 +463,15 @@ class AdapterClassFieldReference {
 	}
 
 	set userName(new_userName /*str*/) {
-		this.html_element.setAttribute('aria-label', new_userName);
+		this.html_elements[0].setAttribute('aria-label', new_userName);
 	}
 
 	get display() /*int*/ {
-		let visibility = this.html_element.style.visibility;
+		let visibility = this.html_elements[0].style.visibility;
 		if (visibility === null) {
 			visibility = 'visible';
 		}
-		let nonPrintable = this.html_element.classList.contains('nonprintable');
+		let nonPrintable = this.html_elements[0].classList.contains('nonprintable');
 		if (visibility == 'hidden') {
 			// noView not supported
 			return display.hidden;
@@ -380,24 +489,24 @@ class AdapterClassFieldReference {
 			throw "tried to set noView display on element";
 		}
 		if (newDisplay == display.hidden) {
-			this.html_element.style.visibility = 'hidden';
+			this.html_elements[0].style.visibility = 'hidden';
 		} else {
-			this.html_element.style.visibility = 'visible';
+			this.html_elements[0].style.visibility = 'visible';
 			if (newDisplay == display.noPrint) {
-				this.html_element.classList.add('nonprintable');
+				this.html_elements[0].classList.add('nonprintable');
 			}
-			this.html_element.dispatchEvent(new Event('displayShow'));
+			this.html_elements[0].dispatchEvent(new Event('displayShow'));
 		}
 	}
 
 	get type() /*str*/ {
-		switch (this.html_element.tagName.toLowerCase()) {
+		switch (this.html_elements[0].tagName.toLowerCase()) {
 			case 'button':
 				return 'button';
 			case 'select':
 				return 'combobox';
 			case 'input':
-				switch (this.html_element.type) {
+				switch (this.html_elements[0].type) {
 					case 'button':
 						return 'button';
 					case 'checkbox':
@@ -405,7 +514,7 @@ class AdapterClassFieldReference {
 					case 'radio':
 						return 'radiobutton';
 					default:
-						if (this.html_element.getAttribute('list')) {
+						if (this.html_elements[0].getAttribute('list')) {
 							return 'combobox';
 						}
 						return 'text';
@@ -416,43 +525,55 @@ class AdapterClassFieldReference {
 	}
 
 	get currentValueIndices() /*int*/ {
-		if (this.html_element.tagName.toLowerCase() == 'select') {
-			return this.html_element.selectedIndex;
-		} else if ((this.html_element.tagName.toLowerCase() == 'input') && (this.html_element.getAttribute('list'))) {
-			throw "get currentValueIndices on datalist-input " + String(this.html_element.id);
+		if (this.html_elements[0].tagName.toLowerCase() == 'select') {
+			return this.html_elements[0].selectedIndex;
+		} else if ((this.html_elements[0].tagName.toLowerCase() == 'input') && (this.html_elements[0].getAttribute('list'))) {
+			console.log(
+				"warning: executing currentValueIndices for input list",
+				this.html_elements[0].id,
+				", make sure all innerText is matchable"
+			);
+			let selectedIndex = -1;
+			let value = this.html_elements[0].value.trim().toLowerCase();
+			let counter = 0;
+			for (let optionElement of this.html_elements[0].list.options) {
+				if (value == optionElement.innerText.trim().toLowerCase()) {
+					selectedIndex = counter;
+					break;
+				}
+				counter += 1;
+			}
+			return selectedIndex;
 		} else {
-			throw "get currentValueIndices on non-combobox " + String(this.html_element.id);
+			throw "get currentValueIndices on non-combobox " + String(this.html_elements[0].id);
 		}
 	}
 
 	set currentValueIndices(newIndex /*int*/) {
-		if (this.html_element.tagName.toLowerCase() == 'select') {
-			this.html_element.selectedIndex = newIndex;
-		} else if ((this.html_element.tagName.toLowerCase() == 'input') && (this.html_element.getAttribute('list'))) {
-			let listElement = document.getElementById(this.html_element.getAttribute('list'));
+		if (this.html_elements[0].tagName.toLowerCase() == 'select') {
+			this.html_elements[0].selectedIndex = newIndex;
+		} else if ((this.html_elements[0].tagName.toLowerCase() == 'input') && (this.html_elements[0].getAttribute('list'))) {
+			let listElement = document.getElementById(this.html_elements[0].getAttribute('list'));
 			if (listElement) {
-				this.html_element.value = listElement.children[newIndex].value;
+				this.html_elements[0].value = listElement.children[newIndex].value;
 			} else {
-				throw "Cannot find datalist element " + String(this.html_element.getAttribute('list'));
+				throw "Cannot find datalist element " + String(this.html_elements[0].getAttribute('list'));
 			}
 		} else {
-			throw "set currentValueIndices on non-combobox " + String(this.html_element.id);
+			throw "set currentValueIndices on non-combobox " + String(this.html_elements[0].id);
 		}
 	}
 
 	get page() /*Number*/ {
-		return this.html_element.dataset.page;
+		return this.html_elements[0].dataset.page;
 	}
 
 	toSource() /*str*/ {
-		return this.html_element.toSource();
+		return this.html_elements[0].toSource();
 	}
 
 	isBoxChecked(nWidget /*int*/) /*boolean*/ {
-		if (nWidget > 0) {
-			throw "isBoxChecked nWidget > 0:" + String(nWidget);
-		}
-		if (this.html_element.checked) {
+		if (this.html_elements[nWidget].checked) {
 			return true;
 		}
 		else {
@@ -461,24 +582,21 @@ class AdapterClassFieldReference {
 	}
 
 	checkThisBox(nWidget /*int*/, bCheckIt = true /*boolean*/) {
-		if (nWidget > 0) {
-			throw "checkThisBox nWidget > 0:" + String(nWidget);
-		}
 		let changed = false;
-		if (this.html_element.checked != bCheckIt) {
+		if (this.html_elements[nWidget].checked != bCheckIt) {
 			changed = true;
 		}
-		this.html_element.checked = bCheckIt;
+		this.html_elements[nWidget].checked = bCheckIt;
 		if (changed) {
-			this.html_element.dispatchEvent(new Event('change'));
+			this.html_elements[nWidget].dispatchEvent(new Event('change'));
 		}
 	}
 
 	setItems(oArray /*[str|[str;2]]*/) {
-		if ((this.html_element.tagName.toLowerCase() != 'input') || !this.html_element.hasAttribute('list')) {
-			throw "called setItems on unsupported element type: " + this.html_element.tagName.toLowerCase();
+		if ((this.html_elements[0].tagName.toLowerCase() != 'input') || !this.html_elements[0].hasAttribute('list')) {
+			throw "called setItems on unsupported element type: " + this.html_elements[0].tagName.toLowerCase();
 		}
-		let listElement = document.getElementById(this.html_element.getAttribute('list'));
+		let listElement = document.getElementById(this.html_elements[0].getAttribute('list'));
 		while (listElement.lastElementChild) {
 			listElement.removeChild(listElement.lastElementChild);
 		}
@@ -499,18 +617,48 @@ class AdapterClassFieldReference {
 	}
 
 	buttonSetIcon(icon /*String*/) {
-		this.html_element.style.backgroundImage = "url(" + icon + ")";
+		this.html_elements[0].style.backgroundImage = "url(" + icon + ")";
 	}
 
 	setAction(actionType /*String*/, actionStr /*String*/) {
-		// TODO: make universal by scanning for `What` and `getField` and adding the change listeners?
-		if (actionStr != '') {
+		if (actionStr == '') {  // do nothing
+			return;
+		}
+		if (actionType != 'Calculate') {  // do nothing
+			throw "Unknown action type for setAction: " + actionType;
+		}
+		if (
+			[
+				"event.value = Math.max(1, What('Cha Mod'));", "event.value = 1 + What('Cha Mod');"
+			].includes(actionStr)
+		) {  // TODO: remove when we're confident enough in the change rule matching
+			let accessedFieldIds = getAccessedFieldIds(actionStr);
+			let currentFieldId = event.target.id;
+			let changeEventName;
+			for (let fieldID of accessedFieldIds) {
+				changeEventName = fieldID + '_change';
+				if (!(changeEventName in EventType)) {
+					throw "Could not find change event for field id " + fieldID;
+				}
+				eventManager.add_listener(EventType[changeEventName], function() {
+					eval(actionStr);
+					document.getElementById(currentFieldId).value = event.value;
+				})
+			}
+		} else {
 			throw (
-				"setAction called for '" + actionType + "', with non-empty value '" + actionStr + "'. "
-				+ "add an if-clause for the specific target and action, add a script to add the event listener(s) "
-				+ "(or expand existing one(s)), eval-ing the actionStr and setting value to event.value."
+				"setAction called for '" + actionType + "', with unknown non-empty value '" + actionStr + "'. "
+				+ "Make sure the code analyser above is functioning properly, then add it to whitelist."
 			);
 		}
+	}
+
+	setFocus() {
+		this.html_elements[0].focus();
+	}
+
+	deleteRemVal() {
+		delete this.html_elements[0].dataset.remVal;
 	}
 }
 
@@ -573,43 +721,33 @@ class PreSplitString {
 	}
 }
 
-class CurrentProfsAdapter {
-	constructor(
-		skills, armours, weapons, saves, resistances, languages, tools, savetxts, visions, speeds, specialarmours, carryingcapacitys, advantages
-	) {
-		this.skill = (skills === undefined) ? {} : skills;
-		this.armour = (armours === undefined) ? {} : armours;
-		this.weapon = (weapons === undefined) ? {} : weapons;
-		this.save = (saves === undefined) ? {} : saves;
-		this.resistance = (resistances === undefined) ? {} : resistances;
-		this.language = (languages === undefined) ? {} : languages;
-		this.tool = (tools === undefined) ? {} : tools;
-		this.savetxt = (savetxts === undefined) ? {} : savetxts;
-		this.vision = (visions === undefined) ? {} : visions;
-		this.speed = (speeds === undefined) ? {} : speeds;
-		this.specialarmour = (specialarmours === undefined) ? {} : specialarmours;
-		this.carryingcapacity = (carryingcapacitys === undefined) ? {} : carryingcapacitys;
-		this.advantage = (advantages === undefined) ? {} : advantages;
+
+class AdapterClassReadStream {
+	constructor(file /*[File]*/) {
+		this.file = file;
+	}
+
+	async read() /*string*/ {
+		return await this.file.text();
+	}
+}
+
+
+// Current... adapters
+
+class UserImportedFilesAdapter {
+	constructor(args) {
+		for (let arg in args) {
+			this[arg] = args[arg];
+		}
 	}
 
 	toSource() {
-		return (
-			"new CurrentProfsAdapter("
-			+ "skills=" + adapter_helper_recursive_toSource(this.skill) + ","
-			+ "armours=" + adapter_helper_recursive_toSource(this.armour) + ","
-			+ "weapons=" + adapter_helper_recursive_toSource(this.weapon) + ","
-			+ "saves=" + adapter_helper_recursive_toSource(this.save) + ","
-			+ "resistances=" + adapter_helper_recursive_toSource(this.resistance) + ","
-			+ "languages=" + adapter_helper_recursive_toSource(this.language) + ","
-			+ "tools=" + adapter_helper_recursive_toSource(this.tool) + ","
-			+ "savetxts=" + adapter_helper_recursive_toSource(this.savetxt) + ","
-			+ "visions=" + adapter_helper_recursive_toSource(this.vision) + ","
-			+ "speeds=" + adapter_helper_recursive_toSource(this.speed) + ","
-			+ "specialarmours=" + adapter_helper_recursive_toSource(this.specialarmour) + ","
-			+ "carryingcapacitys=" + adapter_helper_recursive_toSource(this.carryingcapacity) + ","
-			+ "advantages=" + adapter_helper_recursive_toSource(this.advantage)
-			+ ")"
-		)
+		let scrString = "new UserImportedFilesAdapter({";
+		for (let file in this) {
+			scrString += "'" + file + "':`" + this[file] + "`,";
+		}
+		return scrString + "})";
 	}
 }
 
@@ -645,6 +783,165 @@ class ChangesDialogSkipAdapter {
 			+ "chAT=" + adapter_helper_recursive_toSource(this.chAT) + ","
 			+ "chNO=" + adapter_helper_recursive_toSource(this.chNO) + ","
 			+ "chCO=" + adapter_helper_recursive_toSource(this.chCO)
+			+ ")"
+		)
+	}
+}
+
+
+let CurrentFeatureChoicesKeys = ['classes', 'background', 'background feature', 'race', 'feats', 'items', 'magic', 'bonus'];
+class CurrentFeatureChoicesAdapter {
+	constructor(args) {
+		for (let arg of CurrentFeatureChoicesKeys) {
+			this[arg] = (args[arg] === undefined) ? {} : args[arg];
+		}
+	}
+
+	toSource() {
+		let scrString = "new CurrentFeatureChoicesAdapter({";
+		for (let key in this) {
+			scrString += "'" + key + "':" + adapter_helper_recursive_toSource(this[key]) + ",";
+		}
+		return scrString + "})";
+	}
+}
+
+
+class CurrentSourcesAdapter {
+	constructor(
+		firstTime,
+		globalKnown,
+		globalExcl,
+		classExcl,
+		classExclDefault,
+		racesExcl,
+		racesExclDefault,
+		backgrExcl,
+		backgrExclDefault,
+		backFeaExcl,
+		backFeaExclDefault,
+		featsExcl,
+		featsExclDefault,
+		weapExcl,
+		weapExclDefault,
+		armorExcl,
+		armorExclDefault,
+		ammoExcl,
+		ammoExclDefault,
+		magicitemExcl,
+		magicitemExclDefault,
+		spellsExcl,
+		spellsExclDefault,
+		creaExcl,
+		creaExclDefault,
+		compExcl,
+		compExclDefault,
+		gearExcl,
+		gearExclDefault
+	) {
+		this.firstTime = (firstTime === undefined) ? false : firstTime;
+		this.globalKnown = (globalKnown === undefined) ? [] : globalKnown;
+		this.globalExcl = (globalExcl === undefined) ? [] : globalExcl;
+		this.classExcl = (classExcl === undefined) ? [] : classExcl;
+		this.classExclDefault = (classExclDefault === undefined) ? [] : classExclDefault;
+		this.racesExcl = (racesExcl === undefined) ? [] : racesExcl;
+		this.racesExclDefault = (racesExclDefault === undefined) ? [] : racesExclDefault;
+		this.backgrExcl = (backgrExcl === undefined) ? [] : backgrExcl;
+		this.backgrExclDefault = (backgrExclDefault === undefined) ? [] : backgrExclDefault;
+		this.backFeaExcl = (backFeaExcl === undefined) ? [] : backFeaExcl;
+		this.backFeaExclDefault = (backFeaExclDefault === undefined) ? [] : backFeaExclDefault;
+		this.featsExcl = (featsExcl === undefined) ? [] : featsExcl;
+		this.featsExclDefault = (featsExclDefault === undefined) ? [] : featsExclDefault;
+		this.weapExcl = (weapExcl === undefined) ? [] : weapExcl;
+		this.weapExclDefault = (weapExclDefault === undefined) ? [] : weapExclDefault;
+		this.armorExcl = (armorExcl === undefined) ? [] : armorExcl;
+		this.armorExclDefault = (armorExclDefault === undefined) ? [] : armorExclDefault;
+		this.ammoExcl = (ammoExcl === undefined) ? [] : ammoExcl;
+		this.ammoExclDefault = (ammoExclDefault === undefined) ? [] : ammoExclDefault;
+		this.magicitemExcl = (magicitemExcl === undefined) ? [] : magicitemExcl;
+		this.magicitemExclDefault = (magicitemExclDefault === undefined) ? [] : magicitemExclDefault;
+		this.spellsExcl = (spellsExcl === undefined) ? [] : spellsExcl;
+		this.spellsExclDefault = (spellsExclDefault === undefined) ? [] : spellsExclDefault;
+		this.creaExcl = (creaExcl === undefined) ? [] : creaExcl;
+		this.creaExclDefault = (creaExclDefault === undefined) ? [] : creaExclDefault;
+		this.compExcl = (compExcl === undefined) ? [] : compExcl;
+		this.compExclDefault = (compExclDefault === undefined) ? [] : compExclDefault;
+		this.gearExcl = (gearExcl === undefined) ? [] : gearExcl;
+		this.gearExclDefault = (gearExclDefault === undefined) ? [] : gearExclDefault;
+	}
+
+	toSource() {
+		return (
+			"new CurrentSourcesAdapter("
+			+ "firstTime=" + adapter_helper_recursive_toSource(this.firstTime) + ","
+			+ "globalKnown=" + adapter_helper_recursive_toSource(this.globalKnown) + ","
+			+ "globalExcl=" + adapter_helper_recursive_toSource(this.globalExcl) + ","
+			+ "classExcl=" + adapter_helper_recursive_toSource(this.classExcl) + ","
+			+ "classExclDefault=" + adapter_helper_recursive_toSource(this.classExclDefault) + ","
+			+ "racesExcl=" + adapter_helper_recursive_toSource(this.racesExcl) + ","
+			+ "racesExclDefault=" + adapter_helper_recursive_toSource(this.racesExclDefault) + ","
+			+ "backgrExcl=" + adapter_helper_recursive_toSource(this.backgrExcl) + ","
+			+ "backgrExclDefault=" + adapter_helper_recursive_toSource(this.backgrExclDefault) + ","
+			+ "backFeaExcl=" + adapter_helper_recursive_toSource(this.backFeaExcl) + ","
+			+ "backFeaExclDefault=" + adapter_helper_recursive_toSource(this.backFeaExclDefault) + ","
+			+ "featsExcl=" + adapter_helper_recursive_toSource(this.featsExcl) + ","
+			+ "featsExclDefault=" + adapter_helper_recursive_toSource(this.featsExclDefault) + ","
+			+ "weapExcl=" + adapter_helper_recursive_toSource(this.weapExcl) + ","
+			+ "weapExclDefault=" + adapter_helper_recursive_toSource(this.weapExclDefault) + ","
+			+ "armorExcl=" + adapter_helper_recursive_toSource(this.armorExcl) + ","
+			+ "armorExclDefault=" + adapter_helper_recursive_toSource(this.armorExclDefault) + ","
+			+ "ammoExcl=" + adapter_helper_recursive_toSource(this.ammoExcl) + ","
+			+ "ammoExclDefault=" + adapter_helper_recursive_toSource(this.ammoExclDefault) + ","
+			+ "magicitemExcl=" + adapter_helper_recursive_toSource(this.magicitemExcl) + ","
+			+ "magicitemExclDefault=" + adapter_helper_recursive_toSource(this.magicitemExclDefault) + ","
+			+ "spellsExcl=" + adapter_helper_recursive_toSource(this.spellsExcl) + ","
+			+ "spellsExclDefault=" + adapter_helper_recursive_toSource(this.spellsExclDefault) + ","
+			+ "creaExcl=" + adapter_helper_recursive_toSource(this.creaExcl) + ","
+			+ "creaExclDefault=" + adapter_helper_recursive_toSource(this.creaExclDefault) + ","
+			+ "compExcl=" + adapter_helper_recursive_toSource(this.compExcl) + ","
+			+ "compExclDefault=" + adapter_helper_recursive_toSource(this.compExclDefault) + ","
+			+ "gearExcl=" + adapter_helper_recursive_toSource(this.gearExcl) + ","
+			+ "gearExclDefault=" + adapter_helper_recursive_toSource(this.gearExclDefault)
+			+ ")"
+		)
+	}
+}
+
+class CurrentProfsAdapter {
+	constructor(
+		skills, armours, weapons, saves, resistances, languages, tools, savetxts, visions, speeds, specialarmours, carryingcapacitys, advantages
+	) {
+		this.skill = (skills === undefined) ? {} : skills;
+		this.armour = (armours === undefined) ? {} : armours;
+		this.weapon = (weapons === undefined) ? {} : weapons;
+		this.save = (saves === undefined) ? {} : saves;
+		this.resistance = (resistances === undefined) ? {} : resistances;
+		this.language = (languages === undefined) ? {} : languages;
+		this.tool = (tools === undefined) ? {} : tools;
+		this.savetxt = (savetxts === undefined) ? {} : savetxts;
+		this.vision = (visions === undefined) ? {} : visions;
+		this.speed = (speeds === undefined) ? {} : speeds;
+		this.specialarmour = (specialarmours === undefined) ? {} : specialarmours;
+		this.carryingcapacity = (carryingcapacitys === undefined) ? {} : carryingcapacitys;
+		this.advantage = (advantages === undefined) ? {} : advantages;
+	}
+
+	toSource() {
+		return (
+			"new CurrentProfsAdapter("
+			+ "skills=" + adapter_helper_recursive_toSource(this.skill) + ","
+			+ "armours=" + adapter_helper_recursive_toSource(this.armour) + ","
+			+ "weapons=" + adapter_helper_recursive_toSource(this.weapon) + ","
+			+ "saves=" + adapter_helper_recursive_toSource(this.save) + ","
+			+ "resistances=" + adapter_helper_recursive_toSource(this.resistance) + ","
+			+ "languages=" + adapter_helper_recursive_toSource(this.language) + ","
+			+ "tools=" + adapter_helper_recursive_toSource(this.tool) + ","
+			+ "savetxts=" + adapter_helper_recursive_toSource(this.savetxt) + ","
+			+ "visions=" + adapter_helper_recursive_toSource(this.vision) + ","
+			+ "speeds=" + adapter_helper_recursive_toSource(this.speed) + ","
+			+ "specialarmours=" + adapter_helper_recursive_toSource(this.specialarmour) + ","
+			+ "carryingcapacitys=" + adapter_helper_recursive_toSource(this.carryingcapacity) + ","
+			+ "advantages=" + adapter_helper_recursive_toSource(this.advantage)
 			+ ")"
 		)
 	}
@@ -695,6 +992,8 @@ function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
 				return result;
 			}
 		}
+	} if (typeof object === 'string' || object instanceof String) {
+		return "'" + object + "'";
 	} else {
 		return String(object);
 	}
@@ -719,20 +1018,43 @@ function adapter_helper_get_number_field_selection() /*[int, int]*/ {
 	return [moveCount, moveCount + orig_len];
 };
 
-function adapter_helper_reference_factory(element /*HTMLElement*/, field_id /*String*/) /*AdapterClassFieldReference|AdapterClassFieldContainterReference|null*/ {
-	if (field_id) {
-		if (field_id.startsWith('Template.extras.')) {
-			let values = (new AdapterClassFieldReference(element)).value.split(",");
-			if ((values.length == 1) && (values[0] == "")) {
-				values = [];
+function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFieldReference|AdapterClassFieldContainterReference|null*/ {
+	let element = document.getElementById(field_id);
+	let elements = [];
+	if (element == null) {
+		element = document.getElementById(field_id + "#0");
+		if (element == null) {
+			if (['AdvLog.Options'].includes(field_id)) {
+				return null
+			} else {
+				throw "null element: " + field_id;
 			}
-			return new AdapterClassTemplateReference(values);
+		} else {
+			let counter = 0;
+			elements = []
+			while (element != null) {
+				elements.push(element);
+				counter += 1;
+				element = document.getElementById(field_id + "#" + String(counter));
+			}
 		}
+	} else {
+		elements.push(element);
 	}
-	if (element.classList.contains('field')) {
-		return new AdapterClassFieldReference(html_element = element);
-	} else if (element.classList.contains('field-container')) {
-		return new AdapterClassFieldContainterReference(html_element = element);
+	if (field_id.startsWith('Template.extras.')) {
+		let values = (new AdapterClassFieldReference(elements)).value.split(",");
+		if ((values.length == 1) && (values[0] == "")) {
+			values = [];
+		}
+		return new AdapterClassTemplateReference(values);
+	}
+	if (elements[0].classList.contains('field')) {
+		return new AdapterClassFieldReference(html_elements=elements);
+	} else if (elements[0].classList.contains('field-container')) {
+		if (elements.length > 1) {
+			throw "not implemented: field-container with multiple elements, for " + field_id;
+		}
+		return new AdapterClassFieldContainterReference(html_element=elements[0]);
 	} else {
 		return null;
 	}

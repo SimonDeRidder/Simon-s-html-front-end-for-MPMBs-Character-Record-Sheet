@@ -306,10 +306,25 @@ const util = {
 		}
 		if (cDIPath) {
 			throw "readFileIntoStream with cDIPath not implemented.";
-		} else {
-			[file_handle] = await window.showOpenFilePicker({multiple: false});
 		}
-		return new AdapterClassReadStream(await file_handle.getFile());
+		return new Promise((resolve, reject) => {
+			let elm = document.createElement('input');
+			elm.style.visibility='hidden';
+			elm.setAttribute('type', 'file');
+			elm.addEventListener('change', function () {
+				if (elm.files && elm.files.length > 0) {
+					var file = elm.files[0];
+					var reader = new FileReader();
+					elm.value = '';
+					reader.onload = function(e) {
+						resolve(new AdapterClassReadStream(reader.result));
+						elm.remove();
+					};
+				}
+				reader.readAsText(file);
+			});
+			elm.click();
+		});
 	},
 
 	stringFromStream: async function(oStream /*AdapterClassReadStream*/) /*String*/ {
@@ -723,12 +738,12 @@ class PreSplitString {
 
 
 class AdapterClassReadStream {
-	constructor(file /*[File]*/) {
-		this.file = file;
+	constructor(fileContent /*String*/) {
+		this.fileContent = fileContent;
 	}
 
 	async read() /*string*/ {
-		return await this.file.text();
+		return this.fileContent;
 	}
 }
 

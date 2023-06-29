@@ -25,15 +25,15 @@ function loadScript(path /*str*/) /*Promise*/ {
 function initialCalculationEvents() {
 	// trigger AC calculation
 	document.getElementById('AC_Armor_Bonus').dispatchEvent(new Event('change'));
-	// trigger AC_Dexterity_Modifier calculation (and all skills) (and Attack.i.To Hit)
-	document.getElementById('Dex_Mod').dispatchEvent(new Event('change'));
 	// trigger Adventuring_Gear_Location_Subtotal_* and Adventuring_Gear_Weight_Subtotal_* calculation
 	document.getElementById('Adventuring_Gear_Amount_1').dispatchEvent(new Event('change'));
 	document.getElementById('Adventuring_Gear_Amount_19').dispatchEvent(new Event('change'));
 	document.getElementById('Adventuring_Gear_Amount_37').dispatchEvent(new Event('change'));
-	// trigger ability mods calculation
+	// trigger ability mods calculation (and ST calculation) and AC_Dexterity_Modifier calculation (and all skills) (and Attack.i.To Hit)
+	document.getElementById('Con').dispatchEvent(new Event('change'));
 	document.getElementById('Cha').dispatchEvent(new Event('change'));
-	// TODO: Str, Dex, Con, Int, Wis, HoS (remoce Dex_Mod trigger after Dex to avoid doubles)
+	document.getElementById('Dex').dispatchEvent(new Event('change'));
+	// TODO: Str, Int, Wis, HoS
 }
 
 loadScript('_functions/AbilityScores_old.js')

@@ -7,13 +7,26 @@
 		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/general_info.svg" style="width: var(--page-width); height: 195px;">
 		<span class="textlabel" style="top: 106px; left: 366.6px;">LEVEL &amp; CLASS</span>
 		<span class="textlabel" style="top: 106px; left: 658.5px;">PLAYER NAME</span>
+		<span
+			id="DCI.Title"
+			class="field textlabel"
+			style="font-size: 9.4px;top: 73px;left: 291px;visibility: hidden;"
+		>DCI</span>
 		<span class="textlabel" style="top: 145px; left: 366.6px;">BACKGROUND</span>
 		<span class="textlabel" style="top: 145px; left: 543.3px;">RACE</span>
 		<span class="textlabel" style="top: 145px; left: 658.5px;">EXPERIENCE</span>
 		<span class="textlabel-dimmed" style="top: 145px; left: 777.1px;font-size: 10.6px">Next Level</span>
 		<span class="textlabel" style="top: 155px; left: 101.5px;">CHARACTER NAME</span>
+		
 
 		<input id="PC_Name" class="field inputfield" style="top: 108px;left: 85px;font-size: 16pt;width: 150pt;height: 18pt;font-family: 'scala-sans'" type="text">
+		<input
+			id="DCI.Text"
+			class="field inputfield"
+			aria-label="Put your Adventure League DCI here"
+			style="top: 100px;left: 291px;font-size: 16pt;width: 58.5px;height: 16px;text-align: center;visibility: hidden;"
+			spellcheck="true"
+		/>
 		<input
 			id="Character_Level"
 			class="field inputfield"
@@ -106,14 +119,31 @@
 		<div id="Text.HoS.Ability" class="field textlabel-bold" style="visibility: hidden;top: 681px;left: 7px;width: 77px;"></div>
 
 		<input id="Str" class="field inputfield" style="top:  93px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
-		<input id="Dex" class="field inputfield" style="top: 201px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
-		<input id="Con" class="field inputfield" style="top: 309px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input
+			id="Dex"
+			class="field inputfield"
+			style="top: 201px;left: 27px;font-size: 15px;width: 25pt;height: 16pt;text-align: center"
+			type="number"
+			aria-label="Primary class abilities & Multiclassing prerequisites"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="eventManager.handle_event(EventType.Dex_change)"
+		/>
+		<input
+			id="Con"
+			class="field inputfield"
+			style="top: 309px;left: 27px;font-size: 15px;width: 25pt;height: 16pt;text-align: center"
+			type="number"
+			min="0"
+			step="1"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.Con_change)"
+		/>
 		<input id="Int" class="field inputfield" style="top: 417px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
 		<input id="Wis" class="field inputfield" style="top: 525px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
 		<input
 			id="Cha"
 			class="field inputfield"
-			style="top: 633px;left: 27px;font-size: 13.3pt;width: 25pt;height: 16pt;text-align: center"
+			style="top: 633px;left: 27px;font-size: 15px;width: 25pt;height: 16pt;text-align: center"
 			type="number"
 			min="0"
 			step="1"
@@ -123,8 +153,20 @@
 		<input id="HoS" class="field inputfield" style="visibility: hidden;top: 741px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
 
 		<input id="Str_Mod" class="field isNumber inputfield-noneditable" style="top:  48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
-		<input id="Dex_Mod" class="field isNumber inputfield-noneditable" style="top: 156px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
-		<input id="Con_Mod" class="field isNumber inputfield-noneditable" style="top: 264px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input
+			id="Dex_Mod"
+			class="field isNumber inputfield-noneditable"
+			style="top: 156px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
+			value="0"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Dex_Mod_change)"
+		/>
+		<input
+			id="Con_Mod"
+			class="field isNumber inputfield-noneditable"
+			style="top: 264px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
+			type="text"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Con_Mod_change)"
+		/>
 		<input id="Int_Mod" class="field isNumber inputfield-noneditable" style="top: 372px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
 		<input id="Wis_Mod" class="field isNumber inputfield-noneditable" style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
 		<input
@@ -132,13 +174,13 @@
 			class="field isNumber inputfield-noneditable"
 			style="top: 580px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
 			type="text"
-			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value}; eventManager.handle_event(EventType.Cha_Mod_change)"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Cha_Mod_change)"
 		/>
 		<input id="HoS_Mod" class="field isNumber inputfield-noneditable" style="visibility: hidden;top: 696px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
 
 		<script type="text/javascript">
 			// Ability Mods
-			['Cha'].forEach(function(ability) {
+			['Dex', 'Con', 'Cha'].forEach(function(ability) {
 				eventManager.add_listener(
 					EventType[ability + '_change'],
 					function () {
@@ -173,8 +215,20 @@
 		</div>
 
 		<input id="Str_ST_Prof" class="field checkcircle" type="checkbox" style="top: 10.4px;left: 14.9px;">
-		<input id="Dex_ST_Prof" class="field checkcircle" type="checkbox" style="top: 30.0px;left: 14.9px;">
-		<input id="Con_ST_Prof" class="field checkcircle" type="checkbox" style="top: 49.6px;left: 14.9px;">
+		<input
+			id="Dex_ST_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 30.0px;left: 14.9px;"
+			onchange="eventManager.handle_event(EventType.Dex_ST_Prof_change)"
+		/>
+		<input
+			id="Con_ST_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 49.6px;left: 14.9px;"
+			onchange="eventManager.handle_event(EventType.Con_ST_Prof_change)"
+		/>
 		<input id="Int_ST_Prof" class="field checkcircle" type="checkbox" style="top: 10.4px;left: 101.6px;">
 		<input id="Wis_ST_Prof" class="field checkcircle" type="checkbox" style="top: 30.0px;left: 101.6px;">
 		<input
@@ -186,8 +240,20 @@
 		/>
 
 		<input id="Str_ST_Mod" class="field inputfield-notched" style="top: 10.4px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
-		<input id="Dex_ST_Mod" class="field inputfield-notched" style="top: 30.0px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
-		<input id="Con_ST_Mod" class="field inputfield-notched" style="top: 49.6px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
+		<input
+			id="Dex_ST_Mod"
+			class="field inputfield-notched"
+			style="top: 30.0px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none;"
+			type="text"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value}"
+		/>
+		<input
+			id="Con_ST_Mod"
+			class="field inputfield-notched"
+			style="top: 49.6px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none;"
+			type="text"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value}"
+		/>
 		<input id="Int_ST_Mod" class="field inputfield-notched" style="top: 10.4px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
 		<input id="Wis_ST_Mod" class="field inputfield-notched" style="top: 30.0px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
 		<input
@@ -217,19 +283,35 @@
 			aria-label="All Saving Throws Bonus Modifier"
 			style="top: -12px;left: 62.3px;width: 18px;height: 13.3px;text-align: center;visibility: hidden"
 			value="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.All_ST_Bonus_change)"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.All_ST_Bonus_change)"
+		/>
+		<input
+			id="Dex_ST_Bonus"
+			class="field inputfield bluetext"
+			aria-label="Dexterity Saving Throw Bonus Modifier"
+			style="top: 30px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden"
+			value="0"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dex_ST_Bonus_change)"
+		/>
+		<input
+			id="Con_ST_Bonus"
+			class="field inputfield bluetext"
+			aria-label="Constitution Saving Throw Bonus Modifier"
+			style="top: 49.6px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;"
+			value="0"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Con_ST_Bonus_change)"
 		/>
 		<input
 			id="Cha_ST_Bonus"
 			class="field inputfield bluetext"
-			aria-label="Chraisma Saving Throw Bonus Modifier"
+			aria-label="Charisma Saving Throw Bonus Modifier"
 			style="top: 49.6px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden"
 			value="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
 		/>
 		<script type="text/javascript">
 			// Ability Saving Throws
-			['Cha'].forEach(function(ability) {
+			['Dex', 'Con', 'Cha'].forEach(function(ability) {
 				[
 					EventType[ability + "_Mod_change"],
 					EventType[ability + "_ST_Prof_change"],
@@ -253,6 +335,19 @@
 						}
 					)
 				});
+			});
+			// Bonus field setters
+			['All_ST_Bonus', 'Dex_ST_Bonus', 'Con_ST_Bonus', 'Cha_ST_Bonus'].forEach(function(elementId /*String*/) {
+				document.getElementById(elementId).onclick = async function (clickEvent /*MouseEvent*/) {
+					let adapter=new AdapterClassFieldReference([this]);
+					event.target.name=adapter.name;
+					event.target.submitName=adapter.submitName;
+					event.target.userName=adapter.userName;
+					event.modifier=event.ctrlKey;
+					event.shift=event.shiftKey;
+					await SetThisFldVal();
+					adapter.value=event.target.value;
+				}
 			});
 		</script>
 	</div>
@@ -284,8 +379,7 @@
 			aria-label="With this button you can set the value of the maximum hit points field to one of the calculated values:"
 			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeHPMenu_HPOptions();"
 		>Set Max HP</button>
-		<input id="HP_Max" class="field inputfield" style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
-
+		<input id="HP_Max" class="field inputfield" style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="number" data-submit_name="0,0,0,fixed">
 		<input id="Proficiency_Bonus" class="field inputfield-noneditable" style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
 
 		<input
@@ -301,12 +395,42 @@
 
 		<input id="Initiative_bonus" class="field inputfield-noneditable" style="top: 132px;left: 215.3px;font-size: 28px;width: 66.8px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
 
-		<input id="Death_Save_Succes1" class="field checkcircle" type="checkbox" style="top: 211.1px;left: 22.8px;width: 14px;height: 14px;">
-		<input id="Death_Save_Succes2" class="field checkcircle" type="checkbox" style="top: 211.1px;left: 42.1px;width: 14px;height: 14px;">
-		<input id="Death_Save_Succes3" class="field checkcircle" type="checkbox" style="top: 211.1px;left: 61.4px;width: 14px;height: 14px;">
-		<input id="Death_Save_Fail1" class="field checkcircle" type="checkbox" style="top: 232.2px;left: 22.8px;width: 14px;height: 14px;">
-		<input id="Death_Save_Fail2" class="field checkcircle" type="checkbox" style="top: 232.2px;left: 42.1px;width: 14px;height: 14px;">
-		<input id="Death_Save_Fail3" class="field checkcircle" type="checkbox" style="top: 232.2px;left: 61.4px;width: 14px;height: 14px;">
+		<input
+			id="Death_Save_Succes1"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 211.1px;left: 22.8px;width: 14px;height: 14px;"
+		/>
+		<input
+			id="Death_Save_Succes2"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 211.1px;left: 42.1px;width: 14px;height: 14px;"
+		/>
+		<input
+			id="Death_Save_Succes3"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 211.1px;left: 61.4px;width: 14px;height: 14px;"
+		/>
+		<input
+			id="Death_Save_Fail1"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 232.2px;left: 22.8px;width: 14px;height: 14px;"
+		/>
+		<input
+			id="Death_Save_Fail2"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 232.2px;left: 42.1px;width: 14px;height: 14px;"
+		/>
+		<input
+			id="Death_Save_Fail3"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 232.2px;left: 61.4px;width: 14px;height: 14px;"
+		/>
 
 		<input id="HD1_Level" class="field inputfield-notched" style="top: 211px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
 		<input id="HD1_Die" class="field inputfield-notched" style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
@@ -528,6 +652,19 @@
 					}
 				);
 			});
+			// Bonus field setters
+			['AC_Armor_Bonus', 'AC_Shield_Bonus'].forEach(function(elementId /*String*/) {
+				document.getElementById(elementId).onclick = async function (clickEvent /*MouseEvent*/) {
+					let adapter=new AdapterClassFieldReference([this]);
+					event.target.name=adapter.name;
+					event.target.submitName=adapter.submitName;
+					event.target.userName=adapter.userName;
+					event.modifier=event.ctrlKey;
+					event.shift=event.shiftKey;
+					await SetThisFldVal();
+					adapter.value=event.target.value;
+				}
+			});
 		</script>
 	</div>
 
@@ -612,7 +749,14 @@
 			style="top: 74.5px;left: 22.3px;width: 8px;height: 8px;"
 			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ath', true);eventManager.handle_event(EventType.Ath_Exp_change);}"
 		/>
-		<input id="Dec_Exp" class="field checkcircle" type="checkbox" style="top: 94.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input
+			id="Dec_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 94.0px;left: 22.3px;width: 8px;height: 8px;"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Dec', true);eventManager.handle_event(EventType.Dec_Exp_change);}"
+			aria-label="Skill proficiencies gained from:"
+		/>
 		<input id="His_Exp" class="field checkcircle" type="checkbox" style="top: 113.5px;left: 22.3px;width: 8px;height: 8px;">
 		<input id="Ins_Exp" class="field checkcircle" type="checkbox" style="top: 133.0px;left: 22.3px;width: 8px;height: 8px;">
 		<input id="Inti_Exp" class="field checkcircle" type="checkbox" style="top: 152.5px;left: 22.3px;width: 8px;height: 8px;">
@@ -656,7 +800,14 @@
 			style="top: 76.5px;left: 15.2px;"
 			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ath');eventManager.handle_event(EventType.Ath_Prof_change);}"
 		/>
-		<input id="Dec_Prof" class="field checkcircle" type="checkbox" style="top: 96.0px;left: 15.2px;">
+		<input
+			id="Dec_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 96.0px;left: 15.2px;"
+			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Dec');eventManager.handle_event(EventType.Dec_Prof_change);}"
+			aria-label="Skill proficiencies gained from:"
+		/>
 		<input id="His_Prof" class="field checkcircle" type="checkbox" style="top: 115.5px;left: 15.2px;">
 		<input id="Ins_Prof" class="field checkcircle" type="checkbox" style="top: 135.0px;left: 15.2px;">
 		<input id="Inti_Prof" class="field checkcircle" type="checkbox" style="top: 154.5px;left: 15.2px;">
@@ -705,7 +856,14 @@
 				type="text"
 				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
 			/>
-			<input id="Dec" class="field inputfield-notched" style="top: 78.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input
+				id="Dec"
+				class="field inputfield-notched"
+				style="top: 78.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;font-family: SegoeUI;overflow-x: scroll;"
+				spellcheck="true"
+				type="text"
+				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+			/>
 			<input id="His" class="field inputfield-notched" style="top: 97.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
 			<input id="Ins" class="field inputfield-notched" style="top: 117.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
 			<input id="Inti" class="field inputfield-notched" style="top: 136.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
@@ -720,7 +878,7 @@
 			<input id="Ste" class="field inputfield-notched" style="top: 312.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
 			<input id="Sur" class="field inputfield-notched" style="top: 331.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
 
-			<div id="Text.SkillsNames" class="field" userName="alphabeta">
+			<div id="Text.SkillsNames" class="field" aria-label="alphabeta">
 				<div id="character_skills_label_Acr" class="textlabel" style="top: 1.3px;left: 27.7px;width: fit-content"><span>Acrobatics</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
 				<div id="character_skills_label_Ani" class="textlabel" style="top: 20.8px;left: 27.7px;width: fit-content"><span>Animal Handling</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
 				<div id="character_skills_label_Arc" class="textlabel" style="top: 40.3px;left: 27.7px;width: fit-content"><span>Arcana</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
@@ -747,20 +905,20 @@
 
 		<!-- BlueText -->
 		<input
-			id="Acr_Bonus"
-			class="field inputfield bluetext"
-			style="top: 19px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
-			aria-label="Acrobatics Bonus Modifier"
-			value="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Acr_Bonus_change)"
-		/>
-		<input
 			id="All_Skills_Bonus"
 			class="field inputfield bluetext"
 			style="top: -5px;left: 40px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="All Skills Bonus Modifier"
 			value="0"
-			onchange="event.value=this.value;ValidateBonus(true);this.value=event.value;eventManager.handle_event(EventType.All_Skills_Bonus_change)"
+			onchange="event.value=this.value;ValidateBonus(true);this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.All_Skills_Bonus_change)"
+		/>
+		<input
+			id="Acr_Bonus"
+			class="field inputfield bluetext"
+			style="top: 19px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Acrobatics Bonus Modifier"
+			value="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Acr_Bonus_change)"
 		/>
 		<input
 			id="Ani_Bonus"
@@ -768,7 +926,7 @@
 			style="top: 38.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Animal Handling Bonus Modifier"
 			value="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Ani_Bonus_change)"
+			onchange="event.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ani_Bonus_change)"
 		/>
 		<input
 			id="Arc_Bonus"
@@ -776,15 +934,23 @@
 			style="top: 58px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Arcana Bonus Modifier"
 			value="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Arc_Bonus_change)"
+			onchange="event.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Arc_Bonus_change)"
 		/>
 		<input
 			id="Ath_Bonus"
 			class="field inputfield bluetext"
-			style="top: 58px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			style="top: 77.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Athletics Bonus Modifier"
 			value="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=event.value;eventManager.handle_event(EventType.Ath_Bonus_change)"
+			onchange="event.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ath_Bonus_change)"
+		/>
+		<input
+			id="Dec_Bonus"
+			class="field inputfield bluetext"
+			style="top: 97px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Deception Bonus Modifier"
+			value="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dec_Bonus_change)"
 		/>
 
 		<!-- event listeners -->
@@ -869,8 +1035,10 @@
 					event_type,
 					function () {
 						CalcAllSkills();
-						['Acr', 'Ani', 'Arc', 'Ath', 'Dec', 'His', 'Ins', 'Inti', 'Inv', 'Med', 'Nat', 'Perc', 'Perf',
-						 'Pers', 'Rel', 'Sle', 'Ste', 'Sur', 'Too'].forEach(function (skill) {
+						[
+							'Acr', 'Ani', 'Arc', 'Ath', 'Dec', 'His', 'Ins', 'Inti', 'Inv', 'Med', 'Nat', 'Perc', 'Perf',
+						 	'Pers', 'Rel', 'Sle', 'Ste', 'Sur', 'Too'
+						].forEach(function (skill) {
 							event.target.name = skill;
 							CalcSkill();
 							let skillElement = document.getElementById(skill);
@@ -879,6 +1047,21 @@
 						})
 					}
 				);
+			});
+			// Bonus field setters
+			[
+				'All_Skills_Bonus', 'Acr_Bonus', 'Ani_Bonus', 'Arc_Bonus', 'Ath_Bonus', 'Dec_Bonus'
+			].forEach(function(elementId /*String*/) {
+				document.getElementById(elementId).onclick = async function (clickEvent /*MouseEvent*/) {
+					let adapter=new AdapterClassFieldReference([this]);
+					event.target.name=adapter.name;
+					event.target.submitName=adapter.submitName;
+					event.target.userName=adapter.userName;
+					event.modifier=event.ctrlKey;
+					event.shift=event.shiftKey;
+					await SetThisFldVal();
+					adapter.value=event.target.value;
+				}
 			});
 		</script>
 	</div>
@@ -960,7 +1143,13 @@
 
 		<button id="SR" class="field button" style="top: 186px;left: 210.9px">SR</button>
 		<button id="LR" class="field button" style="top: 186px;left: 232px">LR</button>
-		<button id="Dawn" class="field button" style="top: 186px;left: 252.2px">Dawn</button>
+		<button
+			id="Dawn"
+			class="field button nonprintable"
+			style="top: 186px;left: 252.2px"
+			aria-label="Click here to reset the 'Used' fields of limited features that recover at dawn."
+			onclick="ResetFeaDawn();"
+		>Dawn</button>
 
 		<button
 			id="Button.Limited_Feature_1"
@@ -1342,6 +1531,12 @@
 		<input id="Reaction_4" class="field inputfield" style="top:  85px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
 		<input id="Reaction_5" class="field inputfield" style="top: 105px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
 		<input id="Reaction_6" class="field inputfield" style="top: 125px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_7" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_8" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_9" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_10" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_11" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input id="Reaction_12" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
 
 		<button
 			id="Button.Action_1"
@@ -1634,7 +1829,7 @@
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;ValidateBonus();this.value=event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
+			onchange="event.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
 		/>
 		<input
 			id="AmmoRightDisplay.Amount"
@@ -1643,7 +1838,7 @@
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;ValidateBonus();this.value=event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
+			onchange="event.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
 		/>
 
 		<button
@@ -1661,508 +1856,498 @@
 			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
 		>Reload</button>
 
-		<div id="AmmoLeft" class="field-container" style="position: absolute;top: 50px;left: 22px;width: 100px;height: 60px;">
-			<div id="AmmoLeft.Top" class="field-container">
-				<input
-					id="AmmoLeft.Top.1"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left:  0px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Top.3"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 20px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Top.5"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 40px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Top.7"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 60px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Top.9"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 80px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Top.10"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 90px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<div id="AmmoLeft.Top.Axe" class="field-container">
-					<input
-						id="AmmoLeft.Top.Axe.2"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 0px;left: 10px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoLeft');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoLeft.Top.Axe.4"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 0px;left: 30px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoLeft');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoLeft.Top.Axe.6"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 0px;left: 50px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoLeft');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoLeft.Top.Axe.8"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 0px;left: 70px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoLeft');"
-						type="checkbox"
-					/>
-				</div>
-			</div>
-			<div id="AmmoLeft.Base" class="field-container">
-				<input
-					id="AmmoLeft.Base.11"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left:  0px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Base.12"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 10px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Base.14"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 30px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Base.16"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 50px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Base.18"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 70px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoLeft.Base.20"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 90px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-					type="checkbox"
-				/>
-				<div id="AmmoLeft.Base.Axe" class="field-container">
-					<input
-						id="AmmoLeft.Base.Axe.13"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 30px;left: 20px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoLeft');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoLeft.Base.Axe.15"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 30px;left: 40px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoLeft');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoLeft.Base.Axe.17"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 30px;left: 60px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoLeft');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoLeft.Base.Axe.19"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 30px;left: 80px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoLeft');"
-						type="checkbox"
-					/>
-				</div>
-			</div>
+		<div id="AmmoLeft" style="position: absolute;top: 50px;left: 22px;width: 100px;height: 60px;">
+			<input
+				id="AmmoLeft.Top.1"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left:  0px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Top.3"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 20px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Top.5"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 40px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Top.7"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 60px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Top.9"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 80px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Top.10"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 90px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Top.Axe.2"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 10px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Top.Axe.4"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 30px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Top.Axe.6"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 50px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Top.Axe.8"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 70px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.11"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left:  0px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.12"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 10px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.14"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 30px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.16"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 50px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.18"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 70px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.20"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 90px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.Axe.13"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 20px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.Axe.15"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 40px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.Axe.17"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 60px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoLeft.Base.Axe.19"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 80px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+				type="checkbox"
+			/>
 
-			<div id="AmmoLeft.Bullet" class="field-container">
-				<input
-					id="AmmoLeft.Bullet.1"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.2"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.3"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.4"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.5"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.6"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.7"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.8"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.9"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.10"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.11"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.12"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.13"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.14"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.15"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.16"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.17"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.18"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.19"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.20"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.21"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.22"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.23"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.24"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.25"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.26"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.27"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.28"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.29"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.30"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.31"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.32"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.33"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.34"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.35"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.36"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.37"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.38"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.39"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.40"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.41"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.42"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.43"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.44"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.45"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.46"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.47"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.48"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.49"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-				<input
-					id="AmmoLeft.Bullet.50"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoLeft');"
-				/>
-			</div>
+			<input
+				id="AmmoLeft.Bullet.1"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.2"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.3"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.4"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.5"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.6"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.7"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.8"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.9"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.10"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.11"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.12"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.13"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.14"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.15"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.16"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.17"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.18"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.19"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.20"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.21"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.22"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.23"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.24"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.25"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.26"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.27"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.28"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.29"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.30"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.31"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.32"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.33"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.34"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.35"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.36"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.37"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.38"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.39"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.40"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.41"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.42"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.43"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.44"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.45"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.46"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.47"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.48"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.49"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
+			<input
+				id="AmmoLeft.Bullet.50"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoLeft');"
+			/>
 
 			<div
 				id="AmmoLeft.Icon.Arrows"
@@ -2206,508 +2391,498 @@
 			></div>
 		</div>
 
-		<div id="AmmoRight" class="field-container" style="position: absolute;top: 50px;left: 167.5px;width: 100px;height: 60px;">
-			<div id="AmmoRight.Top" class="field-container">
-				<input
-					id="AmmoRight.Top.1"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left:  0px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Top.3"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 20px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Top.5"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 40px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Top.7"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 60px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Top.9"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 80px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Top.10"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 0px;left: 90px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<div id="AmmoRight.Top.Axe" class="field-container">
-					<input
-						id="AmmoRight.Top.Axe.2"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 0px;left: 10px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoRight');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoRight.Top.Axe.4"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 0px;left: 30px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoRight');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoRight.Top.Axe.6"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 0px;left: 50px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoRight');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoRight.Top.Axe.8"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 0px;left: 70px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoRight');"
-						type="checkbox"
-					/>
-				</div>
-			</div>
-			<div id="AmmoRight.Base" class="field-container">
-				<input
-					id="AmmoRight.Base.11"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left:  0px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Base.12"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 10px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Base.14"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 30px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Base.16"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 50px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Base.18"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 70px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<input
-					id="AmmoRight.Base.20"
-					class="field checkbox-ammunition ammunition-arrow"
-					style="top: 30px;left: 90px;width: 10px; height: 30px"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-					type="checkbox"
-				/>
-				<div id="AmmoRight.Base.Axe" class="field-container">
-					<input
-						id="AmmoRight.Base.Axe.13"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 30px;left: 20px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoRight');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoRight.Base.Axe.15"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 30px;left: 40px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoRight');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoRight.Base.Axe.17"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 30px;left: 60px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoRight');"
-						type="checkbox"
-					/>
-					<input
-						id="AmmoRight.Base.Axe.19"
-						class="field checkbox-ammunition ammunition-arrow"
-						style="top: 30px;left: 80px;width: 10px; height: 30px"
-						onclick="onAmmoClick(this, 'AmmoRight');"
-						type="checkbox"
-					/>
-				</div>
-			</div>
+		<div id="AmmoRight" style="position: absolute;top: 50px;left: 167.5px;width: 100px;height: 60px;">
+			<input
+				id="AmmoRight.Top.1"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left:  0px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Top.3"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 20px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Top.5"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 40px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Top.7"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 60px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Top.9"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 80px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Top.10"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 90px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Top.Axe.2"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 10px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Top.Axe.4"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 30px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Top.Axe.6"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 50px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Top.Axe.8"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 0px;left: 70px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.11"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left:  0px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.12"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 10px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.14"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 30px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.16"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 50px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.18"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 70px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.20"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 90px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.Axe.13"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 20px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.Axe.15"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 40px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.Axe.17"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 60px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
+			<input
+				id="AmmoRight.Base.Axe.19"
+				class="field checkbox-ammunition ammunition-arrow"
+				style="top: 30px;left: 80px;width: 10px; height: 30px"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+				type="checkbox"
+			/>
 
-			<div id="AmmoRight.Bullet" class="field-container">
-				<input
-					id="AmmoRight.Bullet.1"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.2"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.3"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.4"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.5"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.6"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.7"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.8"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.9"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.10"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top:  0px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.11"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.12"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.13"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.14"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.15"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.16"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.17"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.18"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.19"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.20"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 12px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.21"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.22"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.23"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.24"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.25"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.26"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.27"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.28"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.29"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.30"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 24px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.31"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.32"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.33"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.34"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.35"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.36"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.37"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.38"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.39"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.40"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 36px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.41"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left:  0px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.42"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 10px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.43"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 20px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.44"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 30px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.45"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 40px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.46"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 50px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.47"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 60px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.48"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 70px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.49"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 80px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-				<input
-					id="AmmoRight.Bullet.50"
-					class="field checkbox-ammunition ammunition-bullet"
-					type="checkbox"
-					style="top: 48px;left: 90px;width: 10px;height: 12px;visibility: hidden"
-					onclick="onAmmoClick(this, 'AmmoRight');"
-				/>
-			</div>
+			<input
+				id="AmmoRight.Bullet.1"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.2"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.3"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.4"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.5"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.6"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.7"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.8"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.9"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.10"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top:  0px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.11"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.12"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.13"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.14"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.15"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.16"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.17"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.18"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.19"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.20"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 12px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.21"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.22"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.23"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.24"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.25"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.26"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.27"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.28"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.29"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.30"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 24px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.31"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.32"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.33"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.34"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.35"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.36"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.37"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.38"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.39"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.40"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 36px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.41"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left:  0px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.42"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 10px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.43"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 20px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.44"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 30px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.45"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 40px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.46"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 50px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.47"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 60px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.48"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 70px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.49"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 80px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
+			<input
+				id="AmmoRight.Bullet.50"
+				class="field checkbox-ammunition ammunition-bullet"
+				type="checkbox"
+				style="top: 48px;left: 90px;width: 10px;height: 12px;visibility: hidden"
+				onclick="onAmmoClick(this, 'AmmoRight');"
+			/>
 
 			<div
 				id="AmmoRight.Icon.Arrows"
@@ -3497,7 +3672,11 @@
 	</div>
 
 	<span id="SheetInformation" class="field textlabel-dimmed" style="top: 1155px;left: 43px;font-size: 6.43px;font-weight: bold">MorePurpleMoreBetter&apos;s D&amp;D 5th edition Character Record Sheet v13.1.2 (Printer Friendly)</span>
-	<span id="CopyrightInformationFront" class="field textlabel-dimmed" style="top: 1155px;left: 387px;font-size: 6.43px;font-weight: bold">
+	<span
+		id="CopyrightInformationFront"
+		class="field textlabel-dimmed"
+		style="top: 1155px;left: 387px;font-size: 6.4px;font-weight: bold"
+	>
 		Made by Joost Wijnen (mpmb@flapkan.com); Web front-end by Simon De Ridder; Dragon Head by spikeilustra; Design inspired by Wizards of the Coast character sheet
 	</span>
 
@@ -3512,25 +3691,6 @@
 		<div id="Proficiency_Bonus_Modifier" class="field"></div>
 		<div id="Perc_Adv" class="field"></div><!--?-->
 		<div id="Perc_Dis" class="field"></div><!--?-->
-		<div id="Extra.Exhaustion_Level_1" class="field"></div>
-		<div id="Extra.Exhaustion_Level_2" class="field"></div>
-		<div id="Extra.Exhaustion_Level_3" class="field"></div>
-		<div id="Extra.Exhaustion_Level_4" class="field"></div>
-		<div id="Extra.Exhaustion_Level_5" class="field"></div>
-		<div id="Extra.Exhaustion_Level_6" class="field"></div>
-		<div id="Extra.Condition_1" class="field"></div>
-		<div id="Extra.Condition_3" class="field"></div>
-		<div id="Extra.Condition_4" class="field"></div>
-		<div id="Extra.Condition_5" class="field"></div>
-		<div id="Extra.Condition_6" class="field"></div>
-		<div id="Extra.Condition_7" class="field"></div>
-		<div id="Extra.Condition_8" class="field"></div>
-		<div id="Extra.Condition_9" class="field"></div>
-		<div id="Extra.Condition_10" class="field"></div>
-		<div id="Extra.Condition_11" class="field"></div>
-		<div id="Extra.Condition_12" class="field"></div>
-		<div id="Extra.Condition_13" class="field"></div>
-		<div id="Extra.Condition_14" class="field"></div>
 		<div id="Stealth_Disadv" class="field"></div>
 		<div id="Text.Header.Combat" class="field"></div>
 		<div id="Spell_DC_1_Bonus" class="field"></div>
@@ -3538,9 +3698,6 @@
 		<div id="Attack.Titles" class="field"></div>
 		<div id="Text.SaveDC.1" class="field"></div>
 		<div id="HoS_ST_Bonus" class="field"></div>
-		<div id="DCI.Text" class="field"></div>
-		<div id="DCI.Title" class="field"></div>
-		<div id="Dec_Bonus" class="field"></div>
 		<div id="His_Bonus" class="field"></div>
 		<div id="Ins_Bonus" class="field"></div>
 		<div id="Inti_Bonus" class="field"></div>

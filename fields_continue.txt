@@ -1,16 +1,7 @@
 Bluetext*   -   skipped for now
-Class Features Menu -   done
+Extra.Gear Location.Row <i:1-36>#<j:0-1>    -   done
 
 // trigger events on change:
-"Con Mod": Con_Mod_change
-"Dec Bonus": Dec_Bonus_change
-"Dec Exp": Dec_Exp_change
-"Dec Prof": Dec_Prof_change
-"Dex Mod": Dex_Mod_change
-"Extra.Condition 8": Extra_Condition_8_change
-"Extra.Condition 9": Extra_Condition_9_change
-"Extra.Condition 13": Extra_Condition_13_change
-"Extra.Condition 14": Extra_Condition_14_change
 'Heavy Armor': Heavy_Armor_change
 "His Bonus": His_Bonus_change
 "His Exp": His_Exp_change
@@ -28,6 +19,7 @@ Class Features Menu -   done
 "Inv Exp": Inv_Exp_change
 "Inv Prof": Inv_Prof_change
 "Jack of All Trades": Jack_of_All_Trades_change
+"Limited_Feature_Used_<i:1-8>" : Limited_Feature_Used_<i:1-8>_change
 "Med Bonus": Med_Bonus_change
 "Med Exp": Med_Exp_change
 "Med Prof": Med_Prof_change

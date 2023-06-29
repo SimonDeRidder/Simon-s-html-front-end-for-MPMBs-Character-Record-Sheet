@@ -89,6 +89,7 @@ const app = {
 				"FEATS SOURCE SELECTION DIALOG",
 				"CREATURES SOURCE SELECTION DIALOG",
 				"SUBCLASS SELECTION DIALOG",
+				"SET MODIFIER DIALOG",
 			].includes(monitor.description.name)
 		) {
 			// TODO: remove this if all execDialogs are converted
@@ -172,14 +173,14 @@ AdapterParsePopUpMenu = function (aParams, resolve) {
 		} else {
 			if (aParams[i].oSubMenu) {
 				menu.push({
-					text: aParams[i].cName,
+					text: aParams[i].cName.replace('&&', '&amp;'),
 					enabled: aParams[i].bEnabled,
 					sub: AdapterParsePopUpMenu(aParams[i].oSubMenu, resolve),
 				});
 			} else {
 				let returnVal = aParams[i].cReturn ? aParams[i].cReturn : aParams[i].cName;
 				let item = {
-					text: aParams[i].cName,
+					text: aParams[i].cName.replace('&&', '&amp;'),
 					enabled: aParams[i].bEnabled,
 					events: {
 						'click': function (event) {
@@ -216,6 +217,10 @@ this.getField = function (field_name /*str*/) /*AdapterClassFieldReference|Adapt
 		return adapter_helper_get_saveimg_field(field_name.replace(/^SaveIMG\./, ''))
 	}
 	let field_id = adapter_helper_convert_fieldname_to_id(field_name);
+	if (field_id.endsWith('.alphabeta')) {
+		// for Stealth Disadv/Stealth_Disadv (see Functions2:7633), TODO find out what to do with this.
+		field_id = field_id.replace(/.alphabeta$/, '');
+	}
 	return adapter_helper_reference_factory(field_id);
 };
 
@@ -228,7 +233,8 @@ this.resetForm = function (aFields = null /*fields*/) {
 		throw "aFields is null in resetForm";
 	}
 	aFields.forEach(field => {
-		let element = document.getElementById(adapter_helper_convert_fieldname_to_id(field));
+		console.log("resetting '" + field + "'");
+		let element = adapter_helper_reference_factory(adapter_helper_convert_fieldname_to_id(field)).html_elements[0];
 		let element_type = element.getAttribute('type');
 		let changed = false;
 		if ((element_type == 'text') | (element_type == 'number')) {
@@ -426,7 +432,7 @@ class AdapterClassFieldReference {
 		return adapter_helper_convert_id_to_fieldname(id_);
 	}
 
-	get value() /*String*/ {
+	get value() /*String|Number|Boolean*/ {
 		let value_;
 		if (['input', 'select', 'textarea'].includes(this.html_elements[0].tagName.toLowerCase())) {
 			value_ = this.html_elements[0].value;
@@ -448,14 +454,31 @@ class AdapterClassFieldReference {
 		) {
 			return Number(value_);
 		}
+		if (value_ == 'true') {
+			return true;
+		}
+		if (value_ == 'false') {
+			return false;
+		}
 		return value_;
 	}
 
-	set value(new_value /*str*/) {
+	set value(new_value /*String|[String]*/) {
+		if ((new_value != null) && (new_value.constructor === Array)) {
+			new_value = new_value.join(',');
+		}
 		let changed = false;
 		if (['input', 'select', 'textarea'].includes(this.html_elements[0].tagName.toLowerCase())) {
 			if (this.html_elements[0].value != new_value) {
 				changed = true;
+			}
+			if (
+				(this.html_elements[0].tagName.toLowerCase() == 'input')
+				&& (this.html_elements[0].getAttribute('type')?.toLowerCase() == 'number')
+				&& isNaN(new_value)
+			) {
+				// try to strip a unit from the number
+				new_value = new_value.replace(/^\s*(-?\d+\.?\d*)\s*[a-zA-Z]+$/, '$1');
 			}
 			this.html_elements[0].value = new_value;
 		} else {
@@ -504,13 +527,21 @@ class AdapterClassFieldReference {
 			throw "tried to set noView display on element";
 		}
 		if (newDisplay == display.hidden) {
-			this.html_elements[0].style.visibility = 'hidden';
-		} else {
-			this.html_elements[0].style.visibility = 'visible';
-			if (newDisplay == display.noPrint) {
-				this.html_elements[0].classList.add('nonprintable');
+			for (let element of this.html_elements) {
+				element.style.visibility = 'hidden';
 			}
-			this.html_elements[0].dispatchEvent(new Event('displayShow'));
+		} else {
+			for (let element of this.html_elements) {
+				element.style.visibility = 'visible';
+			}
+			if (newDisplay == display.noPrint) {
+				for (let element of this.html_elements) {
+					element.classList.add('nonprintable');
+				}
+			}
+			for (let element of this.html_elements) {
+				element.dispatchEvent(new Event('displayShow'));
+			}
 		}
 	}
 
@@ -583,22 +614,61 @@ class AdapterClassFieldReference {
 		return this.html_elements[0].dataset.page;
 	}
 
+	get rect() /*[Number]*/ {
+		let boundingRect = this.html_elements[0].getBoundingClientRect();
+		return [
+			boundingRect.left * 3.0 / 4.0,
+			boundingRect.top * 3.0 / 4.0,
+			boundingRect.right * 3.0 / 4.0,
+			boundingRect.bottom * 3.0 / 4.0,
+		]
+	}
+
+	set rect(newRect /*[Number]*/) {
+		let currentBoundingRect = this.html_elements[0].getBoundingClientRect();
+		let leftDiff = (newRect[0] * 4 / 3) - currentBoundingRect.left;
+		let topDiff = (newRect[1] * 4 / 3) - currentBoundingRect.top;
+		let diff = {
+			left: leftDiff,
+			top: topDiff,
+			width: (newRect[2] * 4 / 3) - currentBoundingRect.right - leftDiff,
+			height: (newRect[3] * 4 / 3) - currentBoundingRect.bottom - topDiff,
+		}
+		let currentVal, valueMatch;
+		for (let styleType of Object.keys(diff)) {
+			if (Math.abs(diff[styleType]) > 0.01) {
+				currentVal = this.html_elements[0].style[styleType];
+				valueMatch = currentVal.match(/^\s*(-?\d+\.?\d*)\s*px\s*$/);
+				if (valueMatch == null) {
+					throw (
+						"Tried to change element style '"
+						+ styleType
+						+ "' for element '"
+						+ this.html_elements[0].id
+						+ "', but that style is not defined."
+					);
+				}
+				this.html_elements[0].style[styleType] = "" + (Number(valueMatch[1]) + diff[styleType]) + "px";
+			}
+		}
+	}
+
 	toSource() /*str*/ {
 		return this.html_elements[0].toSource();
 	}
 
-	isBoxChecked(nWidget /*int*/) /*boolean*/ {
+	isBoxChecked(nWidget /*int*/) /*Number*/ {
 		if (this.html_elements[nWidget].checked) {
-			return true;
+			return 1;
 		}
 		else {
-			return false;
+			return 0;
 		}
 	}
 
 	checkThisBox(nWidget /*int*/, bCheckIt = true /*boolean*/) {
 		let changed = false;
-		if (this.html_elements[nWidget].checked != bCheckIt) {
+		if (Number(this.html_elements[nWidget].checked) != Number(bCheckIt)) {
 			changed = true;
 		}
 		this.html_elements[nWidget].checked = bCheckIt;
@@ -644,11 +714,13 @@ class AdapterClassFieldReference {
 		}
 		if (
 			[
-				"event.value = Math.max(1, What('Cha Mod'));", "event.value = 1 + What('Cha Mod');"
+				"event.value = Math.max(1, What('Cha Mod'));",
+				"event.value = 1 + What('Cha Mod');",
+				"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var DCmod = Number(usages) * 5; event.value = (isNaN(Number(usages)) || usages === '') ? 'DC  ' : 'DC ' + Number(10 + DCmod);"
 			].includes(actionStr)
 		) {  // TODO: remove when we're confident enough in the change rule matching
 			let accessedFieldIds = getAccessedFieldIds(actionStr);
-			let currentFieldId = event.target.id;
+			let currentFieldId = this.html_elements[0].id;
 			let changeEventName;
 			for (let fieldID of accessedFieldIds) {
 				changeEventName = fieldID + '_change';
@@ -656,8 +728,10 @@ class AdapterClassFieldReference {
 					throw "Could not find change event for field id " + fieldID;
 				}
 				eventManager.add_listener(EventType[changeEventName], function() {
+					let theElement = document.getElementById(currentFieldId);
+					event.target.name = adapter_helper_convert_id_to_fieldname(theElement.id);
 					eval(actionStr);
-					document.getElementById(currentFieldId).value = event.value;
+					theElement.value = event.value;
 				})
 			}
 		} else {
@@ -689,33 +763,6 @@ class AdapterClassImageReference {
 }
 
 
-class AdapterClassFieldContainterReference {
-	constructor(html_element /*HTMLElement*/) {
-		this.html_element = html_element;
-	}
-
-	set submitName(new_submitName /*str*/) {
-		throw "set submitName called on field container"
-	}
-
-	set value(new_value /*str*/) {
-		throw "set value called on field container"
-	}
-
-	set userName(new_userName /*str*/) {
-		throw "set userName called on field container"
-	}
-
-	set display(newDisplay /*int*/) {
-		for (let i = 0; i < this.html_element.children.length; i++) {
-			let childRef = adapter_helper_reference_factory(this.html_element.children[i], "");
-			if (childRef) {
-				childRef.display = newDisplay;
-			}
-		}
-	}
-}
-
 class AdapterClassTemplateReference {
 	constructor(values /*[String]*/) {
 		this.values = values;
@@ -725,6 +772,7 @@ class AdapterClassTemplateReference {
 		return new PreSplitString(this.values);
 	}
 }
+
 
 class PreSplitString {
 	constructor(values /*[String]*/) {
@@ -1036,21 +1084,18 @@ function adapter_helper_get_number_field_selection() /*[int, int]*/ {
 function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFieldReference|AdapterClassFieldContainterReference|null*/ {
 	let element = document.getElementById(field_id);
 	let elements = [];
-	if (element == null) {
-		element = document.getElementById(field_id + "#0");
-		if (element == null) {
+	if ((element == null ) || (!element.classList.contains('field'))) {
+		// No single element by this id, look for "child elements" that start with the id as prefix
+		[...document.getElementsByClassName('field')].forEach(element => {
+			if (element.id.match(new RegExp("^" + field_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "(?![a-zA-Z0-9])"))) {
+				elements.push(element);
+			}
+		});
+		if (elements.length == 0) {
 			if (['AdvLog.Options'].includes(field_id)) {
 				return null
 			} else {
 				throw "null element: " + field_id;
-			}
-		} else {
-			let counter = 0;
-			elements = []
-			while (element != null) {
-				elements.push(element);
-				counter += 1;
-				element = document.getElementById(field_id + "#" + String(counter));
 			}
 		}
 	} else {
@@ -1063,16 +1108,7 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 		}
 		return new AdapterClassTemplateReference(values);
 	}
-	if (elements[0].classList.contains('field')) {
-		return new AdapterClassFieldReference(html_elements=elements);
-	} else if (elements[0].classList.contains('field-container')) {
-		if (elements.length > 1) {
-			throw "not implemented: field-container with multiple elements, for " + field_id;
-		}
-		return new AdapterClassFieldContainterReference(html_element=elements[0]);
-	} else {
-		return null;
-	}
+	return new AdapterClassFieldReference(html_elements=elements);
 }
 
 function adapter_helper_get_saveimg_field(img_name /*String*/) /*AdapterClassImageReference|null*/ {

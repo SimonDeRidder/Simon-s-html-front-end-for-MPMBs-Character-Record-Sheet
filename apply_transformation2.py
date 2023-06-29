@@ -4,7 +4,7 @@ import re
 
 import numpy as np
 
-FILE = "img/page_reference/backgrounds/movement.svg"
+FILE = "img/page_reference/backgrounds/environment.svg"
 PRECISION = 5
 TRANSFORM_PATTERN = re.compile(
 	r'\s*transform="matrix\(\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,\s*(-?[0-9\.]+)\s*,'

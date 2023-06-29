@@ -3014,7 +3014,10 @@ function SetRacesdropdown(forceTooltips) {
 //parse the results from the menu into an array
 async function getMenu(menuname) {
 	if (
-		!["actions", "attacks", "background", "gearline", "hp", "limfea", "importscripts", "faq", "sources", "classfeatures"].includes(menuname)
+		![
+			"actions", "attacks", "background", "gearline", "hp", "limfea", "importscripts", "inventory", "faq",
+			"sources", "classfeatures"
+		].includes(menuname)
 		) {  // TODO: remove when all done
 		throw "error: unknown context menu: '" + menuname + "', make sure it is async";
 	}
@@ -3418,8 +3421,8 @@ function MakeInventoryMenu() {
 };
 
 //call the inventory menu ('add equipment' button) and do something with the results
-function InventoryOptions(input) {
-	var MenuSelection = input ? input : getMenu("inventory");
+async function InventoryOptions(input) {
+	var MenuSelection = input ? input : await getMenu("inventory");
 
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 

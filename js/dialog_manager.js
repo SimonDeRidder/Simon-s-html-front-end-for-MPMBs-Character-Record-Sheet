@@ -46,7 +46,7 @@ const dialogManager = {
 					}
 					let elementType = theElement.getAttribute('elementType');
 					if (elementType == 'edit_text') {
-						theElement.setAttribute('placeholder', thingsToLoad[elementID]);
+						theElement.value = thingsToLoad[elementID];
 					} else if (elementType == 'image') {
 						theElement.style.width = thingsToLoad[elementID].width + 'px';
 						theElement.style.height = thingsToLoad[elementID].height + 'px';
@@ -121,7 +121,10 @@ const dialogManager = {
 				return results;
 			};
 			dialog.setForeColorRed = function (elementId /*str*/) {
-				document.getElementById(dialog.idPrefix + elementId).style.color = "red";
+				let element = document.getElementById(dialog.idPrefix + elementId);
+				if (element) {
+					element.style.color = "red";
+				}
 			};
 			dialog.visible = function (thingsToSetVisible /*Object*/) {
 				for (let elementID in thingsToSetVisible) {

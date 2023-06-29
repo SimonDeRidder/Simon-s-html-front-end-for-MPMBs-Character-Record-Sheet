@@ -39,20 +39,51 @@ function addElementNode(
 
 function getAccessedFieldIds(code /*String*/) /*Set[String]*/ {
 	const patterns = [/What\(([^\)]+)\)/g, /tdoc.getField\(([^\)]+)\)/g];
-	let all_matches = [];
+
+	function isStringLiteralString(theString /*String*/) /*boolean*/ {
+		return theString.startsWith("'") && theString.endsWith("'") && !theString.slice(1, -1).includes("'")
+	}
+
+	let all_matches = new Set();
 	for (let pattern of patterns) {
 		let matches = [...code.matchAll(pattern)];
 		for (let match of matches) {
-			if (match[1].startsWith("'") && match[1].endsWith("'") && !match[1].slice(1, -1).includes("'")) {
-				all_matches.push(match[1].slice(1, -1));
+			if (isStringLiteralString(match[1].trim())) {
+				let matchID = adapter_helper_convert_fieldname_to_id(match[1].trim().slice(1, -1));
+				if (document.getElementById(matchID)) {
+					all_matches.add(matchID);
+				}
 			} else {
-				throw "Non-literal encountered in matches for getAccessedFieldIds: " + match;
+				let fieldNameTokens = match[1].split("+");
+				if (fieldNameTokens.length == 1) {
+					// one token, not string
+					throw "Variable encountered in matches for getAccessedFieldIds: " + match;
+				} else {
+					let pattern = "";
+					let trimToken;
+					for (let token of fieldNameTokens) {
+						trimToken = token.trim();
+						if (isStringLiteralString(trimToken)) {
+							pattern += adapter_helper_convert_fieldname_to_id(trimToken.slice(1, -1));
+						} else {
+							// variable, could be anything
+							// TODO: try to resolve
+							if (trimToken.endsWith('Nmbr') || trimToken.endsWith('Num') || (trimToken == 'i')) {
+								pattern += "\\d+";
+							} else {
+								pattern += ".+";
+							}
+						}
+					}
+					let fieldIDRegExp = new RegExp("^" + pattern + "$");
+					[...document.getElementsByClassName('field')].forEach(element => {
+						if (fieldIDRegExp.test(element.id)) {
+							all_matches.add(element.id);
+						}
+					})
+				}
 			}
 		}
 	}
-	let accessedFieldIds = new Set();
-	for (let match of all_matches) {
-		accessedFieldIds.add(adapter_helper_convert_fieldname_to_id(match));
-	}
-	return accessedFieldIds;
+	return all_matches;
 }

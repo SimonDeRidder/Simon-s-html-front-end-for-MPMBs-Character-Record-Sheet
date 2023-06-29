@@ -3246,7 +3246,7 @@ async function PagesOptions() {
 			Toggle2ndAbilityDC(MenuSelection[1]);
 			break;
 		case "equip" :
-			if (MenuSelection[3] == "false") InventoryOptions([MenuSelection[1]]);
+			if (MenuSelection[3] == "false") await InventoryOptions([MenuSelection[1]]);
 			if (MenuSelection[1] == "weight") WeightToCalc_Button();
 			break;
 		case "3rdpage" :
@@ -6174,7 +6174,7 @@ function EvalDmgDie(input, notComp, isSpecial) {
 };
 
 // add a way to set the value of a field
-function SetThisFldVal() {
+async function SetThisFldVal() {
 	var len = typePF ? 4 : 3;
 	if (event.target.submitName || event.target.value.length > len || event.modifier || event.shift) {
 		var QI = getTemplPre(event.target.name, "AScomp");
@@ -6307,7 +6307,7 @@ function SetThisFldVal() {
 								alignment : "align_left",
 								item_id : "txtC",
 								name : "This calculates to:",
-								char_width : 1,
+								char_width : 11,
 								height : 25
 							}, {
 								type : "static_text",
@@ -6360,7 +6360,7 @@ function SetThisFldVal() {
 				}]
 			}
 		};
-		if (app.execDialog(theDialog) === "ok") {
+		if (await app.execDialog(theDialog) === "ok") {
 			event.target.value = theDialog.theTXT;
 		};
 	};

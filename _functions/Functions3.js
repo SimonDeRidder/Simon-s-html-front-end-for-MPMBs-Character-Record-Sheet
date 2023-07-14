@@ -1191,7 +1191,7 @@ function processAddWeapons(AddRemove, weapons) {
 // set ammuntion or remove the ammuntion
 function processAddAmmo(AddRemove, ammos) {
 	if (!ammos) return;
-	if (!isArray(ammos) || (ammos.length === 2 && isNaN(ammos[1]))) {
+	if (!isArray(ammos) || (ammos.length === 2 && !isNaN(ammos[1]))) {
 		ammos = [ammos];
 	}
 	for (var a = 0; a < ammos.length; a++) {
@@ -2255,7 +2255,6 @@ function ShowCompareDialog(txtA, arr, canBeLong) {
 // >>>> Magic Items functions <<<< \\
 
 async function doDropDownValCalcWithChoices() {
-	if (!event.target || event.type != "Field") return;
 	switch (event.name) {
 		case "Calculate":
 			if (event.target.setVal !== undefined) {
@@ -3197,7 +3196,7 @@ async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 		Menus.magicitems = magicMenu;
 		if (MenuSelection == "justMenu") return;
 	}
-	MenuSelection = MenuSelection ? MenuSelection : getMenu("magicitems");
+	MenuSelection = MenuSelection ? MenuSelection : await getMenu("magicitems");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] != "item") return;
 
 	// Start progress bar and stop calculations

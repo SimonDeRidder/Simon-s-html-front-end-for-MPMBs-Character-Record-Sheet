@@ -1,5 +1,5 @@
 Bluetext*   -   skipped for now
-Extra.Gear Location.Row <i:1-36>#<j:0-1>    -   done
+HP Max  -   done
 
 // trigger events on change:
 'Heavy Armor': Heavy_Armor_change

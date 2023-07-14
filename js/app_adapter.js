@@ -228,9 +228,12 @@ this.calculateNow = function () {
 	// TODO: does nothing for now, we don't pause calculations (see also calcStop and calcCont)
 };
 
-this.resetForm = function (aFields = null /*fields*/) {
+this.resetForm = function (aFields = null /*String|[String]|null*/) {
 	if (!aFields) {
 		throw "aFields is null in resetForm";
+	}
+	if (typeof aFields === 'string') {
+		aFields = [aFields];
 	}
 	aFields.forEach(field => {
 		console.log("resetting '" + field + "'");
@@ -459,6 +462,9 @@ class AdapterClassFieldReference {
 		}
 		if (value_ == 'false') {
 			return false;
+		}
+		if (this.html_elements[0].classList.contains('die')) {
+			return ('' + value_).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')
 		}
 		return value_;
 	}
@@ -716,7 +722,8 @@ class AdapterClassFieldReference {
 			[
 				"event.value = Math.max(1, What('Cha Mod'));",
 				"event.value = 1 + What('Cha Mod');",
-				"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var DCmod = Number(usages) * 5; event.value = (isNaN(Number(usages)) || usages === '') ? 'DC  ' : 'DC ' + Number(10 + DCmod);"
+				"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var DCmod = Number(usages) * 5; event.value = (isNaN(Number(usages)) || usages === '') ? 'DC  ' : 'DC ' + Number(10 + DCmod);",
+				'event.value = "As a reaction when a ranged weapon attack hits me while I\'m wearing these gloves, I can reduce the damage by 1d10 + " + Number(What("Dex Mod")) + " (my Dexterity modifier). This only works if I have a free hand. If I reduce the damage to 0, I can catch the missile if it is small enough for me to hold in that hand.";',
 			].includes(actionStr)
 		) {  // TODO: remove when we're confident enough in the change rule matching
 			let accessedFieldIds = getAccessedFieldIds(actionStr);
@@ -1017,7 +1024,7 @@ function adapter_helper_convert_fieldname_to_id(field_name /*str*/) /*str*/ {
 };
 
 function adapter_helper_convert_id_to_fieldname(id /*str*/) /*str*/ {
-	return id.replace(/_/g, " ");
+	return id.replace(/_/g, " ").replace(/#\d+$/, "");
 };
 
 function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
@@ -1042,16 +1049,16 @@ function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
 				return "new Date(" + object.toString() + ")"
 			} else {
 				// it is an object literal
-				let result = "{";
+				let result = "Object({";
 				let first = true;
 				for (let var_ in object) {
 					if (!first) {
 						result += ",";
 					}
-					result += var_ + ":" + adapter_helper_recursive_toSource(object[var_]);
+					result += "'" + var_ + "':" + adapter_helper_recursive_toSource(object[var_]);
 					first = false;
 				}
-				result += "}";
+				result += "})";
 				return result;
 			}
 		}
@@ -1092,10 +1099,23 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 			}
 		});
 		if (elements.length == 0) {
-			if (['AdvLog.Options'].includes(field_id)) {
-				return null
-			} else {
-				throw "null element: " + field_id;
+			// try removing '.1' at the end (for .rect)
+			if (field_id.endsWith('.1')) {
+				element = document.getElementById(field_id.replace(/\.1$/, ''));
+				if ((element != null ) && element.classList.contains('field')) {
+					elements.push(element);
+				}
+			}
+			if (elements.length == 0) {
+				if (['AdvLog.Options'].includes(field_id)) {
+					return null
+				} else if (field_id == 'Comp.Desc.Name') {
+					elements.push(document.getElementById('P4.AScomp.' + field_id)); // bookmark field
+				} else if (field_id == 'Notes.Left') {
+					elements.push(document.getElementById('P5.ASnotes.' + field_id)); // bookmark field
+				} else {
+					throw "null element: " + field_id;
+				}
 			}
 		}
 	} else {

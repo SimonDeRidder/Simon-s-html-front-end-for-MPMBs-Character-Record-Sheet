@@ -41,7 +41,10 @@ function getAccessedFieldIds(code /*String*/) /*Set[String]*/ {
 	const patterns = [/What\(([^\)]+)\)/g, /tdoc.getField\(([^\)]+)\)/g];
 
 	function isStringLiteralString(theString /*String*/) /*boolean*/ {
-		return theString.startsWith("'") && theString.endsWith("'") && !theString.slice(1, -1).includes("'")
+		return (
+			(theString.startsWith("'") && theString.endsWith("'") && !theString.slice(1, -1).includes("'"))
+			|| (theString.startsWith('"') && theString.endsWith('"') && !theString.slice(1, -1).includes('"'))
+		)
 	}
 
 	let all_matches = new Set();

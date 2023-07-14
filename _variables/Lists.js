@@ -1753,7 +1753,7 @@ var BookMarkList = {
 	"ASfront" : !typePF ? "Text.Header.Status" : "Extra.Notes",
 	"ASoverflow" : "Extra.Magic Item " + (FieldNumbers.magicitemsD + 1),
 	"ASbackgr" : !typePF ? "Text.Header.Background2" : "Sex",
-	"AScomp" : "P4.AScomp.Comp.Desc.Name",
+	"AScomp" : "Comp.Desc.Name",
 	"ASnotes" : "Notes.Left",
 	"WSfront" : "Wildshapes.Settings",
 	"ALlog" : "AdvLog.Options",

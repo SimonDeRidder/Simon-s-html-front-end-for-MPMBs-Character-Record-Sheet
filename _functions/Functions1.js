@@ -3015,8 +3015,8 @@ function SetRacesdropdown(forceTooltips) {
 async function getMenu(menuname) {
 	if (
 		![
-			"actions", "attacks", "background", "gearline", "hp", "limfea", "importscripts", "inventory", "faq",
-			"sources", "classfeatures"
+			"actions", "attacks", "background", "classfeatures", "faq", "feats", "gearline", "hp", "limfea",
+			"importscripts", "inventory", "magicitems", "sources"
 		].includes(menuname)
 		) {  // TODO: remove when all done
 		throw "error: unknown context menu: '" + menuname + "', make sure it is async";
@@ -5088,7 +5088,7 @@ async function MakeFeatMenu_FeatOptions(MenuSelection, itemNmbr) {
 		Menus.feats = featMenu;
 		if (MenuSelection == "justMenu") return;
 	}
-	MenuSelection = getMenu("feats");
+	MenuSelection = await getMenu("feats");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] != "feat") return;
 
 	// Start progress bar and stop calculations

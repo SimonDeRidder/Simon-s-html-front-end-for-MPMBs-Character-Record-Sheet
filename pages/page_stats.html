@@ -36,7 +36,7 @@
 			required
 			spellcheck="true"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(false, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(false, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}};"
 			onchange="event.value=this.value;this.value=this.dataset.temp?this.dataset.temp:0;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);levelFieldVal();this.value=event.value;"
 		/>
 		<input
@@ -271,7 +271,20 @@
 		<input id="Resistance_Damage_Type_5" class="field inputfield" list="resistances_options" style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
 		<input id="Resistance_Damage_Type_6" class="field inputfield" list="resistances_options" style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
 			<datalist id="resistances_options">
+				<option value=""></option>
 				<option value="Acid">Acid</option>
+				<option value="Bludgeoning">Bludgeoning</option>
+				<option value="Cold">Cold</option>
+				<option value="Fire">Fire</option>
+				<option value="Force">Force</option>
+				<option value="Lightning">Lightning</option>
+				<option value="Necrotic">Necrotic</option>
+				<option value="Piercing">Piercing</option>
+				<option value="Poison">Poison</option>
+				<option value="Psychic">Psychic</option>
+				<option value="Radiant">Radiant</option>
+				<option value="Slashing">Slashing</option>
+				<option value="Thunder">Thunder</option>
 			</datalist>
 
 		<textarea id="Saving_Throw_advantages_/_disadvantages" class="field inputfield" rows="6" style="top: 141px;left: 13px;width: 159.7px;height: 96px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
@@ -379,7 +392,15 @@
 			aria-label="With this button you can set the value of the maximum hit points field to one of the calculated values:"
 			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeHPMenu_HPOptions();"
 		>Set Max HP</button>
-		<input id="HP_Max" class="field inputfield" style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="number" data-submit_name="0,0,0,fixed">
+		<input
+			id="HP_Max"
+			class="field inputfield"
+			style="top: 37px;left: 19.5px;font-size: 28px;width: 67px;height: 27px;text-align: center;padding: 0 0 0 0"
+			type="number"
+			data-submit_name="0,0,0,fixed"
+			aria-label="The total hit points (with averages and max for 1st level)"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+		/>
 		<input id="Proficiency_Bonus" class="field inputfield-noneditable" style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
 
 		<input
@@ -390,7 +411,11 @@
 		/>
 
 		<input id="HP_Temp" class="field inputfield" style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
-		<textarea id="HP_Current" class="field inputfield" style="top: 132px;left: 26px;font-size: 14px;width: 160px;height: 35px;padding-top: 1px;font-family: 'scala-sans'"></textarea>
+		<textarea
+			id="HP_Current"
+			class="field inputfield"
+			style="top: 132px;left: 26px;font-size: 14px;width: 160px;height: 35px;padding-top: 1px"
+		></textarea>
 		<button id="Heal" class="field button" style="top: 170px;left: 168px">Heal</button>
 
 		<input id="Initiative_bonus" class="field inputfield-noneditable" style="top: 132px;left: 215.3px;font-size: 28px;width: 66.8px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
@@ -432,15 +457,83 @@
 			style="top: 232.2px;left: 61.4px;width: 14px;height: 14px;"
 		/>
 
-		<input id="HD1_Level" class="field inputfield-notched" style="top: 211px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
-		<input id="HD1_Die" class="field inputfield-notched" style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
-		<input id="HD1_Used" class="field inputfield-notched" style="top: 211px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
-		<input id="HD2_Level" class="field inputfield-notched" style="top: 230px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
-		<input id="HD2_Die" class="field inputfield-notched" style="top: 230px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
-		<input id="HD2_Used" class="field inputfield-notched" style="top: 230px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
-		<input id="HD3_Level" class="field inputfield-notched" style="top: 249px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;" type="number">
-		<input id="HD3_Die" class="field inputfield-notched" style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;" type="text">
-		<input id="HD3_Used" class="field inputfield-notched" style="top: 249px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;" type="number">
+		<input
+			id="HD1_Level"
+			class="field inputfield-notched"
+			style="top: 211px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
+			type="number"
+			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD1_Level_change)"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+		/>
+		<input
+			id="HD2_Level"
+			class="field inputfield-notched"
+			style="top: 230px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
+			type="number"
+			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD2_Level_change)"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+		/>
+		<input
+			id="HD3_Level"
+			class="field inputfield-notched"
+			style="top: 249px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
+			type="number"
+			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD3_Level_change)"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+		/>
+
+		<input
+			id="HD1_Die"
+			class="field inputfield-notched die"
+			style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
+			type="text"
+			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD1_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
+		/>
+		<input
+			id="HD2_Die"
+			class="field inputfield-notched die"
+			style="top: 230px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
+			type="text"
+			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD2_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
+		/>
+		<input
+			id="HD3_Die"
+			class="field inputfield-notched die"
+			style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
+			type="text"
+			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD3_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
+		/>
+
+		<input
+			id="HD1_Used"
+			class="field inputfield-notched"
+			style="top: 211px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
+			type="number"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+		/>
+		<input
+			id="HD2_Used"
+			class="field inputfield-notched"
+			style="top: 230px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
+			type="number"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+		/>
+		<input
+			id="HD3_Used"
+			class="field inputfield-notched"
+			style="top: 249px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
+			type="number"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+		/>
 
 		<input id="Speed_encumbered" class="field inputfield" style="top: 211px;left: 215.2px;font-size: 10px;width: 66.7px;height: 12px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
 		<input id="Speed" class="field inputfield" style="top: 225px;left: 215.2px;font-size: 20px;width: 66.7px;height: 50px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
@@ -470,6 +563,24 @@
 						let ACElement = document.getElementById('AC');
 						ACElement.value = event.value;
 						ACElement.dispatchEvent(new Event('change'));
+					}
+				)
+			});
+
+			// HP Max
+			[
+				EventType.HD1_Die_change,
+				EventType.HD2_Die_change,
+				EventType.HD3_Die_change,
+				EventType.HD1_Level_change,
+				EventType.HD2_Level_change,
+				EventType.HD3_Level_change,
+				EventType.Con_change,
+			].forEach(function (event_type) {
+				eventManager.add_listener(
+					event_type,
+					function () {
+						calcHP('');
 					}
 				)
 			});
@@ -1140,6 +1251,14 @@
 		<input id="Limited_Feature_Used_6" class="field inputfield" style="top: 127.1px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
 		<input id="Limited_Feature_Used_7" class="field inputfield" style="top: 147.4px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
 		<input id="Limited_Feature_Used_8" class="field inputfield" style="top: 167.7px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input id="Limited_Feature_Used_9" class="field inputfield"  style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans';visibility: hidden;" type="number">
+		<input id="Limited_Feature_Used_10" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans';visibility: hidden;" type="number">
+		<input id="Limited_Feature_Used_11" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans';visibility: hidden;" type="number">
+		<input id="Limited_Feature_Used_12" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans';visibility: hidden;" type="number">
+		<input id="Limited_Feature_Used_13" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans';visibility: hidden;" type="number">
+		<input id="Limited_Feature_Used_14" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans';visibility: hidden;" type="number">
+		<input id="Limited_Feature_Used_15" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans';visibility: hidden;" type="number">
+		<input id="Limited_Feature_Used_16" class="field inputfield" style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;font-family: 'scala-sans';visibility: hidden;" type="number">
 
 		<button id="SR" class="field button" style="top: 186px;left: 210.9px">SR</button>
 		<button id="LR" class="field button" style="top: 186px;left: 232px">LR</button>
@@ -3797,14 +3916,5 @@
 		<div id="BlueText.Attack.3.Damage_Die" class="field"></div>
 		<div id="BlueText.Attack.4.Damage_Die" class="field"></div>
 		<div id="BlueText.Attack.5.Damage_Die" class="field"></div>
-		<input id="Bonus_Action_7" class="field inputfield" type="text">
-		<input id="Bonus_Action_8" class="field inputfield" type="text">
-		<input id="Bonus_Action_9" class="field inputfield" type="text">
-		<input id="Bonus_Action_10" class="field inputfield" type="text">
-		<input id="Bonus_Action_11" class="field inputfield" type="text">
-		<input id="Bonus_Action_12" class="field inputfield" type="text">
-		<input id="Bonus_Action_13" class="field inputfield" type="text">
-		<input id="Bonus_Action_14" class="field inputfield" type="text">
-		<input id="Bonus_Action_15" class="field inputfield" type="text">
 	</div>
 </div>

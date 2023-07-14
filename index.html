@@ -4,7 +4,6 @@
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<link rel="stylesheet" href="base.min.css" />
 	<link rel="stylesheet" href="packages/contextmenujs/contextmenu.css" />
 	<link rel="stylesheet" href="style.css" />
 	<script type="text/javascript">
@@ -114,9 +113,9 @@
 
 <body>
 	<div id="button-container">
-		<button class="tablink" onclick="openPage('pf1', this)">Stats</button>
+		<button class="tablink" onclick="openPage('pf1', this)" id="defaultOpen">Stats</button>
 		<button class="tablink" onclick="openPage('pf2', this)">Features & Equipment</button>
-		<button class="tablink" onclick="openPage('pf3', this)" id="defaultOpen">Notes & Feats</button>
+		<button class="tablink" onclick="openPage('pf3', this)">Notes & Feats</button>
 		<button class="tablink" onclick="openPage('pf4', this)">Background</button>
 		<button class="tablink" onclick="openPage('pf5', this)">Companion</button>
 		<button class="tablink" onclick="openPage('pf6', this)">Notes</button>
@@ -160,7 +159,7 @@
 		<div id="WhiteoutRemember" class="field"></div>
 
 		<div id="Template.extras.AScomp" class="field" value="P4.AScomp."></div>
-		<div id="Template.extras.ASnotes" class="field" value=""></div>
+		<div id="Template.extras.ASnotes" class="field" value=",P5.ASnotes."></div>
 		<div id="Template.extras.WSfront" class="field" value=""></div>
 		<div id="Template.extras.SSfront" class="field" value=""></div>
 		<div id="Template.extras.SSmore" class="field" value=""></div>

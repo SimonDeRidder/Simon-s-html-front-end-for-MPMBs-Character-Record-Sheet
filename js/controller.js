@@ -10,6 +10,8 @@
 // TODO: figure out what to do with SetThisFldVal
 // TODO: connect thermoM to floating fade-out status message
 // TODO: revamp number formatting (keystroke[12] and format[12])
+// TODO: make sure setting setVal on magic items/feats triggers a calculation (see doDropDownValCalcWithChoices) (change event should suffice)
+// TODO: make sure field getters in CurrentEvals.hp trigger calculation of HP_Max
 
 // Load functions
 

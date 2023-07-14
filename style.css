@@ -133,6 +133,7 @@
 	text-align: center;
 	background-color: #DEDDDE;
 	color: var(--black);
+	font-family: SegoeUI;
 	border: none;
 	border-width: 0px;
 	clip-path: polygon(15% 0, 100% 0%, 100% 76%, 85% 100%, 0% 100%, 0% 24%);

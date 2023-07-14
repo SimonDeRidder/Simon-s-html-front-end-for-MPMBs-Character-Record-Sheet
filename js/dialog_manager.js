@@ -114,6 +114,8 @@ const dialogManager = {
 								results[elementID][theElement.options[it].value] = (it == theElement.selectedIndex) ? 1 : -1;
 							}
 						}
+					} else if (elementType == 'radio') {
+						results[elementID] = theElement.checked;
 					} else {
 						throw "unknown element type for dialog.store: " + elementType;
 					}
@@ -331,6 +333,7 @@ const dialogManager = {
 			element.setAttribute('value', name);
 			let labelElement = addElementNode('label', parent, name, null, null, style);
 			labelElement.setAttribute('for', item_id);
+			inputList.push(body.item_id);
 		} else {
 			throw "unimplemented element type for execDialog: " + body.type;
 		}

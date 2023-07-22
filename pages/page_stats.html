@@ -2,6 +2,10 @@
 
 	<button id="Show_Buttons" class="button" style="right: 4px; top: 3px;">Show extra features</button>
 
+	<!--Temporary buttons for ribbon-->
+	<button class="field button" onclick="MakePagesMenu().then(PagesOptions())">Pages</button>
+		
+
 	<div id="character_general_info" class="pane" style="width: var(--page-width); height: 195px;">
 		<img class="pane-bg" alt="" src="img/bg_splashy_stripes.svg" style="width: var(--page-width); height: 195px;">
 		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/general_info.svg" style="width: var(--page-width); height: 195px;">
@@ -19,7 +23,7 @@
 		<span class="textlabel" style="top: 155px; left: 101.5px;">CHARACTER NAME</span>
 		
 
-		<input id="PC_Name" class="field inputfield" style="top: 108px;left: 85px;font-size: 16pt;width: 150pt;height: 18pt;font-family: 'scala-sans'" type="text">
+		<input id="PC_Name" class="field inputfield" style="top: 108px;left: 85px;font-size: 21.4px;width: 200px;height: 24px;font-family: 'scala-sans'" type="text">
 		<input
 			id="DCI.Text"
 			class="field inputfield"
@@ -92,10 +96,11 @@
 
 		<button
 			id="HeaderIcon"
-			class="field textlabel"
-			style="top: 114px; left: 53px; overflow-wrap: normal; font-size: 2pt; width: 24pt; line-height: 1.3;"
+			class="field textlabel nonprintable"
+			style="top: 104px;left: 58px;overflow-wrap: normal;font-size: 3px;width: 24px;height:34px;padding: 1px;line-height: 1.3;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/page_stats/header_icons/blank.svg')"
+			aria-label="Click here to change the Header Icon."
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeIconMenu_IconOptions()"
 		>
-			CLICK HERE TO CHANGE THIS ICON
 		</button>
 		<button
 			id="Add_Experience_Button"
@@ -150,7 +155,16 @@
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
 			onchange="eventManager.handle_event(EventType.Cha_change)"
 		/>
-		<input id="HoS" class="field inputfield" style="visibility: hidden;top: 741px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input
+			id="HoS"
+			class="field inputfield"
+			style="visibility: hidden;top: 741px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;z-index:2"
+			type="number"
+			min="0"
+			step="1"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="eventManager.handle_event(EventType.HoS_change)"
+		/>
 
 		<input id="Str_Mod" class="field isNumber inputfield-noneditable" style="top:  48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
 		<input
@@ -176,11 +190,24 @@
 			type="text"
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Cha_Mod_change)"
 		/>
-		<input id="HoS_Mod" class="field isNumber inputfield-noneditable" style="visibility: hidden;top: 696px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input
+			id="HoS_Mod"
+			class="field isNumber inputfield-noneditable"
+			style="visibility: hidden;top: 696px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0;z-index: 2"
+			type="text"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.HoS_Mod_change)"
+		/>
+
+		<div
+			id="Image.HoS"
+			class="field"
+			style="position:absolute;top: 660px;left: 0px;width: 282.75px;height: 168px;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/page_stats/backgrounds/hos.svg');visibility: hidden;z-index:1"
+		></div>
+		<div id="Text.HoS.Save" class="field"></div>
 
 		<script type="text/javascript">
 			// Ability Mods
-			['Dex', 'Con', 'Cha'].forEach(function(ability) {
+			['Dex', 'Con', 'Cha', 'HoS'].forEach(function(ability) {
 				eventManager.add_listener(
 					EventType[ability + '_change'],
 					function () {
@@ -238,6 +265,13 @@
 			style="top: 49.6px;left: 101.6px;"
 			onchange="eventManager.handle_event(EventType.Cha_ST_Prof_change)"
 		/>
+		<input
+			id="HoS_ST_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 802px;left: -87px;z-index: 1;visibility: hidden"
+			onchange="eventManager.handle_event(EventType.HoS_ST_Prof_change)"
+		/>
 
 		<input id="Str_ST_Mod" class="field inputfield-notched" style="top: 10.4px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
 		<input
@@ -260,6 +294,13 @@
 			id="Cha_ST_Mod"
 			class="field inputfield-notched"
 			style="top: 49.6px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none;"
+			type="text"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value}"
+		/>
+		<input
+			id="HoS_ST_Mod"
+			class="field inputfield-notched"
+			style="top: 802px;left: -70px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none;z-index: 1;visibility: hidden"
 			type="text"
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value}"
 		/>
@@ -297,6 +338,7 @@
 			style="top: -12px;left: 62.3px;width: 18px;height: 13.3px;text-align: center;visibility: hidden"
 			value="0"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.All_ST_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter.value=event.target.value;});}"
 		/>
 		<input
 			id="Dex_ST_Bonus"
@@ -305,6 +347,7 @@
 			style="top: 30px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden"
 			value="0"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dex_ST_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter.value=event.target.value;});}"
 		/>
 		<input
 			id="Con_ST_Bonus"
@@ -313,6 +356,7 @@
 			style="top: 49.6px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;"
 			value="0"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Con_ST_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter.value=event.target.value;});}"
 		/>
 		<input
 			id="Cha_ST_Bonus"
@@ -321,10 +365,20 @@
 			style="top: 49.6px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden"
 			value="0"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter.value=event.target.value;});}"
+		/>
+		<input
+			id="HoS_ST_Bonus"
+			class="field inputfield bluetext"
+			aria-label="Honor/Sanity Saving Throw Bonus Modifier"
+			style="top: 802px;left: -107px;width: 14px;height: 13.3px;text-align: center;z-index: 1;visibility: hidden"
+			value="0"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter.value=event.target.value;});}"
 		/>
 		<script type="text/javascript">
 			// Ability Saving Throws
-			['Dex', 'Con', 'Cha'].forEach(function(ability) {
+			['Dex', 'Con', 'Cha', 'HoS'].forEach(function(ability) {
 				[
 					EventType[ability + "_Mod_change"],
 					EventType[ability + "_ST_Prof_change"],
@@ -348,19 +402,6 @@
 						}
 					)
 				});
-			});
-			// Bonus field setters
-			['All_ST_Bonus', 'Dex_ST_Bonus', 'Con_ST_Bonus', 'Cha_ST_Bonus'].forEach(function(elementId /*String*/) {
-				document.getElementById(elementId).onclick = async function (clickEvent /*MouseEvent*/) {
-					let adapter=new AdapterClassFieldReference([this]);
-					event.target.name=adapter.name;
-					event.target.submitName=adapter.submitName;
-					event.target.userName=adapter.userName;
-					event.modifier=event.ctrlKey;
-					event.shift=event.shiftKey;
-					await SetThisFldVal();
-					adapter.value=event.target.value;
-				}
 			});
 		</script>
 	</div>
@@ -410,30 +451,42 @@
 			type="number"
 		/>
 
-		<input id="HP_Temp" class="field inputfield" style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
+		<input
+			id="HP_Temp"
+			class="field inputfield"
+			style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0"
+			type="number"
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+		/>
 		<textarea
 			id="HP_Current"
 			class="field inputfield"
 			style="top: 132px;left: 26px;font-size: 14px;width: 160px;height: 35px;padding-top: 1px"
 		></textarea>
-		<button id="Heal" class="field button" style="top: 170px;left: 168px">Heal</button>
+		<button
+			id="Heal"
+			class="field button nonprintable"
+			style="top: 170px;left: 168px"
+			aria-label="Empty several fields (just like a Long Rest):"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);HealItNow()"
+		>Heal</button>
 
 		<input id="Initiative_bonus" class="field inputfield-noneditable" style="top: 132px;left: 215.3px;font-size: 28px;width: 66.8px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
 
 		<input
-			id="Death_Save_Succes1"
+			id="Death_Save_Success1"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 211.1px;left: 22.8px;width: 14px;height: 14px;"
 		/>
 		<input
-			id="Death_Save_Succes2"
+			id="Death_Save_Success2"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 211.1px;left: 42.1px;width: 14px;height: 14px;"
 		/>
 		<input
-			id="Death_Save_Succes3"
+			id="Death_Save_Success3"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 211.1px;left: 61.4px;width: 14px;height: 14px;"
@@ -688,7 +741,13 @@
 		>
 		<input id="Medium_Armor" class="field checkcircle" type="checkbox" style="top: 59px;left: 78.5px;">
 		<input id="Medium_Armor_Max_Mod" class="field" type="number" style="visibility: hidden">
-		<input id="Heavy_Armor" class="field checkcircle" type="checkbox" style="top: 59px;left: 154.9px;">
+		<input
+			id="Heavy_Armor"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 59px;left: 154.9px"
+			onchange="eventManager.handle_event(EventType.Heavy_Armor_change)"
+		/>
 		<input
 			id="AC_Magic_Description"
 			class="field inputfield"
@@ -837,38 +896,44 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 16px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Acr', true);eventManager.handle_event(EventType.Acr_Exp_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Acr', true).then(() => {eventManager.handle_event(EventType.Acr_Exp_change);});}"
 		/>
 		<input
 			id="Ani_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 35.5px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ani', true);eventManager.handle_event(EventType.Ani_Exp_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ani', true).then(() => {eventManager.handle_event(EventType.Ani_Exp_change);});}"
 		/>
 		<input
 			id="Arc_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 55.0px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Arc', true);eventManager.handle_event(EventType.Arc_Exp_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Arc', true).then(() => {eventManager.handle_event(EventType.Arc_Exp_change);});}"
 		/>
 		<input
 			id="Ath_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 74.5px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ath', true);eventManager.handle_event(EventType.Ath_Exp_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ath', true).then(() => {eventManager.handle_event(EventType.Ath_Exp_change);});}"
 		/>
 		<input
 			id="Dec_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 94.0px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Dec', true);eventManager.handle_event(EventType.Dec_Exp_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Dec', true).then(() => {eventManager.handle_event(EventType.Dec_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
-		<input id="His_Exp" class="field checkcircle" type="checkbox" style="top: 113.5px;left: 22.3px;width: 8px;height: 8px;">
+		<input
+			id="His_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 113.5px;left: 22.3px;width: 8px;height: 8px;"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('His', true).then(() => {eventManager.handle_event(EventType.His_Exp_change);});}"
+		/>
 		<input id="Ins_Exp" class="field checkcircle" type="checkbox" style="top: 133.0px;left: 22.3px;width: 8px;height: 8px;">
 		<input id="Inti_Exp" class="field checkcircle" type="checkbox" style="top: 152.5px;left: 22.3px;width: 8px;height: 8px;">
 		<input id="Inv_Exp" class="field checkcircle" type="checkbox" style="top: 172.0px;left: 22.3px;width: 8px;height: 8px;">
@@ -888,38 +953,44 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 18px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Acr');eventManager.handle_event(EventType.Acr_Prof_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Acr').then(() => {eventManager.handle_event(EventType.Acr_Prof_change);});}"
 		/>
 		<input
 			id="Ani_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 37.5px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ani');eventManager.handle_event(EventType.Ani_Prof_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ani').then(() => {eventManager.handle_event(EventType.Ani_Prof_change);});}"
 		/>
 		<input
 			id="Arc_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 57.0px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Arc');eventManager.handle_event(EventType.Arc_Prof_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Arc').then(() => {eventManager.handle_event(EventType.Arc_Prof_change);});}"
 		/>
 		<input
 			id="Ath_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 76.5px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Ath');eventManager.handle_event(EventType.Ath_Prof_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ath').then(() => {eventManager.handle_event(EventType.Ath_Prof_change);});}"
 		/>
 		<input
 			id="Dec_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 96.0px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference(this);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};await applySkillClick('Dec');eventManager.handle_event(EventType.Dec_Prof_change);}"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Dec').then(() => {eventManager.handle_event(EventType.Dec_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
-		<input id="His_Prof" class="field checkcircle" type="checkbox" style="top: 115.5px;left: 15.2px;">
+		<input
+			id="His_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 115.5px;left: 15.2px;"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('His').then(() => {eventManager.handle_event(EventType.His_Prof_change);});}"
+		/>
 		<input id="Ins_Prof" class="field checkcircle" type="checkbox" style="top: 135.0px;left: 15.2px;">
 		<input id="Inti_Prof" class="field checkcircle" type="checkbox" style="top: 154.5px;left: 15.2px;">
 		<input id="Inv_Prof" class="field checkcircle" type="checkbox" style="top: 174.0px;left: 15.2px;">
@@ -938,7 +1009,7 @@
 			<input
 				id="Acr"
 				class="field inputfield-notched"
-				style="top: 0.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 0.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
 				spellcheck="true"
 				type="text"
 				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
@@ -946,7 +1017,7 @@
 			<input
 				id="Ani"
 				class="field inputfield-notched"
-				style="top: 19.5px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 19.5px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
 				spellcheck="true"
 				type="text"
 				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
@@ -954,7 +1025,7 @@
 			<input
 				id="Arc"
 				class="field inputfield-notched"
-				style="top: 39.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 39.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
 				spellcheck="true"
 				type="text"
 				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
@@ -962,7 +1033,7 @@
 			<input
 				id="Ath"
 				class="field inputfield-notched"
-				style="top: 58.5px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 58.5px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
 				spellcheck="true"
 				type="text"
 				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
@@ -970,12 +1041,19 @@
 			<input
 				id="Dec"
 				class="field inputfield-notched"
-				style="top: 78.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;font-family: SegoeUI;overflow-x: scroll;"
+				style="top: 78.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
 				spellcheck="true"
 				type="text"
 				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
 			/>
-			<input id="His" class="field inputfield-notched" style="top: 97.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input
+				id="His"
+				class="field inputfield-notched"
+				style="top: 97.5px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
+				spellcheck="true"
+				type="text"
+				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+			/>
 			<input id="Ins" class="field inputfield-notched" style="top: 117.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
 			<input id="Inti" class="field inputfield-notched" style="top: 136.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
 			<input id="Inv" class="field inputfield-notched" style="top: 156.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
@@ -1062,6 +1140,14 @@
 			aria-label="Deception Bonus Modifier"
 			value="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dec_Bonus_change)"
+		/>
+		<input
+			id="His_Bonus"
+			class="field inputfield bluetext"
+			style="top: 116.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="History Bonus Modifier"
+			value="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=event.target.valueCalculated?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.His_Bonus_change)"
 		/>
 
 		<!-- event listeners -->
@@ -1161,7 +1247,7 @@
 			});
 			// Bonus field setters
 			[
-				'All_Skills_Bonus', 'Acr_Bonus', 'Ani_Bonus', 'Arc_Bonus', 'Ath_Bonus', 'Dec_Bonus'
+				'All_Skills_Bonus', 'Acr_Bonus', 'Ani_Bonus', 'Arc_Bonus', 'Ath_Bonus', 'Dec_Bonus', 'His_Bonus'
 			].forEach(function(elementId /*String*/) {
 				document.getElementById(elementId).onclick = async function (clickEvent /*MouseEvent*/) {
 					let adapter=new AdapterClassFieldReference([this]);
@@ -1884,9 +1970,11 @@
 		<span class="textlabel" style="top: 35px;left: 105px;font-size: 8.6px">PASSIVE WISDOM (PERCEPTION)</span>
 		<div class="textlabel-bold" style="top: 126px;left: 12.5px;width: 264.3px">SENSES</div>
 
-		<input id="Passive_Perception" class="field inputfield-noneditable" style="top: 26.5px;left: 31px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
+		<input id="Passive_Perception.0" class="field inputfield-noneditable" style="top: 26.5px;left: 31px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
+		<input id="Passive_Perception.1" class="field inputfield-noneditable" style="top: 26.5px;left: 124.75px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans';visibility: hidden" type="number">
 
-		<textarea id="Vision" class="field inputfield" rows="3" style="top: 63px;left: 15px;width: 255px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
+		<textarea id="Vision.0" class="field inputfield" rows="3" style="top: 63px;left: 15px;width: 255px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
+		<textarea id="Vision.1" class="field inputfield" rows="3" style="top: 63px;left: 108.75px;width: 161.25px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans';visibility: hidden"></textarea>
 	</div>
 
 
@@ -3816,8 +3904,6 @@
 		<div id="Spell_DC_2_Bonus" class="field"></div>
 		<div id="Attack.Titles" class="field"></div>
 		<div id="Text.SaveDC.1" class="field"></div>
-		<div id="HoS_ST_Bonus" class="field"></div>
-		<div id="His_Bonus" class="field"></div>
 		<div id="Ins_Bonus" class="field"></div>
 		<div id="Inti_Bonus" class="field"></div>
 		<div id="Inv_Bonus" class="field"></div>
@@ -3832,7 +3918,7 @@
 		<div id="Sur_Bonus" class="field"></div>
 		<div id="Too_Bonus" class="field"></div>
 		<div id="Extra.Layers_Remember" class="field"></div>
-		<div id="HoSRememberState" class="field"></div>
+		<div id="HoSRememberState" class="field" value="0"></div>
 		<div id="HP_Max_Current" class="field"></div>
 		<div id="Attack.1.Description_Tooltip" class="field"></div>
 		<div id="Attack.1.To_Hit_Bonus" class="field"></div>

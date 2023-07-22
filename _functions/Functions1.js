@@ -3015,8 +3015,8 @@ function SetRacesdropdown(forceTooltips) {
 async function getMenu(menuname) {
 	if (
 		![
-			"actions", "attacks", "background", "classfeatures", "faq", "feats", "gearline", "hp", "limfea",
-			"importscripts", "inventory", "magicitems", "sources"
+			"actions", "attacks", "background", "classfeatures", "faq", "feats", "gearline", "hp", "icon", "limfea",
+			"importscripts", "inventory", "magicitems", "pages", "sources"
 		].includes(menuname)
 		) {  // TODO: remove when all done
 		throw "error: unknown context menu: '" + menuname + "', make sure it is async";

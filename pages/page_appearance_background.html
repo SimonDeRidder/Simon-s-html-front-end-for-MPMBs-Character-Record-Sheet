@@ -21,14 +21,14 @@
 			id="Background_Renown.Text"
 			class="field inputfield"
 			type="text"
-			style="top: 108px;left: 290px;width: 61px;height: 24px;text-align: center;visibility: hidden;"
+			style="top: 108px;left: 290px;width: 61px;height: 24px;text-align: center;padding-top: 0px;visibility: hidden;"
 		/>
 
-		<input id="Sex" class="field inputfield" style="top: 88px;left: 364.5px;font-size: 11pt;width: 91px;height: 17px;font-family: 'scala-sans'" type="text">
+		<input id="Sex" class="field inputfield" style="top: 88px;left: 364.5px;font-size: 11pt;width: 91px;height: 17px;padding-top: 0px;font-family: 'scala-sans'" type="text">
 		<input
 			id="Age"
 			class="field inputfield"
-			style="top: 88px;left: 461.5px;width: 84.5px;height: 17px;font-size: 11pt;overflow-x: scroll;"
+			style="top: 88px;left: 461.5px;width: 84.5px;height: 17px;font-size: 11pt;overflow-x: scroll;padding-top: 0px"
 			spellcheck="true"
 			type="number"
 		/>
@@ -36,12 +36,18 @@
 		<datalist id="size_category_options">
 			<option value="Medium">
 		</datalist>
-		<input id="Height" class="field inputfield" style="top: 88px;left: 642.5px;font-size: 11pt;width: 84px;height: 17px;font-family: 'scala-sans'" type="text">
-		<input id="Weight" class="field inputfield" style="top: 88px;left: 732.5px;font-size: 11pt;width: 90px;height: 17px;font-family: 'scala-sans'" type="text">
+		<input
+			id="Height"
+			class="field inputfield"
+			style="top: 88px;left: 642.5px;font-size: 11pt;width: 84px;height: 17px;padding-top: 0px"
+			type="text"
+			spellcheck="true"
+		/>
+		<input id="Weight" class="field inputfield" style="top: 88px;left: 732.5px;font-size: 11pt;width: 90px;height: 17px;padding-top: 0px;font-family: 'scala-sans'" type="text">
 		<input
 			id="Alignment"
 			class="field inputfield"
-			style="top: 127px;left: 364.5px;width: 91px;height: 17px;font-size: 8.4pt"
+			style="top: 127px;left: 364.5px;width: 91px;height: 17px;font-size: 8.4pt;padding-top: 0px"
 			spellcheck="true"
 			type="text"
 			list="alignment_options"
@@ -61,20 +67,26 @@
 		<input
 			id="Faith/Deity"
 			class="field inputfield"
-			style="top: 127px;left: 461.5px;font-size: 11pt;width: 84.5px;height: 17px"
+			style="top: 127px;left: 461.5px;font-size: 11pt;width: 84.5px;height: 17px;padding-top: 0px"
 			type="text"
 			aria-label="Your character's dogma, god, beliefs, and/or the name of your Warlock patron"
 			spellcheck="true"
 		/>
-		<input id="Hair_colour" class="field inputfield" style="top: 127px;left: 552px;font-size: 11pt;width: 84.5px;height: 17px;font-family: 'scala-sans'" type="text">
 		<input
-			id="Eyes_colour"
+			id="Hair_colour"
 			class="field inputfield"
-			style="top: 127px;left: 642.5px;font-size: 11pt;width: 84px;height: 17px"
+			style="top: 127px;left: 552px;font-size: 11pt;width: 84.5px;height: 17px;padding-top: 0px"
 			type="text"
 			spellcheck="true"
 		/>
-		<input id="Skin_colour" class="field inputfield" style="top: 127px;left: 732.5px;font-size: 11pt;width: 90px;height: 17px;font-family: 'scala-sans'" type="text">
+		<input
+			id="Eyes_colour"
+			class="field inputfield"
+			style="top: 127px;left: 642.5px;font-size: 11pt;width: 84px;height: 17px;padding-top: 0px"
+			type="text"
+			spellcheck="true"
+		/>
+		<input id="Skin_colour" class="field inputfield" style="top: 127px;left: 732.5px;font-size: 11pt;width: 90px;height: 17px;padding-top: 0px;font-family: 'scala-sans'" type="text">
 	</div>
 
 
@@ -142,13 +154,19 @@
 		</datalist>
 
 		<div id="Symbol" class="field" style="position: absolute;top: 65px;left: 298px;width: 222.5px;height: 181.2px;font-size: 11.6pt;line-height: 14pt;cursor: pointer;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/factions/blank.svg');"></div>
+
+		<div
+			id="Image.Background_FactionRank.Text"
+			class="field"
+			style="position:absolute;top: 286.5px;left: 276px;width: 244px;height: 36px;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/page_appearance_background/backgrounds/faction_rank.svg');text-align: right;padding: 27px 15px 0px 0px;visibility: hidden"
+		>FACTION RANK</div>
 		<input
 			id="Background_FactionRank.Text"
 			class="field inputfield"
 			list="faction_rank_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
 			spellcheck="true"
-			style="top: 310px;left: 290px;width: 130px;visibility: hidden;"
+			style="top: 310px;left: 290px;width: 130px;visibility: hidden"
 		/>
 		<datalist id="faction_rank_options">
 		</datalist>
@@ -228,8 +246,6 @@
 
 	<div style="visibility:hidden">
 		<div id="Background_Renown.Title" class="field"></div>
-		<div id="Background_FactionRank.Title" class="field"></div>
-		<div id="Image.Background_FactionRank.Text" class="field"></div>
 		<div id="Text.Header.Background2" class="field"></div>
 	</div>
 </div>

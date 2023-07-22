@@ -1,12 +1,9 @@
 Bluetext*   -   skipped for now
-HP Max  -   done
+HeaderIcon	-	todo icons
+Image.DnDLogo*	-	todo
+Image.HoS
 
 // trigger events on change:
-'Heavy Armor': Heavy_Armor_change
-"His Bonus": His_Bonus_change
-"His Exp": His_Exp_change
-"His Prof": His_Prof_change
-"HoS Mod": HoS_Mod_change
 "Init Bonus": Init_Bonus_change
 "Ins Bonus": Ins_Bonus_change
 "Ins Exp": Ins_Exp_change

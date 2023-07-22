@@ -544,6 +544,10 @@ class AdapterClassFieldReference {
 				for (let element of this.html_elements) {
 					element.classList.add('nonprintable');
 				}
+			} else {
+				for (let element of this.html_elements) {
+					element.classList.remove('nonprintable');
+				}
 			}
 			for (let element of this.html_elements) {
 				element.dispatchEvent(new Event('displayShow'));
@@ -709,6 +713,36 @@ class AdapterClassFieldReference {
 
 	buttonSetIcon(icon /*String*/) {
 		this.html_elements[0].style.backgroundImage = "url(" + icon + ")";
+		if (this.html_elements[0].dataset.tempUrl) {
+			URL.revokeObjectURL(this.html_elements[0].dataset.tempUrl);
+			delete this.html_elements[0].dataset.tempUrl;
+		}
+	}
+
+	buttonImportIcon(cPath /*String*/, nPage /*Number*/) {
+		if (cPath) {
+			throw "buttonImportIcon with cPath not implemented.";
+		}
+		if (nPage) {
+			throw "buttonImportIcon with nPage not implemented.";
+		}
+		let elm = document.createElement('input');
+		elm.style.visibility='hidden';
+		elm.setAttribute('type', 'file');
+		let thisElement = this.html_elements[0];
+		elm.addEventListener('change', function () {
+			if (elm.files && elm.files.length > 0) {
+				var tmpPath = URL.createObjectURL(elm.files[0])
+				thisElement.style.backgroundImage = "url(" + tmpPath + ")";
+				if (thisElement.dataset.tempUrl) {
+					URL.revokeObjectURL(thisElement.dataset.tempUrl);
+				}
+				thisElement.dataset.tempUrl = tmpPath;
+
+			}
+			elm.remove();
+		});
+		elm.click();
 	}
 
 	setAction(actionType /*String*/, actionStr /*String*/) {
@@ -1132,14 +1166,18 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 }
 
 function adapter_helper_get_saveimg_field(img_name /*String*/) /*AdapterClassImageReference|null*/ {
-	// Faction.The Emerald Enclave.symbol
 	if (img_name.startsWith('Faction.')) {
-		let bare_name = img_name.replace(/^Faction\./, '').replace(/\.symbol$/, '').toLowerCase().replace(/ /g, '_').replace("'", "");
+		// e.g. 'Faction.The Emerald Enclave.symbol'
+		let bare_name = img_name.replace(/^Faction\./, '').replace(/\.symbol$/, '').toLowerCase().replace(/(?:\s+|^)the(?:\s+|$)/g, ' ').replace(/(?:\s+|^)of(?:\s+|$)/g, ' ').replace(/ /g, '').replace("'", "");
 		if (adapter_helper_UrlExists('img/factions/' + bare_name + '.svg')) {
 			return new AdapterClassImageReference('img/factions/' + bare_name + '.svg');
 		} else {
 			return null;
 		}
+	} else if (img_name == 'ClickMeIcon') {
+		return new AdapterClassImageReference('img/page_stats/header_icons/blank.svg');
+	} else if (img_name == 'EmptyIcon') {
+		return new AdapterClassImageReference('');
 	}
 	throw "unknown SaveIMG type: " + String(img_name);
 }

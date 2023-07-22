@@ -3297,7 +3297,7 @@ async function MakePagesMenu() {
 
 //call the pages menu and do something with the results
 async function PagesOptions() {
-	var MenuSelection = getMenu("pages");
+	var MenuSelection = await getMenu("pages");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	switch (MenuSelection[0]) {
 		case "proficiencydice":
@@ -3727,7 +3727,7 @@ function getBookmarkTemplate(bookmark) {
 
 //make menu for the button to (re)set the portrait/organization symbol
 //after that, do something with the menu and its results
-function MakeIconMenu_IconOptions() {
+async function MakeIconMenu_IconOptions() {
 	var SymbPort = event.target.name;
 	var DoAdvLog = SymbPort.indexOf("AdvLog") !== -1;
 	var DisplayName = SymbPort.indexOf("Comp.") !== -1 ? "Companion's Icon" : (SymbPort.indexOf("HeaderIcon") !== -1 ? "Header Icon" : SymbPort);
@@ -3837,7 +3837,7 @@ function MakeIconMenu_IconOptions() {
 	Menus.icon = IconMenu;
 
 	//now call the menu
-	var MenuSelection = getMenu("icon");
+	var MenuSelection = await getMenu("icon");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
 	switch (MenuSelection[0]) {

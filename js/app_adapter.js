@@ -90,11 +90,18 @@ const app = {
 				"CREATURES SOURCE SELECTION DIALOG",
 				"SUBCLASS SELECTION DIALOG",
 				"SET MODIFIER DIALOG",
+				"CHANGES ALERT DIALOG",
+				"COMPARE DIALOG",
+				"ABILITY SCORES DIALOG",
+				"NEW COLUMN DIALOG",
+				"REMOVE COLUMN DIALOG",
+				"SPELL SELECTION DIALOG",
+				"SPELL LIST GENERATION DIALOG",
 			].includes(monitor.description.name)
 		) {
 			// TODO: remove this if all execDialogs are converted
 			// New usage: make caller async, ensure callbacks are connected
-			throw "unknown execDialog caller";
+			throw "unknown execDialog caller: " + monitor.description.name;
 		}
 		if (inheritDialog != null) {
 			throw "inheritDialog not null in execDialog";
@@ -106,6 +113,8 @@ const app = {
 		let body = [];
 		let buttonCallbacks = new Map();
 		let initialiseCallback = null;
+		let destroyCallback = null;
+		let validateCallback = null;
 		let title = "";
 		for (let prop in monitor) {
 			if (prop == 'description') {
@@ -114,11 +123,11 @@ const app = {
 			} else if (prop == 'initialize') {
 				initialiseCallback = prop;
 			} else if (prop == 'validate') {
-				throw "validate callback not implemented for execDialog";
+				validateCallback = prop;
 			} else if (prop == 'commit') {
 				buttonCallbacks.set('ok', prop);
 			} else if (prop == 'destroy') {
-				throw "destroy callback not implemented for execDialog";
+				destroyCallback = prop;
 			} else if (typeof (monitor[prop]) == 'function') {
 				buttonCallbacks.set(prop, prop);
 			}
@@ -131,6 +140,8 @@ const app = {
 			icon = null,
 			callbacksToInsert = buttonCallbacks,
 			initialiseCallback = initialiseCallback,
+			destroyCallback = destroyCallback,
+			validateCallback = validateCallback,
 		)
 	},
 
@@ -157,12 +168,40 @@ const display = {
 	noView: 3,
 };
 
+const color = {
+	transparent: ["T"],
+	black: ["G", 0],
+	white: ["G", 1],
+	red: ["RGB", 1, 0, 0],
+	green: ["RGB", 0, 1, 0],
+	blue: ["RGB", 0, 0, 1],
+	cyan: ["CMYK", 1, 0, 0, 0],
+	magenta: ["CMYK", 0, 1, 0, 0],
+	yellow: ["CMYK", 0, 0, 1, 0],
+	dkGray: ["G", 0.25],
+	gray: ["G", 0.5],
+	ltGray: ["G", 0.75] ,
+};
+
+const border = {
+	s: "solid",
+	b: "beveled",
+	d: "dashed",
+	i: "inset",
+	u: "underline",
+}
+
+function thermoM(text /*String*/, someFlag /*boolean*/) {
+	console.log(text);
+}
+
 
 console.println = console.log;
 console.show = console.log;
 
 AdapterParsePopUpMenu = function (aParams, resolve) {
 	let menu = []
+	let currentEvent = event;
 	for (let i = 0; i < aParams.length; i++) {
 		if (aParams[i] === undefined) {
 			continue;
@@ -184,6 +223,11 @@ AdapterParsePopUpMenu = function (aParams, resolve) {
 					enabled: aParams[i].bEnabled,
 					events: {
 						'click': function (event) {
+							if (currentEvent && currentEvent.target && currentEvent.target.contextTransfers) {
+								for (let targetProp of currentEvent.target.contextTransfers) {
+									event.target[targetProp] = currentEvent.target[targetProp];
+								}
+							}
 							resolve(returnVal);
 						},
 					},
@@ -212,11 +256,14 @@ this.bookmarkRoot = {
 	],
 };
 
-this.getField = function (field_name /*str*/) /*AdapterClassFieldReference|AdapterClassImageReference|null*/ {
-	if (field_name.startsWith('SaveIMG.') && (field_name != 'SaveIMG.Patreon')) {
-		return adapter_helper_get_saveimg_field(field_name.replace(/^SaveIMG\./, ''))
+this.getField = function (field /*str|AdapterClassFieldReference*/) /*AdapterClassFieldReference|AdapterClassImageReference|null*/ {
+	if (field.constructor.name == 'AdapterClassFieldReference') {
+		return field;
 	}
-	let field_id = adapter_helper_convert_fieldname_to_id(field_name);
+	if (field.startsWith('SaveIMG.') && (field != 'SaveIMG.Patreon')) {
+		return adapter_helper_get_saveimg_field(field.replace(/^SaveIMG\./, ''))
+	}
+	let field_id = adapter_helper_convert_fieldname_to_id(field);
 	if (field_id.endsWith('.alphabeta')) {
 		// for Stealth Disadv/Stealth_Disadv (see Functions2:7633), TODO find out what to do with this.
 		field_id = field_id.replace(/.alphabeta$/, '');
@@ -225,7 +272,7 @@ this.getField = function (field_name /*str*/) /*AdapterClassFieldReference|Adapt
 };
 
 this.calculateNow = function () {
-	// TODO: does nothing for now, we don't pause calculations (see also calcStop and calcCont)
+	initialCalculationEvents();
 };
 
 this.resetForm = function (aFields = null /*String|[String]|null*/) {
@@ -235,33 +282,65 @@ this.resetForm = function (aFields = null /*String|[String]|null*/) {
 	if (typeof aFields === 'string') {
 		aFields = [aFields];
 	}
-	aFields.forEach(field => {
-		console.log("resetting '" + field + "'");
-		let element = adapter_helper_reference_factory(adapter_helper_convert_fieldname_to_id(field)).html_elements[0];
-		let element_type = element.getAttribute('type');
-		let changed = false;
-		if ((element_type == 'text') | (element_type == 'number')) {
-			if (element.value != "") {
-				changed = true;
+	let elementAdapter, element_type, changed;
+	for (let field of aFields) {
+		try {
+			elementAdapter = adapter_helper_reference_factory(adapter_helper_convert_fieldname_to_id(field));
+		} catch (error) {
+			console.log("Error resetting fields: ", field);
+			return;
+		}
+		for (let element of elementAdapter.html_elements) {
+			element_type = element.getAttribute('type');
+			changed = false;
+			if ((element_type == 'text') | (element_type == 'number')) {
+				if ('default' in element.dataset) {
+					if (element.value != element.dataset.default) {
+						changed = true;
+					}
+					element.value = element.dataset.default;
+				} else {
+					console.log("element without default value: '" + element.id + "', resetting to empty");
+					if (element.value != "") {
+						changed = true;
+					}
+					element.value = "";
+				}
 			}
-			element.value = "";
-		}
-		else if (element_type == 'checkbox') {
-			if (element.checked) {
-				changed = true;
+			else if (element_type == 'checkbox') {
+				if ('default' in element.dataset) {
+					let defaultBool = (element.dataset.default == 'true') ? true : false;
+					if (element.checked != defaultBool) {
+						changed = true;
+					}
+					element.checked = defaultBool;
+				} else {
+					console.log("element without default value: '" + element.id + "', resetting to false");
+					if (element.checked) {
+						changed = true;
+					}
+					element.checked = false;
+				}
 			}
-			element.checked = false;
-		}
-		else {
-			if (element.value != "") {
-				changed = true;
+			else {
+				if ('default' in element.dataset) {
+					if (element.value != element.dataset.default) {
+						changed = true;
+					}
+					element.value = element.dataset.default;
+				} else {
+					console.log("element without default value: '" + element.id + "', resetting to empty");
+					if (element.value != "") {
+						changed = true;
+					}
+					element.value = "";
+				}
 			}
-			element.value = "";
+			if (changed) {
+				element.dispatchEvent(new Event('change'));
+			}
 		}
-		if (changed) {
-			element.dispatchEvent(new Event('change'));
-		}
-	});
+	}
 };
 
 
@@ -392,8 +471,10 @@ Array.prototype.toSource = function () /*str*/ {
 			str += String(this[i]);
 		} else if ((typeof this[i]) == 'string') {
 			str += "'" + this[i] + "'";
+		} else if ((typeof this[i]) == 'boolean') {
+			str += this[i] ? "true" : "false";
 		} else {
-			throw "unsupported element type in array toSource:" + (typeof this[i]);
+			throw "unsupported element type in array toSource: " + (typeof this[i]);
 		}
 	}
 	return "[" + str + "]";
@@ -417,7 +498,7 @@ class AdapterClassFieldReference {
 
 	get submitName() /*String*/ {
 		let submitName_ = this.html_elements[0].dataset.submit_name;
-		if (!submitName_) {
+		if (submitName_ == undefined) {
 			return "";
 		}
 		return submitName_;
@@ -442,7 +523,7 @@ class AdapterClassFieldReference {
 		} else {
 			value_ = this.html_elements[0].getAttribute('value');
 		}
-		if (value_ === undefined) {
+		if (value_ === undefined || value_ == null) {
 			return "";
 		}
 		if (
@@ -683,7 +764,7 @@ class AdapterClassFieldReference {
 		}
 		this.html_elements[nWidget].checked = bCheckIt;
 		if (changed) {
-			this.html_elements[nWidget].dispatchEvent(new Event('change'));
+			this.html_elements[nWidget].dispatchEvent(new Event('click'));
 		}
 	}
 
@@ -745,6 +826,12 @@ class AdapterClassFieldReference {
 		elm.click();
 	}
 
+	buttonSetCaption(cCaption /*String*/, nFace /*Number*/) {
+		for (let element of this.html_elements) {
+			element.innerText = cCaption;
+		}
+	}
+
 	setAction(actionType /*String*/, actionStr /*String*/) {
 		if (actionStr == '') {  // do nothing
 			return;
@@ -790,6 +877,33 @@ class AdapterClassFieldReference {
 	deleteRemVal() {
 		delete this.html_elements[0].dataset.remVal;
 	}
+
+	getArray() /*[AdapterClassFieldReference]*/ {
+		var childFields = [];
+		for (let element of this.html_elements) {
+			childFields.push(new AdapterClassFieldReference([element]));
+		}
+		return childFields;
+	}
+
+	getItemAt(nIdx /*Number*/, bExportValue /*Boolean*/) /*String*/{
+		if ((this.html_elements[0].tagName.toLowerCase() == 'input') && this.html_elements[0].hasAttribute('list')) {
+			throw "getItemAt for input-list type not implemented yet: " + this.html_elements[0].id;
+		} else if (this.html_elements[0].tagName.toLowerCase() == 'select') {
+			if (nIdx == -1) {
+				nIdx = this.html_elements[0].options.length - 1;
+			}
+			let option = this.html_elements[0].options[nIdx];
+			if (bExportValue) {
+				return option.getAttribute('value');
+			} else {
+				return option.innerText;
+			}
+		} else {
+			throw "getItemAt called for unsupported type: " + this.html_elements[0].tagName.toLowerCase() + " (" + this.html_elements[0].id + ")";
+		}
+	}
+
 }
 
 
@@ -804,26 +918,26 @@ class AdapterClassImageReference {
 }
 
 
-class AdapterClassTemplateReference {
-	constructor(values /*[String]*/) {
-		this.values = values;
-	}
+// class AdapterClassTemplateReference {
+// 	constructor(values /*[String]*/) {
+// 		this.values = values;
+// 	}
 
-	get value() /*PreSplitString*/ {
-		return new PreSplitString(this.values);
-	}
-}
+// 	get value() /*PreSplitString*/ {
+// 		return new PreSplitString(this.values);
+// 	}
+// }
 
 
-class PreSplitString {
-	constructor(values /*[String]*/) {
-		this.values = values;
-	}
+// class PreSplitString {
+// 	constructor(values /*[String]*/) {
+// 		this.values = values;
+// 	}
 
-	split() /*[String]*/ {
-		return this.values;
-	}
-}
+// 	split() /*[String]*/ {
+// 		return this.values;
+// 	}
+// }
 
 
 class AdapterClassReadStream {
@@ -1128,7 +1242,7 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 	if ((element == null ) || (!element.classList.contains('field'))) {
 		// No single element by this id, look for "child elements" that start with the id as prefix
 		[...document.getElementsByClassName('field')].forEach(element => {
-			if (element.id.match(new RegExp("^" + field_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "(?![a-zA-Z0-9])"))) {
+			if (element.id.match(new RegExp("^" + field_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ".*"))) {
 				elements.push(element);
 			}
 		});
@@ -1147,6 +1261,12 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 					elements.push(document.getElementById('P4.AScomp.' + field_id)); // bookmark field
 				} else if (field_id == 'Notes.Left') {
 					elements.push(document.getElementById('P5.ASnotes.' + field_id)); // bookmark field
+				} else if (
+					(field_id == 'spells.name.0')
+					|| field_id.startsWith('SpellSlots.CheckboxesSet.lvl')
+					|| field_id.startsWith('SpellSlotsRemember')
+				) {
+					elements.push(document.getElementById('P6.SSfront.' + field_id)); // bookmark field or spellslots
 				} else {
 					throw "null element: " + field_id;
 				}
@@ -1155,22 +1275,42 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 	} else {
 		elements.push(element);
 	}
-	if (field_id.startsWith('Template.extras.')) {
-		let values = (new AdapterClassFieldReference(elements)).value.split(",");
-		if ((values.length == 1) && (values[0] == "")) {
-			values = [];
-		}
-		return new AdapterClassTemplateReference(values);
-	}
+	// if (field_id.startsWith('Template.extras.')) {
+	// 	let values = (new AdapterClassFieldReference(elements)).value.split(",");
+	// 	if ((values.length == 1) && (values[0] == "")) {
+	// 		values = [];
+	// 	}
+	// 	return new AdapterClassTemplateReference(values);
+	// }
 	return new AdapterClassFieldReference(html_elements=elements);
 }
 
 function adapter_helper_get_saveimg_field(img_name /*String*/) /*AdapterClassImageReference|null*/ {
 	if (img_name.startsWith('Faction.')) {
 		// e.g. 'Faction.The Emerald Enclave.symbol'
-		let bare_name = img_name.replace(/^Faction\./, '').replace(/\.symbol$/, '').toLowerCase().replace(/(?:\s+|^)the(?:\s+|$)/g, ' ').replace(/(?:\s+|^)of(?:\s+|$)/g, ' ').replace(/ /g, '').replace("'", "");
-		if (adapter_helper_UrlExists('img/factions/' + bare_name + '.svg')) {
-			return new AdapterClassImageReference('img/factions/' + bare_name + '.svg');
+		let type_ = img_name.toLowerCase().match(/\.(symbol|banner|icon)$/)[1]
+		let bare_name = img_name.replace(/^Faction\./, '').replace(/\.(symbol|banner|icon)$/, '').toLowerCase().replace(/(?:\s+|^)the(?:\s+|$)/g, ' ').replace(/(?:\s+|^)of(?:\s+|$)/g, ' ').replace(/ /g, '').replace("'", "");
+		let img_path = 'img/factions/' + type_ + '/' + bare_name + '.svg';
+		if (adapter_helper_UrlExists(img_path)) {
+			return new AdapterClassImageReference(img_path);
+		} else {
+			return null;
+		}
+	} else if (img_name.startsWith('ClassIcon.')) {
+		// e.g. 'ClassIcon.artificer'
+		let theClass = img_name.toLowerCase().match(/\.([ a-zA-Z]+)$/)[1].toLowerCase().replace(/ /g, '').replace("'", "");
+		let img_path = 'img/class/icon/' + theClass + '.svg';
+		if (adapter_helper_UrlExists(img_path)) {
+			return new AdapterClassImageReference(img_path);
+		} else {
+			return null;
+		}
+	} else if (img_name.startsWith('ALicon.')) {
+		// e.g. ALicon.tod
+		let theAL = img_name.toLowerCase().match(/\.([ a-zA-Z]+)$/)[1].toLowerCase().replace(/ /g, '').replace("'", "");
+		let img_path = 'img/adventure_league/' + theAL + '.svg';
+		if (adapter_helper_UrlExists(img_path)) {
+			return new AdapterClassImageReference(img_path);
 		} else {
 			return null;
 		}
@@ -1187,4 +1327,35 @@ function adapter_helper_UrlExists(url /*String*/) /*boolean*/ {
 	http.open('HEAD', url, false);
 	http.send();
 	return http.status != 404;
+}
+
+function adapter_helper_storeSetThisFldValResult(fieldAdapter /*AdapterClassFieldReference*/) {
+	fieldAdapter.value = event.target.value
+}
+
+function adapter_helper_get_prefix_from_script(postPrefix /*String*/) /*String*/ {
+	let elementQueue = new Queue();
+	for (let childElement of document.currentScript.parentElement.childNodes) {
+		if (childElement instanceof HTMLElement) {
+			elementQueue.enqueue(childElement);
+		}
+	}
+
+	let prefix = "";
+	while (!elementQueue.isEmpty) {
+		let currentElement = elementQueue.dequeue();
+		if (currentElement.classList.contains('field') || (currentElement.tagName.toLowerCase() == 'datalist')) {
+			let CompIndex = currentElement.id.indexOf(postPrefix);
+			if (CompIndex != -1) {
+				prefix = currentElement.id.slice(0, CompIndex);
+				break;
+			}
+		}
+		for (let childElement of currentElement.childNodes) {
+			if (childElement instanceof HTMLElement) {
+				elementQueue.enqueue(childElement);
+			}
+		}
+	}
+	return prefix;
 }

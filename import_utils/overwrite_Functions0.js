@@ -58,11 +58,3 @@ function newObj(item) {
 
 	return result;
 };
-
-function calcStop(noSheetUpdate) {
-	// do nothing, we keep calculating (see also calcCont and calculateNow)
-};
-
-function calcCont(noSheetUpdate, viaTimeOut) {
-	// do nothing, we keep calculating (see also calcStop and calculateNow)
-};

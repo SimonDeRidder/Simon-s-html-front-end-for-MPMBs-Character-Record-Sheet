@@ -11,6 +11,8 @@ const dialogManager = {
 		icon = null /*todo*/,
 		callbacksToInsert = new Map() /*Map[str, str]*/,
 		initialiseCallback = null /*str|null*/,
+		destroyCallback = null /*str|null*/,
+		validateCallback = null /*str|null*/,
 	) /*str*/ {
 		return new Promise((resolve, reject) => {
 			let buttonList = [];
@@ -36,6 +38,9 @@ const dialogManager = {
 				dialog.idPrefix = '';
 			}
 			dialog.end = function (result) {
+				if (destroyCallback) {
+					monitor[destroyCallback](dialog);
+				}
 				resolve(result);
 			};
 			dialog.load = function (thingsToLoad /*Object*/) {
@@ -45,7 +50,7 @@ const dialogManager = {
 						continue;
 					}
 					let elementType = theElement.getAttribute('elementType');
-					if (elementType == 'edit_text') {
+					if ((elementType == 'edit_text') && !theElement.hasAttribute('list')) {
 						theElement.value = thingsToLoad[elementID];
 					} else if (elementType == 'image') {
 						theElement.style.width = thingsToLoad[elementID].width + 'px';
@@ -53,11 +58,19 @@ const dialogManager = {
 						theElement.setAttribute('src', 'img/icons/' + thingsToLoad[elementID].name + '.ico');
 					} else if (['button', 'static_text', 'link_text'].includes(elementType)) {
 						theElement.innerText = thingsToLoad[elementID];
-					} else if (['popup', 'hier_list_box'].includes(elementType)) {
-						let currentParent;
-						for (let i=theElement.options.length; i--;) {
-							currentParent = theElement.options[i].parentElement;
-							currentParent.removeChild(theElement.options[i]);
+					} else if (
+						['popup', 'list_box', 'hier_list_box'].includes(elementType)
+						|| ((elementType == 'edit_text') && theElement.hasAttribute('list'))
+					) {
+						let currentParent, rootElement;
+						if (elementType == 'edit_text') {
+							rootElement = document.getElementById(theElement.getAttribute('list'));
+						} else {
+							rootElement = theElement;
+						}
+						for (let i=rootElement.options.length; i--;) {
+							currentParent = rootElement.options[i].parentElement;
+							currentParent.removeChild(rootElement.options[i]);
 							if (
 								(currentParent.tagName.toUpperCase() == 'OPTGROUP')
 								&& (currentParent.children.length == 0)
@@ -68,23 +81,33 @@ const dialogManager = {
 						for (let optionName in thingsToLoad[elementID]){
 							let optionList = {};
 							let optionValue = thingsToLoad[elementID][optionName];
-							if (Number.isInteger(optionValue)) {
-								currentParent = theElement;
+							if (Number.isInteger(optionValue) || (typeof optionValue == "boolean")) {
+								currentParent = rootElement;
 								optionList[optionName] = optionValue;
 							} else {
 								currentParent = document.createElement('optgroup');
 								currentParent.setAttribute('label', optionName);
-								theElement.appendChild(currentParent);
+								rootElement.appendChild(currentParent);
 								optionList = optionValue;
 							}
 							for (let subOptionName in optionList) {
 								let option = document.createElement('option');
 								option.value = subOptionName;
 								option.innerText = subOptionName;
-								option.selected = optionList[subOptionName] == 1;
+								if (elementType == 'edit_text') {
+									if (optionList[subOptionName] > 0) {
+										theElement.value = option.value;
+									}
+								} else {
+									option.selected = optionList[subOptionName] > 0;
+								}
 								currentParent.appendChild(option);
 							}
 						}
+					} else if (['check_box', 'radio'].includes(elementType)) {
+						theElement.checked = thingsToLoad[elementID];
+					} else if (elementType == 'cluster') {
+						theElement.childNodes[0].innerText = thingsToLoad[elementID];
 					} else {
 						// 'view', 'cluster', 'ok', 'ok_cancel', 'ok_cancel_other', 'gap'
 						throw "unknown element type for dialog.load: " + elementType;
@@ -100,21 +123,22 @@ const dialogManager = {
 						results[elementID] = theElement.value;
 					} else if (['button', 'static_text', 'link_text'].includes(elementType)) {
 						results[elementID] = theElement.innerText;
-					} else if (['popup', 'hier_list_box'].includes(elementType)) {
+					} else if (['popup', 'list_box', 'hier_list_box'].includes(elementType)) {
 						results[elementID] = {};
-						let elementParent;
+						let elementParent, optionValue;
 						for (let it = 0; it < theElement.options.length; it++) {
 							elementParent = theElement.options[it].parentElement;
+							optionValue = ((it == theElement.selectedIndex) ? 1 : -1) * (1 + it);
 							if (elementParent.tagName.toUpperCase() == 'OPTGROUP') {
 								if (!(elementParent.label in results[elementID])) {
 									results[elementID][elementParent.label] = {};
 								}
-								results[elementID][elementParent.label][theElement.options[it].value] = (it == theElement.selectedIndex) ? 1 : -1;
+								results[elementID][elementParent.label][theElement.options[it].value] = optionValue;
 							} else {
-								results[elementID][theElement.options[it].value] = (it == theElement.selectedIndex) ? 1 : -1;
+								results[elementID][theElement.options[it].value] = optionValue;
 							}
 						}
-					} else if (elementType == 'radio') {
+					} else if (['check_box', 'radio'].includes(elementType)) {
 						results[elementID] = theElement.checked;
 					} else {
 						throw "unknown element type for dialog.store: " + elementType;
@@ -155,6 +179,59 @@ const dialogManager = {
 			dialog.focus = function (elementID /*String*/) {
 				document.getElementById(dialog.idPrefix + elementID).focus();
 			}
+			dialog._validate = function () {
+				if (destroyCallback) {
+					monitor[validateCallback](dialog);
+				}
+			}
+			dialog.insertEntryInList = function (thingsToInsert /*Object[String, Number]*/) {
+				for (let elementID in thingsToInsert) {
+					let theElement = document.getElementById(dialog.idPrefix + elementID);
+					if (theElement == null) {
+						continue;
+					}
+					let elementType = theElement.getAttribute('elementType');
+					if (
+						['popup', 'list_box', 'hier_list_box'].includes(elementType)
+						|| ((elementType == 'edit_text') && theElement.hasAttribute('list'))
+					) {
+						let currentParent, rootElement;
+						if (elementType == 'edit_text') {
+							rootElement = document.getElementById(theElement.getAttribute('list'));
+						} else {
+							rootElement = theElement;
+						}
+						for (let optionName in thingsToInsert[elementID]){
+							let optionList = {};
+							let optionValue = thingsToInsert[elementID][optionName];
+							if (Number.isInteger(optionValue) || (typeof optionValue == "boolean")) {
+								currentParent = rootElement;
+								optionList[optionName] = optionValue;
+							} else {
+								currentParent = document.createElement('optgroup');
+								currentParent.setAttribute('label', optionName);
+								rootElement.appendChild(currentParent);
+								optionList = optionValue;
+							}
+							for (let subOptionName in optionList) {
+								let option = document.createElement('option');
+								option.value = subOptionName;
+								option.innerText = subOptionName;
+								if (elementType == 'edit_text') {
+									if (optionList[subOptionName] > 0) {
+										theElement.value = option.value;
+									}
+								} else {
+									option.selected = optionList[subOptionName] > 0;
+								}
+								currentParent.appendChild(option);
+							}
+						}
+					} else {
+						throw "unknown element type for dialog.insertEntryInList: " + elementType;
+					}
+				}
+			}
 
 			addElementNode("p", dialog, title, dialog.idPrefix + "modalTitle", "modalTitle");
 			if (icon) {
@@ -193,17 +270,18 @@ const dialogManager = {
 				this._add_body_recursive(element, body.elements[i], callbacksToInsert, inputList, buttonList, dialog, monitor, resolve_cb);
 			}
 		} else if (body.type == 'cluster') {
-			element = addElementNode('fieldset', parent, null, null, null, null);
+			element = addElementNode('fieldset', parent, null, dialog.idPrefix + body.item_id, null, null);
 			addElementNode('legend', element, body.name, null, null, null);
 			let style = this._parse_element_style(body);
 			style.borderWidth = 1;
-			let container = addElementNode('div', element, null, dialog.idPrefix + body.item_id, 'modalDialogViewElement', style);
+			let container = addElementNode('div', element, null, null, 'modalDialogViewElement', style);
 			for (let i = 0; i < body.elements.length; i++) {
 				this._add_body_recursive(container, body.elements[i], callbacksToInsert, inputList, buttonList, dialog, monitor, resolve_cb);
 			}
 		} else if (body.type == 'static_text') {
 			let style = this._parse_element_style(body);
 			element = addElementNode('div', parent, body.name, dialog.idPrefix + body.item_id, 'modalDialogStaticTextElement', style);
+			inputList.push(body.item_id);
 		} else if (body.type == 'ok') {
 			let containerFloat = (body.alignment == 'align_center') ? 'center' : ((body.alignment == 'align_right') ? 'right' : 'left');
 			element = addElementNode(
@@ -251,12 +329,17 @@ const dialogManager = {
 			if (body.password != null) {
 				throw "edit_text option password not implemented";
 			}
+			let listName = null;
 			if (body.PopupEdit != null) {
-				throw "edit_text option PopupEdit not implemented";
+				listName = dialog.idPrefix + body.item_id + '_datalist';
+				addElementNode('datalist', parent, null, listName);
+				delete body.PopupEdit;
 			}
 			let spinEdit = false;
 			if (body.SpinEdit != null) {
-				spinEdit = body.SpinEdit;
+				if (!listName) {
+					spinEdit = body.SpinEdit;
+				}
 				delete body.SpinEdit;
 			}
 			let style = this._parse_element_style(body);
@@ -266,6 +349,23 @@ const dialogManager = {
 			}
 			if (readonly) {
 				element.setAttribute('readonly', true);
+			}
+			if (listName) {
+				element.setAttribute('list', listName);
+				element.onclick = function (event) {
+					let elWidth = this.style.width.trim();
+					if (elWidth.endsWith('px')) {
+						if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {
+							this.value='';
+						}
+					} else if (elWidth.endsWith('ch')) {
+						if (event.offsetX > Number(this.offsetWidth)-26) {
+							this.value='';
+						}
+					} else {
+						throw "Unknown width type for list input:", elWidth
+					}
+				}
 			}
 			if (spinEdit) {
 				element.setAttribute('type', 'number')
@@ -281,7 +381,7 @@ const dialogManager = {
 			element = addElementNode('div', parent, null, dialog.idPrefix + body.item_id, '', this._parse_element_style(body));
 		} else if (body.type == 'image') {
 			element = addElementNode('img', parent, null, dialog.idPrefix + body.item_id, '', this._parse_element_style(body));
-		} else if (body.type == 'popup') {
+		} else if (['list_box', 'popup'].includes(body.type)) {
 			let style = this._parse_element_style(body);
 			style.height = "27.5px";
 			element = addElementNode('select', parent, null, dialog.idPrefix + body.item_id, '', style);
@@ -327,17 +427,34 @@ const dialogManager = {
 		} else if (body.type == 'radio') {
 			let { type, item_id, group_id, name, ...body_style } = body;
 			let style = this._parse_element_style(body_style);
-			element = addElementNode('input', parent, '', item_id, null, style);
+			let container = addElementNode('div', parent, null, null, null, style);
+			element = addElementNode('input', container, '', dialog.idPrefix + item_id, null);
 			element.setAttribute('type', 'radio');
 			element.setAttribute('name', group_id);
 			element.setAttribute('value', name);
+			let labelElement = addElementNode('label', container, name, null, null);
+			labelElement.setAttribute('for', dialog.idPrefix + item_id);
+			inputList.push(body.item_id);
+		} else if (body.type == 'check_box') {
+			let { type, item_id, name, ...body_style } = body;
+			let style = this._parse_element_style(body_style);
+			element = addElementNode('input', parent, '', dialog.idPrefix + item_id, null, style);
+			element.setAttribute('type', 'checkbox');
+			element.setAttribute('value', name);
 			let labelElement = addElementNode('label', parent, name, null, null, style);
-			labelElement.setAttribute('for', item_id);
+			labelElement.setAttribute('for', dialog.idPrefix + item_id);
 			inputList.push(body.item_id);
 		} else {
 			throw "unimplemented element type for execDialog: " + body.type;
 		}
 		element.setAttribute('elementType', body.type);
+		var oldOnchange = element.onchange;
+		element.onchange = function () {
+			if (oldOnchange) {
+				oldOnchange();
+			}
+			dialog._validate();
+		}
 	},
 
 	_keyboardHandler: function (evt, buttonList) {
@@ -399,24 +516,29 @@ const dialogManager = {
 			'item_id', 'type', 'alignment', 'align_children', 'back_color', 'bold', 'char_height', 'char_width', 'font',
 			'gradient_direction', 'gradient_type', 'height', 'margin_height', 'name', 'truncate', 'width', 'wrap_name',
 		];
-		let ignoredElements = ['elements'];
+		let ignoredElements = ['elements', 'skipType'];
 		for (let prop in element) {  // TODO: remove this check when complete
 			if (!styleElements.includes(prop) && !ignoredElements.includes(prop)) {
 				throw "unknown style in element for execDialog: " + prop;
 			}
 		}
-		let style = { 'display': 'grid' };
+		let style = {};
 		if (element.alignment == 'align_top') {
 			style.textAlign = 'center';
+			style.display = 'grid';
 		} else if (element.alignment == 'align_fill') {
 			style.textAlign = 'left';
 			style.width = '100%';
+			style.display = 'grid';
 		} else if (element.alignment == 'align_left') {
 			style.textAlign = 'left';
+			style.display = 'grid';
 		} else if (element.alignment == 'align_right') {
 			style.textAlign = 'right';
+			style.display = 'grid';
 		} else if (element.alignment == 'align_center') {
 			style.textAlign = 'center';
+			style.display = 'grid';
 		} else if (element.alignment == 'align_offscreen') {
 			style.display = 'none';
 		} else if (element.alignment) {
@@ -445,7 +567,7 @@ const dialogManager = {
 			style.width = String(element.char_width * 20 / Number(style.fontSize.slice(0, 2))) + 'ch';
 		}
 		if (element.width) {
-			style.width = String(element.width) + 'px';
+			style.width = String(element.width * 4 / 3) + 'px';
 		}
 		if (element.bold) {
 			style.fontWeight = 'bold';
@@ -454,14 +576,14 @@ const dialogManager = {
 			style.height = String(element.char_height * 20 / Number(style.fontSize.slice(0, 2))) + 'ch';
 		}
 		if (element.height) {
-			style.height = String(element.height) + 'px';
+			style.height = String(element.height * 4 / 3) + 'px';
 		}
 		if (element.wrap_name) {
 			style.overflowWrap = 'break-word';
 		}
 		if (element.align_children == 'align_top') {
 			style.display = 'flex';
-			style.flexDirection = 'column';
+			style.flexDirection = 'row';
 			style.alignItems = 'center';
 			style.justifyContent = 'center';
 		} else if (element.align_children == 'align_left') {
@@ -469,6 +591,11 @@ const dialogManager = {
 			style.flexDirection = 'column';
 			style.alignItems = 'left';
 			style.justifyContent = 'left';
+		} else if (element.align_children == 'align_right') {
+			style.display = 'flex';
+			style.flexDirection = 'column';
+			style.alignItems = 'right';
+			style.justifyContent = 'right';
 		} else if (element.align_children == 'align_row') {
 			style.display = 'flex';
 			style.flexDirection = 'row';
@@ -520,7 +647,7 @@ const dialogManager = {
 		if (callbacksToInsert.has(buttonID)) {
 			link.onclick = async function () {
 				await monitor[callbacksToInsert.get(buttonID)](dialog);
-				if (callbacksToInsert.get(buttonID) == 'commit') {
+				if (['commit', 'ok'].includes(callbacksToInsert.get(buttonID))) {
 					resolve_cb(buttonID);
 				}
 			};

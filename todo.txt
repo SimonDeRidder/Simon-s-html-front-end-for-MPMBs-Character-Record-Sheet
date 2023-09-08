@@ -1,5 +1,4 @@
 finish fieldnames_continue.txt
 finish fields_continue
-HeaderIcon: faction banners & icons & class icons
 better context menu (with scroll for long options)
 defaultValue

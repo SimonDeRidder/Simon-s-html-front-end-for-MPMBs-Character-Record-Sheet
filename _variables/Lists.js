@@ -756,9 +756,9 @@ var SetPrintPages_Dialog = {
 	},
 
 	//fun whenever the Hide checkbox is clicked
-	Hide : function (dialog) {
+	Hide : async function (dialog) {
 		this.bHide = !this.bHide;
-		HideShowEverything(this.bHide);
+		await HideShowEverything(this.bHide);
 	},
 
 	description : {

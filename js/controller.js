@@ -3,15 +3,16 @@
 // TODO: Make a field "Whiteout.Standard.0" that controls the lines in multi-line inputs fields (I think)
 // TODO: connect "Color.Theme"
 // TODO: "SaveIMG.Header.Left." + colour, "SaveIMG.Divider." + colour
-// TODO: find a way to add tooltips for buttons etc
+// TODO: find a way to show tooltips
 // TODO: connect "Extra.Layers Button", "Buttons"
 // TODO: rename adapter_helper_* and AdapterClass* to more reasonable things
 // TODO: switch to <select> for all non-customisable dropdowns
-// TODO: figure out what to do with SetThisFldVal
 // TODO: connect thermoM to floating fade-out status message
 // TODO: revamp number formatting (keystroke[12] and format[12])
 // TODO: make sure setting setVal on magic items/feats triggers a calculation (see doDropDownValCalcWithChoices) (change event should suffice)
-// TODO: make sure field getters in CurrentEvals.hp trigger calculation of HP_Max
+// TODO: make sure field getters in CurrentEvals.hp trigger calculation of (Comp.Use.)HP.Max
+// TODO: set default values up to P4.AScomp.Comp.Type
+// TODO: parse CurrentEvals stuff for proper event triggering
 
 // Load functions
 
@@ -25,17 +26,26 @@ function loadScript(path /*str*/) /*Promise*/ {
 }
 
 function initialCalculationEvents() {
+	// First set CurrentWeapons (errors otherwise)
+	FindWeapons();
+	FindCompWeapons(undefined, 'P4.AScomp.');
 	// trigger AC calculation
 	document.getElementById('AC_Armor_Bonus').dispatchEvent(new Event('change'));
 	// trigger Adventuring_Gear_Location_Subtotal_* and Adventuring_Gear_Weight_Subtotal_* calculation
 	document.getElementById('Adventuring_Gear_Amount_1').dispatchEvent(new Event('change'));
 	document.getElementById('Adventuring_Gear_Amount_19').dispatchEvent(new Event('change'));
 	document.getElementById('Adventuring_Gear_Amount_37').dispatchEvent(new Event('change'));
+	document.getElementById('Extra.Gear_Amount_1#1').dispatchEvent(new Event('change'));
+	document.getElementById('P4.AScomp.Comp.eqp.Gear_Amount_1').dispatchEvent(new Event('change'));
 	// trigger ability mods calculation (and ST calculation) and AC_Dexterity_Modifier calculation (and all skills) (and Attack.i.To Hit)
 	document.getElementById('Con').dispatchEvent(new Event('change'));
 	document.getElementById('Cha').dispatchEvent(new Event('change'));
 	document.getElementById('Dex').dispatchEvent(new Event('change'));
-	// TODO: Str, Int, Wis, HoS
+	document.getElementById('Int').dispatchEvent(new Event('change'));
+	document.getElementById('HoS').dispatchEvent(new Event('change'));
+	// TODO: Str, Wis
+	// trigger weight texts
+	document.getElementById('Unit_System').dispatchEvent(new Event('change'));
 }
 
 loadScript('_functions/AbilityScores_old.js')
@@ -64,5 +74,6 @@ loadScript('_functions/AbilityScores_old.js')
 	.then(script => loadScript('_variables/ListsRaces.js'))
 	.then(script => loadScript('_variables/ListsSources.js'))
 	.then(script => loadScript('_variables/ListsSpells.js'))
-	.then(script => loadScript('import_utils/overwrite_Startup.js'))
-	.then(script => initialCalculationEvents());
+	.then(script => loadScript('_functions/Startup.js'));
+	// .then(script => loadScript('import_utils/overwrite_Startup.js'))
+	// .then(script => initialCalculationEvents());

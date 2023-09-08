@@ -63,4 +63,23 @@
 <path style="fill:none;stroke-width:1.0;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(4.017639%,3.95813%,4.968262%);stroke-opacity:1;stroke-miterlimit:10;" d="M 367.292969 154.679688 L 367.292969 234.496094"/>
 <path style="fill:none;stroke-width:1.0;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(4.017639%,3.95813%,4.968262%);stroke-opacity:1;stroke-miterlimit:10;" d="M 367.292969 270.984375 L 367.292969 374.0625"/>
 
+
+<g id="max_hit_points_partial" fill="none" stroke="rgb(4.017639%,3.95813%,4.968262%)">
+	<path
+		id="frame"
+		stroke-width="2.4"
+		d="M 10.5 43.9 L 19.7 34.7 L 103.3 34.7 L 112.5 43.9 L 112.5 104.9 L 103.3 114.1 L 19.7 114.1 L 10.5 104.9 Z"
+	/>
+	<g id="corner_curvelets" stroke-width="1.2">
+		<path d="M  10.5 64   C  10.5  52.6  16.5  34.7 36  34.7"/>
+		<path d="M  10.5 84.8 C  10.5  96.2  16.5 114.1 36 114.1"/>
+		<path d="M 112.5 64   C 112.5  52.6 106.5  34.7 87  34.7"/>
+		<path d="M 112.5 84.8 C 112.5  96.2 106.5 114.1 87 114.1"/>
+	</g>
+	<g id="side_lines" stroke-width="1.2">
+		<path d="M  16.3 44.5 L  16.3 104.2"/>
+		<path d="M 106.7 44.5 L 106.7 104.2"/>
+	</g>
+</g>
+
 </svg>

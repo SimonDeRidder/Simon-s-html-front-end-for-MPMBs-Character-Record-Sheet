@@ -247,7 +247,9 @@ async function ApplyCompRace(newRace, prefix, sCompType) {
 	}
 
 	// Undo things from a previous race, if any
-	await undoCreaturePresistents(prefix, oldCrea);
+	if (oldCrea) {
+		await undoCreaturePresistents(prefix, oldCrea);
+	}
 
 	// save the companion type
 	if (sCompType && CompanionList[sCompType]) {
@@ -630,7 +632,7 @@ async function ApplyCompRace(newRace, prefix, sCompType) {
 	// Apply the special companion type (if any)
 	ApplyCompanionType(true, prefix);
 
-	SetHPTooltip(false, true);
+	SetHPTooltip(false, true, prefix);
 	thermoM(thermoTxt, true); // Stop progress bar
 }
 
@@ -766,7 +768,7 @@ async function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 		}
 	// Menu options for changing the current creature to a special companion option
 		if (bAddMenuDivider) menuLVL1(aCompMenu, [["-", "-"]]);
-		if (CurrentCompRace[prefix].typeFound === "creature") {
+		if (CurrentCompRace[prefix] && CurrentCompRace[prefix].typeFound === "creature") {
 			var aSubInstructions = [];
 			for (var sComp in oCompanions) {
 				var oComp = CompanionList[sComp];
@@ -819,7 +821,7 @@ async function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 	// Save this menu in the global variable
 		Menus.companion = aCompMenu;
 	}
-	var MenuSelection = MenuSelection ? MenuSelection : getMenu("companion");
+	var MenuSelection = MenuSelection ? MenuSelection : await getMenu("companion");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] != "companion") return;
 
 	// Start progress bar and stop calculations
@@ -2784,7 +2786,7 @@ function LimFeaDelete(itemNmbr) {
 }
 
 //a way of going to a specified field (for making bookmarks independent of templates)
-function Bookmark_Goto(BookNm) {
+async function Bookmark_Goto(BookNm) {
 	// Find the field corresponding to the bookmark name
 	var theTemplate = event.type === "Bookmark" ? getBookmarkTemplate(event.target) : false;
 	var isVisible = theTemplate ? isTemplVis(theTemplate[0], true) : true;
@@ -2814,7 +2816,7 @@ function Bookmark_Goto(BookNm) {
 				var newPrefix = DoTemplate(theTemplate[0], "Add");
 				tDoc.getField(newPrefix + BookMarkList[BookNm]).setFocus();
 			} else {
-				GenerateSpellSheet();
+				await GenerateSpellSheet();
 			};
 		};
 	};
@@ -3330,7 +3332,7 @@ async function PagesOptions() {
 			break;
 		case "scores" :
 			if (MenuSelection[1] === "dialog") {
-				AbilityScores_Button();
+				await AbilityScores_Button();
 				break;
 			};
 			ShowHonorSanity(MenuSelection[1].capitalize());
@@ -3406,14 +3408,14 @@ function functionBookmarks(theParent) {
 
 	var doTheChildren = function (aParent, colour) {
 		for (var i = 0; i < aParent.length; i++) {
-			aParent[i].setAction("Bookmark_Goto(event.target.name);");
+			aParent[i].setAction("await Bookmark_Goto(event.target.name);");
 			if (aParent[i].children) {
 				doTheChildren(aParent[i].children, colour);
 			}
 		}
 	}
 
-	theParent.setAction("Bookmark_Goto(event.target.name);");
+	theParent.setAction("await Bookmark_Goto(event.target.name);");
 	doTheChildren(theParent.children);
 }
 
@@ -4894,7 +4896,7 @@ async function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
 		return;
 	};
 
-	var MenuSelection = input ? input : getMenu("skills");
+	var MenuSelection = input ? input : await getMenu("skills");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
 	switch (MenuSelection[1]) {
@@ -8502,7 +8504,7 @@ async function setUnicodeUse(enable, force) {
 		};
 		// update the tooltips that use unicode
 		UpdateDropdown("tooltips");
-		AbilityScores_Button(true);
+		await AbilityScores_Button(true);
 		setSkillTooltips(true);
 		await MakeSkillsMenu_SkillsOptions(true, true);
 		SetHPTooltip();

@@ -1243,7 +1243,7 @@ function calcStop(noSheetUpdate) {
 };
 
 // function to start the calculations of the PDF again
-function calcCont(noSheetUpdate, viaTimeOut) {
+async function calcCont(noSheetUpdate, viaTimeOut) {
 	if (!noSheetUpdate) UpdateSheetWeapons(); // first recalculate the weapons if set to do so, before restarting any calculations
 	if (calcStartSet) {
 		app.clearTimeOut(calcStartSet);
@@ -1257,7 +1257,7 @@ function calcCont(noSheetUpdate, viaTimeOut) {
 	tDoc.dirty = currentDirty;
 	thermoStop();
 	if (!noSheetUpdate) {
-		UpdateSheetDisplay();
+		await UpdateSheetDisplay();
 		thermoStop();
 	} else if (viaTimeOut) {
 		CurrentUpdates = {types : []};

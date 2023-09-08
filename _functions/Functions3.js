@@ -209,11 +209,11 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		// --- backwards compatibility --- //
 		var abiScoresTxt = uObj.scorestxt ? uObj.scorestxt : uObj.improvements ? uObj.improvements : false;
 		if (uObj.scores || abiScoresTxt) {
-			processStats(addIt, type, tipNm, uObj.scores, abiScoresTxt, false, uObj.scoresMaximum, uObj.scoresMaxLimited);
+			await processStats(addIt, type, tipNm, uObj.scores, abiScoresTxt, false, uObj.scoresMaximum, uObj.scoresMaxLimited);
 		} else if (uObj.scoresMaximum) {
-			processStats(addIt, type, tipNm, uObj.scoresMaximum, abiScoresTxt, "maximums");
+			await processStats(addIt, type, tipNm, uObj.scoresMaximum, abiScoresTxt, "maximums");
 		}
-		if (uObj.scoresOverride) processStats(addIt, type, tipNm, uObj.scoresOverride, abiScoresTxt, "overrides");
+		if (uObj.scoresOverride) await processStats(addIt, type, tipNm, uObj.scoresOverride, abiScoresTxt, "overrides");
 
 		// spellcasting
 		if (uObj.spellcastingBonus) await processSpBonus(addIt, uniqueObjNm, uObj.spellcastingBonus, type, aParent, objNm, forceNonCurrent ? true : false);
@@ -257,7 +257,7 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		var aWeaponsAdd = uObj.weaponsAdd ? uObj.weaponsAdd : type == "race" && uObj.weapons ? uObj.weapons : false;
 		if (aWeaponsAdd) processAddWeapons(addIt, aWeaponsAdd);
 		var anArmorAdd = uObj.armorAdd ? uObj.armorAdd : uObj.addarmor ? uObj.addarmor : false;
-		if (anArmorAdd) processAddArmour(addIt, anArmorAdd);
+		if (anArmorAdd) await processAddArmour(addIt, anArmorAdd);
 		if (uObj.shieldAdd) processAddShield(addIt, uObj.shieldAdd, uObj.weight);
 		if (uObj.ammoAdd) processAddAmmo(addIt, uObj.ammoAdd);
 
@@ -1123,7 +1123,7 @@ async function processSpellcastingBonusElsewhere(bAddRemove, sType, sSrcNm, sUni
 }
 
 // set the armour (if more AC than current armour) or remove the armour
-function processAddArmour(AddRemove, armour) {
+async function processAddArmour(AddRemove, armour) {
 	if (!armour || typeof armour != "string") return;
 	if (!AddRemove) { // remove
 		RemoveArmor(armour);
@@ -1135,7 +1135,7 @@ function processAddArmour(AddRemove, armour) {
 		if (remCurArm && remAC) { // there was a previous armor, so check if this new armor is better or not
 			// calculate all the field values, or the AC field will not be updated
 			var isStoppedCalc = calcStartSet != false;
-			if (isStoppedCalc) calcCont(true);
+			if (isStoppedCalc) await calcCont(true);
 			if (remAC > Number(What("AC"))) {
 				Value("AC Armor Description", remCurArm);
 			} else if (isStoppedCalc) {
@@ -1448,7 +1448,7 @@ function UpdateSheetWeapons() {
 
 // a function to do all the default things after a change in level, class, race, feat, magic item, or companion
 // this function is called whenever the calculations are activated again
-function UpdateSheetDisplay() {
+async function UpdateSheetDisplay() {
 	if (!CurrentUpdates.types.length || !IsNotReset || !IsNotImport) {
 		CurrentUpdates = {types : []}; // reset the CurrentUpdates variable
 		return;
@@ -1610,7 +1610,7 @@ function UpdateSheetDisplay() {
 	// possible options for stats: statsoverride, statsclasses, statsrace, statsfeats, statsitems
 	if (CUflat.indexOf("stats") !== -1 || CurrentUpdates.types.indexOf("testasi") !== -1) {
 		Changes_Dialog.oldStats = Who("Str");
-		if (AbilityScores_Button(true)) { // sets tooltip for stats and returns true if anything changed
+		if (await AbilityScores_Button(true)) { // sets tooltip for stats and returns true if anything changed
 			var strStats = "";
 			// ability score improvements
 			if (CurrentUpdates.types.indexOf("testasi") !== -1) {
@@ -1682,8 +1682,8 @@ function UpdateSheetDisplay() {
 						name : checkboxTxt
 					}]
 				});
-				Changes_Dialog.bSTc = function (dialog) {
-					ShowCompareDialog(
+				Changes_Dialog.bSTc = async function (dialog) {
+					await ShowCompareDialog(
 						["Ability Score changes", "The text above is part of the 'Ability Scores Dialog' and the tooltip (mouseover text) of the ability score fields.\nYou can always open the 'Ability Scores Dialog' using the 'Scores' button in the 'JavaScript Window'-toolbar or the 'Ability Scores' bookmark."],
 						[
 							["Old ability score modifiers", this.oldStats],
@@ -1692,8 +1692,8 @@ function UpdateSheetDisplay() {
 						true
 					);
 				};
-				Changes_Dialog.bSTo = function (dialog) {
-					AbilityScores_Button();
+				Changes_Dialog.bSTo = async function (dialog) {
+					await AbilityScores_Button();
 					// this dialog might have just updated the stats, prompting for some other updates
 					if (CurrentUpdates.types.indexOf("attacks") !== -1) ReCalcWeapons();
 					if (CurrentUpdates.types.indexOf("hp") !== -1) SetHPTooltip(false, false);
@@ -1748,8 +1748,8 @@ function UpdateSheetDisplay() {
 				name : checkboxTxt
 			}]
 		});
-		Changes_Dialog.bHPc = function (dialog) {
-			ShowCompareDialog(
+		Changes_Dialog.bHPc = async function (dialog) {
+			await ShowCompareDialog(
 				["Hit Points changes", "You can always find the current Hit Point calculation in the tooltip (mouseover text) of the Max HP field."],
 				[["Old HP calculation", this.oldHPtt], ["New HP calculation", Who("HP Max")]]
 			);
@@ -1853,9 +1853,9 @@ function UpdateSheetDisplay() {
 			}]
 		});
 		Changes_Dialog.curSpLen = CurrentSpellsLen;
-		Changes_Dialog.bSPo = function (dialog) {
+		Changes_Dialog.bSPo = async function (dialog) {
 			if (this.curSpLen) {
-				if (GenerateSpellSheet(undefined, true)) {
+				if (await GenerateSpellSheet(undefined, true)) {
 					app.alert({
 						cTitle : "New spell sheets have been generated",
 						nIcon : 3,
@@ -1869,8 +1869,8 @@ function UpdateSheetDisplay() {
 		if (changedSpellEval || CurrentEvals.spellStr) {
 			Changes_Dialog.oldSpellStr = CurrentUpdates.spellStrOld ? CurrentUpdates.spellStrOld : "";
 			Changes_Dialog.spellStrChange = changedSpellEval;
-			Changes_Dialog.bSPs = function (dialog) {
-				ShowCompareDialog(
+			Changes_Dialog.bSPs = async function (dialog) {
+				await ShowCompareDialog(
 					["Things affecting spells, spell properties and/or spell list generation", "Some features might affect how spells are displayed on the spell sheet, by adding more range for example.\n\nOthers might affect how a spell list for a spellcasting class or feature is generated, by adding extra spells to choose from for example."],
 					this.spellStrChange ?
 					[
@@ -1922,8 +1922,8 @@ function UpdateSheetDisplay() {
 				name : checkboxTxt
 			}]
 		});
-		Changes_Dialog.bSKc = function (dialog) {
-			ShowCompareDialog(
+		Changes_Dialog.bSKc = async function (dialog) {
+			await ShowCompareDialog(
 				["Skill proficiencies", "You can always find the current skill proficiencies in the tooltip (mouseover text) of the skill fields."],
 				[
 					["Old skill proficiencies", this.oldSkillStr],
@@ -1971,8 +1971,8 @@ function UpdateSheetDisplay() {
 				name : checkboxTxt
 			}]
 		});
-		Changes_Dialog.bAtk = function (dialog) {
-			ShowCompareDialog(
+		Changes_Dialog.bAtk = async function (dialog) {
+			await ShowCompareDialog(
 				["Things affecting attack/DC calculations", "You can always see what things are affecting the attack calculations with the small buttons in front of each attack entry on the first page.", "Be aware that things affecting spell attacks and spell save DCs are applied in the attack section and on the spell sheet pages, but not to the 'Ability Save DC' on the first page."],
 				[
 					["Old attack/DC manipulations", this.oldAtkStr],
@@ -2024,8 +2024,8 @@ function UpdateSheetDisplay() {
 				name : checkboxTxt
 			}]
 		});
-		Changes_Dialog.bNot = function (dialog) {
-			ShowCompareDialog(
+		Changes_Dialog.bNot = async function (dialog) {
+			await ShowCompareDialog(
 				[
 					(CurrentUpdates.notesChanges && CurrentUpdates.remarks) ? "Important Remarks and Things added to Notes section(s)" : CurrentUpdates.remarks ? "ImportantRemarks" : "Things added to Notes section(s)",
 					CurrentUpdates.notesChanges ? "You can always edit the text in the Notes section or Notes pages, you don't have to keep it as set by the automation." : "",
@@ -2047,8 +2047,8 @@ function UpdateSheetDisplay() {
 		if (CurrentUpdates.companionChanges) {
 			strCompanion += "One or more creatures has been added or removed from one or more companion pages.";
 			Changes_Dialog.companionChange = "\u2022 " + CurrentUpdates.companionChanges.join("\n\u2022 ");
-			Changes_Dialog.bCOa = function (dialog) {
-				ShowCompareDialog(
+			Changes_Dialog.bCOa = async function (dialog) {
+				await ShowCompareDialog(
 					["Additions/removals on the Companion pages", "You can always edit the companion pages how you see fit, you don't have to leave it as it has been set with the automation. You could add more companion pages, for example.", 'You can also add multiples of the same companion, just add another page and select the same companion race.'],
 					[
 						["", this.companionChange]
@@ -2060,8 +2060,8 @@ function UpdateSheetDisplay() {
 		if (changedCompCallback) {
 			strCompanion += (strCompanion ? "\n" : "") + "A change was detected in the callback that affects creatures added to a companion page.";
 			Changes_Dialog.oldCreaStr = CurrentUpdates.creaStrOld ? CurrentUpdates.creaStrOld : "";
-			Changes_Dialog.bCOe = function (dialog) {
-				ShowCompareDialog(
+			Changes_Dialog.bCOe = async function (dialog) {
+				await ShowCompareDialog(
 					["Callback changes for the Companion pages", "You can always edit the companion pages how you see fit, you don't have to leave it as it has been set with the automation. You could remove or add text, for example.", 'You can always see what things are affecting the companion page automation with the Companion Options button on each companion page.'],
 					[
 						["Old callback manipulations", this.oldCreaStr],
@@ -2131,7 +2131,7 @@ function UpdateSheetDisplay() {
 		// add the sections to the dialog
 		setDialogName(Changes_Dialog, "sect", "elements", dialogParts);
 		// open the dialog
-		var dia = app.execDialog(Changes_Dialog);
+		var dia = await app.execDialog(Changes_Dialog);
 	}
 
 	// reset the CurrentUpdates variable
@@ -2143,7 +2143,7 @@ function UpdateSheetDisplay() {
 
 //a way to show a dialog that compares multiple things
 //arr is an array of arrays with two entries each [cluster title, cluster text]
-function ShowCompareDialog(txtA, arr, canBeLong) {
+async function ShowCompareDialog(txtA, arr, canBeLong) {
 	var clusterArr = [];
 	var isTxtA = isArray(txtA);
 	var hdr = isTxtA ? txtA[0] : txtA;
@@ -2249,7 +2249,7 @@ function ShowCompareDialog(txtA, arr, canBeLong) {
 			}]
 		}
 	}
-	var dia = app.execDialog(ShowCompare_Dialog);
+	var dia = await app.execDialog(ShowCompare_Dialog);
 }
 
 // >>>> Magic Items functions <<<< \\
@@ -3644,7 +3644,7 @@ async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, c
 				processAddWeapons(AddRemove, itemToProcess ? itemToProcess : newMIname.replace(/weapon (\+\d)/i, "$1").replace(/(\+\d) *\((.*?)\)/i, "$1 $2"));
 				break;
 			case "armor":
-				processAddArmour(AddRemove, itemToProcess ? itemToProcess : newMIname.replace(/armou?r (\+\d)/i, "$1").replace(/(\+\d) *\((.*?)\)/i, "$1 $2"));
+				await processAddArmour(AddRemove, itemToProcess ? itemToProcess : newMIname.replace(/armou?r (\+\d)/i, "$1").replace(/(\+\d) *\((.*?)\)/i, "$1 $2"));
 				break;
 		}
 	}

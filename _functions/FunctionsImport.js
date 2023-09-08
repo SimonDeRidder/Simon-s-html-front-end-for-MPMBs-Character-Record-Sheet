@@ -1447,7 +1447,7 @@ async function DirectImport(consoleTrigger) {
 	if (!closeAlert) {
 		await global.docTo.InitializeEverything(consoleTrigger, true);
 		global.docTo.dirty = true;
-		global.docTo.calcCont();
+		await global.docTo.calcCont();
 		thermoTxt = thermoM("Importing from '" + global.docFrom.documentFileName + "'...");
 		thermoM(0.9);
 

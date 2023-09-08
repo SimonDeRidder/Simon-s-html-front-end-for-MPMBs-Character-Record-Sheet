@@ -25,6 +25,12 @@
 		<span class="textlabel" style="top: 269.7px;left: 29.4px;font-size: 8.8px">FEAT:</span>
 		<span class="textlabel" style="top: 386.7px;left: 29.4px;font-size: 8.8px">FEAT:</span>
 
+		<div
+			id="Image.calc_boxes.ASfront"
+			class="field"
+			style="visibility: hidden"
+		></div>
+
 		<input
 			id="Feat_Name_1"
 			class="field inputfield"
@@ -270,11 +276,66 @@
 		<span class="textlabel" style="top: 383.5px;left: 29.4px;font-size: 8.7px">MAGIC ITEM:</span>
 		<span class="textlabel" style="top: 500.5px;left: 29.4px;font-size: 8.7px">MAGIC ITEM:</span>
 
-		<span class="textlabel" style="top:  31.5px;left: 299px;font-size: 8.8px">Attuned</span>
-		<span class="textlabel" style="top: 148.5px;left: 299px;font-size: 8.8px">Attuned</span>
-		<span class="textlabel" style="top: 265.5px;left: 299px;font-size: 8.8px">Attuned</span>
-		<span class="textlabel" style="top: 382.5px;left: 299px;font-size: 8.8px">Attuned</span>
-		<span class="textlabel" style="top: 499.5px;left: 299px;font-size: 8.8px">Attuned</span>
+		<span
+			id="Image.MagicItemAttuned.1"
+			class="field textlabel"
+			style="top: 31.5px;left: 299px;font-size: 8.8px"
+		>Attuned</span>
+		<span
+			id="Image.MagicItemAttuned.2"
+			class="field textlabel"
+			style="top: 148.5px;left: 299px;font-size: 8.8px"
+		>Attuned</span>
+		<span
+			id="Image.MagicItemAttuned.3"
+			class="field textlabel"
+			style="top: 265.5px;left: 299px;font-size: 8.8px"
+		>Attuned</span>
+		<span
+			id="Image.MagicItemAttuned.4"
+			class="field textlabel"
+			style="top: 382.5px;left: 299px;font-size: 8.8px"
+		>Attuned</span>
+		<span
+			id="Image.MagicItemAttuned.5"
+			class="field textlabel"
+			style="top: 499.5px;left: 299px;font-size: 8.8px"
+		>Attuned</span>
+		<span
+			id="Image.MagicItemAttuned.6"
+			class="field textlabel"
+			style="visibility: hidden;font-size: 8.8px">Attun
+		ed</span>
+		<span
+			id="Image.MagicItemAttuned.7"
+			class="field textlabel"
+			style="visibility: hidden;font-size: 8.8px">Attun
+		ed</span>
+		<span
+			id="Image.MagicItemAttuned.8"
+			class="field textlabel"
+			style="visibility: hidden;font-size: 8.8px">Attun
+		ed</span>
+		<span
+			id="Image.MagicItemAttuned.9"
+			class="field textlabel"
+			style="visibility: hidden;font-size: 8.8px">Attun
+		ed</span>
+		<span
+			id="Image.MagicItemAttuned.10"
+			class="field textlabel"
+			style="visibility: hidden;font-size: 8.8px">Attun
+		ed</span>
+		<span
+			id="Image.MagicItemAttuned.11"
+			class="field textlabel"
+			style="visibility: hidden;font-size: 8.8px">Attun
+		ed</span>
+		<span
+			id="Image.MagicItemAttuned.12"
+			class="field textlabel"
+			style="visibility: hidden;font-size: 8.8px">Attun
+		ed</span>
 
 		<input
 			id="Extra.Magic_Item_1"
@@ -283,7 +344,7 @@
 			style="top: 29px;left: 81px;font-size: 12px;width: 157px;height: 13.3px"
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -293,7 +354,7 @@
 			style="top: 146px;left: 81px;font-size: 12px;width: 157px;height: 13.3px"
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -303,7 +364,7 @@
 			style="top: 263px;left: 81px;font-size: 12px;width: 157px;height: 13.3px"
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -313,7 +374,7 @@
 			style="top: 380px;left: 81px;font-size: 12px;width: 157px;height: 13.3px"
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -323,7 +384,7 @@
 			style="top: 497px;left: 81px;font-size: 12px;width: 157px;height: 13.3px"
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -333,7 +394,7 @@
 			style="visibility:hidden;" 
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -343,7 +404,7 @@
 			style="visibility:hidden;" 
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -353,7 +414,7 @@
 			style="visibility:hidden;" 
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -363,7 +424,7 @@
 			style="visibility:hidden;" 
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -373,7 +434,7 @@
 			style="visibility:hidden;" 
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -383,7 +444,7 @@
 			style="visibility:hidden;" 
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
@@ -393,7 +454,7 @@
 			style="visibility:hidden;" 
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<datalist id="magic_item_options">
@@ -2653,18 +2714,6 @@
 	<!-- Invisible fields (some are bluetext mods, sort these out later) -->
 	<div style="visibility:hidden">
 		<div id="Extra.Notes_Whiteout" class="field"></div>
-		<div id="Image.MagicItemAttuned.1" class="field"></div>
-		<div id="Image.MagicItemAttuned.2" class="field"></div>
-		<div id="Image.MagicItemAttuned.3" class="field"></div>
-		<div id="Image.MagicItemAttuned.4" class="field"></div>
-		<div id="Image.MagicItemAttuned.5" class="field"></div>
-		<div id="Image.MagicItemAttuned.6" class="field"></div>
-		<div id="Image.MagicItemAttuned.7" class="field"></div>
-		<div id="Image.MagicItemAttuned.8" class="field"></div>
-		<div id="Image.MagicItemAttuned.9" class="field"></div>
-		<div id="Image.MagicItemAttuned.10" class="field"></div>
-		<div id="Image.MagicItemAttuned.11" class="field"></div>
-		<div id="Image.MagicItemAttuned.12" class="field"></div>
 		<div id="Extra.Gear_Location.Title#2" class="field"></div>
 		<div id="Extra.Gear_Location.Title#3" class="field"></div>
 		<div id="Extra.Gear_Location.SubtotalName_1" class="field"></div>

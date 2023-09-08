@@ -113,13 +113,13 @@
 
 <body>
 	<div id="button-container">
-		<button class="tablink" onclick="openPage('pf1', this)" id="defaultOpen">Stats</button>
+		<button class="tablink" onclick="openPage('pf1', this)">Stats</button>
 		<button class="tablink" onclick="openPage('pf2', this)">Features & Equipment</button>
 		<button class="tablink" onclick="openPage('pf3', this)">Notes & Feats</button>
 		<button class="tablink" onclick="openPage('pf4', this)">Background</button>
 		<button class="tablink" onclick="openPage('pf5', this)">Companion</button>
 		<button class="tablink" onclick="openPage('pf6', this)">Notes</button>
-		<button class="tablink" onclick="openPage('pf7', this)">Spells</button>
+		<button class="tablink" onclick="openPage('pf7', this)" id="defaultOpen">Spells</button>
 		<button class="tablink" onclick="openPage('pf8', this)">Reference</button>
 	</div>
 	<br style="clear: both;" />
@@ -153,7 +153,7 @@
 		<div id="Wis_Remember" class="field"></div>
 		<div id="Cha_Remember" class="field"></div>
 		<div id="HoS_Remember" class="field"></div>
-		<div id="BoxesLinesRemember" class="field" value="calcboxes"></div>
+		<div id="BoxesLinesRemember" class="field" value="calc_boxes"></div>
 		<div id="DateFormat_Remember" class="field"></div>
 		<div id="Companion.Remember" class="field"></div>
 		<div id="WhiteoutRemember" class="field"></div>
@@ -165,7 +165,7 @@
 		<div id="Template.extras.SSmore" class="field" value=""></div>
 		<div id="Template.extras.ALlog" class="field" value=""></div>
 
-		<div id="Unit_System" class="field" value="imperial"></div>
+		<div id="Unit_System" class="field" value="imperial" onchange="eventManager.handle_event(EventType.Unit_System_change)"></div>
 		<div id="Decimal_Separator" class="field"></div>
 		<div id="Delimiter" class="field" value=","></div>
 		<div id="d20warning" class="field"></div>
@@ -176,7 +176,7 @@
 
 		<div id="User_Imported_Files.Stringified" class="field" value="new UserImportedFilesAdapter({})"></div>
 		<div id="ChangesDialogSkip.Stringified" class="field" value="new ChangesDialogSkipAdapter()"></div>
-		<div id="CurrentSpells.Stringified" class="field" value="([])##########([])"></div>
+		<div id="CurrentSpells.Stringified" class="field" value="([])##########(Object({incl: [], excl: [], amendSPDescr: false, allowSpellAdd: true, emptyFields: false, glossary: true}))"></div>
 		<div id="CurrentSources.Stringified" class="field" value="new CurrentSourcesAdapter()"></div>
 		<div id="CurrentEvals.Stringified" class="field" value="Object()"></div>
 		<div id="CurrentProfs.Stringified" class="field" value="new CurrentProfsAdapter()"></div>
@@ -191,8 +191,6 @@
 		<div id="Color.DragonHeads" class="field"></div>
 		<div id="Color.HPDragon" class="field"></div>
 		<div id="Color.DC" class="field"></div>
-
-		<div id="Image.calcboxes.HoS" class="field"></div>
 	</div>
 </body>
 <script>
@@ -203,7 +201,7 @@
 	includePage("pf5", 5, prefix = "P4.AScomp.");
 	includePage("pf5a", 6);
 	includePage("pf6", 7, prefix = "P5.ASnotes.");
-	includePage("pf7", 8);
+	includePage("pf7", 8);//, prefix = "P6.SSfront.");
 	includePage("pf8", 9);
 </script>
 <script>

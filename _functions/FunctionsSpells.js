@@ -2768,7 +2768,7 @@ function DefineSpellSheetDialogs(force, formHeight) {
 }
 
 //ask the user to set all the spells for all the classes he has
-function AskUserSpellSheet() {
+async function AskUserSpellSheet() {
 	DefineSpellSheetDialogs();
 	var dia = spDias.spellSelect;
 	var classesArray = [];
@@ -3038,7 +3038,7 @@ function AskUserSpellSheet() {
 		thermoM(0.8);
 
 		//now call the dialog and do something with the results if OK was pressed
-		var diaResult = app.execDialog(dia);
+		var diaResult = await app.execDialog(dia);
 		if (diaResult == "cancel") {
 			SetStringifieds("spells");
 			return "stop"; //don't continue with the rest of the function and let the other function know not to continue either
@@ -3128,7 +3128,7 @@ function AskUserSpellSheet() {
 					diaSB.iteration = (diaSBi + 1) + "/" + Math.max(diaSBi + 1, SBextras.length, 1);
 					diaSB.selectSp = SBextras[diaSBi] ? SBextras[diaSBi] : [];
 					setDialogName(diaSB, "bPre", "name", diaSBi == 0 ? "<< Go Back (also Orders Spellbook)" : "<< Go to Previous Spellbook Dialog");
-					var diaSBResult = app.execDialog(diaSB);
+					var diaSBResult = await app.execDialog(diaSB);
 					// now replace the SBextras entry with the new diaSB.selectSp
 					SBextras[diaSBi] = diaSB.selectSp;
 
@@ -3218,7 +3218,7 @@ function AskUserSpellSheet() {
 				diaPrep.offsetSp = spCast.blueTxt && spCast.blueTxt.prep ? spCast.blueTxt.prep : 0;
 
 				//call the dialog and do something with the results
-				if (app.execDialog(diaPrep) !== "ok") {
+				if (await app.execDialog(diaPrep) !== "ok") {
 					SetStringifieds("spells");
 					return "stop"; //don't continue with the rest of the function and let the other function know not to continue either
 				} else {
@@ -3282,7 +3282,7 @@ function AskUserSpellSheet() {
 		spDias.sheetOrder.dashEmptyFields = CurrentCasters.emptyFields ? false : true;
 		spDias.sheetOrder.amendSpellDescriptions = CurrentCasters.amendSpDescr || CurrentCasters.amendSpDescr === undefined ? true : false;
 		spDias.sheetOrder.allowSpellAdd = CurrentCasters.allowSpellAdd || CurrentCasters.allowSpellAdd === undefined ? true : false;
-		if (app.execDialog(spDias.sheetOrder) !== "ok") {
+		if (await app.execDialog(spDias.sheetOrder) !== "ok") {
 			toReturn = "stop"; //don't continue with the rest of the function and let the other function know not to continue either
 		} else {
 			var exclList = spDias.sheetOrder.bExcL;
@@ -3318,9 +3318,9 @@ function AskUserSpellSheet() {
 }
 
 //generate the spell sheet for all the different classes
-function GenerateSpellSheet(GoOn) {
+async function GenerateSpellSheet(GoOn) {
 	//first ask the user for input on what to do with all the spellcasting classes
-	if (!GoOn) var GoOn = AskUserSpellSheet();
+	if (!GoOn) var GoOn = await AskUserSpellSheet();
 
 	if (!GoOn) {
 		var toAsk = {
@@ -3748,7 +3748,7 @@ async function MakeSpellMenu_SpellOptions(MenuSelection) {
 	if (!MenuSelection) {
 		MakeSpellMenu();
 		//now call the menu
-		MenuSelection = getMenu("spells");
+		MenuSelection = await getMenu("spells");
 	};
 
 	//and do something with this menus results
@@ -3759,7 +3759,7 @@ async function MakeSpellMenu_SpellOptions(MenuSelection) {
 	var SSmultiple = What("Template.extras.SSmore").split(",").length > 2 || (What("Template.extras.SSfront") !== "" && What("Template.extras.SSmore") !== "");
 	switch (MenuSelection[1]) {
 	 case "generate" :
-		GenerateSpellSheet();
+		await GenerateSpellSheet();
 		break;
 	 case "makeempty" :
 		if (SSvisible) {
@@ -4881,7 +4881,7 @@ function HideSpellSheetElement(theTarget) {
 
 // When changing the spellcasting ability of a manual header, save it to the remember field so that the element can be recreated when inserting/deleting rows (field blur)
 // If this is a header linked to a CurrentSpells object, change its spellcasting ability and offer to re-generate the sheet
-function SaveSpellcastingAbility() {
+async function SaveSpellcastingAbility() {
 	if (!event.target) return;
 	var base = event.target.name;
 	var caster = What(base.replace("ability", "class"));
@@ -4906,7 +4906,7 @@ function SaveSpellcastingAbility() {
 			});
 			if (redosheets === 4) {
 				SetStringifieds("spells");
-				GenerateSpellSheet();
+				await GenerateSpellSheet();
 				return;
 			}
 		}
@@ -5185,7 +5185,7 @@ function CreateBkmrksCompleteSpellSheet() {
 					color : ["RGB", 0.93, 0.49, 0.098]
 				},
 				"Spell Options" : {
-					cExpr : "MakeSpellMenu_SpellOptions();",
+					cExpr : "await MakeSpellMenu_SpellOptions();",
 					color : ["RGB", 0.2509765625, 0.5176544189453125, 0.67059326171875]
 				},
 				"Flatten" : {

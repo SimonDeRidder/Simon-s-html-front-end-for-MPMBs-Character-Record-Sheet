@@ -82,7 +82,7 @@ function MakeButtons() {
 			});
 			app.addToolButton({
 				cName : "AbilityScoresButton",
-				cExec : "AbilityScores_Button();",
+				cExec : "await AbilityScores_Button();",
 				oIcon : allIcons.scores,
 				cTooltext : toUni("Ability Scores") + "\nOpen the Ability Scores dialog where you can set them using their separate parts, see the Point Buy value, and apply a magic item that overrides.\n\nThis dialog also gives the option to add Honor/Sanity.",
 				nPos : 8,
@@ -102,7 +102,7 @@ function MakeButtons() {
 		if (!tDoc.info.AdvLogOnly) {
 			app.addToolButton({
 				cName : "SpellsButton",
-				cExec : "MakeSpellMenu_SpellOptions();",
+				cExec : "await MakeSpellMenu_SpellOptions();",
 				oIcon : allIcons.spells,
 				cTooltext : toUni("Spells Options") + "\nGet a menu with the options to:\n   \u2022  Create a Spell Sheet;\n   \u2022  Select the sources for that Spell Sheet;\n   \u2022  Delete an existing Spell Sheet;" + (!typePF ? "\n   \u2022  Set the visibility of the Spell Slot check boxes to the Spell Sheet, the Limited Feature section, or both;" : "") + "\n   \u2022  Set the sheet to use Spell Points instead of Spell Slots.\n\nGenerating a Spell Sheet will involve filling out a dialog for each spellcasting class/race/feat. After that you can select which is included in the Spell Sheet and in what order.", //\n\nAlternatively you can create an empty Spell Sheet which you can fill out manually.",
 				nPos : 10,
@@ -122,7 +122,7 @@ function MakeButtons() {
 			});
 			app.addToolButton({
 				cName : "PrintButton",
-				cExec : "PrintButton();",
+				cExec : "await PrintButton();",
 				oIcon : allIcons.print,
 				cTooltext : toUni("Print") + "\nSelect what pages you want to print and open the print dialog.\n\nThe pages you select will be remembered for the next time you press this button.\n\nYou also get an option to hide all fields on the sheet before printing.",
 				nPos : 12,
@@ -3015,8 +3015,8 @@ function SetRacesdropdown(forceTooltips) {
 async function getMenu(menuname) {
 	if (
 		![
-			"actions", "attacks", "background", "classfeatures", "faq", "feats", "gearline", "hp", "icon", "limfea",
-			"importscripts", "inventory", "magicitems", "pages", "sources"
+			"actions", "attacks", "background", "classfeatures", "companion", "faq", "feats", "gearline", "hp", "icon",
+			"limfea", "importscripts", "inventory", "magicitems", "pages", "skills", "spells", "sources"
 		].includes(menuname)
 		) {  // TODO: remove when all done
 		throw "error: unknown context menu: '" + menuname + "', make sure it is async";
@@ -4357,11 +4357,11 @@ function AddSkillProf(SkillName, change, expertise, returnSkillName, bonus, comp
 			var newval = !change ? "nothing" : expertise ? "expertise" : "proficient";
 		}
 		Value(skFld, newval);
-		if (bonus !== undefined && bonus !== false) Value(prefix + ".BlueText.Comp.Use.Skills." + tempString + ".Bonus", bonus);
+		if (bonus !== undefined && bonus !== false) Value(prefix + "BlueText.Comp.Use.Skills." + tempString + ".Bonus", bonus);
 	} else {
-		var profFld = QI ? tempString + " Prof" : prefix + ".Comp.Use.Skills." + tempString + ".Prof";
-		var expFld = QI ? tempString + " Exp" : prefix + ".Comp.Use.Skills." + tempString + ".Exp";
-		var bonusFld = QI ? tempString + " Bonus" : prefix + ".BlueText.Comp.Use.Skills." + tempString + ".Bonus";
+		var profFld = QI ? tempString + " Prof" : prefix + "Comp.Use.Skills." + tempString + ".Prof";
+		var expFld = QI ? tempString + " Exp" : prefix + "Comp.Use.Skills." + tempString + ".Exp";
+		var bonusFld = QI ? tempString + " Bonus" : prefix + "BlueText.Comp.Use.Skills." + tempString + ".Bonus";
 		var curProf = tDoc.getField(profFld).isBoxChecked(0);
 		var curExp = tDoc.getField(expFld).isBoxChecked(0);
 		var exp, prof;
@@ -6218,7 +6218,7 @@ async function processClassFeatureExtraChoiceDependencies(lvlA, aClass, aFeature
 }
 
 // The print feature button
-function PrintButton() {
+async function PrintButton() {
 	var thePageOptions = [
 		"CSfront",
 		"CSback",
@@ -6273,7 +6273,7 @@ function PrintButton() {
 		};
 	 case "cancel":
 		if (SetPrintPages_Dialog.bHide) {
-			HideShowEverything(false);
+			await HideShowEverything(false);
 			SetPrintPages_Dialog.bHide = false;
 		}
 	}
@@ -6325,7 +6325,7 @@ function PrintTheSheet() {
 };
 
 //Hide (true) or show (false) all the different form fields in the entire sheet
-function HideShowEverything(toggle) {
+async function HideShowEverything(toggle) {
 	if (toggle) {
 		// Start progress bar and stop calculations
 		var thermoTxt = thermoM("Hiding all the fields...");
@@ -6334,7 +6334,7 @@ function HideShowEverything(toggle) {
 		//first undo the visibility of the blue-text fields, if visible
 		ToggleBlueText(false);
 
-		if (FieldsRemember.length) HideShowEverything(false);
+		if (FieldsRemember.length) await HideShowEverything(false);
 
 		var exceptionRegex = /(Sheet|Copyright)Information|(Whiteout|Title|^(?!Too).* Text)$|(Whiteout|Image|Text|Line|Display)\.|Circle|Location\.Line|Medium Armor Max Mod|Comp\.Type|Ammo(Right|Left)\.Icon|spellshead\.Box/;
 		for (var F = 0; F < tDoc.numFields; F++) {
@@ -6368,7 +6368,7 @@ function HideShowEverything(toggle) {
 	};
 	// Stop the progress bar and force calculations to start again because this is function is called while a dialog is displayed
 	thermoM(thermoTxt, true);
-	calcCont(true);
+	await calcCont(true);
 };
 
 // Calculate the AC (field calculation)
@@ -6687,7 +6687,7 @@ function CalcAbilityDC() {
 }
 //find the ability score the tool (or custom skill) is keyed off on
 function UpdateTooSkill() {
-	var TooSkillTxt = event.target && event.target.name == "Too Text" ? event.value.toLowerCase() : What("Too Text").toLowerCase();
+	var TooSkillTxt = event && event.target && event.target.name == "Too Text" ? event.value.toLowerCase() : What("Too Text").toLowerCase();
 	var Ability = "Too";
 	for (var i = 0; i < AbilityScores.abbreviations.length; i++) {
 		if (TooSkillTxt.indexOf("(" + AbilityScores.abbreviations[i].toLowerCase() + ")") !== -1) {

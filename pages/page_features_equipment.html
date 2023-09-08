@@ -70,6 +70,12 @@
 		<span class="textlabel-bold" style="top: 146.3px;left: 18.7px;width: 329px">BACKGROUND FEATURE</span>
 		<span class="textlabel-dimmed" style="top: 20.5px;left: 24.7px;font-size: 10.6px">Feature Name:</span>
 
+		<div
+			id="Image.calc_boxes.CSback"
+			class="field"
+			style="visibility: hidden"
+		></div>
+
 		<input
 			id="Background_Feature"
 			class="field inputfield"
@@ -77,7 +83,7 @@
 			style="top: 19px;left: 91px;font-size: 12px;width: 247px;height: 13.3px"
 			spellcheck="true"
 			aria-label="Select or type in the background feature you want to use and its text will be filled out below automatically."
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-13) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			onchange="ApplyBackgroundFeature(self.value);"
 		/>
 		<datalist id="background_feature_options">

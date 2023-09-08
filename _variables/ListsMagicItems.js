@@ -2984,7 +2984,7 @@ var Base_MagicItemsList = {
 		description : "This book contains health and diet tips, and its words are charged with magic. If I spend 48 hours within 6 days to study its contents and practicing its guidelines, my Constitution score increases by 2, as does my maximum for that score. The manual then loses its magic, but regains it in a century.",
 		descriptionFull : "This book contains health and diet tips, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Constitution score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century.",
 		weight : 5,
-		applyStatBonus : function(itemName, statName, statBonus) {
+		applyStatBonus : async function(itemName, statName, statBonus) {
 			// a function for all the manuals/tomes
 			if (!IsNotReset) return;
 			initiateCurrentStats();
@@ -3016,21 +3016,21 @@ var Base_MagicItemsList = {
 			if (alreadyAppliedBefore) {
 				baseAdd = [].concat(CurrentStats.maximumsLinked[itemName]);
 				// remove the old version
-				processStats(false, "magic", itemName, baseAdd, false, false, maxAdd);
+				await processStats(false, "magic", itemName, baseAdd, false, false, maxAdd);
 				if (removeAll) {
 					// also remove the maximum
-					processStats(false, "magic", itemName, maxAdd, false, "maximums");
+					await processStats(false, "magic", itemName, maxAdd, false, "maximums");
 					return;
 				}
 				// now increase the gains to include the item again
 				baseAdd[statIndx] += statBonus;
 				maxAdd[statIndx] = "+" + baseAdd[statIndx];
 			}
-			processStats(true, "magic", itemName, baseAdd, false, false, maxAdd);
-			processStats(true, "magic", itemName, maxAdd, false, "maximums");
+			await processStats(true, "magic", itemName, baseAdd, false, false, maxAdd);
+			await processStats(true, "magic", itemName, maxAdd, false, "maximums");
 		},
-		eval : function() {
-			MagicItemsList["manual of bodily health"].applyStatBonus("Manual of Bodily Health", "Constitution", 2);
+		eval : async function() {
+			await MagicItemsList["manual of bodily health"].applyStatBonus("Manual of Bodily Health", "Constitution", 2);
 		}
 	},
 	"manual of gainful exercise" : {
@@ -3042,8 +3042,8 @@ var Base_MagicItemsList = {
 		description : "This book describes fitness exercises, and its words are charged with magic. If I spend 48 hours over a period of 6 days or fewer studying its contents and practicing its guidelines, my Strength score increases by 2, as does my maximum for that score. The manual then loses its magic, but regains it in a century.",
 		descriptionFull : "This book describes fitness exercises, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Strength score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century.",
 		weight : 5,
-		eval : function() {
-			MagicItemsList["manual of bodily health"].applyStatBonus("Manual of Gainful Exercise", "Strength", 2);
+		eval : async function() {
+			await MagicItemsList["manual of bodily health"].applyStatBonus("Manual of Gainful Exercise", "Strength", 2);
 		}
 	},
 	"manual of golems" : { // contains contributions by Larry Hoy
@@ -3097,8 +3097,8 @@ var Base_MagicItemsList = {
 		description : "This book contains coordination and balance exercises, and its words are charged with magic. If I spend 48 hours within 6 days to study its contents and practicing its guidelines, my Dexterity score increases by 2, as does my maximum for that score. The manual then loses its magic, but regains it in a century.",
 		descriptionFull : "This book contains coordination and balance exercises, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Dexterity score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century.",
 		weight : 5,
-		eval : function() {
-			MagicItemsList["manual of bodily health"].applyStatBonus("Manual of Quickness of Action", "Dexterity", 2);
+		eval : async function() {
+			await MagicItemsList["manual of bodily health"].applyStatBonus("Manual of Quickness of Action", "Dexterity", 2);
 		}
 	},
 	"medallion of thoughts" : {
@@ -5959,8 +5959,8 @@ var Base_MagicItemsList = {
 		description : "This book contains memory and logic exercises, and its words are charged with magic. If I spend 48 hours within a period of 6 days to study its contents and practicing its guidelines, my Intelligence score increases by 2, as does my maximum for that score. The tome then loses its magic, but regains it in a century.",
 		descriptionFull : "This book contains memory and logic exercises, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Intelligence score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century.",
 		weight : 5,
-		eval : function() {
-			MagicItemsList["manual of bodily health"].applyStatBonus("Tome of Clear Thought", "Intelligence", 2);
+		eval : async function() {
+			await MagicItemsList["manual of bodily health"].applyStatBonus("Tome of Clear Thought", "Intelligence", 2);
 		}
 	},
 	"tome of leadership and influence" : {
@@ -5972,8 +5972,8 @@ var Base_MagicItemsList = {
 		description : "This book contains guidelines for influencing and charming others and its words are charged with magic. If I spend 48 hours within 6 days studying its contents and practicing its guidelines, my Charisma score increases by 2, as does my maximum for that score. The tome then loses its magic, but regains it in a century.",
 		descriptionFull : "This book contains guidelines for influencing and charming others, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Charisma score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century.",
 		weight : 5,
-		eval : function() {
-			MagicItemsList["manual of bodily health"].applyStatBonus("Tome of Leadership and Influence", "Charisma", 2);
+		eval : async function() {
+			await MagicItemsList["manual of bodily health"].applyStatBonus("Tome of Leadership and Influence", "Charisma", 2);
 		}
 	},
 	"tome of understanding" : {
@@ -5985,8 +5985,8 @@ var Base_MagicItemsList = {
 		description : "This book contains intuition and insight exercises, and its words are charged with magic. If I spend 48 hours within a period of 6 days studying its contents and practicing its guidelines, my Wisdom score increases by 2, as does my maximum for that score. The tome then loses its magic, but regains it in a century.",
 		descriptionFull : "This book contains intuition and insight exercises, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Wisdom score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century.",
 		weight : 5,
-		eval : function() {
-			MagicItemsList["manual of bodily health"].applyStatBonus("Tome of Understanding", "Wisdom", 2);
+		eval : async function() {
+			await MagicItemsList["manual of bodily health"].applyStatBonus("Tome of Understanding", "Wisdom", 2);
 		}
 	},
 	"trident of fish command" : {

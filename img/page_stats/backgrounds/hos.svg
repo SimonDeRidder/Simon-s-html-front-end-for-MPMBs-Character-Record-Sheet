@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="377pt" height="224pt" viewBox="0 0 377 224" version="1.2">
 
-<path id="white_bg" fill="white" d="M 0 45 L 377 45 L 377 224 L 0 224 Z"/>
+<path id="white_bg" fill="white" d="M 0 43 L 377 43 L 377 224 L 0 224 Z"/>
 
 <g id="attribute_extension">
 	<g id="grey_background" fill="#DEDDDE">
@@ -79,6 +79,24 @@
 		<path d="M 145.89062 140.29297 L 364.55859 140.29297"/>
 		<path d="M 145.89062 162.29297 L 364.55859 162.29297"/>
 		<path d="M 145.89062 184.28906 L 364.55859 184.28906"/>
+	</g>
+</g>
+
+
+<g id="save_frame" fill="none" stroke="rgb(4.017639%,3.95813%,4.968262%)">
+	<path
+		stroke-width="2.4"
+		d="M 12.2 184.4 L 21.4 175.2 L 111.8 175.2 L 121.0 184.4 L 121.0 212.2 L 111.8 221.4 L 21.4 221.4 L 12.2 212.2 Z"
+	/>
+	<g id="corner_curvelets" stroke-width="1.2">
+		<path d="M  12.2 204.5 C  12.2 193.1  18.2 175.2 37.7 175.2"/>
+		<path d="M  12.2 192.1 C  12.2 203.5  18.2 221.4 37.7 221.4"/>
+		<path d="M 121.0 204.5 C 121.0 193.1 115.0 175.2 95.5 175.2"/>
+		<path d="M 121.0 192.1 C 121.0 203.5 115.0 221.4 95.5 221.4"/>
+	</g>
+	<g id="side_lines" stroke-width="1.2">
+		<path d="M  18.0 185.0 L  18.0 211.5"/>
+		<path d="M 115.2 185.0 L 115.2 211.5"/>
 	</g>
 </g>
 

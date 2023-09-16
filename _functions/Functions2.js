@@ -839,10 +839,10 @@ async function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 			thermoTxt = thermoM("Applying...", false); // Change the progress bar text
 			break;
 		case "add_page":
-			DoTemplate("AScomp", "Add");
+			await DoTemplate("AScomp", "Add");
 			break;
 		case "remove_page":
-			DoTemplate("AScomp", "Remove", prefix);
+			await DoTemplate("AScomp", "Remove", prefix);
 			break;
 		case "visible":
 			if (MenuSelection[2].indexOf("comp.img") !== -1) {
@@ -1162,7 +1162,7 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 					}
 				}
 			}
-			if (!prefix) prefix = DoTemplate('AScomp', 'Add');
+			if (!prefix) prefix = await DoTemplate('AScomp', 'Add');
 			if (!stopMatch) {
 				await ApplyCompRace(sRace, prefix, sCompanionType);
 				doCallBack(aCallBack, prefix);
@@ -1175,7 +1175,7 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 				if (What(AScompA[a] + 'Comp.Race').toLowerCase().indexOf(sRaceLow) !== -1) {
 					var iPageNo = tDoc.getField(AScompA[a] + 'Comp.Race').page + 1;
 					if (bRemoveWholePage) { // remove the whole page
-						DoTemplate("AScomp", "Remove", AScompA[a], true);
+						await DoTemplate("AScomp", "Remove", AScompA[a], true);
 					} else {
 						Value(prefix + 'Comp.Race', ""); // reset the race field
 					}
@@ -1742,7 +1742,7 @@ async function ApplyWildshape() {
 }
 
 //add a wild shape to the top most empty place
-function AddWildshape(input, inCrea) {
+async function AddWildshape(input, inCrea) {
 	var prefixA = What("Template.extras.WSfront").split(",").splice(1);
 	var inputLC = input.toLowerCase();
 	inCrea = inCrea && CreatureList[inCrea] ? inCrea : ParseCreature(inputLC);
@@ -1763,7 +1763,7 @@ function AddWildshape(input, inCrea) {
 		}
 	};
 	//if the wildshape to add was not found and there was no room to add it, add another wild shapes page and add the entry to the top of the new page
-	var newPrefix = DoTemplate("WSfront", "Add");
+	var newPrefix = await DoTemplate("WSfront", "Add");
 	Value(newPrefix + "Wildshape.Race.1", input);
 }
 
@@ -2016,7 +2016,7 @@ function MakeWildshapeMenu() {
 };
 
 //call the wildshape menu and do something with the results
-function WildshapeOptions() {
+async function WildshapeOptions() {
 	var MenuSelection = getMenu("wildshape");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	var prefix = getTemplPre(event.target.name, "WSfront", true);
@@ -2032,7 +2032,7 @@ function WildshapeOptions() {
 		tDoc.resetForm([prefix + "Wildshape.Race"]);
 		break;
 	 case "add" :
-		AddWildshape(CreatureList[MenuSelection[1]].name, MenuSelection[1]);
+		await AddWildshape(CreatureList[MenuSelection[1]].name, MenuSelection[1]);
 		break;
 	 case "remove" :
 		RemoveWildshape(MenuSelection[1]);
@@ -2049,10 +2049,10 @@ function WildshapeOptions() {
 		}
 		break;
 	 case "add page" :
-		DoTemplate("WSfront", "Add");
+		await DoTemplate("WSfront", "Add");
 		break;
 	 case "remove page" :
-		DoTemplate("WSfront", "Remove", prefix);
+		await DoTemplate("WSfront", "Remove", prefix);
 		break;
 	}
 }
@@ -2720,7 +2720,7 @@ async function Bookmark_Goto(BookNm) {
 		};
 		if (app.alert(theMessage) === 4) {
 			if (theTemplate[0] !== "SSfront") {
-				var newPrefix = DoTemplate(theTemplate[0], "Add");
+				var newPrefix = await DoTemplate(theTemplate[0], "Add");
 				tDoc.getField(newPrefix + BookMarkList[BookNm]).setFocus();
 			} else {
 				await GenerateSpellSheet();
@@ -2751,7 +2751,7 @@ function deletePage(fldNm, onTemplate) {
 }
 
 // show/hide a template (AddRemove == undefined) or add/remove template with multiple instances (AddRemove == "Add" | "Remove" | "RemoveAll")
-function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
+async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 	MakeMobileReady(false); // Undo flatten, if needed
 
 	//make a function for determining the next page to add the template
@@ -2807,7 +2807,7 @@ function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 			calcStop();
 
 			//now spawn a new instance of the template with the same fields as the template at the desired page
-			tDoc.getTemplate(tempNm).spawn(tempPage, false, false);
+			await tDoc.getTemplate(tempNm).spawn(tempPage, false, false);
 
 			//black out the appropriate bookmarks
 			amendBookmarks(BookMarkList[tempNm + "_Bookmarks"], true);
@@ -2913,7 +2913,7 @@ function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 			var toDeleteArray = [];
 			if (isTempVisible && tempExtras.indexOf(theNewPrefix) !== -1) {
 				while (tempExtras.indexOf(theNewPrefix) !== -1) {
-					tDoc.getTemplate("blank").spawn(tempPage, false, false);
+					await tDoc.getTemplate("blank").spawn(tempPage, false, false);
 					toDeleteArray.push(tempPage);
 					tempPage++;
 					theNewPrefix = "P" + tempPage + "." + tempNm + ".";
@@ -2921,7 +2921,7 @@ function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 			};
 
 			// Add another instance of the template, but with changing the field names
-			tDoc.getTemplate(tempNm).spawn(tempPage, true, false);
+			await tDoc.getTemplate(tempNm).spawn(tempPage, true, false);
 
 			// Put the updated array in the field
 			tempExtras.push(theNewPrefix);
@@ -3223,7 +3223,7 @@ async function PagesOptions() {
 			break;
 		case "template" :
 			MenuSelection[1] = MenuSelection[1].substr(0, 2).toUpperCase() + MenuSelection[1].substr(2);
-			DoTemplate(MenuSelection[1], MenuSelection[2]);
+			await DoTemplate(MenuSelection[1], MenuSelection[2]);
 			break;
 		case "advleague" :
 			await AdventureLeagueOptions(MenuSelection);
@@ -3328,7 +3328,7 @@ function functionBookmarks(theParent) {
 
 //make a menu to hide/show the lines of the notes on the page
 //after that, do something with the menu and its results
-function MakeNotesMenu_NotesOptions() {
+async function MakeNotesMenu_NotesOptions() {
 	//define some variables
 	var toSearch = event.target.name.indexOf("Notes") !== -1 ? "Notes." : "Cnote.";
 	var prefix = event.target.name.substring(0, event.target.name.indexOf(toSearch));
@@ -3382,10 +3382,10 @@ function MakeNotesMenu_NotesOptions() {
 		toDo = WhiteR;
 		break;
 	 case "add page" :
-		DoTemplate("ASnotes", "Add");
+		await DoTemplate("ASnotes", "Add");
 		break;
 	 case "remove page" :
-		DoTemplate("ASnotes", "Remove", prefix);
+		await DoTemplate("ASnotes", "Remove", prefix);
 		break;
 	 case "comp.img" :
 		toShow[0] = !toShow[0];
@@ -3488,7 +3488,7 @@ function UpdateLogsheetNumbering(prefix, prePrefix) {
 
 //Make menu for the button on the adventurers log page and parse it to Menus.advlog
 //after that, do something with the menu and its results
-function MakeAdvLogMenu_AdvLogOptions(Button) {
+async function MakeAdvLogMenu_AdvLogOptions(Button) {
 	var prefix = Button ? "P0.AdvLog." : getTemplPre(event.target.name, "ALlog", true);
 	var isFirstPrefix = prefix === What("Template.extras.ALlog").split(",")[1];
 	var cLogoDisplay = minVer && typePF ? tDoc.getField("Image.DnDLogo.AL").display : false;
@@ -3574,17 +3574,17 @@ function MakeAdvLogMenu_AdvLogOptions(Button) {
 	var thermoTxt;
 	switch (MenuSelection[0]) {
 	 case "add page" :
-		DoTemplate("ALlog", "Add");
+		await DoTemplate("ALlog", "Add");
 		break;
 	 case "remove page" :
-		DoTemplate("ALlog", "Remove", prefix);
+		await DoTemplate("ALlog", "Remove", prefix);
 		break;
 	 case "remove all" :
 		thermoTxt = thermoM("Removing all Adventure Logsheets...");
 		calcStop();
-		tDoc.getTemplate("blank").spawn(0, false, false);
+		await tDoc.getTemplate("blank").spawn(0, false, false);
 		tDoc.deletePages({nStart: 1, nEnd: tDoc.numPages - 1});
-		tDoc.getTemplate("ALlog").spawn(0, true, false);
+		await tDoc.getTemplate("ALlog").spawn(0, true, false);
 		Value("Template.extras.ALlog", ",P0.ALlog");
 		tDoc.deletePages(1);
 		break;
@@ -3615,7 +3615,7 @@ function MakeAdvLogMenu_AdvLogOptions(Button) {
 		UpdateALdateFormat(MenuSelection[1]);
 		break;
 	 case "generate" :
-		addALlogEntry();
+		await addALlogEntry();
 		break;
 	 case "dndlogo" :
 		DnDlogo(MenuSelection[2]);
@@ -4611,7 +4611,7 @@ async function ChangeToCompleteAdvLogSheet(FAQpath) {
 	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("OnBlur", "UpdateFactionSymbols();");
 	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("Keystroke", "");
 
-	tDoc.getTemplate("ALlog").spawn(0, true, false);
+	await tDoc.getTemplate("ALlog").spawn(0, true, false);
 	tDoc.deletePages({nStart: 1, nEnd: tDoc.numPages - 1});
 	tDoc.getTemplate("ALlog").hidden = false;
 	tDoc.getTemplate("remember").hidden = false;
@@ -4692,7 +4692,7 @@ function CreateBkmrksCompleteAdvLogSheet() {
 			cExpr : "MakeButtons(); tDoc.bookmarkRoot.children[0].open = !tDoc.bookmarkRoot.children[0].open;",
 			children : {
 				"Set Pages Layout" : {
-					cExpr : "MakeAdvLogMenu_AdvLogOptions(true);",
+					cExpr : "await MakeAdvLogMenu_AdvLogOptions(true);",
 					color : ["RGB", 0.9098052978515625, 0.196075439453125, 0.48626708984375]
 				},
 				"Text Options" : {
@@ -4951,7 +4951,7 @@ function setListsUnitSystem(isMetric, onStart) {
 }
 
 // automatically add a new entry on the Adventurers Logsheet with the sheets current values
-function addALlogEntry() {
+async function addALlogEntry() {
 	//first find the next empty logsheet entry
 	var theTypesA = [
 		".xp",
@@ -4981,7 +4981,7 @@ function addALlogEntry() {
 	};
 	//now if no empty log was found, first add another logsheet page
 	if (emptyLog.length === 0) {
-		emptyLog[0] = DoTemplate("ALlog", "Add");
+		emptyLog[0] = await DoTemplate("ALlog", "Add");
 		emptyLog[1] = 1;
 		emptyLog[2] = ALlogA[ALlogA.length - 1];
 	};
@@ -5054,7 +5054,7 @@ function addALlogEntry() {
 };
 
 //menu for logsheet entries to move up, move down, insert, delete, or clear
-function MakeAdvLogLineMenu_AdvLogLineOptions() {
+async function MakeAdvLogLineMenu_AdvLogLineOptions() {
 	var prefix = getTemplPre(event.target.name, "ALlog", true);
 	var firstPrefix = isTemplVis("ALlog", true)[1];
 	var lineNmbr = Number(event.target.name.slice(-1));
@@ -5085,11 +5085,11 @@ function MakeAdvLogLineMenu_AdvLogLineOptions() {
 
 	var MenuSelection = getMenu("advlogline");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
-	doAdvLogLine(MenuSelection[0], lineNmbr, prefix);
+	await doAdvLogLine(MenuSelection[0], lineNmbr, prefix);
 }
 
 //do with logsheet entry, move up, move down, insert, delete, clear
-function doAdvLogLine(action, lineNmbr, prefix) {
+async function doAdvLogLine(action, lineNmbr, prefix) {
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Applying the layout settings...");
 	calcStop();
@@ -5133,7 +5133,7 @@ function doAdvLogLine(action, lineNmbr, prefix) {
 					FieldsDown[F] = ALlogA[ALlogA.indexOf(prefix) + 1] + "AdvLog.1" + FieldNames[F];
 					FieldsDownValue[F] = "";
 				} else {
-					if (!extraPage) extraPage = DoTemplate("ALlog", "Add");
+					if (!extraPage) extraPage = await DoTemplate("ALlog", "Add");
 					FieldsDown[F] = extraPage + "AdvLog.1" + FieldNames[F];
 					FieldsDownValue[F] = "";
 				}
@@ -5170,7 +5170,7 @@ function doAdvLogLine(action, lineNmbr, prefix) {
 				if (tA === (ALlogA.length - 1) && i === FieldNumbers.logs) {
 					for (var F = 0; F < FieldNames.length; F++) {
 						var fieldVal = What(ALlogA[tA] + "AdvLog." + i + FieldNames[F]);
-						if (fieldVal && !extraPage) extraPage = DoTemplate("ALlog", "Add");
+						if (fieldVal && !extraPage) extraPage = await DoTemplate("ALlog", "Add");
 						Value(extraPage + "AdvLog.1" + FieldNames[F], fieldVal);
 						Value(ALlogA[tA] + "AdvLog." + i + FieldNames[F], What(ALlogA[tA] + "AdvLog." + (i - 1) + FieldNames[F]));
 					}
@@ -8028,7 +8028,7 @@ async function SetCreatureSize(prefix, sName, aSizes) {
 
 // Process a feature attribute through the AddToNotes function
 // namesArr = [tipNm, displName, fObjName, aParent]
-function processToNotesPage(AddRemove, items, type, mainObj, parentObj, namesArr) {
+async function processToNotesPage(AddRemove, items, type, mainObj, parentObj, namesArr) {
 	if (!isArray(items)) items = [items];
 	// set the alertType, determined by type
 	var fallback = {
@@ -8084,16 +8084,16 @@ function processToNotesPage(AddRemove, items, type, mainObj, parentObj, namesArr
 			}
 		} else { // add to its own section on a notes page
 			if (AddRemove) {
-				AddToNotes(noteStr, alertTxt, false, fallback.alertType, true, noteObj.amendTo);
+				await AddToNotes(noteStr, alertTxt, false, fallback.alertType, true, noteObj.amendTo);
 			} else {
-				AddToNotes("", false, noteStr, false, true);
+				await AddToNotes("", false, noteStr, false, true);
 			}
 		}
 	}
 }
 
 // A way to add a string to a notes page, or generate a notes page if it didn't exist yet
-function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amendToNote) {
+async function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amendToNote) {
 	if (!noteStr && !oldNoteStr) return;
 	
 	var prefix = false;
@@ -8107,7 +8107,7 @@ function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amend
 	};
 	var replaceOldNote = false;
 	if (noteStr && !isTemplVis("ASnotes")) {
-		var noteFld = DoTemplate("ASnotes", "Add");
+		var noteFld = await DoTemplate("ASnotes", "Add");
 		noteFld += "Notes.Left";
 	} else {
 		var noteFld = false, amendFld = false;
@@ -8137,7 +8137,7 @@ function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amend
 			};
 		};
 		if (!noteFld && noteStr) {
-			noteFld = DoTemplate("ASnotes", "Add");
+			noteFld = await DoTemplate("ASnotes", "Add");
 			noteFld += "Notes.Left";
 		} else if (!noteFld && oldNoteStr) {
 			return;
@@ -8156,7 +8156,7 @@ function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amend
 		}
 	} else if (replaceOldNote && oldNoteStr && prefix && !What(prefix + "Notes.Left") && !What(prefix + "Notes.Right")) {
 		// if the notes page is now completely empty, remove it completely
-		DoTemplate("ASnotes", "Remove", prefix, true);
+		await DoTemplate("ASnotes", "Remove", prefix, true);
 	}
 };
 

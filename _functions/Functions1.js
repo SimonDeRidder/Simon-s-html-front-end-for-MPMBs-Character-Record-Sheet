@@ -8,7 +8,7 @@ function MakeButtons() {
 		if (!tDoc.info.SpellsOnly) {
 			app.addToolButton({
 				cName : "LayoutButton",
-				cExec : minVer ? "MakeAdvLogMenu_AdvLogOptions(true);" : "await MakePagesMenu(); PagesOptions();",
+				cExec : minVer ? "await MakeAdvLogMenu_AdvLogOptions(true);" : "await MakePagesMenu(); PagesOptions();",
 				oIcon : allIcons.layout,
 				cTooltext : toUni("Set Pages Layout") + "\nSelect which pages are visible in the sheet and set the different lay-out options on those pages. Some pages might offer extra options on the page itself.\n\nNote that you can have multiple instances of the following pages:\n   \u2022  Companion page;\n   \u2022  Notes page;\n   \u2022  Wild Shapes page;\n   \u2022  Spell Sheet page.;\n   \u2022  Adventure Logsheet.\n\nIf you add more pages or you hide/show the pages many times, the file size might increase.",
 				nPos : 0,
@@ -445,7 +445,7 @@ async function ResetAll(GoOn, noTempl, deleteImports) {
 	thermoM(1/9); //increment the progress dialog's progress
 
 	//delete any extra templates and make any template that is invisible, visible
-	RemoveSpellSheets(); //first do all the Spell Sheets
+	await RemoveSpellSheets(); //first do all the Spell Sheets
 	var defaultShowTempl = ["ASfront", "ASbackgr", "PRsheet"];
 	for (var R in TemplateDep) {
 		if (R === "SSfront" || R === "SSmore" || (!typePF && R === "PRsheet")) continue; //don't do this for the spell sheets, they have their own function; also don't do it for the player reference sheet in not the Printer Friendly version, as it doesn't exist
@@ -455,11 +455,11 @@ async function ResetAll(GoOn, noTempl, deleteImports) {
 
 		//if invisible, and one of the defaultShowTempl, make it visible
 		if (!isTempVisible && defaultShowTempl.indexOf(R) !== -1) {
-			DoTemplate(R, "Add");
+			await DoTemplate(R, "Add");
 		} else if (tempExtras) { //if there can be multiples of a template, remove them
-			DoTemplate(R, "RemoveAll", false, true); //remove all of them
+			await DoTemplate(R, "RemoveAll", false, true); //remove all of them
 		} else if (isTempVisible && defaultShowTempl.indexOf(R) === -1) {
-			DoTemplate(R, "Remove"); //remove all of them
+			await DoTemplate(R, "Remove"); //remove all of them
 		};
 	};
 
@@ -550,8 +550,8 @@ async function ResetAll(GoOn, noTempl, deleteImports) {
 
 	//generate an instance of the AScomp and ASnotes templates
 	if (!noTempl) {
-		DoTemplate("AScomp", "Add");
-		DoTemplate("ASnotes", "Add");
+		await DoTemplate("AScomp", "Add");
+		await DoTemplate("ASnotes", "Add");
 	};
 	// now move the focus to the first page
 	tDoc.getField(BookMarkList["CSfront"]).setFocus();
@@ -1140,9 +1140,9 @@ async function ToggleAdventureLeague(Setting) {
 	//Show the adventurers log, if not already visible
 	if (Setting.allog !== undefined) {
 		if (isTemplVis("ALlog")) {
-			DoTemplate("ALlog", "RemoveAll");
+			await DoTemplate("ALlog", "RemoveAll");
 		} else {
-			DoTemplate("ALlog", "Add");
+			await DoTemplate("ALlog", "Add");
 		};
 	};
 
@@ -3015,8 +3015,9 @@ function SetRacesdropdown(forceTooltips) {
 async function getMenu(menuname) {
 	if (
 		![
-			"actions", "attacks", "background", "classfeatures", "companion", "faq", "feats", "gearline", "hp", "icon",
-			"limfea", "importscripts", "inventory", "magicitems", "pages", "skills", "spells", "sources"
+			"actions", "attacks", "background", "classfeatures", "companion", "faq", "feats", "gearline", "glossary",
+			"hp", "icon", "limfea", "importscripts", "inventory", "magicitems", "pages", "skills", "spells",
+			"spellsLine", "spellsPrepared", "sources"
 		].includes(menuname)
 		) {  // TODO: remove when all done
 		throw "error: unknown context menu: '" + menuname + "', make sure it is async";
@@ -5238,7 +5239,7 @@ function FeatDelete(itemNmbr) {
 }
 
 // Add a feat to the second/third page or overflow page
-function AddFeat(sFeat) {
+async function AddFeat(sFeat) {
 	if (!sFeat) return;
 	// Check if this feat is recognized and if so, quit if it already exists
 	var aParsedFeat = ParseFeat(sFeat);
@@ -5260,7 +5261,7 @@ function AddFeat(sFeat) {
 				return; // the feat already exists
 			} else if (n === 2 && sCurFeat === "") {
 				// if the next empty field on the overflow page and the overflow page is hidden, show it
-				if (i > FieldNumbers.featsD && !tDoc.getField(BookMarkList["Overflow sheet"])) DoTemplate("ASoverflow", "Add");
+				if (i > FieldNumbers.featsD && !tDoc.getField(BookMarkList["Overflow sheet"])) await DoTemplate("ASoverflow", "Add");
 				Value(sFldNm, sFeat);
 				return; // feat was successfully added
 			}

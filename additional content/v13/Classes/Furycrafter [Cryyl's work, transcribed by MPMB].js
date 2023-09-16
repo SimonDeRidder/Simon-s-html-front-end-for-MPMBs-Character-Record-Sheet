@@ -341,7 +341,7 @@ AddSubClass("furycrafter", "manifestation", {
 						}
 					}
 				}
-				if (!prefix) prefix = DoTemplate('AScomp', 'Add');
+				if (!prefix) prefix = await DoTemplate('AScomp', 'Add');
 				Value(prefix + 'Comp.Race', selBeast);
 				var theType = tDoc.getField(prefix + 'Comp.Type');
 				theType.readonly = true;
@@ -365,14 +365,14 @@ AddSubClass("furycrafter", "manifestation", {
 				}
 				tDoc.getField(prefix + 'Comp.Use.AC').submitName = What(prefix + 'Comp.Use.AC');
 			},
-			removeeval : function () {
+			removeeval : async function () {
 				var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 				if (!AScompA) return;
 				compName = compName.toLowerCase();
 				for (var a = 1; a < AScompA.length; a++) {
 					var theType = tDoc.getField(prefix + 'Comp.Type');
 					if (theType.readonly && theType.value == "Fury") {
-						DoTemplate("AScomp", "Remove", AScompA[a], true);
+						await DoTemplate("AScomp", "Remove", AScompA[a], true);
 					}
 				}
 			},

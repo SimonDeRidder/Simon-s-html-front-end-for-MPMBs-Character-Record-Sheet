@@ -180,7 +180,7 @@ const dialogManager = {
 				document.getElementById(dialog.idPrefix + elementID).focus();
 			}
 			dialog._validate = function () {
-				if (destroyCallback) {
+				if (validateCallback) {
 					monitor[validateCallback](dialog);
 				}
 			}
@@ -438,10 +438,11 @@ const dialogManager = {
 		} else if (body.type == 'check_box') {
 			let { type, item_id, name, ...body_style } = body;
 			let style = this._parse_element_style(body_style);
-			element = addElementNode('input', parent, '', dialog.idPrefix + item_id, null, style);
+			let container = addElementNode('div', parent, null, null, null, style);
+			element = addElementNode('input', container, '', dialog.idPrefix + item_id, null);
 			element.setAttribute('type', 'checkbox');
 			element.setAttribute('value', name);
-			let labelElement = addElementNode('label', parent, name, null, null, style);
+			let labelElement = addElementNode('label', container, name, null, null);
 			labelElement.setAttribute('for', dialog.idPrefix + item_id);
 			inputList.push(body.item_id);
 		} else {
@@ -529,7 +530,6 @@ const dialogManager = {
 		} else if (element.alignment == 'align_fill') {
 			style.textAlign = 'left';
 			style.width = '100%';
-			style.display = 'grid';
 		} else if (element.alignment == 'align_left') {
 			style.textAlign = 'left';
 			style.display = 'grid';
@@ -648,12 +648,12 @@ const dialogManager = {
 			link.onclick = async function () {
 				await monitor[callbacksToInsert.get(buttonID)](dialog);
 				if (['commit', 'ok'].includes(callbacksToInsert.get(buttonID))) {
-					resolve_cb(buttonID);
+					dialog.end(buttonID);
 				}
 			};
 		} else {
 			link.onclick = function () {
-				resolve_cb(buttonID);
+				dialog.end(buttonID);
 			};
 		}
 		if (buttonList.length == 0) {

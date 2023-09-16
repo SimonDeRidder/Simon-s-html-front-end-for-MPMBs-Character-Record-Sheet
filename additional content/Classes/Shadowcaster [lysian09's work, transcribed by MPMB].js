@@ -281,8 +281,8 @@ AddSubClass("shadowcaster", "shadowmaster", {
 				"This companion serves me as best it can, obeying my commands",
 				"It gains several benefits, see the companion page for details"
 			]),
-			eval : "shadowmasters_companion_functions.add(newClassLvl.shadowcaster);",
-			removeeval : "shadowmasters_companion_functions.remove();",
+			eval : "await shadowmasters_companion_functions.add(newClassLvl.shadowcaster);",
+			removeeval : "await shadowmasters_companion_functions.remove();",
 			changeeval : "shadowmasters_companion_functions.update(oldClassLvl.shadowcaster, newClassLvl.shadowcaster);"
 		},
 		"subclassfeature6" : {
@@ -535,7 +535,7 @@ AddSubClass("shadowcaster", "skiamancer", {
 
 // Functions for the Shadowmasters' companion
 shadowmasters_companion_functions = {
-	add : function(slvl) {
+	add : async function(slvl) {
 		if (slvl < 2) return;
 		var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 		var prefix = false;
@@ -547,7 +547,7 @@ shadowmasters_companion_functions = {
 				}
 			}
 		}
-		if (!prefix) prefix = DoTemplate('AScomp', 'Add');
+		if (!prefix) prefix = await DoTemplate('AScomp', 'Add');
 		Value(prefix + 'Comp.Race', 'Shadow Elemental');
 		Uneditable(prefix + 'Comp.Race');
 		var theType = tDoc.getField(prefix + 'Comp.Type');
@@ -586,12 +586,12 @@ shadowmasters_companion_functions = {
 			})
 		}
 	},
-	remove : function() {
+	remove : async function() {
 		var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 		if (AScompA) {
 			for (var a = 1; a < AScompA.length; a++) {
 				if (What(AScompA[a] + 'Comp.Type').indexOf('Shadow Com') !== -1) {
-					DoTemplate("AScomp", "Remove", AScompA[a]);
+					await DoTemplate("AScomp", "Remove", AScompA[a]);
 					return;
 				}
 			}

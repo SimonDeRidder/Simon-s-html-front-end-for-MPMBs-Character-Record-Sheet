@@ -136,13 +136,13 @@ ClassList["cardcaster"] = {
 		"\r\rXIX - The Sun" + desc(["\u2022 Demiplane\t\t\u2022 Holy Aura", "\u2022 Incendiary Cloud\t\t\u2022 Sunburst", "If I play the Moon or the Sun, I can't use either again until I finish a long rest"]) +
 		"\r\rXX - Judgement" + desc(["\u2022 Foresight\t\t\u2022 Imprisonment\t\u2022 Mass Heal", "\u2022 Meteor Swarm\t\t\u2022 Power Word Kill", "If I play Judgement or the World, I can't use either again until I finish a long rest"]) +
 		"\r\rXXI - The World" + desc(["\u2022 Time Stop\t\t\u2022 True Polymorph", "\u2022 True Resurrection\t\t\u2022 Wish", "If I play Judgement or the World, I can't use either again until I finish a long rest"]),
-	addMajorArcana : function() {
-		AddToNotes(ClassList.cardcaster.majorArcana1, 'Major Arcana cards 0-XI of the Cardcaster class');
-		AddToNotes(ClassList.cardcaster.majorArcana2, 'Major Arcana cards XII-XXI of the Cardcaster class');
+	addMajorArcana : async function() {
+		await AddToNotes(ClassList.cardcaster.majorArcana1, 'Major Arcana cards 0-XI of the Cardcaster class');
+		await AddToNotes(ClassList.cardcaster.majorArcana2, 'Major Arcana cards XII-XXI of the Cardcaster class');
 	},
-	removeMajorArcana : function() {
-		AddToNotes('', '', ClassList.cardcaster.majorArcana1);
-		AddToNotes('', '', ClassList.cardcaster.majorArcana2);
+	removeMajorArcana : async function() {
+		await AddToNotes('', '', ClassList.cardcaster.majorArcana1);
+		await AddToNotes('', '', ClassList.cardcaster.majorArcana2);
 	},
 	features : {
 		"cards of power" : {
@@ -188,10 +188,10 @@ ClassList["cardcaster"] = {
 					"Once memorized, I can cast the divination ritual spell as a ritual at any time"
 				])
 			},
-			eval : "if (CurrentSpells.cardcaster) { CurrentSpells.cardcaster.typeList = 2; }; ClassFeatureOptions(['cardcaster', 'cards of power', 'card magic', 'extra']); try { ClassList.cardcaster.addMajorArcana(); } catch (er) {}; ClassFeatureOptions(['cardcaster', 'cards of power', 'ritual casting', 'extra']); CurrentSpells['cardcaster-divination rituals'] = {name : 'Divination Rituals', ability : 4, list : {school : ['Div'], ritual : true}, known : {spells : 'book'}}; SetStringifieds('spells');", // Select the 'All spells known regardless of level' checkbox by default
-			removeeval : "ClassFeatureOptions(['cardcaster', 'cards of power', 'card magic', 'extra'], 'remove'); try { ClassList.cardcaster.removeMajorArcana(); } catch (er) {}; ClassFeatureOptions(['cardcaster', 'cards of power', 'ritual casting', 'extra'], 'remove'); delete CurrentSpells['cardcaster-divination rituals']; SetStringifieds('spells');"
-			//eval : "if (CurrentSpells.cardcaster) { CurrentSpells.cardcaster.typeList = 2; }; ClassFeatureOptions(['cardcaster', 'cards of power', 'card magic', 'extra']); try { AddToNotes(ClassList.cardcaster.features['cards of power'].majorArcana1, 'Major Arcana cards 0-XI of the Cardcaster class'); AddToNotes(ClassList.cardcaster.features['cards of power'].majorArcana2, 'Major Arcana cards XII-XXI of the Cardcaster class'); } catch (er) {}; ClassFeatureOptions(['cardcaster', 'cards of power', 'ritual casting', 'extra']); CurrentSpells['cardcaster-divination rituals'] = {name : 'Divination Rituals', ability : 4, list : {school : ['Div'], ritual : true}, known : {spells : 'book'}}; SetStringifieds('spells');", // Select the 'All spells known regardless of level' checkbox by default
-			//removeeval : "ClassFeatureOptions(['cardcaster', 'cards of power', 'card magic', 'extra'], 'remove'); try {AddToNotes('', '', ClassList.cardcaster.features['cards of power'].majorArcana1); AddToNotes('', '', ClassList.cardcaster.features['cards of power'].majorArcana2);} catch (er) {}; ClassFeatureOptions(['cardcaster', 'cards of power', 'ritual casting', 'extra'], 'remove'); delete CurrentSpells['cardcaster-divination rituals']; SetStringifieds('spells');"
+			eval : "if (CurrentSpells.cardcaster) { CurrentSpells.cardcaster.typeList = 2; }; ClassFeatureOptions(['cardcaster', 'cards of power', 'card magic', 'extra']); try { await ClassList.cardcaster.addMajorArcana(); } catch (er) {}; ClassFeatureOptions(['cardcaster', 'cards of power', 'ritual casting', 'extra']); CurrentSpells['cardcaster-divination rituals'] = {name : 'Divination Rituals', ability : 4, list : {school : ['Div'], ritual : true}, known : {spells : 'book'}}; SetStringifieds('spells');", // Select the 'All spells known regardless of level' checkbox by default
+			removeeval : "ClassFeatureOptions(['cardcaster', 'cards of power', 'card magic', 'extra'], 'remove'); try { await ClassList.cardcaster.removeMajorArcana(); } catch (er) {}; ClassFeatureOptions(['cardcaster', 'cards of power', 'ritual casting', 'extra'], 'remove'); delete CurrentSpells['cardcaster-divination rituals']; SetStringifieds('spells');"
+			//eval : "if (CurrentSpells.cardcaster) { CurrentSpells.cardcaster.typeList = 2; }; ClassFeatureOptions(['cardcaster', 'cards of power', 'card magic', 'extra']); try { await AddToNotes(ClassList.cardcaster.features['cards of power'].majorArcana1, 'Major Arcana cards 0-XI of the Cardcaster class'); AddToNotes(ClassList.cardcaster.features['cards of power'].majorArcana2, 'Major Arcana cards XII-XXI of the Cardcaster class'); } catch (er) {}; ClassFeatureOptions(['cardcaster', 'cards of power', 'ritual casting', 'extra']); CurrentSpells['cardcaster-divination rituals'] = {name : 'Divination Rituals', ability : 4, list : {school : ['Div'], ritual : true}, known : {spells : 'book'}}; SetStringifieds('spells');", // Select the 'All spells known regardless of level' checkbox by default
+			//removeeval : "ClassFeatureOptions(['cardcaster', 'cards of power', 'card magic', 'extra'], 'remove'); try {await AddToNotes('', '', ClassList.cardcaster.features['cards of power'].majorArcana1); AddToNotes('', '', ClassList.cardcaster.features['cards of power'].majorArcana2);} catch (er) {}; ClassFeatureOptions(['cardcaster', 'cards of power', 'ritual casting', 'extra'], 'remove'); delete CurrentSpells['cardcaster-divination rituals']; SetStringifieds('spells');"
 		},
 		"major arcana plays" : {
 			name : "Major Arcana Plays",
@@ -607,13 +607,13 @@ AddSubClass("cardcaster", "jack of beasts", {
 	},
 	monstrousArcana1 : ClassList.cardcaster.majorArcana1.replace(/\r\r(\w+) -/g, '\r   \u2022 SPL_$1 [MA]\r\r$1 -').replace(/SPL_(I|II|III) /g, 'Animal Friendship ').replace('SPL_IV', 'Shield of Faith').replace(/SPL_(V|VI) /g, 'Speak with Animals ').replace('SPL_VII ', 'Animal Messenger [MA]\t\u2022 Locate Animals or Plants ').replace('SPL_VIII', 'Enhance Ability').replace('SPL_IX', 'Conjure Animals').replace('SPL_X ', 'Animate Dead [MA]\t\t\u2022 Speak with Dead ').replace('SPL_XI', 'Conjure Minor Elementals') + '\r   \u2022 Conjure Woodland Beings [MA]',
 	monstrousArcana2 : ClassList.cardcaster.majorArcana2.replace(/(   If I play.*)\r\r(\w+) -/g, '   \u2022 SPL_$2 [MA]\r$1\r\r$2 - ').replace('\r\rXIII - Death', '\r   \u2022 Hold Monster [MA]\r\rXIII - Death').replace('\r\rXIV - Temperance', '\r   \u2022 Animate Objects [MA]\t\u2022 Conjure Elemental [MA]\r\r\XIV - Temperance').replace('SPL_XV ', 'Conjure Fey ').replace('SPL_XVI ', 'Create Undead ').replace('SPL_XVII ', 'Conjure Celestial ').replace('SPL_XVIII ', 'Forcecage ').replace('SPL_XIX', 'Animal Shapes').replace('SPL_XX ', 'Dominate Monster ').replace('SPL_XXI', 'Astral Projection').replace(/(\u2022 Wish)/, '$1\r   \u2022 Gate [MA]'),
-	addMonstrousArcana : function () {
-		AddToNotes(ClassSubList['cardcaster-jack of beasts'].monstrousArcana1, 'Monstrous Arcana cards 0-XI of Cardcaster (Jack of Beasts)');
-		AddToNotes(ClassSubList['cardcaster-jack of beasts'].monstrousArcana2, 'Monstrous Arcana cards XII-XXI of Cardcaster (Jack of Beasts)');
+	addMonstrousArcana : async function () {
+		await AddToNotes(ClassSubList['cardcaster-jack of beasts'].monstrousArcana1, 'Monstrous Arcana cards 0-XI of Cardcaster (Jack of Beasts)');
+		await AddToNotes(ClassSubList['cardcaster-jack of beasts'].monstrousArcana2, 'Monstrous Arcana cards XII-XXI of Cardcaster (Jack of Beasts)');
 	},
-	removeMajorArcana : function () {
-		AddToNotes('', '', ClassSubList['cardcaster-jack of beasts'].monstrousArcana1);
-		AddToNotes('', '', ClassSubList['cardcaster-jack of beasts'].monstrousArcana2);
+	removeMajorArcana : async function () {
+		await AddToNotes('', '', ClassSubList['cardcaster-jack of beasts'].monstrousArcana1);
+		await AddToNotes('', '', ClassSubList['cardcaster-jack of beasts'].monstrousArcana2);
 	},
 	features : {
 		"subclassfeature1" : {
@@ -642,7 +642,7 @@ AddSubClass("cardcaster", "jack of beasts", {
 			source : ["EN5:110", 3],
 			minlevel : 1,
 			description : "\n   " + "I have additional spell options for every major arcana card (see [MA] on 'Notes' page)",
-			eval : "try { if (ClassSubList['cardcaster-jack of beasts']) { ClassList.cardcaster.removeMajorArcana(); ClassSubList['cardcaster-jack of beasts'].addMonstrousArcana(); }; } catch (er) {}; ",
+			eval : "try { if (ClassSubList['cardcaster-jack of beasts']) { await ClassList.cardcaster.removeMajorArcana(); await ClassSubList['cardcaster-jack of beasts'].addMonstrousArcana(); }; } catch (er) {}; ",
 			removeeval : "try { if (ClassSubList['cardcaster-jack of beasts']) { ClassSubList['cardcaster-jack of beasts'].removeMonstrousArcana(); }; } catch (er) {}; "
 		},
 		"subclassfeature2" : {

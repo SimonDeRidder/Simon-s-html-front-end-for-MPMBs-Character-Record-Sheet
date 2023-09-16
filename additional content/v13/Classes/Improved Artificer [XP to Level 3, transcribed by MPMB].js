@@ -698,8 +698,8 @@ ClassList["improved artificer"] = {
 				name : "Clockwork Drone",
 				source : ["XPtL3:IA", 7],
 				description : " [2 points]\n   Descriptions of upgrades to the clockwork drone will only appear on its companion page",
-				eval : "improvedArtificerClockworkConstructsFunctions.add('Clockwork Drone', 'Drone Clockwork Construct (Artificer 1, XPtL3:IA 7):\\n \\u2022 The drone follows my commands and acts on my turn in combat\\n \\u2022 Without upgrades, it has 17 AC and a base average of 9 hit points\\n \\u2022 Without upgrades, its claw grab feature can carry 60 lb'); ",
-				removeeval : "improvedArtificerClockworkConstructsFunctions.remove('Clockwork Drone'); "
+				eval : "await improvedArtificerClockworkConstructsFunctions.add('Clockwork Drone', 'Drone Clockwork Construct (Artificer 1, XPtL3:IA 7):\\n \\u2022 The drone follows my commands and acts on my turn in combat\\n \\u2022 Without upgrades, it has 17 AC and a base average of 9 hit points\\n \\u2022 Without upgrades, its claw grab feature can carry 60 lb'); ",
+				removeeval : "await improvedArtificerClockworkConstructsFunctions.remove('Clockwork Drone'); "
 			},
 			"drone: increase ac by 1 (2 invention points)" : {
 				name : "Clockwork Drone: Increase AC by 1",
@@ -767,8 +767,8 @@ ClassList["improved artificer"] = {
 				name : "Clockwork Fighter",
 				source : ["XPtL3:IA", 7],
 				description : " [2 points]\n   Descriptions of upgrades to the clockwork fighter will only appear on its companion page",
-				eval : "improvedArtificerClockworkConstructsFunctions.add('Clockwork Fighter', 'Fighter Clockwork Construct (Artificer 1, XPtL3:IA 7):\\n \\u2022 The fighter follows my commands, but rolls its own initiative and acts on its own turn\\n \\u2022 Without upgrades, it has 17 AC and a base average of 22 hit points\\n \\u2022 Without upgrades, its punch attacks are +5 to hit, do 2d6 damage, and are only 1 per action'); ",
-				removeeval : "improvedArtificerClockworkConstructsFunctions.remove('Clockwork Fighter'); "
+				eval : "await improvedArtificerClockworkConstructsFunctions.add('Clockwork Fighter', 'Fighter Clockwork Construct (Artificer 1, XPtL3:IA 7):\\n \\u2022 The fighter follows my commands, but rolls its own initiative and acts on its own turn\\n \\u2022 Without upgrades, it has 17 AC and a base average of 22 hit points\\n \\u2022 Without upgrades, its punch attacks are +5 to hit, do 2d6 damage, and are only 1 per action'); ",
+				removeeval : "await improvedArtificerClockworkConstructsFunctions.remove('Clockwork Fighter'); "
 			},
 			"fighter: increase ac by 1 (2 invention points)" : {
 				name : "Clockwork Fighter: Increase AC by 1",
@@ -838,8 +838,8 @@ ClassList["improved artificer"] = {
 				name : "Clockwork Mount",
 				source : ["XPtL3:IA", 8],
 				description : " [2 points]\n   Descriptions of upgrades to the clockwork mount will only appear on its companion page",
-				eval : "improvedArtificerClockworkConstructsFunctions.add('Clockwork Mount', 'Mount Clockwork Construct (Artificer 1, XPtL3:IA 8):\\n \\u2022 The mount follows my commands and acts on my turn in combat\\n \\u2022 Without upgrades, it has 10 AC and a base average of 34 hit points\\n \\u2022 Without upgrades, its carrying capacity is 540 lb and has 50 ft speed'); ",
-				removeeval : "improvedArtificerClockworkConstructsFunctions.remove('Clockwork Mount'); "
+				eval : "await improvedArtificerClockworkConstructsFunctions.add('Clockwork Mount', 'Mount Clockwork Construct (Artificer 1, XPtL3:IA 8):\\n \\u2022 The mount follows my commands and acts on my turn in combat\\n \\u2022 Without upgrades, it has 10 AC and a base average of 34 hit points\\n \\u2022 Without upgrades, its carrying capacity is 540 lb and has 50 ft speed'); ",
+				removeeval : "await improvedArtificerClockworkConstructsFunctions.remove('Clockwork Mount'); "
 			},
 			"mount: increase carrying capacity by 50 lb (2 invention points)" : {
 				name : "Clockwork Mount: Increase Carrying Capacity by 50 lb",
@@ -1477,12 +1477,12 @@ improvedArtificerClockworkConstructsFunctions = {
 		return !theRe[0] && returnEmpty ? isEmpty : theRe;
 	},
 	// adding a creature
-	add : function(constr, notesStr) {
+	add : async function(constr, notesStr) {
 		var isUsed = improvedArtificerClockworkConstructsFunctions.find(constr, true);
 		if (isUsed[0]) return; // already exists
 		var defaultUnits = What("Unit System") === "imperial";
 		notesStr = !notesStr ? "" : defaultUnits ? notesStr : ConvertToMetric(notesStr, 0.5);
-		var prefix = isUsed[1] ? isUsed[1] : DoTemplate('AScomp', 'Add');
+		var prefix = isUsed[1] ? isUsed[1] : await DoTemplate('AScomp', 'Add');
 		var theType = tDoc.getField(prefix + 'Comp.Type');
 		theType.value = "Clockwork";
 		theType.readonly = true;
@@ -1511,9 +1511,9 @@ improvedArtificerClockworkConstructsFunctions = {
 		}
 	},
 	// removing a creature
-	remove : function(constr) {
+	remove : async function(constr) {
 		var isUsed = improvedArtificerClockworkConstructsFunctions.find(constr, true);
-		if (isUsed[0]) DoTemplate('AScomp', 'Remove', isUsed[0]);
+		if (isUsed[0]) await DoTemplate('AScomp', 'Remove', isUsed[0]);
 	},
 	// add (AddRemove = true) or remove (AddRemove = false)
 	// fldsNtxts is an array of arrays with each array being [fieldName, textToAdd];

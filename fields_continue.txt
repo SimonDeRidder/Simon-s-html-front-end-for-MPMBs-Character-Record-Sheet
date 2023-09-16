@@ -1,10 +1,10 @@
 Bluetext*   -   skipped for now
-test: Sorcerer (20) -> apply -> Create Spell Sheets -> (some spells) Continue -> Generate
-P6.SSfront.spells.time.<i:1-55> -   done
+PC_Name
 
 // trigger events on change:
 "Passive Perception": Passive_Perception_change
 "Passive Perception Bonus": Passive_Perception_Bonus_change
+"PC_name": PC_Name_change
 "Perc Bonus": Perc_Bonus_change
 "Perc Exp": Perc_Exp_change
 "Perc Prof": Perc_Prof_change

@@ -718,12 +718,12 @@ async function DirectImport(consoleTrigger) {
 					var tempExtr = pagesLayout[templ + "Extras"];
 					var templToVis = global.docTo.isTemplVis(templ);
 					if (templToVis && !templAte && !tempExtr) { // remove any visible pages that are not visible in the docFrom
-						DoTemplate(templ, "Remove", false, true);
+						await DoTemplate(templ, "Remove", false, true);
 					} else if (templAte && !templToVis && TemplatesWithExtras.indexOf(templ) === -1) { //add the non-duplicatable templates
-						DoTemplate(templ);
+						await DoTemplate(templ);
 					} else if (tempExtr) { // add templates with dependencies
 						if (sameType || (templ !== "SSmore" && (templ !== "SSfront" || !pagesLayout.SSmoreExtras))) {
-							for (var tE = 0; tE < tempExtr; tE++) DoTemplate(templ, "Add");
+							for (var tE = 0; tE < tempExtr; tE++) await DoTemplate(templ, "Add");
 						};
 						pagesLayout[templ + "ExtraNmTo"] = What("Template.extras." + templ).split(",").splice(1);
 					};
@@ -1382,7 +1382,7 @@ async function DirectImport(consoleTrigger) {
 						var tPrepFldFrom = global.docFrom.getField(prefixFrom + "spellshead." + (fromSheetTypePF ? "Image" : "Text") + ".prepare.0");
 						var tPrepFldToNm = prefixTo + "spellshead." + (typePF ? "Image" : "Text") + ".prepare.0";
 						if (tPrepFldFrom && tPrepFldFrom.display === display.hidden) {
-							MakePreparedMenu_PreparedOptions(tPrepFldToNm);
+							await MakePreparedMenu_PreparedOptions(tPrepFldToNm);
 						};
 					}
 					//set the spell remember fields
@@ -1430,7 +1430,7 @@ async function DirectImport(consoleTrigger) {
 		};
 
 		//import the icons
-		IIerror = ImportIcons(pagesLayout, app.viewerType !== "Reader" && importFromPath[2]);
+		IIerror = await ImportIcons(pagesLayout, app.viewerType !== "Reader" && importFromPath[2]);
 
 		// set the focus to the top of the first page
 		tDoc.getField("Player Name").setFocus();
@@ -1599,7 +1599,7 @@ function ImportField(fldNm, actionsObj, fromFldNm) {
 };
 
 //import the icons
-function ImportIcons(pagesLayout, viaSaving) {
+async function ImportIcons(pagesLayout, viaSaving) {
 	if (!global.docTo || !global.docFrom) return true; //either of the documents or fields doesn't exist
 
 	var fromSheetTypePF = global.docFrom.info.SheetType ? (/printer friendly/i).test(global.docFrom.info.SheetType) : false;
@@ -1692,10 +1692,10 @@ function ImportIcons(pagesLayout, viaSaving) {
 
 		//add a blank template page as first page
 		if (global.docFrom.getTemplate("blank")) {
-			global.docFrom.getTemplate("blank").spawn(fromPagT, true, false);
+			await global.docFrom.getTemplate("blank").spawn(fromPagT, true, false);
 			var usePage = fromPagT;
 		} else if (global.docFrom.getTemplate("ASnotes")) { //or add a blank notes template page as first page
-			global.docFrom.getTemplate("ASnotes").spawn(fromPagT, true, false);
+			await global.docFrom.getTemplate("ASnotes").spawn(fromPagT, true, false);
 			global.docFrom.removeField("P0.ASnotes");
 			var usePage = fromPagT;
 		} else { //take the current notes page and delete all fields on it

@@ -24,7 +24,15 @@
 		<span class="textlabel" style="top: 83.1px;left: 730.35px;font-size: 9px"><b>8</b>TH LEVEL</span>
 		<span class="textlabel" style="top: 83.1px;left: 782.48px;font-size: 9px"><b>9</b>TH LEVEL</span>
 
-		<input id="zAdvLog.PC.Name" class="field inputfield" style="top: 105px;left: 72px;font-size: 12.5pt;width: 168pt;height: 14.5pt;text-align: center;font-family: 'scala-sans'" type="text">
+		<input
+			id="zAdvLog.PC_Name"
+			class="field inputfield"
+			style="top: 105px;left: 72px;font-size: 12.5pt;width: 168pt;height: 14.5pt;text-align: center"
+			type="text"
+			spellcheck="true"
+			data-default=""
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;ValidateAdvLogInfo()"
+		/>
 
 		<input
 			id="SpellSlots.Checkboxes.lvl1.top2.1"
@@ -80,6 +88,18 @@
 			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
 			data-default=""
 		></div>
+		<input
+			id="SpellSlots.CheckboxesSet.lvl1"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 130px;left: 367px;width: 12px;height: 11px;text-align: center"
+			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
+			value="0"
+			data-default="0"
+			type="number"
+			min="0"
+			step="1"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+		/>
 
 		<input
 			id="SpellSlots.Checkboxes.lvl2.top2.1"
@@ -136,6 +156,18 @@
 			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
 			data-default=""
 		></div>
+		<input
+			id="SpellSlots.CheckboxesSet.lvl2"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 130px;left: 419.14px;width: 12px;height: 11px;text-align: center"
+			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
+			value="0"
+			data-default="0"
+			type="number"
+			min="0"
+			step="1"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+		/>
 
 		<input
 			id="SpellSlots.Checkboxes.lvl3.top2.1"
@@ -192,6 +224,18 @@
 			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
 			data-default=""
 		></div>
+		<input
+			id="SpellSlots.CheckboxesSet.lvl3"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 130px;left: 471.28px;width: 12px;height: 11px;text-align: center"
+			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
+			value="0"
+			data-default="0"
+			type="number"
+			min="0"
+			step="1"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+		/>
 
 		<input
 			id="SpellSlots.Checkboxes.lvl4.top2.1"
@@ -248,6 +292,18 @@
 			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
 			data-default=""
 		></div>
+		<input
+			id="SpellSlots.CheckboxesSet.lvl4"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 130px;left: 523.42px;width: 12px;height: 11px;text-align: center"
+			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
+			value="0"
+			data-default="0"
+			type="number"
+			min="0"
+			step="1"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+		/>
 
 		<input
 			id="SpellSlots.Checkboxes.lvl5.top2.1"
@@ -304,6 +360,18 @@
 			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
 			data-default=""
 		></div>
+		<input
+			id="SpellSlots.CheckboxesSet.lvl5"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 130px;left: 575.56px;width: 12px;height: 11px;text-align: center"
+			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
+			value="0"
+			data-default="0"
+			type="number"
+			min="0"
+			step="1"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+		/>
 
 		<input
 			id="SpellSlots.Checkboxes.lvl6.top2.1"
@@ -360,6 +428,18 @@
 			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
 			data-default=""
 		></div>
+		<input
+			id="SpellSlots.CheckboxesSet.lvl6"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 130px;left: 627.70px;width: 12px;height: 11px;text-align: center"
+			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
+			value="0"
+			data-default="0"
+			type="number"
+			min="0"
+			step="1"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+		/>
 
 		<input
 			id="SpellSlots.Checkboxes.lvl7.top2.1"
@@ -416,6 +496,18 @@
 			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
 			data-default=""
 		></div>
+		<input
+			id="SpellSlots.CheckboxesSet.lvl7"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 130px;left: 679.84px;width: 12px;height: 11px;text-align: center"
+			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
+			value="0"
+			data-default="0"
+			type="number"
+			min="0"
+			step="1"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+		/>
 
 		<input
 			id="SpellSlots.Checkboxes.lvl8.top2.1"
@@ -472,6 +564,18 @@
 			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
 			data-default=""
 		></div>
+		<input
+			id="SpellSlots.CheckboxesSet.lvl8"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 130px;left: 731.98px;width: 12px;height: 11px;text-align: center"
+			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
+			value="0"
+			data-default="0"
+			type="number"
+			min="0"
+			step="1"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+		/>
 
 		<input
 			id="SpellSlots.Checkboxes.lvl9.top2.1"
@@ -528,6 +632,18 @@
 			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
 			data-default=""
 		></div>
+		<input
+			id="SpellSlots.CheckboxesSet.lvl9"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 130px;left: 784.12px;width: 12px;height: 11px;text-align: center"
+			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
+			value="0"
+			data-default="0"
+			type="number"
+			min="0"
+			step="1"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+		/>
 
 		<div
 			id="Image.SpellPoints"
@@ -586,35 +702,109 @@
 			aria-label="Get a menu with the options to:"
 			onclick="MakeSpellMenu_SpellOptions()"
 		>Spell Sheet Options</button>
+
+		<script type="text/javascript">
+			{
+				let prefix = adapter_helper_get_prefix_from_script('spellshead.Text');
+				// zAdvLog.PC_Name
+				eventManager.add_listener(
+					EventType.PC_Name_change,
+					function () {
+						event.target.name = prefix + 'zAdvLog.PC Name';
+						CalcAdvLogInfo();
+						if (event.value !== undefined) {
+							let nameElement = document.getElementById(refix + 'zAdvLog.PC Name');
+							nameElement.value = event.value;
+						}
+					}
+				)
+			}
+		</script>
 	</div>
 
 
 	<div id="spell_sheet_table" class="pane" style="top: 180px;left: 34px;width: 825px;height: 972px">
 
-		<div id="spellshead.Image.Header.Left.0" class="field" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 64px;">
+		<div
+			id="spellshead.Image.Header.Left.0"
+			class="field"
+			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px"
+		>
 			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
 			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
 			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
 			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
 
-			<input id="spellshead.Text.header.0" class="field inputfield" style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'" type="text" data-submit_name="">
-			<select id="spellshead.ability.0" class="field inputfield" style="top: 18px;left: 343px;font-size: 15px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;font-family: 'scala-sans'">
-				<option value="charisma">Charisma</option>
-				<option value="intelligence">Intelligence </option>
+			<input
+				id="spellshead.Text.header.0"
+				class="field inputfield"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				type="text"
+				data-submit_name=""
+				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
+				data-default=""
+				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+			/>
+			<select
+				id="spellshead.ability.0"
+				class="field inputfield"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
+				onchange="{let wrapper = new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_0_change)})}"
+			>
+				<option value="nothing"></option>
+				<option value="Str Mod">  Strength</option>
+				<option value="Dex Mod">  Dexterity</option>
+				<option value="Con Mod">Constitution</option>
+				<option value="Int Mod"> Intelligence</option>
+				<option value="Wis Mod">   Wisdom</option>
+				<option value="Cha Mod">  Charisma</option>
 			</select>
-			<input id="spellshead.attack.0" class="field inputfield-noneditable" style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;font-family: 'scala-sans'" type="text">
-			<input id="spellshead.dc.0" class="field inputfield-noneditable" style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;font-family: 'scala-sans'" type="text">
+			<input
+				id="spellshead.attack.0"
+				class="field inputfield-noneditable"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				type="text"
+				data-default=""
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
+			/>
+			<input
+				id="spellshead.dc.0"
+				class="field inputfield-noneditable"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				type="text"
+				data-default=""
+				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_0_change)"
+			/>
 
-			<div id="spellshead.Image.prepare.0" class="field" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;">
+			<div
+				id="spellshead.Image.prepare.0"
+				class="field"
+				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
+				onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.contextTransfers=['name'];MakePreparedMenu_PreparedOptions()"
+			>
 				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
 				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
 
-				<input id="spellshead.prepare.0" class="field inputfield-noneditable" style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;font-family: 'scala-sans'" type="number">
+				<input
+					id="spellshead.prepare.0"
+					class="field inputfield-noneditable"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					type="number"
+					data-default=""
+					onchange="eventManager.handle_event(EventType.spellshead_prepare_0_change)"
+				/>
 			</div>
 
 			<!-- BlueText -->
+			<input
+				id="spellshead.class.0"
+				class="field inputfield"
+				style="visibility: hidden;top: 45px;left: 299px;width: 31px;height: 15px"
+				data-default=""
+				onchange="eventManager.handle_event(EventType.spellshead_class_0_change)"
+			/>
 			<input
 				id="BlueText.spellshead.attack.0"
 				class="field inputfield bluetext"
@@ -624,7 +814,7 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_attack_0_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.0"
@@ -635,7 +825,7 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_dc_0_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.0"
@@ -646,34 +836,90 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_0_change)"
 			/>
 		</div>
 
-		<div id="spellshead.Image.Header.Left.1" class="field" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 64px;visibility: hidden">
+		<div
+			id="spellshead.Image.Header.Left.1"
+			class="field"
+			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
+		>
 			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
 			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
 			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
 			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
 
-			<input id="spellshead.Text.header.1" class="field inputfield" style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'" type="text">
-			<select id="spellshead.ability.1" class="field inputfield" style="top: 18px;left: 343px;font-size: 15px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;font-family: 'scala-sans'">
-				<option value="charisma">Charisma</option>
-				<option value="intelligence">Intelligence </option>
+			<input
+				id="spellshead.Text.header.1"
+				class="field inputfield"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				type="text"
+				data-submit_name=""
+				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
+				data-default=""
+				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+			/>
+			<select
+				id="spellshead.ability.1"
+				class="field inputfield"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
+				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_1_change)})}"
+			>
+				<option value="nothing"></option>
+				<option value="Str Mod">  Strength</option>
+				<option value="Dex Mod">  Dexterity</option>
+				<option value="Con Mod">Constitution</option>
+				<option value="Int Mod"> Intelligence</option>
+				<option value="Wis Mod">   Wisdom</option>
+				<option value="Cha Mod">  Charisma</option>
 			</select>
-			<input id="spellshead.attack.1" class="field inputfield-noneditable" style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;font-family: 'scala-sans'" type="text">
-			<input id="spellshead.dc.1" class="field inputfield-noneditable" style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;font-family: 'scala-sans'" type="text">
+			<input
+				id="spellshead.attack.1"
+				class="field inputfield-noneditable"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				type="text"
+				data-default=""
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_1_change)"
+			/>
+			<input
+				id="spellshead.dc.1"
+				class="field inputfield-noneditable"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				type="text"
+				data-default=""
+				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_1_change)"
+			/>
 
-			<div id="spellshead.Image.prepare.1" class="field" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;">
+			<div
+				id="spellshead.Image.prepare.1"
+				class="field"
+				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
+				onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
+			>
 				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
 				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
 
-				<input id="spellshead.prepare.1" class="field inputfield-noneditable" style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;font-family: 'scala-sans'" type="number">
+				<input
+					id="spellshead.prepare.1"
+					class="field inputfield-noneditable"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					type="number"
+					data-default=""
+					onchange="eventManager.handle_event(EventType.spellshead_prepare_1_change)"
+				/>
 			</div>
 
 			<!-- BlueText -->
+			<input
+				id="spellshead.class.1"
+				class="field inputfield"
+				style="visibility: hidden;top: 45px;left: 299px;width: 31px;height: 15px"
+				data-default=""
+				onchange="eventManager.handle_event(EventType.spellshead_class_1_change)"
+			/>
 			<input
 				id="BlueText.spellshead.attack.1"
 				class="field inputfield bluetext"
@@ -683,7 +929,7 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_attack_1_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.1"
@@ -694,7 +940,7 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_1_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.1"
@@ -705,34 +951,90 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_1_change)"
 			/>
 		</div>
 
-		<div id="spellshead.Image.Header.Left.2" class="field" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 64px;visibility: hidden">
+		<div
+			id="spellshead.Image.Header.Left.2"
+			class="field"
+			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
+		>
 			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
 			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
 			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
 			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
 
-			<input id="spellshead.Text.header.2" class="field inputfield" style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'" type="text">
-			<select id="spellshead.ability.2" class="field inputfield" style="top: 18px;left: 343px;font-size: 15px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;font-family: 'scala-sans'">
-				<option value="charisma">Charisma</option>
-				<option value="intelligence">Intelligence </option>
+			<input
+				id="spellshead.Text.header.2"
+				class="field inputfield"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				type="text"
+				data-submit_name=""
+				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
+				data-default=""
+				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+			/>
+			<select
+				id="spellshead.ability.2"
+				class="field inputfield"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
+				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_2_change)})}"
+			>
+				<option value="nothing"></option>
+				<option value="Str Mod">  Strength</option>
+				<option value="Dex Mod">  Dexterity</option>
+				<option value="Con Mod">Constitution</option>
+				<option value="Int Mod"> Intelligence</option>
+				<option value="Wis Mod">   Wisdom</option>
+				<option value="Cha Mod">  Charisma</option>
 			</select>
-			<input id="spellshead.attack.2" class="field inputfield-noneditable" style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;font-family: 'scala-sans'" type="text">
-			<input id="spellshead.dc.2" class="field inputfield-noneditable" style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;font-family: 'scala-sans'" type="text">
+			<input
+				id="spellshead.attack.2"
+				class="field inputfield-noneditable"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				type="text"
+				data-default=""
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
+			/>
+			<input
+				id="spellshead.dc.2"
+				class="field inputfield-noneditable"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				type="text"
+				data-default=""
+				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_2_change)"
+			/>
 
-			<div id="spellshead.Image.prepare.2" class="field" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;">
+			<div
+				id="spellshead.Image.prepare.2"
+				class="field"
+				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
+				onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
+			>
 				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
 				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
 
-				<input id="spellshead.prepare.2" class="field inputfield-noneditable" style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;font-family: 'scala-sans'" type="number">
+				<input
+					id="spellshead.prepare.2"
+					class="field inputfield-noneditable"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					type="number"
+					data-default=""
+					onchange="eventManager.handle_event(EventType.spellshead_prepare_2_change)"
+				/>
 			</div>
 
 			<!-- BlueText -->
+			<input
+				id="spellshead.class.2"
+				class="field inputfield"
+				style="visibility: hidden;top: 45px;left: 299px;width: 31px;height: 15px"
+				data-default=""
+				onchange="eventManager.handle_event(EventType.spellshead_class_2_change)"
+			/>
 			<input
 				id="BlueText.spellshead.attack.2"
 				class="field inputfield bluetext"
@@ -742,7 +1044,7 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_attack_2_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.2"
@@ -753,7 +1055,7 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_2_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.2"
@@ -764,34 +1066,90 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_2_change)"
 			/>
 		</div>
 
-		<div id="spellshead.Image.Header.Left.3" class="field" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 64px;visibility: hidden">
+		<div
+			id="spellshead.Image.Header.Left.3"
+			class="field"
+			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
+		>
 			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
 			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
 			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
 			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
 
-			<input id="spellshead.Text.header.3" class="field inputfield" style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'" type="text">
-			<select id="spellshead.ability.3" class="field inputfield" style="top: 18px;left: 343px;font-size: 15px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;font-family: 'scala-sans'">
-				<option value="charisma">Charisma</option>
-				<option value="intelligence">Intelligence </option>
+			<input
+				id="spellshead.Text.header.3"
+				class="field inputfield"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				type="text"
+				data-submit_name=""
+				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
+				data-default=""
+				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+			/>
+			<select
+				id="spellshead.ability.3"
+				class="field inputfield"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
+				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_3_change)})}"
+			>
+				<option value="nothing"></option>
+				<option value="Str Mod">  Strength</option>
+				<option value="Dex Mod">  Dexterity</option>
+				<option value="Con Mod">Constitution</option>
+				<option value="Int Mod"> Intelligence</option>
+				<option value="Wis Mod">   Wisdom</option>
+				<option value="Cha Mod">  Charisma</option>
 			</select>
-			<input id="spellshead.attack.3" class="field inputfield-noneditable" style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;font-family: 'scala-sans'" type="text">
-			<input id="spellshead.dc.3" class="field inputfield-noneditable" style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;font-family: 'scala-sans'" type="text">
+			<input
+				id="spellshead.attack.3"
+				class="field inputfield-noneditable"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				type="text"
+				data-default=""
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
+			/>
+			<input
+				id="spellshead.dc.3"
+				class="field inputfield-noneditable"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				type="text"
+				data-default=""
+				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_3_change)"
+			/>
 
-			<div id="spellshead.Image.prepare.3" class="field" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;">
+			<div
+				id="spellshead.Image.prepare.3"
+				class="field"
+				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
+				onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
+			>
 				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
 				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
 
-				<input id="spellshead.prepare.3" class="field inputfield-noneditable" style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;font-family: 'scala-sans'" type="number">
+				<input
+					id="spellshead.prepare.3"
+					class="field inputfield-noneditable"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					type="number"
+					data-default=""
+					onchange="eventManager.handle_event(EventType.spellshead_prepare_3_change)"
+				/>
 			</div>
 
 			<!-- BlueText -->
+			<input
+				id="spellshead.class.3"
+				class="field inputfield"
+				style="visibility: hidden;top: 45px;left: 299px;width: 31px;height: 15px"
+				data-default=""
+				onchange="eventManager.handle_event(EventType.spellshead_class_3_change)"
+			/>
 			<input
 				id="BlueText.spellshead.attack.3"
 				class="field inputfield bluetext"
@@ -801,7 +1159,7 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_attack_3_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.3"
@@ -812,7 +1170,7 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_3_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.3"
@@ -823,28 +1181,41 @@
 				data-default="0"
 				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext()"
+				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_3_change)"
 			/>
 		</div>
 
-		<div id="spellsdiv.Image.0" class="field" style="position: absolute;top: 64px;left: 0px;width: 825px;height: 32px;">
+		<div
+			id="spellsdiv.Image.0"
+			class="field"
+			style="position: absolute;top: 64px;left: 0px;width: 825px;height: 31.2px"
+			data-default=""
+		>
 			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/divider.svg" style="top: 0px;left: 0px;width: 825px;height: 32px;">
-
-			<input id="spellsdiv.Text.0" class="field inputfield" style="top: 8px;left: 205.2px;font-size: 10.6px;width: 410.5px;height: 14px;text-align: center;font-weight: bold;text-transform: uppercase;font-family: 'scala-sans'" type="text">
 		</div>
+		<input
+			id="spellsdiv.Text.0"
+			class="field inputfield"
+			style="top: 72px;left: 205.2px;font-size: 10.6px;width: 410.5px;height: 14px;text-align: center;font-weight: bold;text-transform: uppercase;font-family: 'scala-sans'"
+			type="text"
+			data-default=""
+			onchange="this.value=this.value.toUpperCase();event.value = this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);HideSpellSheetElement();"
+		/>
 
-		<div style="position: absolute;top: 96px;left: 0px;width:825px;height: 16px;">
-			<div
+		<div id="spellscontainer.0" style="position: absolute;top: 96px;left: 0px;width:825px;height: 15.6px;">
+			<button
 				id="spells.check.0"
-				class="field"
-				style="position: absolute;width: 15px;height: 15px;left: 1px;top: 1px;font-size: 8.4px;font-weight: bold;text-align: center;"
+				class="field button nonprintable"
+				style="position: absolute;width: 14px;height: 14px;left: 2px;top: 2px;font-size: 10px;font-weight: bold;text-align: center;"
 				data-default=""
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox()"
-			></div>
+				value=""
+				onclick=" event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName;document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
+				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=this.getAttribute('value');event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName;document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
+			>&gt;</button>
 			<button
 				id="spells.checkbox.0"
 				class="field button nonprintable"
-				style="position: absolute;top: 1px;left: 1px;width: 15px;height: 15px;text-align: center;font-size: 12px"
+				style="position: absolute;top: 2px;left: 2px;width: 14px;height: 14px;text-align: center;font-size: 10px;padding: 0;z-index: 1;;visibility: hidden;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;"
 				aria-label="Click here for the options for this row."
 				data-default="false"
 				onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox()"
@@ -865,12 +1236,6 @@
 				type="text"
 				data-default=""
 				spellcheck="true"
-			/>
-			<input
-				id="spells.remember.0"
-				class="field"
-				style="visibility: hidden"
-				onchange="ApplySpell(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
 				id="spells.save.0"
@@ -938,7 +1303,194 @@
 				data-default=""
 			/>
 		</div>
-		<!-- TODO: copy up to 55 -->
+		<input
+			id="spells.remember.0"
+			class="field"
+			style="visibility: hidden;position: absolute;top: 96px;left: 0px;width:825px;height: 15.6px"
+			onchange="ApplySpell(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
+		/>
+
+		<div
+			id="spellsgloss.Image.0"
+			class="field"
+			style="position: absolute;top: 782.4px;left: 0px;width: 825px;height: 187.6px;cursor: pointer;visibility: hidden"
+			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.contextTransfers=['name'];MakeGlossMenu_GlossOptions()"
+		>
+			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/glossary.svg" style="top: 0px;left: 0px;width: 825px;height: 187.6px;">
+
+			<div class="textlabel-bold" style="top: 168px;left: 0px;width: 100%">GLOSSARY OF ABBREVIATIONS USED IN THIS SPELL SHEET</div>
+
+			<!-- Column 1 -->
+			<div class="textlabel-bold" style="top:  13.4px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px;">(R)</div>
+			<div class="textlabel-bold" style="top:  27.1px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">1 a</div>
+			<div class="textlabel-bold" style="top:  40.8px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">1 bns / bns a</div>
+			<div class="textlabel-bold" style="top:  54.5px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">1 rea</div>
+			<div class="textlabel-bold" style="top:  68.2px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">20 cu ft</div>
+			<div class="textlabel-bold" style="top:  81.9px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">20 sq ft</div>
+			<div class="textlabel-bold" style="top:  95.6px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">adv.</div>
+			<div class="textlabel-bold" style="top: 109.3px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">atk</div>
+			<div class="textlabel-bold" style="top: 123.0px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">chk/check</div>
+			<div class="textlabel-bold" style="top: 136.7px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">CL</div>
+			<div class="textlabel-bold" style="top: 150.4px;left: 11.5px;width: 60px;text-align: left;font-size: 10.4px">Conc, 1 min</div>
+
+			<div class="textlabel" style="top:  12.4px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">Ritual</div>
+			<div class="textlabel" style="top:  26.1px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">1 action</div>
+			<div class="textlabel" style="top:  39.8px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">1 bonus action</div>
+			<div class="textlabel" style="top:  53.5px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">1 reaction</div>
+			<div class="textlabel" style="top:  67.2px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">20 cubic feet</div>
+			<div class="textlabel" style="top:  80.9px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">20 square feet</div>
+			<div class="textlabel" style="top:  94.6px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">Advantage</div>
+			<div class="textlabel" style="top: 108.3px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">Attack (roll)</div>
+			<div class="textlabel" style="top: 122.0px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">Ability check</div>
+			<div class="textlabel" style="top: 135.7px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">Character Level</div>
+			<div class="textlabel" style="top: 149.4px;left: 77px;width: 75px;text-align: left;font-size: 10.4px">Concentration, up to 1 minute</div>
+
+			<!-- Column 2 -->
+			<div class="textlabel-bold" style="top:  13.4px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">dif. ter.</div>
+			<div class="textlabel-bold" style="top:  27.1px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">dis.</div>
+			<div class="textlabel-bold" style="top:  40.8px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">dmg</div>
+			<div class="textlabel-bold" style="top:  54.5px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">h</div>
+			<div class="textlabel-bold" style="top:  68.2px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">Kn</div>
+			<div class="textlabel-bold" style="top:  81.9px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">Me</div>
+			<div class="textlabel-bold" style="top:  95.6px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">min</div>
+			<div class="textlabel-bold" style="top: 109.3px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">obj</div>
+			<div class="textlabel-bold" style="top: 123.0px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">obsc.</div>
+			<div class="textlabel-bold" style="top: 136.7px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">rnd</div>
+			<div class="textlabel-bold" style="top: 150.4px;left: 156px;width: 35px;text-align: left;font-size: 10.4px">SL</div>
+
+			<div class="textlabel" style="top:  12.4px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Difficult terrain</div>
+			<div class="textlabel" style="top:  26.1px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Disadvantage</div>
+			<div class="textlabel" style="top:  39.8px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Damage</div>
+			<div class="textlabel" style="top:  53.5px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Hour(s)</div>
+			<div class="textlabel" style="top:  67.2px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Known</div>
+			<div class="textlabel" style="top:  80.9px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Memorized</div>
+			<div class="textlabel" style="top:  94.6px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Minute(s)</div>
+			<div class="textlabel" style="top: 108.3px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Object(s)</div>
+			<div class="textlabel" style="top: 122.0px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Obscured</div>
+			<div class="textlabel" style="top: 135.7px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Round(s)</div>
+			<div class="textlabel" style="top: 149.4px;left: 193px;width: 75px;text-align: left;font-size: 10.4px">Spell slot level</div>
+
+			<!-- Column 3 -->
+			<div class="textlabel-bold" style="top:  13.4px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">(D)</div>
+			<div class="textlabel-bold" style="top:  27.1px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">+1d6/SL</div>
+			<div class="textlabel-bold" style="top:  40.8px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">30-ft rad</div>
+			<div class="textlabel-bold" style="top:  54.5px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">S:30-ft rad</div>
+			<div class="textlabel-bold" style="top:  68.2px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">5 crea</div>
+			<div class="textlabel-bold" style="top:  81.9px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">25gp cons.</div>
+			<div class="textlabel-bold" style="top:  95.6px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">all</div>
+			<div class="textlabel-bold" style="top: 109.3px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">any</div>
+			<div class="textlabel-bold" style="top: 123.0px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">M&#x1D453;</div>
+			<div class="textlabel-bold" style="top: 136.7px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">M&#x2020;</div>
+			<div class="textlabel-bold" style="top: 150.4px;left: 271.5px;width: 60px;text-align: left;font-size: 10.4px">see book / B</div>
+
+			<div class="textlabel" style="top:  12.4px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">The spell can be dismissed by the caster as 1 action</div>
+			<div class="textlabel" style="top:  26.1px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">+1d6 for each spell slot level above the spell's level</div>
+			<div class="textlabel" style="top:  39.8px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">30-foot radius sphere centered on any point within range</div>
+			<div class="textlabel" style="top:  53.5px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">Self: 30-foot radius sphere centered on the caster</div>
+			<div class="textlabel" style="top:  67.2px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">Up to 5 creatures in the spell's area, 1 of which can be the caster</div>
+			<div class="textlabel" style="top:  80.9px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">The material component, worth 25 gp, is consumed by the spell</div>
+			<div class="textlabel" style="top:  94.6px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">All creatures within the spell's area</div>
+			<div class="textlabel" style="top: 108.3px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">Any creatures of your choosing that are within the spell's area</div>
+			<div class="textlabel" style="top: 122.0px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">Material component is costly, but is not consumed upon casting</div>
+			<div class="textlabel" style="top: 135.7px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">Material component is costly and is consumed upon casting</div>
+			<div class="textlabel" style="top: 149.4px;left: 333px;width: 290px;text-align: left;font-size: 10.4px">The short spell description here is very incomplete, so beware</div>
+
+			<!-- Column 4 -->
+			<div class="textlabel-bold" style="top:  13.4px;left: 628px;width: 120px;text-align: left;font-size: 10.4px">SOURCES ('B' COLUMN)</div>
+			<div class="textlabel-bold" style="top:  27.1px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">AI</div>
+			<div class="textlabel-bold" style="top:  40.8px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">FD</div>
+			<div class="textlabel-bold" style="top:  54.5px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">P</div>
+			<div class="textlabel-bold" style="top:  68.2px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">RF</div>
+			<div class="textlabel-bold" style="top:  81.9px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">SC</div>
+			<div class="textlabel-bold" style="top:  95.6px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">SR</div>
+			<div class="textlabel-bold" style="top: 109.3px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">T</div>
+			<div class="textlabel-bold" style="top: 123.0px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">U</div>
+			<div class="textlabel-bold" style="top: 136.7px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">W</div>
+			<div class="textlabel-bold" style="top: 150.4px;left: 628px;width: 20px;text-align: left;font-size: 10.4px">X</div>
+
+			<div class="textlabel" style="top:  26.1px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Acquisitions Incorporated</div>
+			<div class="textlabel" style="top:  39.8px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Fizban's Treasury of Dragons</div>
+			<div class="textlabel" style="top:  53.5px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Player's Handbook</div>
+			<div class="textlabel" style="top:  67.2px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Rime of the Frostmaiden</div>
+			<div class="textlabel" style="top:  80.9px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Strixhaven: A Curriculum of Chaos</div>
+			<div class="textlabel" style="top:  94.6px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">System Reference Document</div>
+			<div class="textlabel" style="top: 108.3px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Tasha's Cauldron of Everything</div>
+			<div class="textlabel" style="top: 122.0px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Unearthed Arcana</div>
+			<div class="textlabel" style="top: 135.7px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Explorer's Guide to Wildemount</div>
+			<div class="textlabel" style="top: 149.4px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Xanathar's Guide to Everything</div>
+		</div>
+
+		<script type="text/javascript">
+			{
+				let prefix = adapter_helper_get_prefix_from_script('spellshead.Text');
+
+				// clone spell rows & divs
+				for (
+					let templateDef of [
+						['spellscontainer.0', 55, true, true],
+						['spells.remember.0', 55, true, false],
+						['spellsdiv.Image.0', 9, false, false],
+						['spellsdiv.Text.0', 9, false, false],
+					]
+				) {
+					let templateElement = document.getElementById(prefix + templateDef[0]);
+					let parentContainer = templateElement.parentElement;
+					let initHeight = Number(templateElement.style.top.replace(/\s*px\s*$/, ''));
+					let heightDelta = Number(templateElement.style.height.replace(/\s*px\s*$/, ''));
+					let newNode;
+					for (let i = 1; i<=templateDef[1]; i++) {
+						newNode = templateElement.cloneNode(deep=true);
+						newNode.id = templateElement.id.replace(/\.0$/, '.' + String(i));
+						for (let child of newNode.childNodes) {
+							if (child instanceof HTMLElement) {
+								child.id = child.id.replace(/\.0$/, '.' + String(i));
+							}
+						}
+						if (templateDef[2]) {
+							newNode.style.top = String(initHeight + (i * heightDelta)) + 'px';
+						}
+						newNode.style.visibility = templateDef[3] ? 'visible' : 'hidden';
+						parentContainer.appendChild(newNode);
+					}
+				}
+
+				// spelshead.prepare
+				for (let i=0; i<4; i++) {
+					[
+						EventType.Str_Mod_change,
+						EventType.Dex_Mod_change,
+						EventType.Con_Mod_change,
+						EventType.Int_Mod_change,
+						EventType.Wis_Mod_change,
+						EventType.Cha_Mod_change,
+						EventType.HoS_Mod_change,
+						EventType['spellshead_class_' + String(i) + '_change'],
+						EventType['spellshead_dc_' + String(i) + '_change'],
+						EventType['spellshead_attack_' + String(i) + '_change'],
+						EventType['spellshead_prepare_' + String(i) + '_change'],
+						EventType['spellshead_ability_' + String(i) + '_change'],
+						EventType['BlueText_spellshead_dc_' + String(i) + '_change'],
+						EventType['BlueText_spellshead_attack_' + String(i) + '_change'],
+						EventType['BlueText_spellshead_prepare_' + String(i) + '_change'],
+						EventType.BlueText_Players_Make_All_Rolls_change,
+						EventType.Proficiency_Bonus_change,
+					].forEach(function (eventType) {
+						eventManager.add_listener(
+							eventType,
+							function () {
+								event.target.name = prefix + 'spellshead.prepare.' + String(i);
+								CalcSpellScores();
+								if (event.value !== undefined) {
+									let prepareElement = document.getElementById(prefix + 'spellshead.prepare.' + String(i));
+									prepareElement.value = event.value;
+								}
+							}
+						);
+					});
+				}
+			}
+		</script>
+
 	</div>
 
 	<span id="SpellSheetInformation" class="field textlabel-dimmed" style="top: 1155px;left: 43px;font-size: 6.43px;font-weight: bold">
@@ -954,18 +1506,7 @@
 
 	<!-- Invisible fields (some are bluetext mods, sort these out later) -->
 	<div style="visibility:hidden">
-		<div id="SpellSlots.CheckboxesSet.lvl1" class="field"></div>
-		<div id="SpellSlots.CheckboxesSet.lvl2" class="field"></div>
-		<div id="SpellSlots.CheckboxesSet.lvl3" class="field"></div>
-		<div id="SpellSlots.CheckboxesSet.lvl4" class="field"></div>
-		<div id="SpellSlots.CheckboxesSet.lvl5" class="field"></div>
-		<div id="SpellSlots.CheckboxesSet.lvl6" class="field"></div>
-		<div id="SpellSlots.CheckboxesSet.lvl7" class="field"></div>
-		<div id="SpellSlots.CheckboxesSet.lvl8" class="field"></div>
-		<div id="SpellSlots.CheckboxesSet.lvl9" class="field"></div>
 		<div id="SpellSlots.Checkboxes.SpellPoints" class="field"></div>
-		<div id="spellshead.class.0" class="field"></div>
-		<div id="spellsgloss.Image.0" class="field"></div>
 		<div id="SpellSlotsRemember" class="field"></div>
 		<div id="Image.SpellSlots.Checkboxes.1" class="field"></div>
 		<div id="Image.SpellSlots.Checkboxes.2" class="field"></div>

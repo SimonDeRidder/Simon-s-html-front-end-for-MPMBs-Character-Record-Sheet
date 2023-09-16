@@ -34,27 +34,31 @@
 			}
 		};
 
+		var globalPageInventory = {};
+
 		function editRecursive(element, page_number, prefix) {
 			let elementChildren = element.childNodes;
 			let elementQueue = new Queue();
 			for (i = 0; i < elementChildren.length; i++) {
 				if (elementChildren[i] instanceof HTMLElement) {
-					elementQueue.enqueue(elementChildren[i])
+					elementQueue.enqueue(elementChildren[i]);
 				}
 			}
 
 			while (!elementQueue.isEmpty) {
 				let currentElement = elementQueue.dequeue();
 				let elementClass = currentElement.getAttribute('class');
-				if ((elementClass && elementClass.includes("field")) || (currentElement.tagName.toLowerCase() == 'datalist')) {
-					if (prefix) {
-						currentElement.setAttribute('id', prefix + currentElement.getAttribute('id'));
-						if (currentElement.hasAttribute('list')) {
-							currentElement.setAttribute('list', prefix + currentElement.getAttribute('list'));
-						}
+				// if ((elementClass && elementClass.includes("field")) || (currentElement.tagName.toLowerCase() == 'datalist')) {
+				if (prefix) {
+					currentElement.setAttribute('id', prefix + currentElement.getAttribute('id'));
+					if (currentElement.hasAttribute('list')) {
+						currentElement.setAttribute('list', prefix + currentElement.getAttribute('list'));
 					}
+				}
+				if (page_number) {
 					currentElement.dataset.page = page_number;
 				}
+				// }
 				let subElementChildren = currentElement.childNodes;
 				for (i = 0; i < subElementChildren.length; i++) {
 					if (subElementChildren[i] instanceof HTMLElement) {
@@ -77,29 +81,74 @@
 			});
 		}
 
-		function includePage(page_id, page_number, prefix = "") {
+		async function includePage(page_id, page_number, prefix = "", add_to_inventory = true) {
 			var z, i, elmnt, file, xhttp;
 			elmnt = document.getElementById(page_id);
 			file = elmnt.getAttribute("page-url");
 			if (file) {
-				xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function () {
-					if (this.readyState == 4) {
-						if (this.status == 200) {
-							elmnt.innerHTML = this.responseText;
-							editRecursive(elmnt, page_number, prefix);
-							executeScriptElements(elmnt);
+				return new Promise((resolve, reject) => {
+					xhttp = new XMLHttpRequest();
+					xhttp.onreadystatechange = function () {
+						if (this.readyState == 4) {
+							if (this.status == 200) {
+								elmnt.innerHTML = this.responseText;
+								editRecursive(elmnt, page_number, prefix);
+								executeScriptElements(elmnt);
+							}
+							if (this.status == 404) {
+								elmnt.innerHTML = "Page not found.";
+								reject();
+							}
+							elmnt.removeAttribute("page-url");
+							resolve();
 						}
-						if (this.status == 404) {
-							elmnt.innerHTML = "Page not found.";
-						}
-						elmnt.removeAttribute("page-url");
-						includePage(page_id, prefix);
+					}
+					xhttp.open("GET", file, true);
+					xhttp.send();
+					if (add_to_inventory){
+						globalPageInventory[page_number] = elmnt;
+					}
+				});
+			}
+		}
+
+		function replacePage(pageElement, newPage) {
+			let elementChildren = pageElement.childNodes;
+			let elementQueue = new Queue();
+			for (i = 0; i < elementChildren.length; i++) {
+				if (elementChildren[i] instanceof HTMLElement) {
+					elementQueue.enqueue(elementChildren[i]);
+				}
+			}
+
+			while (!elementQueue.isEmpty) {
+				let currentElement = elementQueue.dequeue();
+				let elementClass = currentElement.getAttribute('class');
+				if ((elementClass && elementClass.includes("field")) || (currentElement.tagName.toLowerCase() == 'datalist')) {
+					currentElement.dataset.page = newPage;
+				}
+				let subElementChildren = currentElement.childNodes;
+				for (i = 0; i < subElementChildren.length; i++) {
+					if (subElementChildren[i] instanceof HTMLElement) {
+						elementQueue.enqueue(subElementChildren[i]);
 					}
 				}
-				xhttp.open("GET", file, true);
-				xhttp.send();
-				return;
+			}
+		}
+
+		async function insertPage(page_id, page_number, prefix = "") {
+			await includePage(page_id, page_number, prefix=prefix, add_to_inventory = false);
+			let i = page_number;
+			let currentPageElement = document.getElementById(page_id);
+			let replacedPage = globalPageInventory[i];
+			globalPageInventory[i] = currentPageElement;
+			while (replacedPage != null) {
+				globalPageInventory[i] = currentPageElement;
+				replacePage(replacedPage, i+1);
+				i = i + 1;
+				currentPageElement = replacedPage;
+				replacedPage = globalPageInventory[i];
+				globalPageInventory[i] = currentPageElement;
 			}
 		}
 	</script>
@@ -113,26 +162,25 @@
 
 <body>
 	<div id="button-container">
-		<button class="tablink" onclick="openPage('pf1', this)">Stats</button>
-		<button class="tablink" onclick="openPage('pf2', this)">Features & Equipment</button>
-		<button class="tablink" onclick="openPage('pf3', this)">Notes & Feats</button>
-		<button class="tablink" onclick="openPage('pf4', this)">Background</button>
-		<button class="tablink" onclick="openPage('pf5', this)">Companion</button>
-		<button class="tablink" onclick="openPage('pf6', this)">Notes</button>
-		<button class="tablink" onclick="openPage('pf7', this)" id="defaultOpen">Spells</button>
-		<button class="tablink" onclick="openPage('pf8', this)">Reference</button>
+		<button id="tabbuttonstat" onclick="openPage('pstat', this)" class="tablink defaultOpen">Stats</button>
+		<button id="tabbuttonfeaq" onclick="openPage('pfeaq', this)" class="tablink">Features & Equipment</button>
+		<button id="tabbuttonnofe" onclick="openPage('pnofe', this)" class="tablink">Notes & Feats</button>
+		<button id="tabbuttonback" onclick="openPage('pback', this)" class="tablink">Background</button>
+		<button id="tabbuttoncomp" onclick="openPage('pcomp', this)" class="tablink">Companion</button>
+		<button id="tabbuttonnote" onclick="openPage('pnote', this)" class="tablink">Notes</button>
+		<button id="tabbuttonrefe" onclick="openPage('prefe', this)" class="tablink">Reference</button>
 	</div>
 	<br style="clear: both;" />
 	<div id="page-wrapper">
-		<div id="pf1" class="page" page-url="pages/page_stats.html"></div>
-		<div id="pf2" class="page" page-url="pages/page_features_equipment.html"></div>
-		<div id="pf3" class="page" page-url="pages/page_notes_feats.html"></div>
-		<div id="pf4" class="page" page-url="pages/page_appearance_background.html"></div>
-		<div id="pf5" class="page" page-url="pages/page_companion.html"></div>
-		<div id="pf5a" class="page" page-url="pages/page_wildshape.html"></div>
-		<div id="pf6" class="page" page-url="pages/page_notes.html"></div>
-		<div id="pf7" class="page" page-url="pages/page_spells.html"></div>
-		<div id="pf8" class="page" page-url="pages/page_reference.html"></div>
+		<div id="pstat" class="page" page-url="pages/page_stats.html"></div>
+		<div id="pfeaq" class="page" page-url="pages/page_features_equipment.html"></div>
+		<div id="pnofe" class="page" page-url="pages/page_notes_feats.html"></div>
+		<div id="pback" class="page" page-url="pages/page_appearance_background.html"></div>
+		<div id="pcomp" class="page" page-url="pages/page_companion.html"></div>
+		<div id="pwildtempl" class="page" page-url="pages/page_wildshape.html"></div>
+		<div id="pnote" class="page" page-url="pages/page_notes.html"></div>
+		<div id="pspellstempl" class="page" page-url="pages/page_spells.html"></div>
+		<div id="prefe" class="page" page-url="pages/page_reference.html"></div>
 	</div>
 
 	<!-- Data storage emulation fields. -->
@@ -194,15 +242,15 @@
 	</div>
 </body>
 <script>
-	includePage("pf1", 1);
-	includePage("pf2", 2);
-	includePage("pf3", 3);
-	includePage("pf4", 4);
-	includePage("pf5", 5, prefix = "P4.AScomp.");
-	includePage("pf5a", 6);
-	includePage("pf6", 7, prefix = "P5.ASnotes.");
-	includePage("pf7", 8);//, prefix = "P6.SSfront.");
-	includePage("pf8", 9);
+	includePage("pstat", 1);
+	includePage("pfeaq", 2);
+	includePage("pnofe", 3);
+	includePage("pback", 4);
+	includePage("pcomp", 5, prefix = "P4.AScomp.");
+	includePage("pwildtempl", 0, prefix="", add_to_inventory=false);
+	includePage("pnote", 6, prefix = "P5.ASnotes.");
+	includePage("pspellstempl", 0, prefix="", add_to_inventory=false);
+	includePage("prefe", 7);
 </script>
 <script>
 	function openPage(pageName, elmnt) {
@@ -222,8 +270,8 @@
 		elmnt.style.backgroundColor = "#ddd";
 	}
 
-	// Get the element with id="defaultOpen" and click on it
-	document.getElementById("defaultOpen").click();
+	// Get the element with class="defaultOpen" and click on it
+	document.getElementsByClassName("defaultOpen")[0].click();
 </script>
 <script type="text/javascript" src="js/controller.js"></script>
 

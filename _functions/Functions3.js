@@ -202,7 +202,7 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		if (uObj.action) processActions(addIt, tipNmF, uObj.action, uObj.limfeaname ? uObj.limfeaname : uObj.name);
 		if (uObj.extraLimitedFeatures) processExtraLimitedFeatures(addIt, tipNmF, uObj.extraLimitedFeatures);
 		if (uObj.extraAC) await processExtraAC(addIt, tipNmF, uObj.extraAC, uObj.name);
-		if (uObj.toNotesPage) processToNotesPage(addIt, uObj.toNotesPage, type, uObj, fObj, [tipNm, displName, fObjName, aParent]);
+		if (uObj.toNotesPage) await processToNotesPage(addIt, uObj.toNotesPage, type, uObj, fObj, [tipNm, displName, fObjName, aParent]);
 		if (uObj.carryingCapacity) await SetProf("carryingcapacity", addIt, uObj.carryingCapacity, tipNmF);
 		if (uObj.advantages) await processAdvantages(addIt, tipNmF, uObj.advantages);
 
@@ -1870,7 +1870,7 @@ async function UpdateSheetDisplay() {
 					})
 				};
 			} else {
-				RemoveSpellSheets();
+				await RemoveSpellSheets();
 			}
 		};
 		if (changedSpellEval || CurrentEvals.spellStr) {
@@ -3334,7 +3334,7 @@ async function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forc
 			if (n === 1 && ((RegExItem.test(curItem) && !RegExItemNo.test(curItem)) || curItem.toLowerCase() === itemLower)) {
 				return; // the item already exists
 			} else if (n === 2 && curItem === "") {
-				if (i > FieldNumbers.magicitemsD && !tDoc.getField(BookMarkList["Overflow sheet"])) DoTemplate("ASoverflow", "Add");
+				if (i > FieldNumbers.magicitemsD && !tDoc.getField(BookMarkList["Overflow sheet"])) await DoTemplate("ASoverflow", "Add");
 				Value(MIflds[0], item);
 				var recognizedItem = CurrentMagicItems.known[i - 1];
 				if (!recognizedItem) {

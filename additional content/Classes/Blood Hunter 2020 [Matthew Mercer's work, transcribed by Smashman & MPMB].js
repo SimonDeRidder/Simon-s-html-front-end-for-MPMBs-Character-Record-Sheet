@@ -345,7 +345,7 @@ ClassList["blood hunter"] = {
 			])
 		}
 	},
-	updateHybridForm : function(BHlevelOld, BHlevelNew) {
+	updateHybridForm : async function(BHlevelOld, BHlevelNew) {
 		if (BHlevelOld <= 2 && BHlevelNew <= 2) return;
 		//a function to create the full text for the hybrid feature
 		var makeHybridText = function(lvl) {
@@ -397,7 +397,7 @@ ClassList["blood hunter"] = {
 		//update the hybrid feature on the notes page
 		var BHstringOld = makeHybridText(BHlevelOld);
 		var BHstringNew = makeHybridText(BHlevelNew);
-		if (BHstringOld != BHstringNew) AddToNotes(BHstringNew, "Blood Hunter (Order of the Lycan) Hybrid form features", BHstringOld, "Class Features section");
+		if (BHstringOld != BHstringNew) await AddToNotes(BHstringNew, "Blood Hunter (Order of the Lycan) Hybrid form features", BHstringOld, "Class Features section");
 	}
 };
 
@@ -1090,8 +1090,8 @@ AddSubClass("blood hunter", "lycan", {
 					"If I include the word 'Lycan' or 'Hybrid' in a melee weapon's name, the calculation will add +1 to damage rolls. This bonus increases to +2 at 11th level and +3 at 18th level in the blood hunter class"
 				]
 			},
-			changeeval : function(v) {
-				ClassList["blood hunter"].updateHybridForm(v[0], v[1]);
+			changeeval : async function(v) {
+				await ClassList["blood hunter"].updateHybridForm(v[0], v[1]);
 			}
 		},
 		"subclassfeature7" : {

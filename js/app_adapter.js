@@ -97,6 +97,7 @@ const app = {
 				"REMOVE COLUMN DIALOG",
 				"SPELL SELECTION DIALOG",
 				"SPELL LIST GENERATION DIALOG",
+				"FIRST COLUMN DIALOG",
 			].includes(monitor.description.name)
 		) {
 			// TODO: remove this if all execDialogs are converted
@@ -246,6 +247,7 @@ AdapterParsePopUpMenu = function (aParams, resolve) {
 this.info = {
 	SheetType: "printer friendly",
 	SheetVersion: "v13.1.2",
+	SpellsOnly: false,
 };
 
 this.bookmarkRoot = {
@@ -353,6 +355,11 @@ this.exportDataObject = function(data /*Object*/) {
 	element.click();
 	document.body.removeChild(element);
 	// window.location.href = "documents/" + data.cName;
+}
+
+
+this.getTemplate = function(cName /*String*/) /*AdapterClassTemplate*/ {
+	return new AdapterClassTemplate(cName);
 }
 
 
@@ -702,11 +709,11 @@ class AdapterClassFieldReference {
 	}
 
 	get page() /*Number*/ {
-		return this.html_elements[0].dataset.page;
+		return Number(this.html_elements[0].dataset.page);
 	}
 
 	get rect() /*[Number]*/ {
-		let boundingRect = this.html_elements[0].getBoundingClientRect();
+		let boundingRect = adapter_helper_get_rect(this.html_elements[0]);
 		return [
 			boundingRect.left * 3.0 / 4.0,
 			boundingRect.top * 3.0 / 4.0,
@@ -716,7 +723,7 @@ class AdapterClassFieldReference {
 	}
 
 	set rect(newRect /*[Number]*/) {
-		let currentBoundingRect = this.html_elements[0].getBoundingClientRect();
+		let currentBoundingRect = adapter_helper_get_rect(this.html_elements[0]);
 		let leftDiff = (newRect[0] * 4 / 3) - currentBoundingRect.left;
 		let topDiff = (newRect[1] * 4 / 3) - currentBoundingRect.top;
 		let diff = {
@@ -742,6 +749,40 @@ class AdapterClassFieldReference {
 				this.html_elements[0].style[styleType] = "" + (Number(valueMatch[1]) + diff[styleType]) + "px";
 			}
 		}
+	}
+
+	set fillColor(color /*[char, ...]*/ ) {
+		let bgColor = adapter_helper_convert_colour(color);
+		for (let el of this.html_elements) {
+			el.style.backgroundColor = bgColor;
+		}
+	}
+
+	set lineWidth(width /*Number*/ ) {
+		for (let el of this.html_elements) {
+			el.style.borderWidth = String(width) + 'px';
+		}
+	}
+
+	set strokeColor(color /*[char, ...]*/ ) {
+		let bgColor = adapter_helper_convert_colour(color);
+		for (let el of this.html_elements) {
+			el.style.borderColor = bgColor;
+		}
+	}
+
+	set borderStyle(style /*String*/ ) {
+		let borderStyle = null;
+		if (['solid', 'beveled'].includes(style)) {
+			borderStyle = 'solid';
+		}
+		if (borderStyle == null) {
+			throw "Setting unimplemented border style:", style;
+		}
+		for (let el of this.html_elements) {
+			el.style.borderStyle = borderStyle;
+		}
+
 	}
 
 	toSource() /*str*/ {
@@ -918,28 +959,6 @@ class AdapterClassImageReference {
 }
 
 
-// class AdapterClassTemplateReference {
-// 	constructor(values /*[String]*/) {
-// 		this.values = values;
-// 	}
-
-// 	get value() /*PreSplitString*/ {
-// 		return new PreSplitString(this.values);
-// 	}
-// }
-
-
-// class PreSplitString {
-// 	constructor(values /*[String]*/) {
-// 		this.values = values;
-// 	}
-
-// 	split() /*[String]*/ {
-// 		return this.values;
-// 	}
-// }
-
-
 class AdapterClassReadStream {
 	constructor(fileContent /*String*/) {
 		this.fileContent = fileContent;
@@ -947,6 +966,92 @@ class AdapterClassReadStream {
 
 	async read() /*string*/ {
 		return this.fileContent;
+	}
+}
+
+class AdapterClassTemplate {
+	constructor(type /*String*/) {
+		if (type == 'SSfront') {
+			this.page_ = 'pages/page_spells.html';
+			this.prefix_ = 'P#.SSfront.';
+			this.buttonPrefix_ = 'Spells';
+			this.buttonIDPrefix_ = 'tabbuttonspel';
+			this.pageIdPrefix = 'pspellstempl';
+			this.buttonFollower = 'tabbuttonrefe';
+		} else {
+			throw "Unimplemented template type:", type;
+		}
+		this.type = type;
+		this.hidden_ = true;
+	}
+
+	get hidden() /*boolean*/ {
+		return this.hidden_;
+	}
+
+	set hidden(newVal /*boolean*/) {
+		throw "Unimplemented: setting hidden on template directly (add logic to add page)";
+		this.hidden_ = newVal;
+	}
+
+	get name() /*String*/ {
+		return this.type;
+	}
+
+	async spawn(nPage = 0 /*Number|null*/, bRename = true /*boolean*/, bOverlay = true /*boolean*/, oXObject = null /*Any*/) {
+		// nPage (optional) The 0-based index of the page number after which or on which the new page will be created,
+		//                  depending on the value of bOverlay. The default is 0.
+		// bRename (optional) Specifies whether form fields on the page should be renamed. The default is true.
+		// bOverlay (optional) If true (the default), the template is overlaid on the specified page.
+		//                     If false, it is inserted as a new page before the specified page.
+		//                     To append a page to the document,
+		//                     set bOverlay to false and set nPage to the number of pages in the document.
+		//                     Note: For certified documents or documents with “Advanced Form Features rights”),
+		//                           the bOverlay parameter is disabled.
+		//                           A template cannot be overlaid for these types of documents.
+		// oXObject (optional, Acrobat 6.0) The value of this parameter is the return value of an earlier call to spawn.
+		if (oXObject) {
+			throw "Unimplemented: AdapterClassTemplate.spawn with oXObject";
+		}
+		if (bOverlay) {
+			throw "Unimplemented: AdapterClassTemplate.spawn with bOverlay = true";
+		}
+
+
+		let index = 1;
+		while (document.getElementById(self.pageIdPrefix + '_' + String(index)) != null) {
+			index += 1;
+		}
+
+		let prefix, buttonName;
+		if (index == 1) {
+			buttonName = this.buttonPrefix_;
+		} else {
+			buttonName = this.buttonPrefix_ + " (" + String(index) + ")";
+		}
+		if (!bRename) {
+			prefix = "";
+		} else {
+			prefix = this.prefix_.replace('P#', 'P' + String(nPage));
+		}
+
+		// insert page
+		let pageWrapperElement = document.getElementById('page-wrapper');
+		let pageElement = document.createElement('div');
+		let pageID = this.pageIdPrefix + '_' + String(index);
+		pageElement.id = pageID;
+		pageElement.className = 'page';
+		pageElement.setAttribute('page-url', this.page_);
+		pageWrapperElement.appendChild(pageElement);
+		await insertPage(pageID, nPage, prefix=prefix);
+		// insert button
+		let buttonContainerElement = document.getElementById('button-container');
+		let buttonElement = document.createElement('button');
+		buttonElement.id = this.buttonIDPrefix_ + '_' + String(index);
+		buttonElement.onclick = function() {openPage(pageID, this)};
+		buttonElement.className = 'tablink';
+		buttonElement.innerText = buttonName;
+		buttonContainerElement.insertBefore(buttonElement, document.getElementById(this.buttonFollower));
 	}
 }
 
@@ -1255,18 +1360,18 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 				}
 			}
 			if (elements.length == 0) {
-				if (['AdvLog.Options'].includes(field_id)) {
+				if (['AdvLog.Options', 'nothing'].includes(field_id)) {
 					return null
 				} else if (field_id == 'Comp.Desc.Name') {
 					elements.push(document.getElementById('P4.AScomp.' + field_id)); // bookmark field
 				} else if (field_id == 'Notes.Left') {
 					elements.push(document.getElementById('P5.ASnotes.' + field_id)); // bookmark field
-				} else if (
-					(field_id == 'spells.name.0')
-					|| field_id.startsWith('SpellSlots.CheckboxesSet.lvl')
-					|| field_id.startsWith('SpellSlotsRemember')
-				) {
-					elements.push(document.getElementById('P6.SSfront.' + field_id)); // bookmark field or spellslots
+				// } else if (
+				// 	(field_id == 'spells.name.0')
+				// 	|| field_id.startsWith('SpellSlots.CheckboxesSet.lvl')
+				// 	|| field_id.startsWith('SpellSlotsRemember')
+				// ) {
+				// 	elements.push(document.getElementById('P6.SSfront.' + field_id)); // bookmark field or spellslots
 				} else {
 					throw "null element: " + field_id;
 				}
@@ -1318,6 +1423,10 @@ function adapter_helper_get_saveimg_field(img_name /*String*/) /*AdapterClassIma
 		return new AdapterClassImageReference('img/page_stats/header_icons/blank.svg');
 	} else if (img_name == 'EmptyIcon') {
 		return new AdapterClassImageReference('');
+	} else if (img_name.startsWith('SpellSlots.')) {
+		return new AdapterClassImageReference('');
+	} else if (img_name.startsWith('Spells.')) {
+		return new AdapterClassImageReference('img/page_spells/checks/' + img_name.toLowerCase().match(/\.([a-z]+)$/)[1] + '.svg');
 	}
 	throw "unknown SaveIMG type: " + String(img_name);
 }
@@ -1358,4 +1467,49 @@ function adapter_helper_get_prefix_from_script(postPrefix /*String*/) /*String*/
 		}
 	}
 	return prefix;
+}
+
+
+function adapter_helper_get_rect(element /*HTMLElement*/) /*DOMRect*/ {
+	let rect = this.html_elements[0].getBoundingClientRect();
+	if (
+		(rect.left == 0.0) && (rect.top == 0.0) && (rect.right == 0.0) && (rect.bottom == 0.0)
+	) {
+		// fall back to getting from style
+		let top = Number(element.style.top.replace(/\s*px\s*$/, ''));
+		let left = Number(element.style.left.replace(/\s*px\s*$/, ''));
+		let height = Number(element.style.height.replace(/\s*px\s*$/, ''));
+		let width = Number(element.style.width.replace(/\s*px\s*$/, ''));
+		if (isNaN(top) || isNaN(left) || isNaN(height) || isNaN(width)) {
+			throw "Fallback for rect failed, make sure to set top, left, height and width for " + element.id;
+		}
+		rect = new DOMRect(left, top, width, height);
+	}
+	return rect;
+}
+
+
+function adapter_helper_convert_colour(color /*[char, ...]*/) /*String|null*/ {
+	let bgColor = null;
+	if (color[0] == 'T') {
+		bgColor = "none";
+	} else if (color[0] == 'G') {
+		if (color[1] == 0) {
+			bgColor = "black";
+		} else if (color[1] == 0.25) {
+			bgColor = "lightgrey";
+		} else if (color[1] == 0.5) {
+			bgColor = "grey";
+		} else if (color[1] == 0.75) {
+			bgColor = "darkgrey";
+		} else if (color[1] == 1) {
+			bgColor = "white";
+		}
+	} else if (color[0] == 'RGB') {
+		bgColor = "rgb(" + String(color[1]*255) + ", " + String(color[2]*255) + ", " + String(color[3]*255) + ")";
+	}
+	if (bgColor == null) {
+		throw "Setting unimplemented color:", color;
+	}
+	return bgColor;
 }

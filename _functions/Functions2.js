@@ -2814,10 +2814,10 @@ async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 					return Math.max.apply(Math, DepTypeFld.page) + 1;
 				};
 			} else {
-				var DepTypeFlds = What("Template.extras." + theDep);
-				if (DepTypeFlds) {
-					return tDoc.getField(DepTypeFlds.split(",").slice(-1)[0] + BookMarkList[theDep]).page + 1;
-				};
+				var depVisible = isTemplVis(theDep, "last");
+				if (depVisible) {
+					return tDoc.getField(depVisible[1] + BookMarkList[theDep]).page + 1;
+				}
 			};
 		};
 		return 2;
@@ -7283,7 +7283,7 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 							setT[iAddLC].conditionBase = iAddLC.replace(aMatchCond[1], "");
 						}
 						if (attr === "text") {
-							AddString(fld, metric ? iAdd : iAddM, "; ");
+							AddString(fld, metric ? iAddM : iAdd, "; ");
 						} else if (attr === "immune" && CurrentProfs.resistance[iAddLC]) {
 							//adding immunity to something that the character also has resistance to, so remove the resistance
 							var theRes = CurrentProfs.resistance[iAddLC];
@@ -7303,7 +7303,7 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 					if (setT[iAddLC].src.length === 0) {
 						delete setT[iAddLC];
 						if (attr === "text") {
-							RemoveString(fld, metric ? iAdd : iAddM);
+							RemoveString(fld, metric ? iAddM : iAdd);
 						} else if (attr === "immune" && CurrentProfs.resistance[iAddLC]) {
 							//removing immunity to something that the character also has resistance to, so add the resistance (again)
 							DoResistance(iAddLC);

@@ -218,10 +218,15 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		// spellcasting
 		if (uObj.spellcastingBonus) await processSpBonus(addIt, uniqueObjNm, uObj.spellcastingBonus, type, aParent, objNm, forceNonCurrent ? true : false);
 		if (CurrentSpells[useSpCasting] && (uObj.spellFirstColTitle || uObj.spellcastingExtra || uObj.spellChanges || uObj.spellcastingExtraApplyNonconform !== undefined)) {
-			CurrentUpdates.types.push("spells");
 			var aCast = CurrentSpells[useSpCasting];
 
-			if (uObj.spellFirstColTitle) aCast.firstCol = addIt ? uObj.spellFirstColTitle : false;
+			if (uObj.spellFirstColTitle) {
+				aCast.firstCol = addIt ? uObj.spellFirstColTitle : false;
+				if (!uObj.spellcastingBonus && !uObj.spellcastingExtra && !uObj.spellChanges) {
+					SetStringifieds('spells');
+					CurrentUpdates.types.push("spells");
+				}
+			}
 
 			if (uObj.spellcastingExtra || uObj.spellcastingExtraApplyNonconform !== undefined) {
 				processSpellcastingExtra(addIt, useSpCasting, fObj.minlevel, tipNmF, uObj.spellcastingExtra, uObj.spellcastingExtraApplyNonconform);
@@ -230,7 +235,6 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		}
 		if (!uObj.spellcastingBonus && addIt && CurrentSpells[useSpCasting] && type !== "classes" && type !== "race" && (uObj.spellcastingAbility !== undefined || uObj.fixedDC || uObj.fixedSpAttack || uObj.allowUpCasting !== undefined || uObj.magicItemComponents !== undefined)) {
 			// will already have been processed if uObj has `spellcastingBonus`
-			CurrentUpdates.types.push("spells");
 			var aCast = CurrentSpells[useSpCasting];
 			if (uObj.spellcastingAbility !== undefined) {
 				aCast.ability = await ReturnSpellcastingAbility(useSpCasting, uObj.spellcastingAbility);
@@ -240,6 +244,9 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 			if (uObj.fixedSpAttack) aCast.fixedSpAttack = Number(uObj.fixedSpAttack);
 			if (uObj.allowUpCasting !== undefined) aCast.allowUpCasting = uObj.allowUpCasting;
 			if (uObj.magicItemComponents !== undefined) aCast.magicItemComponents = uObj.magicItemComponents;
+
+			SetStringifieds('spells');
+			CurrentUpdates.types.push("spells");
 		};
 		if (uObj.spellcastingBonusElsewhere) await processSpellcastingBonusElsewhere(addIt, type, tipNm, uniqueObjNm, uObj.spellcastingBonusElsewhere);
 
@@ -898,6 +905,8 @@ function processSpChanges(AddRemove, srcNm, spChng, spObjName) {
 		// now maybe delete the whole spellAttrOverride if it is empty
 		if (!ObjLength(spCast.spellAttrOverride)) delete spCast.spellAttrOverride;
 	}
+	SetStringifieds('spells');
+	CurrentUpdates.types.push("spells");
 }
 
 // process the spellcastingExtra and spellcastingExtraApplyNonconform attributes
@@ -930,6 +939,7 @@ function processSpellcastingExtra(AddRemove, spObjName, lvl, name, spExtra, spNo
 		var keysArrSort = Object.keys(aCast[remNm]).sort().reverse();
 		aCast[useNm] = aCast[remNm][keysArrSort[0]];
 	}
+	SetStringifieds('spells');
 	CurrentUpdates.types.push("spells");
 }
 

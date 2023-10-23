@@ -834,7 +834,7 @@ ClassSubList["blood hunter-order of the lycan"] = {
 			dmgres : [["Bludgeoning", "Bludg. (in hybrid)"], ["Piercing", "Pierc. (in hybrid)"], ["Slashing", "Slash. (in hybrid)"], ["Silver vuln.", "Silver vuln. (in hybrid)"]],
 			eval : "AddWeapon('Predatory Strikes'); AddAction('bonus action', 'Predatory Strike (with Attack action)', 'Order of the Lycan (Hybrid Transformation)');",
 			removeeval : "RemoveWeapon('Predatory Strike'); RemoveAction('bonus action', 'Predatory Strike (with Attack action)');",
-			changeeval : "UpdateHybridForm();",
+			changeeval : "await UpdateHybridForm();",
 			calcChanges : {
 				atkAdd : [
 					"var hybridDie = function(n) {return n < 3 ? 1 : n < 11 ? 6 : n < 18 ? 8 : 10;}; if (classes.known['blood hunter'] && classes.known['blood hunter'].level && ((/predatory strike/i).test(WeaponName) || ((/unarmed strike/i).test(WeaponName) && (/\\bhybrid\\b/i).test(inputText)))) { var aHybridDie = hybridDie(classes.known['blood hunter'].level); try {var curDie = eval(fields.Damage_Die.replace('d', '*'));} catch (e) {var curDie = 'x';}; if (isNaN(curDie) || curDie < aHybridDie) {fields.Damage_Die = '1d' + aHybridDie;}; fields.Mod = StrDex; if ((/unarmed strike/i).test(WeaponName)) { fields.Damage_Type = 'slashing'; }; }; ",
@@ -919,10 +919,10 @@ WeaponsList["predatory strike"] = {
 };
 
 //a function to update the notes page with the Hybrid form
-UpdateHybridForm = function() {
+UpdateHybridForm = async function() {
 	var NotesPrefix = isTemplVis("ASnotes", true);
 	if (!NotesPrefix) {
-		NotesPrefix = DoTemplate("ASnotes", "Add");
+		NotesPrefix = await DoTemplate("ASnotes", "Add");
 	} else {
 		NotesPrefix = NotesPrefix[1];
 	};

@@ -843,9 +843,9 @@ var Base_ClassList = {
 					var xtr = n < 9 ? "" : "; Vertical surfaces and liquids";
 					return spd + xtr;
 				}),
-				changeeval : function (v) {
+				changeeval : async function (v) {
 					var monkSpd = '+' + (v[1] < 2 ? 0 : v[1] < 6 ? 10 : v[1] < 10 ? 15 : v[1] < 14 ? 20 : v[1] < 18 ? 25 : 30);
-					SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, "Monk: Unarmored Movement");
+					await SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, "Monk: Unarmored Movement");
 				}
 			},
 			"subclassfeature3" : {

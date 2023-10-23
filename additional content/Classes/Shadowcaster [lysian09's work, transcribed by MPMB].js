@@ -140,7 +140,7 @@ ClassList["shadowcaster"] = {
 				return n < 2 ? "" : n < 11 ? "Darkvision 30 ft" : "Devil's Sight 30 ft";
 			}),
 			vision : [["Darkvision", "fixed 30"], ["Darkvision", "+30"]],
-			changeeval : "if (ClassLevelUp.shadowcaster[2] >= 11 && ClassLevelUp.shadowcaster[1] < 11) { processVision(newClassLvl.shadowcaster >= 11, 'Shadowcaster: Umbral Sight', [[\"Devil's sight\", 30]]); }; "
+			changeeval : "if (ClassLevelUp.shadowcaster[2] >= 11 && ClassLevelUp.shadowcaster[1] < 11) { await processVision(newClassLvl.shadowcaster >= 11, 'Shadowcaster: Umbral Sight', [[\"Devil's sight\", 30]]); }; "
 		},
 		"cloak of shadows" : {
 			name : "Cloak of Shadows",
@@ -178,7 +178,7 @@ ClassList["shadowcaster"] = {
 			additional : levels.map(function(n) {
 				return n < 11 ? "" : n < 17 ? "1 meal per week" + (n < 13 ? "" : ", 1 hour sleep per day") : "don't need to eat, sleep, or breathe";
 			}),
-			changeeval : "if (ClassLevelUp.shadowcaster[2] >= 15 && ClassLevelUp.shadowcaster[1] < 15) { SetProf('savetxt', newClassLvl.shadowcaster >= 15, { immune : ['disease'] }, 'Shadowcaster: Sustaining Shadow'); }; "
+			changeeval : "if (ClassLevelUp.shadowcaster[2] >= 15 && ClassLevelUp.shadowcaster[1] < 15) { await SetProf('savetxt', newClassLvl.shadowcaster >= 15, { immune : ['disease'] }, 'Shadowcaster: Sustaining Shadow'); }; "
 		},
 		"mastered mysteries" : {
 			name : "Mastered Mysteries",
@@ -281,8 +281,8 @@ AddSubClass("shadowcaster", "shadowmaster", {
 				"This companion serves me as best it can, obeying my commands",
 				"It gains several benefits, see the companion page for details"
 			]),
-			eval : "shadowmasters_companion_functions.add(newClassLvl.shadowcaster);",
-			removeeval : "shadowmasters_companion_functions.remove();",
+			eval : "await shadowmasters_companion_functions.add(newClassLvl.shadowcaster);",
+			removeeval : "await shadowmasters_companion_functions.remove();",
 			changeeval : "shadowmasters_companion_functions.update(oldClassLvl.shadowcaster, newClassLvl.shadowcaster);"
 		},
 		"subclassfeature6" : {
@@ -535,7 +535,7 @@ AddSubClass("shadowcaster", "skiamancer", {
 
 // Functions for the Shadowmasters' companion
 shadowmasters_companion_functions = {
-	add : function(slvl) {
+	add : async function(slvl) {
 		if (slvl < 2) return;
 		var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 		var prefix = false;
@@ -547,7 +547,7 @@ shadowmasters_companion_functions = {
 				}
 			}
 		}
-		if (!prefix) prefix = DoTemplate('AScomp', 'Add');
+		if (!prefix) prefix = await DoTemplate('AScomp', 'Add');
 		Value(prefix + 'Comp.Race', 'Shadow Elemental');
 		Uneditable(prefix + 'Comp.Race');
 		var theType = tDoc.getField(prefix + 'Comp.Type');
@@ -586,12 +586,12 @@ shadowmasters_companion_functions = {
 			})
 		}
 	},
-	remove : function() {
+	remove : async function() {
 		var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 		if (AScompA) {
 			for (var a = 1; a < AScompA.length; a++) {
 				if (What(AScompA[a] + 'Comp.Type').indexOf('Shadow Com') !== -1) {
-					DoTemplate("AScomp", "Remove", AScompA[a]);
+					await DoTemplate("AScomp", "Remove", AScompA[a]);
 					return;
 				}
 			}

@@ -1,0 +1,9 @@
+Bluetext*   -   skipped for now
+Wildshape*  -   skipped for now
+
+// trigger events on change:
+"BlueText.Attack." + i + ".Damage Bonus": BlueText_Attack_<i:1-5>_Damage_Bonus_change
+"BlueText.Attack." + i + ".Damage Die": BlueText_Attack_<i:1-5>_Damage_Die_change
+"BlueText.Attack." + i + ".To Hit Bonus": BlueText_Attack_<i:1-5>_To_Hit_Bonus_change
+"BlueText.Attack." + i + ".Weight": BlueText_Attack_<i:1-5>_Weight_change
+"BlueText.Players Make All Rolls": BlueText_Players_Make_All_Rolls_change

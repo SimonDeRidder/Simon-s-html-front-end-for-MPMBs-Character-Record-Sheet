@@ -305,9 +305,9 @@ AddSubClass("warlord", "hordemaster", {
 			additional : levels.map(function (n) {
 				return n < 3 ? "" : n < 15 ? "+10 ft" : "+20 ft";
 			}),
-			changeeval : function (v) {
+			changeeval : async function (v) {
 				var addSpd = v[1] < 3 ? 0 : v[1] < 15 ? "+10" : "+20";
-				SetProf('speed', addSpd !== 0, {allModes : addSpd}, "Hordemaster: Skirmisher");
+				await SetProf('speed', addSpd !== 0, {allModes : addSpd}, "Hordemaster: Skirmisher");
 			}
 		},
 		"subclassfeature7" : {

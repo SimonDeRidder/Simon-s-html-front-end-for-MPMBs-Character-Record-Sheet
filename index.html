@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<link rel="stylesheet" href="packages/contextmenujs/contextmenu.css" />
+	<link rel="stylesheet" href="style.css" />
+	<script type="text/javascript">
+		class Queue {
+			constructor() {
+				this.elements = {};
+				this.head = 0;
+				this.tail = 0;
+			}
+			enqueue(element) {
+				this.elements[this.tail] = element;
+				this.tail++;
+			}
+			dequeue() {
+				const item = this.elements[this.head];
+				delete this.elements[this.head];
+				this.head++;
+				return item;
+			}
+			peek() {
+				return this.elements[this.head];
+			}
+			get length() {
+				return this.tail - this.head;
+			}
+			get isEmpty() {
+				return this.length === 0;
+			}
+		};
+
+		var globalPageInventory = {};
+
+		function editRecursive(element, page_number, prefix) {
+			let elementChildren = element.childNodes;
+			let elementQueue = new Queue();
+			for (i = 0; i < elementChildren.length; i++) {
+				if (elementChildren[i] instanceof HTMLElement) {
+					elementQueue.enqueue(elementChildren[i]);
+				}
+			}
+
+			while (!elementQueue.isEmpty) {
+				let currentElement = elementQueue.dequeue();
+				let elementClass = currentElement.getAttribute('class');
+				// if ((elementClass && elementClass.includes("field")) || (currentElement.tagName.toLowerCase() == 'datalist')) {
+				if (prefix) {
+					currentElement.setAttribute('id', prefix + currentElement.getAttribute('id'));
+					if (currentElement.hasAttribute('list')) {
+						currentElement.setAttribute('list', prefix + currentElement.getAttribute('list'));
+					}
+				}
+				if (page_number) {
+					currentElement.dataset.page = page_number;
+				}
+				// }
+				let subElementChildren = currentElement.childNodes;
+				for (i = 0; i < subElementChildren.length; i++) {
+					if (subElementChildren[i] instanceof HTMLElement) {
+						elementQueue.enqueue(subElementChildren[i]);
+					}
+				}
+			}
+		}
+
+		function executeScriptElements(containerElement) {
+			const scriptElements = containerElement.querySelectorAll("script");
+
+			Array.from(scriptElements).forEach((scriptElement) => {
+				const clonedElement = document.createElement("script");
+				Array.from(scriptElement.attributes).forEach((attribute) => {
+					clonedElement.setAttribute(attribute.name, attribute.value);
+				});
+				clonedElement.text = scriptElement.text;
+				scriptElement.parentNode.replaceChild(clonedElement, scriptElement);
+			});
+		}
+
+		async function includePage(page_id, page_number, prefix = "", add_to_inventory = true) {
+			var z, i, elmnt, file, xhttp;
+			elmnt = document.getElementById(page_id);
+			elmnt.setAttribute("page-prefix", prefix);
+			file = elmnt.getAttribute("page-url");
+			return new Promise((resolve, reject) => {
+				xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function () {
+					if (this.readyState == 4) {
+						if (this.status == 200) {
+							elmnt.innerHTML = this.responseText;
+							editRecursive(elmnt, page_number, prefix);
+							executeScriptElements(elmnt);
+						}
+						if (this.status == 404) {
+							elmnt.innerHTML = "Page not found.";
+							reject();
+						}
+						resolve();
+					}
+				}
+				xhttp.open("GET", file, true);
+				xhttp.send();
+				if (add_to_inventory){
+					globalPageInventory[page_number] = elmnt;
+				}
+			});
+		}
+
+		function replacePage(pageElement, newPage) {
+			let elementChildren = pageElement.childNodes;
+			let elementQueue = new Queue();
+			for (i = 0; i < elementChildren.length; i++) {
+				if (elementChildren[i] instanceof HTMLElement) {
+					elementQueue.enqueue(elementChildren[i]);
+				}
+			}
+
+			while (!elementQueue.isEmpty) {
+				let currentElement = elementQueue.dequeue();
+				if (currentElement.dataset.page) {
+					currentElement.dataset.page = newPage;
+				}
+				let subElementChildren = currentElement.childNodes;
+				for (i = 0; i < subElementChildren.length; i++) {
+					if (subElementChildren[i] instanceof HTMLElement) {
+						elementQueue.enqueue(subElementChildren[i]);
+					}
+				}
+			}
+		}
+
+		async function insertPage(page_id, page_number, prefix = "") {
+			await includePage(page_id, page_number, prefix=prefix, add_to_inventory = false);
+			let i = page_number;
+			let currentPageElement = document.getElementById(page_id);
+			let replacedPage = globalPageInventory[i];
+			globalPageInventory[i] = currentPageElement;
+			while (replacedPage != null) {
+				globalPageInventory[i] = currentPageElement;
+				replacePage(replacedPage, i+1);
+				i = i + 1;
+				currentPageElement = replacedPage;
+				replacedPage = globalPageInventory[i];
+				globalPageInventory[i] = currentPageElement;
+			}
+		}
+
+		function rootDeletePage(page_number) {
+			let page = globalPageInventory[page_number];
+			page.parentNode.removeChild(page);
+			let i = page_number;
+			while (globalPageInventory[i + 1]) {
+				globalPageInventory[i] = globalPageInventory[i + 1];
+				replacePage(globalPageInventory[i], i);
+				i = i + 1;
+			}
+			delete globalPageInventory[i];
+		}
+	</script>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/event_manager.js"></script>
+	<script type="text/javascript" src="js/dialog_manager.js"></script>
+	<script type="text/javascript" src="packages/contextmenujs/contextmenu.js"></script>
+	<script type="text/javascript" src="js/app_adapter.js"></script>
+	<title>Character Sheet</title>
+</head>
+
+<body>
+	<div id="button-container">
+		<button id="tabbuttonstat" onclick="openPage(this)" data-page="pstat" class="tablink defaultOpen">Stats</button>
+		<button id="tabbuttonfeaq" onclick="openPage(this)" data-page="pfeaq" class="tablink">Features & Equipment</button>
+		<button id="tabbuttonnofe" onclick="openPage(this)" data-page="pnofe" class="tablink">Notes & Feats</button>
+		<button id="tabbuttonback" onclick="openPage(this)" data-page="pback" class="tablink">Background</button>
+		<button id="tabbuttoncomp" onclick="openPage(this)" data-page="pcomp" class="tablink">Companion</button>
+		<button id="tabbuttonnote" onclick="openPage(this)" data-page="pnote" class="tablink">Notes</button>
+		<button id="tabbuttonrefe" onclick="openPage(this)" data-page="prefe" class="tablink">Reference</button>
+	</div>
+	<br style="clear: both;" />
+	<div id="page-wrapper">
+		<div id="pstat" class="page" page-url="pages/page_stats.html"></div>
+		<div id="pfeaq" class="page" page-url="pages/page_features_equipment.html"></div>
+		<div id="pnofe" class="page" page-url="pages/page_notes_feats.html"></div>
+		<div id="pback" class="page" page-url="pages/page_appearance_background.html"></div>
+		<div id="pcomp" class="page" page-url="pages/page_companion.html"></div>
+		<div id="pwildtempl" class="page" page-url="pages/page_wildshape.html"></div>
+		<div id="pnote" class="page" page-url="pages/page_notes.html"></div>
+		<div id="pspellstempl" class="page" page-url="pages/page_spells.html"></div>
+		<div id="prefe" class="page" page-url="pages/page_reference.html"></div>
+	</div>
+
+	<!-- Data storage emulation fields. -->
+	<div style="visibility:hidden">
+		<div id="SaveIMG.Patreon" class="field"></div>
+		<div id="Opening_Remember" class="field" data-submit_name="9001"></div>
+		<div id="League_Remember" class="field"></div>
+		<div id="Class_Features_Remember" class="field"></div>
+		<div id="SubClass_Remember" class="field" value=""></div>
+		<div id="Race_Remember" class="field"></div>
+		<div id="Adventuring_Gear_Remember" class="field" value="false"></div>
+		<div id="Gear_Location_Remember" class="field" value="false,false"></div>
+		<div id="Str_Remember" class="field"></div>
+		<div id="Dex_Remember" class="field"></div>
+		<div id="Con_Remember" class="field"></div>
+		<div id="Int_Remember" class="field"></div>
+		<div id="Wis_Remember" class="field"></div>
+		<div id="Cha_Remember" class="field"></div>
+		<div id="HoS_Remember" class="field"></div>
+		<div id="BoxesLinesRemember" class="field" value="calc_boxes"></div>
+		<div id="Companion.Remember" class="field"></div>
+		<div id="DateFormat_Remember" class="field"></div>
+		<div id="Print_Remember" class="field"></div>
+		<div id="Proficiencies_Remember" class="field"></div>
+		<div id="WhiteoutRemember" class="field"></div>
+
+		<div id="Template.extras.ASfront" class="field" value=""></div>
+		<div id="Template.extras.AScomp" class="field" value="P4.AScomp."></div>
+		<div id="Template.extras.ASnotes" class="field" value=",P5.ASnotes."></div>
+		<div id="Template.extras.WSfront" class="field" value=""></div>
+		<div id="Template.extras.SSfront" class="field" value=""></div>
+		<div id="Template.extras.SSmore" class="field" value=""></div>
+		<div id="Template.extras.ALlog" class="field" value=""></div>
+		<div id="Template.extras.ASoverflow" class="field" value=""></div>
+
+		<div id="Unit_System" class="field" value="imperial" onchange="eventManager.handle_event(EventType.Unit_System_change)"></div>
+		<div id="Decimal_Separator" class="field" onchange="eventManager.handle_event(EventType.Decimal_Separator_change)"></div>
+		<div id="Delimiter" class="field" value=","></div>
+		<div id="d20warning" class="field"></div>
+		<div id="Highlighting" class="field"></div>
+		<div id="UseUnicode" class="field" value="true"></div>
+		<div id="User_Script" class="field" value=""></div>
+		<div id="Image.DnDLogo.long" class="field"></div>
+
+		<div id="User_Imported_Files.Stringified" class="field" value="new UserImportedFilesAdapter({})"></div>
+		<div id="ChangesDialogSkip.Stringified" class="field" value="new ChangesDialogSkipAdapter()"></div>
+		<div id="CurrentSpells.Stringified" class="field" value="([])##########(Object({incl: [], excl: [], amendSPDescr: false, allowSpellAdd: true, emptyFields: false, glossary: true}))"></div>
+		<div id="CurrentSources.Stringified" class="field" value="new CurrentSourcesAdapter()"></div>
+		<div id="CurrentEvals.Stringified" class="field" value="Object()"></div>
+		<div id="CurrentProfs.Stringified" class="field" value="new CurrentProfsAdapter()"></div>
+		<div id="CurrentVars.Stringified" class="field" value="Object(CurrentVars={manual:{}, bluetxt: false})"></div> <!--new CurrentVarsAdapter()-->
+		<div id="CurrentFeatureChoices.Stringified" class="field" value="new CurrentFeatureChoicesAdapter({})"></div>
+		<div id="CurrentStats.Stringified" class="field" value="Object()"></div>
+	</div>
+
+	<!-- Assorted others. -->
+	<div style="visibility:hidden">
+		<input id="SelectFile" class="field" value=""/>
+
+		<div id="Color.Theme" class="field"></div>
+		<div id="Color.DragonHeads" class="field"></div>
+		<div id="Color.HPDragon" class="field"></div>
+		<div id="Color.DC" class="field"></div>
+	</div>
+</body>
+<script>
+	includePage("pstat", 1);
+	includePage("pfeaq", 2);
+	includePage("pnofe", 3);
+	includePage("pback", 4);
+	includePage("pcomp", 5, prefix = "P4.AScomp.");
+	includePage("pwildtempl", 0, prefix="", add_to_inventory=false);
+	includePage("pnote", 6, prefix = "P5.ASnotes.");
+	includePage("pspellstempl", 0, prefix="", add_to_inventory=false);
+	includePage("prefe", 7);
+</script>
+<script>
+	function openPage(buttonElmnt) {
+		// Hide all elements with class="tabcontent" by default */
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("page");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+
+		// Remove the background color of all tablinks/buttons
+		tablinks = document.getElementsByClassName("tablink");
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].style.backgroundColor = "";
+		}
+		document.getElementById(buttonElmnt.dataset.page).style.display = "block";
+		buttonElmnt.style.backgroundColor = "#ddd";
+	}
+
+	// Get the element with class="defaultOpen" and click on it
+	document.getElementsByClassName("defaultOpen")[0].click();
+</script>
+<script type="text/javascript" src="js/controller.js"></script>
+
+</html>

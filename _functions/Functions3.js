@@ -108,7 +108,7 @@ function GetFeatureType(type, bNoDefaultReturn, bSingularReturn) {
 		ApplyFeatureAttributes("class", ["warlock","eldritch invocations"], [0,4,true], ["","devil's sight","only"], false); // add Devil's Sight
 		ApplyFeatureAttributes("class", ["warlock","eldritch invocations"], [15,0,true], ["devil's sight","","only"], false); // remove Devil's Sight
 */
-function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) {
+async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) {
 	if (!IsNotReset) return; //stop this function on a reset
 
 	// validate input
@@ -123,7 +123,7 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 	var choiceLimFeaTooltip;
 
 	// the function to run an eval string/function
-	var runEval = function(evalThing, attributeName, ignoreUnits) {
+	var runEval = async function(evalThing, attributeName, ignoreUnits) {
 		if (!evalThing) return;
 		try {
 			var convertUnits = false;
@@ -132,12 +132,12 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 				if (convertUnits) evalThing = ConvertToMetric(evalThing, 0.5);
 				eval(evalThing);
 			} else if (typeof evalThing == 'function') {
-				evalThing(lvlA, choiceA);
+				await evalThing(lvlA, choiceA);
 			}
 		} catch (error) {
 			// the error could be caused by the ConvertToMetric function, so try it without to see if that works
 			if (convertUnits) {
-				runEval(evalThing, attributeName, true);
+				await runEval(evalThing, attributeName, true);
 				return;
 			}
 			var eText = "The " + attributeName + " from '" + fObjName + (aParent ? "' of the '" + aParent : "") + "' " + type + " produced an error! Please contact the author of the feature to correct this issue and please include this error message:\n " + error;
@@ -149,7 +149,7 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 
 	// the function to run all regular level-independent attributes
 	// addIt = true to add things and addIt = false to remove things
-	var useAttr = function(uObj, addIt, skipEval, objNm) {
+	var useAttr = async function(uObj, addIt, skipEval, objNm) {
 		var uniqueObjNm = objNm == undefined ? fObjName : fObjName + objNm; // has to be unique
 		var tipNm = displName;
 		var useSpCasting = objNm && (type === "feat" || type === "magic item") && !CurrentSpells[aParent] ? aParent + "_-_" + objNm : aParent;
@@ -188,35 +188,35 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 
 		// run eval or removeeval first
 		var evalType = addIt ? "eval" : "removeeval";
-		if (!skipEval && uObj[evalType]) runEval(uObj[evalType], evalType);
+		if (!skipEval && uObj[evalType]) await runEval(uObj[evalType], evalType);
 
 		if (uObj.calcChanges) addEvals(uObj.calcChanges, tipNmF, addIt, type);
-		if (uObj.savetxt) SetProf("savetxt", addIt, uObj.savetxt, tipNmF);
-		if (uObj.speed) SetProf("speed", addIt, uObj.speed, tipNmF);
+		if (uObj.savetxt) await SetProf("savetxt", addIt, uObj.savetxt, tipNmF);
+		if (uObj.speed) await SetProf("speed", addIt, uObj.speed, tipNmF);
 		if (uObj.addMod) processMods(addIt, tipNmF, uObj.addMod);
-		if (uObj.saves) processSaves(addIt, tipNmF, uObj.saves);
-		if (uObj.toolProfs) processTools(addIt, tipNmF, uObj.toolProfs);
+		if (uObj.saves) await processSaves(addIt, tipNmF, uObj.saves);
+		if (uObj.toolProfs) await processTools(addIt, tipNmF, uObj.toolProfs);
 		if (uObj.languageProfs) processLanguages(addIt, tipNmF, uObj.languageProfs);
-		if (uObj.vision) processVision(addIt, tipNmF, uObj.vision);
-		if (uObj.dmgres) processResistance(addIt, tipNmF, uObj.dmgres);
+		if (uObj.vision) await processVision(addIt, tipNmF, uObj.vision);
+		if (uObj.dmgres) await processResistance(addIt, tipNmF, uObj.dmgres);
 		if (uObj.action) processActions(addIt, tipNmF, uObj.action, uObj.limfeaname ? uObj.limfeaname : uObj.name);
 		if (uObj.extraLimitedFeatures) processExtraLimitedFeatures(addIt, tipNmF, uObj.extraLimitedFeatures);
-		if (uObj.extraAC) processExtraAC(addIt, tipNmF, uObj.extraAC, uObj.name);
-		if (uObj.toNotesPage) processToNotesPage(addIt, uObj.toNotesPage, type, uObj, fObj, [tipNm, displName, fObjName, aParent]);
-		if (uObj.carryingCapacity) SetProf("carryingcapacity", addIt, uObj.carryingCapacity, tipNmF);
-		if (uObj.advantages) processAdvantages(addIt, tipNmF, uObj.advantages);
+		if (uObj.extraAC) await processExtraAC(addIt, tipNmF, uObj.extraAC, uObj.name);
+		if (uObj.toNotesPage) await processToNotesPage(addIt, uObj.toNotesPage, type, uObj, fObj, [tipNm, displName, fObjName, aParent]);
+		if (uObj.carryingCapacity) await SetProf("carryingcapacity", addIt, uObj.carryingCapacity, tipNmF);
+		if (uObj.advantages) await processAdvantages(addIt, tipNmF, uObj.advantages);
 
 		// --- backwards compatibility --- //
 		var abiScoresTxt = uObj.scorestxt ? uObj.scorestxt : uObj.improvements ? uObj.improvements : false;
 		if (uObj.scores || abiScoresTxt) {
-			processStats(addIt, type, tipNm, uObj.scores, abiScoresTxt, false, uObj.scoresMaximum, uObj.scoresMaxLimited);
+			await processStats(addIt, type, tipNm, uObj.scores, abiScoresTxt, false, uObj.scoresMaximum, uObj.scoresMaxLimited);
 		} else if (uObj.scoresMaximum) {
-			processStats(addIt, type, tipNm, uObj.scoresMaximum, abiScoresTxt, "maximums");
+			await processStats(addIt, type, tipNm, uObj.scoresMaximum, abiScoresTxt, "maximums");
 		}
-		if (uObj.scoresOverride) processStats(addIt, type, tipNm, uObj.scoresOverride, abiScoresTxt, "overrides");
+		if (uObj.scoresOverride) await processStats(addIt, type, tipNm, uObj.scoresOverride, abiScoresTxt, "overrides");
 
 		// spellcasting
-		if (uObj.spellcastingBonus) processSpBonus(addIt, uniqueObjNm, uObj.spellcastingBonus, type, aParent, objNm, forceNonCurrent ? true : false);
+		if (uObj.spellcastingBonus) await processSpBonus(addIt, uniqueObjNm, uObj.spellcastingBonus, type, aParent, objNm, forceNonCurrent ? true : false);
 		if (addIt && CurrentSpells[useSpCasting] && (uObj.spellFirstColTitle || uObj.spellcastingExtra || uObj.spellChanges || uObj.spellcastingExtraApplyNonconform !== undefined)) {
 			CurrentUpdates.types.push("spells");
 			var aCast = CurrentSpells[useSpCasting];
@@ -233,7 +233,7 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 			CurrentUpdates.types.push("spells");
 			var aCast = CurrentSpells[useSpCasting];
 			if (uObj.spellcastingAbility !== undefined) {
-				aCast.ability = ReturnSpellcastingAbility(useSpCasting, uObj.spellcastingAbility);
+				aCast.ability = await ReturnSpellcastingAbility(useSpCasting, uObj.spellcastingAbility);
 				aCast.abilityToUse = getSpellcastingAbility(useSpCasting);
 			}
 			if (uObj.fixedDC) aCast.fixedDC = Number(uObj.fixedDC);
@@ -241,23 +241,23 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 			if (uObj.allowUpCasting !== undefined) aCast.allowUpCasting = uObj.allowUpCasting;
 			if (uObj.magicItemComponents !== undefined) aCast.magicItemComponents = uObj.magicItemComponents;
 		};
-		if (uObj.spellcastingBonusElsewhere) processSpellcastingBonusElsewhere(addIt, type, tipNm, uniqueObjNm, uObj.spellcastingBonusElsewhere);
+		if (uObj.spellcastingBonusElsewhere) await processSpellcastingBonusElsewhere(addIt, type, tipNm, uniqueObjNm, uObj.spellcastingBonusElsewhere);
 
 		if (addIt) addListOptions(); // add weapon/armour/ammo/creature option(s)
 
 		// --- backwards compatibility --- //
 		// armor and weapon proficiencies
 		var weaponProf = uObj.weaponProfs ? uObj.weaponProfs : (/^(class|feat)$/).test(type) && uObj.weapons ? uObj.weapons : uObj.weaponprofs ? uObj.weaponprofs : false;
-		if (weaponProf) processWeaponProfs(addIt, tipNmF, weaponProf);
+		if (weaponProf) await processWeaponProfs(addIt, tipNmF, weaponProf);
 		var armorProf = uObj.armorProfs ? uObj.armorProfs : uObj.armor ? uObj.armor : false;
-		if (armorProf) processArmourProfs(addIt, tipNmF, armorProf);
+		if (armorProf) await processArmourProfs(addIt, tipNmF, armorProf);
 
 		// --- backwards compatibility --- //
 		// armor, shield, and weapon additions
 		var aWeaponsAdd = uObj.weaponsAdd ? uObj.weaponsAdd : type == "race" && uObj.weapons ? uObj.weapons : false;
 		if (aWeaponsAdd) processAddWeapons(addIt, aWeaponsAdd);
 		var anArmorAdd = uObj.armorAdd ? uObj.armorAdd : uObj.addarmor ? uObj.addarmor : false;
-		if (anArmorAdd) processAddArmour(addIt, anArmorAdd);
+		if (anArmorAdd) await processAddArmour(addIt, anArmorAdd);
 		if (uObj.shieldAdd) processAddShield(addIt, uObj.shieldAdd, uObj.weight);
 		if (uObj.ammoAdd) processAddAmmo(addIt, uObj.ammoAdd);
 
@@ -266,10 +266,10 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 		var skillsTxt = uObj.skillstxt ? uObj.skillstxt : uObj.skills && type == "feat" && !isArray(uObj.skills) ? uObj.skills : false;
 		if (skillsTxt) skillsTxt = skillsTxt.replace(/^[\r\n]{2,}.+: ?|[;.]$/g, '');
 		var skills = uObj.skills && (type != "feat" || (type == "feat" && isArray(uObj.skills))) ? uObj.skills : false;
-		if (skills || skillsTxt) processSkills(addIt, tipNmF, skills, skillsTxt);
+		if (skills || skillsTxt) await processSkills(addIt, tipNmF, skills, skillsTxt);
 
 		// companion additions
-		if (uObj.creaturesAdd) processAddCompanions(addIt, tipNmF, uObj.creaturesAdd);
+		if (uObj.creaturesAdd) await processAddCompanions(addIt, tipNmF, uObj.creaturesAdd);
 
 		// magic item additions
 		if (uObj.magicitemsAdd) processAddMagicItems(addIt, uObj.magicitemsAdd);
@@ -358,7 +358,7 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 	// First do the eval attribute of the main object, as it might change things for the choice
 	var skipMainEval = false;
  	if (fObj.choices && !choiceA[2] && CheckLVL && AddFea && fObj.eval && (typeof fObj.eval == "string") && (/Fea(Old)?Choice/).test(fObj.eval)) {
-		runEval(fObj.eval, "eval");
+		await runEval(fObj.eval, "eval");
 		skipMainEval = true;
 		// redo the choice array, as the eval might have changed it
 		if (FeaOldChoice) choiceA[0] = FeaOldChoice;
@@ -413,31 +413,31 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 	// Then do all the level-independent attributes, only if this is mandated by the level change
 	if (CheckLVL) {
 		// do the main object if not only interested in the choice, but without the eval as we just did that already
-		if (!choiceA[2]) useAttr(fObj, AddFea, skipMainEval);
+		if (!choiceA[2]) await useAttr(fObj, AddFea, skipMainEval);
 		// if we are are changing the choice or removing the feature, now remove the old choice
 		//if (cJustChange || (!AddFea && cOldObj)) {
 		if (cOldObj && (cJustChange || !AddFea)) {
 			SetFeatureChoice(type, aParent, aParent !== fObjName ? fObjName : "", false, cOnly ? choiceA[0] : "");
-			useAttr(cOldObj, false, false, choiceA[0]);
+			await useAttr(cOldObj, false, false, choiceA[0]);
 		}
 		// if we are changing the choice or adding the feature, now add the new choice
 		//if (cJustChange || cOnly || (AddFea && cNewObj)) {
 		if (cNewObj && AddFea) {
 			SetFeatureChoice(type, aParent, aParent !== fObjName ? fObjName : "", AddFea ? choiceA[1] : "", cOnly ? choiceA[1] : "");
-			useAttr(cNewObj, true, false, choiceA[1]);
+			await useAttr(cNewObj, true, false, choiceA[1]);
 		}
 	}
 
 	// changeeval always at the end and regardless of AddFea or CheckLVL
-	if (!cOnly && fObj.changeeval) runEval(fObj.changeeval, 'changeeval');
-	if (cOldObj && cOldObj.changeeval) runEval(cOldObj.changeeval, 'changeeval');
-	if (cNewObj && cNewObj.changeeval) runEval(cNewObj.changeeval, 'changeeval');
+	if (!cOnly && fObj.changeeval) await runEval(fObj.changeeval, 'changeeval');
+	if (cOldObj && cOldObj.changeeval) await runEval(cOldObj.changeeval, 'changeeval');
+	if (cNewObj && cNewObj.changeeval) await runEval(cNewObj.changeeval, 'changeeval');
 
 	// if this is a class feature (and not doing an extrachoice), always check if we need to update the dependencies
 	if (type == "class" && !cOnly) {
-		if (choiceA[1] && fObj.choiceDependencies) processClassFeatureChoiceDependencies(lvlA, aParent, fObjName, choiceA[1]);
-		if (fObj.autoSelectExtrachoices) processClassFeatureExtraChoiceDependencies(lvlA, aParent, fObjName, fObj);
-		if (fObj.choiceSetsExtrachoices) applyExtrachoicesOfChoice(aParent, fObjName, choiceA, false);
+		if (choiceA[1] && fObj.choiceDependencies) await processClassFeatureChoiceDependencies(lvlA, aParent, fObjName, choiceA[1]);
+		if (fObj.autoSelectExtrachoices) await processClassFeatureExtraChoiceDependencies(lvlA, aParent, fObjName, fObj);
+		if (fObj.choiceSetsExtrachoices) await applyExtrachoicesOfChoice(aParent, fObjName, choiceA, false);
 	}
 
 	// return the level-dependent attributes so it doesn't have to be queried again
@@ -447,7 +447,7 @@ function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) 
 // a function to apply the first-level attributes of a class object
 // AddRemove - can be boolean (true = add all feature, false = remove all features)
 //		or can be an Array of [oldsubclass, newsubclass]
-function ApplyClassBaseAttributes(AddRemove, aClass, primaryClass) {
+async function ApplyClassBaseAttributes(AddRemove, aClass, primaryClass) {
 	// declare some variables
 	var parentCl = ClassList[aClass];
 	var oldSubCl = ClassSubList[AddRemove[0]];
@@ -479,9 +479,9 @@ function ApplyClassBaseAttributes(AddRemove, aClass, primaryClass) {
 	}
 
 	// loop through the attributes and apply them
-	var processAttributes = function (uObj, addIt, tipNmF, ifInObj, ifNotInObj) {
+	var processAttributes = async function (uObj, addIt, tipNmF, ifInObj, ifNotInObj) {
 		// saves, if primary class
-		if (primaryClass && checkIfIn(uObj, ifInObj, ['saves'], true)[0]) processSaves(addIt, tipNmF, uObj.saves);
+		if (primaryClass && checkIfIn(uObj, ifInObj, ['saves'], true)[0]) await processSaves(addIt, tipNmF, uObj.saves);
 
 		// skills
 		var doSkills = checkIfIn(uObj, ifInObj, ['skills', 'skillstxt'], false, ifNotInObj);
@@ -503,20 +503,20 @@ function ApplyClassBaseAttributes(AddRemove, aClass, primaryClass) {
 				// no 'skillstxt' attribute, only 'skills'
 				oSkills = uObj.skills[doSkills[2]];
 			}
-			processSkills(addIt, tipNmF, oSkills, oSkillsTxt);
+			await processSkills(addIt, tipNmF, oSkills, oSkillsTxt);
 		}
 
 		// weapon proficiencies ('weapons' attribute for backwards compatibility)
 		var doWeapons = checkIfIn(uObj, ifInObj, ['weaponProfs', 'weapons'], false, ifNotInObj);
-		if (doWeapons[0]) processWeaponProfs(addIt, tipNmF, uObj[doWeapons[1]][doWeapons[2]]);
+		if (doWeapons[0]) await processWeaponProfs(addIt, tipNmF, uObj[doWeapons[1]][doWeapons[2]]);
 
 		// armour proficiencies ('armor' attribute for backwards compatibility)
 		var doArmour = checkIfIn(uObj, ifInObj, ['armorProfs', 'armor'], false, ifNotInObj);
-		if (doArmour[0]) processArmourProfs(addIt, tipNmF, uObj[doArmour[1]][doArmour[2]]);
+		if (doArmour[0]) await processArmourProfs(addIt, tipNmF, uObj[doArmour[1]][doArmour[2]]);
 
 		// tool proficiencies
 		var doTools = checkIfIn(uObj, ifInObj, ['toolProfs'], false, ifNotInObj);
-		if (doTools[0]) processTools(addIt, tipNmF, uObj.toolProfs[doTools[2]]);
+		if (doTools[0]) await processTools(addIt, tipNmF, uObj.toolProfs[doTools[2]]);
 
 		// spellcasting extra array
 		if (CurrentSpells[aClass] && checkIfIn(uObj, ifInObj, ['spellcastingExtra'], true, ifNotInObj)[0]) {
@@ -527,28 +527,28 @@ function ApplyClassBaseAttributes(AddRemove, aClass, primaryClass) {
 	if (!isArray(AddRemove)) { // do the class (and subclass) attributes in full
 		var newSubCl = classes.known[aClass].subclass ? ClassSubList[classes.known[aClass].subclass] : false;
 		// do the AddRemove for the class attributes that are not in the subclass
-		processAttributes(parentCl, AddRemove, parentCl.name, false, newSubCl);
+		await processAttributes(parentCl, AddRemove, parentCl.name, false, newSubCl);
 		// do the AddRemove for the whole subclass
-		if (newSubCl) processAttributes(newSubCl, AddRemove, newSubCl.subname);
+		if (newSubCl) await processAttributes(newSubCl, AddRemove, newSubCl.subname);
 	} else if (!AddRemove[0] && AddRemove[1]) { // adding a subclass while previously none was there
 		// first remove everything that is in the base class and also in the subclass
-		processAttributes(parentCl, false, parentCl.name, newSubCl);
+		await processAttributes(parentCl, false, parentCl.name, newSubCl);
 		// then add everything from the subclass
-		processAttributes(newSubCl, true, newSubCl.subname);
+		await processAttributes(newSubCl, true, newSubCl.subname);
 	} else if (AddRemove[0] && !AddRemove[1]) { // removing a subclass, going back to just the class
 		// first remove everything that is in the subclass
-		processAttributes(oldSubCl, false, oldSubCl.subname);
+		await processAttributes(oldSubCl, false, oldSubCl.subname);
 		// then add everything from the class that is also in the subclass
-		processAttributes(parentCl, true, parentCl.name, oldSubCl);
+		await processAttributes(parentCl, true, parentCl.name, oldSubCl);
 	} else if (AddRemove[0] && AddRemove[1]) { // changing subclasses
 		// first remove everything that is in old subclass
-		processAttributes(oldSubCl, false, oldSubCl.subname);
+		await processAttributes(oldSubCl, false, oldSubCl.subname);
 		// then add everything from class that is also in old subclass, but not in new subclass
-		processAttributes(parentCl, true, parentCl.name, oldSubCl, newSubCl);
+		await processAttributes(parentCl, true, parentCl.name, oldSubCl, newSubCl);
 		// next remove everything that is in class and also in new subclass, but not in old subclass
-		processAttributes(parentCl, false, parentCl.name, newSubCl, oldSubCl);
+		await processAttributes(parentCl, false, parentCl.name, newSubCl, oldSubCl);
 		// lastly add everything from new subclass
-		processAttributes(newSubCl, true, newSubCl.subname);
+		await processAttributes(newSubCl, true, newSubCl.subname);
 	}
 }
 
@@ -715,7 +715,7 @@ function classFeaChoiceBackwardsComp() {
 }
 
 // a function to return the spellcasting ability, ask the user which to use if it is an array
-function ReturnSpellcastingAbility(sCast, vAbility) {
+async function ReturnSpellcastingAbility(sCast, vAbility) {
 	if (vAbility === undefined) return 0;
 	if (!isArray(vAbility)) return !isNaN(vAbility) || /^(class|race)$/i.test(vAbility) ? vAbility : 0;
 	var sCastName = CurrentSpells[sCast] ? CurrentSpells[sCast].name : sCast;
@@ -730,7 +730,7 @@ function ReturnSpellcastingAbility(sCast, vAbility) {
 		}
 	}
 	if (aAbiOptions.length < 2) return aAbiOptions.length ? aAbiOptions[0] : 0;
-	var sAsk = AskUserOptions("Select Spellcasting Ability Score for " + sCastName, "The spellcasting ability for " + sCastName + " can be one of multiple options. It is up to you to select which the sheet will use from now on.", aAbiOptions, "radio", true, 'You can always change the spellcasting ability for ' + sCastName + ' on the spell sheet once you generate the spell sheet. What you select here is the \"default\" spellcasting ability.');
+	var sAsk = await AskUserOptions("Select Spellcasting Ability Score for " + sCastName, "The spellcasting ability for " + sCastName + " can be one of multiple options. It is up to you to select which the sheet will use from now on.", aAbiOptions, "radio", true, 'You can always change the spellcasting ability for ' + sCastName + ' on the spell sheet once you generate the spell sheet. What you select here is the \"default\" spellcasting ability.');
 	if (oAbiRef[sAsk]) {
 		return oAbiRef[sAsk];
 	} else {
@@ -739,7 +739,7 @@ function ReturnSpellcastingAbility(sCast, vAbility) {
 }
 
 // a function to create the CurrentSpells global variable entry
-function CreateCurrentSpellsEntry(type, fObjName, aChoice, forceNonCurrent) {
+async function CreateCurrentSpellsEntry(type, fObjName, aChoice, forceNonCurrent) {
 	type = GetFeatureType(type);
 	var sTypeSingular = GetFeatureType(type, false, true);
 	var fObjP = false;
@@ -806,13 +806,13 @@ function CreateCurrentSpellsEntry(type, fObjName, aChoice, forceNonCurrent) {
 			}
 		}
 	}
-	if (!sObj.ability) sObj.ability = ReturnSpellcastingAbility(fObjName, fObj.spellcastingAbility ? fObj.spellcastingAbility : fObj.abilitySave ? fObj.abilitySave : 0);
+	if (!sObj.ability) sObj.ability = await ReturnSpellcastingAbility(fObjName, fObj.spellcastingAbility ? fObj.spellcastingAbility : fObj.abilitySave ? fObj.abilitySave : 0);
 	if (!sObj.fixedDC && fObj.fixedDC) sObj.fixedDC = Number(fObj.fixedDC);
 	if (!sObj.fixedSpAttack && fObj.fixedSpAttack) sObj.fixedSpAttack = Number(fObj.fixedSpAttack);
 	if (sObj.allowUpCasting === undefined && fObj.allowUpCasting !== undefined) sObj.allowUpCasting = fObj.allowUpCasting;
 	if (sObj.magicItemComponents === undefined && fObj.magicItemComponents !== undefined) sObj.magicItemComponents = fObj.magicItemComponents;
 	if (fObjP) {
-		if (!sObj.ability) sObj.ability = ReturnSpellcastingAbility(fObjName, fObjP.spellcastingAbility ? fObjP.spellcastingAbility : fObjP.abilitySave ? fObjP.abilitySave : 0);
+		if (!sObj.ability) sObj.ability = await ReturnSpellcastingAbility(fObjName, fObjP.spellcastingAbility ? fObjP.spellcastingAbility : fObjP.abilitySave ? fObjP.abilitySave : 0);
 		if (!sObj.fixedDC && fObjP.fixedDC) sObj.fixedDC = Number(fObjP.fixedDC);
 		if (!sObj.fixedSpAttack && fObjP.fixedSpAttack) sObj.fixedSpAttack = Number(fObjP.fixedSpAttack);
 		if (sObj.allowUpCasting === undefined && fObjP.allowUpCasting !== undefined) sObj.allowUpCasting = fObjP.allowUpCasting;
@@ -823,7 +823,7 @@ function CreateCurrentSpellsEntry(type, fObjName, aChoice, forceNonCurrent) {
 }
 
 // process a spellcastingBonus feature
-function processSpBonus(AddRemove, srcNm, spBon, type, parentName, choice, forceNonCurrent, forceUseSpName) {
+async function processSpBonus(AddRemove, srcNm, spBon, type, parentName, choice, forceNonCurrent, forceUseSpName) {
 	type = GetFeatureType(type);
 	var useSpName = forceUseSpName ? forceUseSpName : choice && (type === "feats" || type === "items") ? parentName + "_-_" + choice : parentName;
 	var sObj = CurrentSpells[useSpName];
@@ -835,7 +835,7 @@ function processSpBonus(AddRemove, srcNm, spBon, type, parentName, choice, force
 		if (!sObj.factor && !sObj.list && ObjLength(sObj.bonus) == 0) delete CurrentSpells[useSpName];
 	} else { // adding the entry
 		// create the spellcasting object if it doesn't yet exist
-		if (!CurrentSpells[useSpName]) sObj = CreateCurrentSpellsEntry(type, parentName, choice, forceNonCurrent);
+		if (!CurrentSpells[useSpName]) sObj = await CreateCurrentSpellsEntry(type, parentName, choice, forceNonCurrent);
 		if (!sObj) return; // failed to create CurrentSpells entry, so stop now
 		sObj.bonus[srcNm] = spBon;
 		// see if this wants to change the spellcasting ability
@@ -856,7 +856,7 @@ function processSpBonus(AddRemove, srcNm, spBon, type, parentName, choice, force
 			}
 		}
 		if (spAbility) {
-			sObj.ability = ReturnSpellcastingAbility(useSpName, spAbility);
+			sObj.ability = await ReturnSpellcastingAbility(useSpName, spAbility);
 			sObj.abilityToUse = getSpellcastingAbility(useSpName);
 		}
 		if (spFixedDC) sObj.fixedDC = spFixedDC;
@@ -947,7 +947,7 @@ var a = {spellcastingBonusElsewhere : {
 }
 }
 */
-function processSpellcastingBonusElsewhere(bAddRemove, sType, sSrcNm, sUniqueSrcNm, oSpElse) {
+async function processSpellcastingBonusElsewhere(bAddRemove, sType, sSrcNm, sUniqueSrcNm, oSpElse) {
 	if (!oSpElse.addTo || typeof oSpElse.addTo !== "string" || (!oSpElse.spellcastingBonus && !oSpElse.addToKnown)) return;
 	sType = GetFeatureType(sType);
 	oSpElse.addTo = oSpElse.addTo.toLowerCase();
@@ -983,7 +983,7 @@ function processSpellcastingBonusElsewhere(bAddRemove, sType, sSrcNm, sUniqueSrc
 					aCastNames.push(sCastName);
 					oRefCasts[aMatches[i]] = sCastName;
 				}
-				var sUserSelect = AskUserOptions(
+				var sUserSelect = await AskUserOptions(
 					"Which spellcasting to add " + sSrcNm + " spells to",
 					'The spells gained from "' + sSrcNm + '" are meant to be automatically added to a "'  + oSpElse.addTo + '" spellcasting entry. Several entries are a match, thus it is up to you to decide which of these to add the spells to.',
 					aCastNames, "radio", true,
@@ -1002,7 +1002,7 @@ function processSpellcastingBonusElsewhere(bAddRemove, sType, sSrcNm, sUniqueSrc
 		}
 		if (oSpElse.spellcastingBonus) { // If adding to bonus spells
 			// simply use processSpBonus
-			processSpBonus(true, sUniqueSrcNm, oSpElse.spellcastingBonus, sType, "", "", false, sSpMain);
+			await processSpBonus(true, sUniqueSrcNm, oSpElse.spellcastingBonus, sType, "", "", false, sSpMain);
 		}
 		var oSpMain = CurrentSpells[sSpMain];
 		if (oSpElse.addToKnown && oSpMain.list && oSpMain.known) { // If adding to known spells / spellbook
@@ -1078,7 +1078,7 @@ function processSpellcastingBonusElsewhere(bAddRemove, sType, sSrcNm, sUniqueSrc
 			var oCast = CurrentSpells[sCast];
 			if (bDoBonus && oCast.bonus && oCast.bonus[sUniqueSrcNm]) {
 				// A regular spellcastingBonus object can be processed as usual
-				processSpBonus(false, sUniqueSrcNm, oSpElse.spellcastingBonus, sType, "", "", false, sSpMain);
+				await processSpBonus(false, sUniqueSrcNm, oSpElse.spellcastingBonus, sType, "", "", false, sSpMain);
 				bDoBonus = false;
 			}
 			if (bDoAddToKnown && oCast.bonusElsewhere && oCast.bonusElsewhere[sUniqueSrcNm]) {
@@ -1123,7 +1123,7 @@ function processSpellcastingBonusElsewhere(bAddRemove, sType, sSrcNm, sUniqueSrc
 }
 
 // set the armour (if more AC than current armour) or remove the armour
-function processAddArmour(AddRemove, armour) {
+async function processAddArmour(AddRemove, armour) {
 	if (!armour || typeof armour != "string") return;
 	if (!AddRemove) { // remove
 		RemoveArmor(armour);
@@ -1135,7 +1135,7 @@ function processAddArmour(AddRemove, armour) {
 		if (remCurArm && remAC) { // there was a previous armor, so check if this new armor is better or not
 			// calculate all the field values, or the AC field will not be updated
 			var isStoppedCalc = calcStartSet != false;
-			if (isStoppedCalc) calcCont(true);
+			if (isStoppedCalc) await calcCont(true);
 			if (remAC > Number(What("AC"))) {
 				Value("AC Armor Description", remCurArm);
 			} else if (isStoppedCalc) {
@@ -1191,7 +1191,7 @@ function processAddWeapons(AddRemove, weapons) {
 // set ammuntion or remove the ammuntion
 function processAddAmmo(AddRemove, ammos) {
 	if (!ammos) return;
-	if (!isArray(ammos) || (ammos.length === 2 && isNaN(ammos[1]))) {
+	if (!isArray(ammos) || (ammos.length === 2 && !isNaN(ammos[1]))) {
 		ammos = [ammos];
 	}
 	for (var a = 0; a < ammos.length; a++) {
@@ -1448,7 +1448,7 @@ function UpdateSheetWeapons() {
 
 // a function to do all the default things after a change in level, class, race, feat, magic item, or companion
 // this function is called whenever the calculations are activated again
-function UpdateSheetDisplay() {
+async function UpdateSheetDisplay() {
 	if (!CurrentUpdates.types.length || !IsNotReset || !IsNotImport) {
 		CurrentUpdates = {types : []}; // reset the CurrentUpdates variable
 		return;
@@ -1610,7 +1610,7 @@ function UpdateSheetDisplay() {
 	// possible options for stats: statsoverride, statsclasses, statsrace, statsfeats, statsitems
 	if (CUflat.indexOf("stats") !== -1 || CurrentUpdates.types.indexOf("testasi") !== -1) {
 		Changes_Dialog.oldStats = Who("Str");
-		if (AbilityScores_Button(true)) { // sets tooltip for stats and returns true if anything changed
+		if (await AbilityScores_Button(true)) { // sets tooltip for stats and returns true if anything changed
 			var strStats = "";
 			// ability score improvements
 			if (CurrentUpdates.types.indexOf("testasi") !== -1) {
@@ -1682,8 +1682,8 @@ function UpdateSheetDisplay() {
 						name : checkboxTxt
 					}]
 				});
-				Changes_Dialog.bSTc = function (dialog) {
-					ShowCompareDialog(
+				Changes_Dialog.bSTc = async function (dialog) {
+					await ShowCompareDialog(
 						["Ability Score changes", "The text above is part of the 'Ability Scores Dialog' and the tooltip (mouseover text) of the ability score fields.\nYou can always open the 'Ability Scores Dialog' using the 'Scores' button in the 'JavaScript Window'-toolbar or the 'Ability Scores' bookmark."],
 						[
 							["Old ability score modifiers", this.oldStats],
@@ -1692,8 +1692,8 @@ function UpdateSheetDisplay() {
 						true
 					);
 				};
-				Changes_Dialog.bSTo = function (dialog) {
-					AbilityScores_Button();
+				Changes_Dialog.bSTo = async function (dialog) {
+					await AbilityScores_Button();
 					// this dialog might have just updated the stats, prompting for some other updates
 					if (CurrentUpdates.types.indexOf("attacks") !== -1) ReCalcWeapons();
 					if (CurrentUpdates.types.indexOf("hp") !== -1) SetHPTooltip(false, false);
@@ -1748,8 +1748,8 @@ function UpdateSheetDisplay() {
 				name : checkboxTxt
 			}]
 		});
-		Changes_Dialog.bHPc = function (dialog) {
-			ShowCompareDialog(
+		Changes_Dialog.bHPc = async function (dialog) {
+			await ShowCompareDialog(
 				["Hit Points changes", "You can always find the current Hit Point calculation in the tooltip (mouseover text) of the Max HP field."],
 				[["Old HP calculation", this.oldHPtt], ["New HP calculation", Who("HP Max")]]
 			);
@@ -1853,9 +1853,9 @@ function UpdateSheetDisplay() {
 			}]
 		});
 		Changes_Dialog.curSpLen = CurrentSpellsLen;
-		Changes_Dialog.bSPo = function (dialog) {
+		Changes_Dialog.bSPo = async function (dialog) {
 			if (this.curSpLen) {
-				if (GenerateSpellSheet(undefined, true)) {
+				if (await GenerateSpellSheet(undefined, true)) {
 					app.alert({
 						cTitle : "New spell sheets have been generated",
 						nIcon : 3,
@@ -1863,14 +1863,14 @@ function UpdateSheetDisplay() {
 					})
 				};
 			} else {
-				RemoveSpellSheets();
+				await RemoveSpellSheets();
 			}
 		};
 		if (changedSpellEval || CurrentEvals.spellStr) {
 			Changes_Dialog.oldSpellStr = CurrentUpdates.spellStrOld ? CurrentUpdates.spellStrOld : "";
 			Changes_Dialog.spellStrChange = changedSpellEval;
-			Changes_Dialog.bSPs = function (dialog) {
-				ShowCompareDialog(
+			Changes_Dialog.bSPs = async function (dialog) {
+				await ShowCompareDialog(
 					["Things affecting spells, spell properties and/or spell list generation", "Some features might affect how spells are displayed on the spell sheet, by adding more range for example.\n\nOthers might affect how a spell list for a spellcasting class or feature is generated, by adding extra spells to choose from for example."],
 					this.spellStrChange ?
 					[
@@ -1922,8 +1922,8 @@ function UpdateSheetDisplay() {
 				name : checkboxTxt
 			}]
 		});
-		Changes_Dialog.bSKc = function (dialog) {
-			ShowCompareDialog(
+		Changes_Dialog.bSKc = async function (dialog) {
+			await ShowCompareDialog(
 				["Skill proficiencies", "You can always find the current skill proficiencies in the tooltip (mouseover text) of the skill fields."],
 				[
 					["Old skill proficiencies", this.oldSkillStr],
@@ -1971,8 +1971,8 @@ function UpdateSheetDisplay() {
 				name : checkboxTxt
 			}]
 		});
-		Changes_Dialog.bAtk = function (dialog) {
-			ShowCompareDialog(
+		Changes_Dialog.bAtk = async function (dialog) {
+			await ShowCompareDialog(
 				["Things affecting attack/DC calculations", "You can always see what things are affecting the attack calculations with the small buttons in front of each attack entry on the first page.", "Be aware that things affecting spell attacks and spell save DCs are applied in the attack section and on the spell sheet pages, but not to the 'Ability Save DC' on the first page."],
 				[
 					["Old attack/DC manipulations", this.oldAtkStr],
@@ -2024,8 +2024,8 @@ function UpdateSheetDisplay() {
 				name : checkboxTxt
 			}]
 		});
-		Changes_Dialog.bNot = function (dialog) {
-			ShowCompareDialog(
+		Changes_Dialog.bNot = async function (dialog) {
+			await ShowCompareDialog(
 				[
 					(CurrentUpdates.notesChanges && CurrentUpdates.remarks) ? "Important Remarks and Things added to Notes section(s)" : CurrentUpdates.remarks ? "ImportantRemarks" : "Things added to Notes section(s)",
 					CurrentUpdates.notesChanges ? "You can always edit the text in the Notes section or Notes pages, you don't have to keep it as set by the automation." : "",
@@ -2047,8 +2047,8 @@ function UpdateSheetDisplay() {
 		if (CurrentUpdates.companionChanges) {
 			strCompanion += "One or more creatures has been added or removed from one or more companion pages.";
 			Changes_Dialog.companionChange = "\u2022 " + CurrentUpdates.companionChanges.join("\n\u2022 ");
-			Changes_Dialog.bCOa = function (dialog) {
-				ShowCompareDialog(
+			Changes_Dialog.bCOa = async function (dialog) {
+				await ShowCompareDialog(
 					["Additions/removals on the Companion pages", "You can always edit the companion pages how you see fit, you don't have to leave it as it has been set with the automation. You could add more companion pages, for example.", 'You can also add multiples of the same companion, just add another page and select the same companion race.'],
 					[
 						["", this.companionChange]
@@ -2060,8 +2060,8 @@ function UpdateSheetDisplay() {
 		if (changedCompCallback) {
 			strCompanion += (strCompanion ? "\n" : "") + "A change was detected in the callback that affects creatures added to a companion page.";
 			Changes_Dialog.oldCreaStr = CurrentUpdates.creaStrOld ? CurrentUpdates.creaStrOld : "";
-			Changes_Dialog.bCOe = function (dialog) {
-				ShowCompareDialog(
+			Changes_Dialog.bCOe = async function (dialog) {
+				await ShowCompareDialog(
 					["Callback changes for the Companion pages", "You can always edit the companion pages how you see fit, you don't have to leave it as it has been set with the automation. You could remove or add text, for example.", 'You can always see what things are affecting the companion page automation with the Companion Options button on each companion page.'],
 					[
 						["Old callback manipulations", this.oldCreaStr],
@@ -2131,7 +2131,7 @@ function UpdateSheetDisplay() {
 		// add the sections to the dialog
 		setDialogName(Changes_Dialog, "sect", "elements", dialogParts);
 		// open the dialog
-		var dia = app.execDialog(Changes_Dialog);
+		var dia = await app.execDialog(Changes_Dialog);
 	}
 
 	// reset the CurrentUpdates variable
@@ -2143,7 +2143,7 @@ function UpdateSheetDisplay() {
 
 //a way to show a dialog that compares multiple things
 //arr is an array of arrays with two entries each [cluster title, cluster text]
-function ShowCompareDialog(txtA, arr, canBeLong) {
+async function ShowCompareDialog(txtA, arr, canBeLong) {
 	var clusterArr = [];
 	var isTxtA = isArray(txtA);
 	var hdr = isTxtA ? txtA[0] : txtA;
@@ -2249,13 +2249,12 @@ function ShowCompareDialog(txtA, arr, canBeLong) {
 			}]
 		}
 	}
-	var dia = app.execDialog(ShowCompare_Dialog);
+	var dia = await app.execDialog(ShowCompare_Dialog);
 }
 
 // >>>> Magic Items functions <<<< \\
 
-function doDropDownValCalcWithChoices() {
-	if (!event.target || event.type != "Field") return;
+async function doDropDownValCalcWithChoices() {
 	switch (event.name) {
 		case "Calculate":
 			if (event.target.setVal !== undefined) {
@@ -2271,9 +2270,9 @@ function doDropDownValCalcWithChoices() {
 			var fldName = event.target.name;
 			var fldNmbr = parseFloat(fldName.slice(-2));
 			if (fldName.toLowerCase().indexOf("magic item") !== -1) {
-				ApplyMagicItem(event.value, fldNmbr);
+				await ApplyMagicItem(event.value, fldNmbr);
 			} else if (fldName.toLowerCase().indexOf("feat") !== -1) {
-				ApplyFeat(event.value, fldNmbr);
+				await ApplyFeat(event.value, fldNmbr);
 			}
 			break;
 		default:
@@ -2408,7 +2407,7 @@ function FindMagicItems() {
 }
 
 // Add the text and features of a Magic Items
-function ApplyMagicItem(input, FldNmbr) {
+async function ApplyMagicItem(input, FldNmbr) {
 	if (IsSetDropDowns || CurrentVars.manual.items || !IsNotMagicItemMenu) return; // When just changing the dropdowns or magic items are set to manual or this is a menu action, don't do anything
 	var MIflds = ReturnMagicItemFieldsArray(FldNmbr);
 	// Not called from a field? Then just set the field and let this function be called anew
@@ -2456,7 +2455,7 @@ function ApplyMagicItem(input, FldNmbr) {
 				failedChoice = true;
 			} else {
 				// if none of the above selected a choice, ask the user!
-				if (!selectMIvar) selectMIvar = AskUserOptions("Select " + aMI.name + " Type", "The '" + aMI.name + "' magic item exists in several forms. Select which form you want to add to the sheet at this time.\n\nYou can change the selected form with the little square button in the magic item line that this item is in.", parseResult[2], "radio", true);
+				if (!selectMIvar) selectMIvar = await AskUserOptions("Select " + aMI.name + " Type", "The '" + aMI.name + "' magic item exists in several forms. Select which form you want to add to the sheet at this time.\n\nYou can change the selected form with the little square button in the magic item line that this item is in.", parseResult[2], "radio", true);
 				newMIvar = selectMIvar.toLowerCase();
 				aMIvar = aMI[newMIvar];
 				setFieldValueTo = aMIvar.name ? aMIvar.name : aMI.name + " [" + selectMIvar + "]";
@@ -2590,11 +2589,11 @@ function ApplyMagicItem(input, FldNmbr) {
 			if (oldMI !== newMI && !skipNoAttunement) {
 				// Undo the selection of a weapon, ammo, or armor if defined
 				if (anOldMI.chooseGear || (oldMIvar && anOldMI[oldMIvar].chooseGear)) {
-					selectMagicItemGearType(false, FldNmbr, oldMIvar && anOldMI[oldMIvar].chooseGear ? anOldMI[oldMIvar].chooseGear : anOldMI.chooseGear);
+					await selectMagicItemGearType(false, FldNmbr, oldMIvar && anOldMI[oldMIvar].chooseGear ? anOldMI[oldMIvar].chooseGear : anOldMI.chooseGear);
 				}
 
 				// Remove its attributes
-				var Fea = ApplyFeatureAttributes(
+				var Fea = await ApplyFeatureAttributes(
 					"item", // type
 					oldMI, // fObjName
 					[CurrentMagicItems.level, 0, false], // lvlA [old-level, new-level, force-apply]
@@ -2691,7 +2690,7 @@ function ApplyMagicItem(input, FldNmbr) {
 			// Set the attunement
 			Checkbox(MIflds[4], theMI.attunement ? true : false, undefined, theMI.attunement ? "" : "hide");
 			var justChange = oldMI == newMI && oldMIvar !== newMIvar;
-			var Fea = ApplyFeatureAttributes(
+			var Fea = await ApplyFeatureAttributes(
 				"item", // type
 				newMI, // fObjName
 				[justChange ? CurrentMagicItems.level : 0, CurrentMagicItems.level, justChange], // lvlA [old-level, new-level, force-apply]
@@ -2704,9 +2703,9 @@ function ApplyMagicItem(input, FldNmbr) {
 		var skipNoAttunement = isDisplay(MIflds[4]) == display.visible && !tDoc.getField(MIflds[4]).isBoxChecked(0);
 		if (!skipNoAttunement && oldMI == newMI && (aMI.chooseGear || (oldMIvar && aMI[oldMIvar].chooseGear))) {
 			// undo the previous
-			selectMagicItemGearType(false, FldNmbr, oldMIvar && aMI[oldMIvar].chooseGear ? aMI[oldMIvar].chooseGear : aMI.chooseGear, oldMIvar);
+			await selectMagicItemGearType(false, FldNmbr, oldMIvar && aMI[oldMIvar].chooseGear ? aMI[oldMIvar].chooseGear : aMI.chooseGear, oldMIvar);
 		}
-		if (theMI.chooseGear) selectMagicItemGearType(true, FldNmbr, theMI.chooseGear);
+		if (theMI.chooseGear) await selectMagicItemGearType(true, FldNmbr, theMI.chooseGear);
 	}
 
 	// Set the visibility of the attuned checkbox
@@ -2715,7 +2714,7 @@ function ApplyMagicItem(input, FldNmbr) {
 	thermoM(thermoTxt, true); // Stop progress bar
 };
 
-function correctMIdescriptionLong(FldNmbr) {
+async function correctMIdescriptionLong(FldNmbr) {
 	if (CurrentVars.manual.items) return;
 	var ArrayNmbr = FldNmbr - 1;
 	var aMI = MagicItemsList[CurrentMagicItems.known[ArrayNmbr]];
@@ -2746,10 +2745,10 @@ function correctMIdescriptionLong(FldNmbr) {
 	Value("Extra.Magic Item Description " + FldNmbr, theDesc);
 	// Apply the chooseGear item again to the description
 	var hasChooseGear = aMIvar && aMIvar.chooseGear ? aMIvar.chooseGear : aMI.chooseGear;
-	if (hasChooseGear) selectMagicItemGearType(true, FldNmbr, hasChooseGear, false, true);
+	if (hasChooseGear) await selectMagicItemGearType(true, FldNmbr, hasChooseGear, false, true);
 }
 
-function ApplyAttunementMI(FldNmbr) {
+async function ApplyAttunementMI(FldNmbr) {
 	if (CurrentVars.manual.items) return;
 	var ArrayNmbr = FldNmbr - 1;
 	var aMI = CurrentMagicItems.known[ArrayNmbr];
@@ -2765,7 +2764,7 @@ function ApplyAttunementMI(FldNmbr) {
 	thermoM(1/2); // Increment the progress bar
 
 	// now apply or remove the magic item's features
-	var Fea = ApplyFeatureAttributes(
+	var Fea = await ApplyFeatureAttributes(
 		"item", // type
 		aMI, // fObjName
 		isChecked ? [0, CurrentMagicItems.level, false] : [CurrentMagicItems.level, 0, false], // lvlA [old-level, new-level, force-apply]
@@ -2775,7 +2774,7 @@ function ApplyAttunementMI(FldNmbr) {
 
 	// Do the selection of a weapon, ammo, armor if defined
 	var useChooseGear = aMIvar && MagicItemsList[aMI][aMIvar].chooseGear ? MagicItemsList[aMI][aMIvar].chooseGear : MagicItemsList[aMI].chooseGear ? MagicItemsList[aMI].chooseGear : false;
-	if (useChooseGear) selectMagicItemGearType(isChecked, FldNmbr, useChooseGear);
+	if (useChooseGear) await selectMagicItemGearType(isChecked, FldNmbr, useChooseGear);
 }
 
 // Hide/show the attuned checkbox for a magic item entry
@@ -3100,7 +3099,7 @@ function ParseMagicItemMenu() {
 };
 
 //Make menu for the button on each Magic Item line and parse it to Menus.magicitems
-function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
+async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 	var magicMenu = [];
 	if (!itemNmbr) itemNmbr = parseFloat(event.target.name.slice(-2));
 	var ArrayNmbr = itemNmbr - 1;
@@ -3197,7 +3196,7 @@ function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 		Menus.magicitems = magicMenu;
 		if (MenuSelection == "justMenu") return;
 	}
-	MenuSelection = MenuSelection ? MenuSelection : getMenu("magicitems");
+	MenuSelection = MenuSelection ? MenuSelection : await getMenu("magicitems");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] != "item") return;
 
 	// Start progress bar and stop calculations
@@ -3211,7 +3210,7 @@ function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 			Value(MIflds[0], getChoiceName(theMI, theMIchoice));
 			break;
 		case "popup" :
-			ShowDialog("Magic item's full description", Who(MIflds[2]));
+			await ShowDialog("Magic item's full description", Who(MIflds[2]));
 			break;
 		case "choice" :
 			aMI = MagicItemsList[theMI];
@@ -3250,16 +3249,16 @@ function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 			}
 			// Correct the description if moving between 3rd and overflow page
 			if ((upToOtherPage && MenuSelection[1] == "up") || (downToOtherPage && MenuSelection[1] == "down")) {
-				correctMIdescriptionLong(itemNmbr);
-				correctMIdescriptionLong(otherNmbr);
+				await correctMIdescriptionLong(itemNmbr);
+				await correctMIdescriptionLong(otherNmbr);
 			}
 			IsNotMagicItemMenu = true;
 			break;
 		case "insert" :
-			MagicItemInsert(itemNmbr);
+			await MagicItemInsert(itemNmbr);
 			break;
 		case "delete" :
-			MagicItemDelete(itemNmbr);
+			await MagicItemDelete(itemNmbr);
 			break;
 		case "clear" :
 			thermoTxt = thermoM("Clearing magic item...", false);
@@ -3282,7 +3281,7 @@ function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 			if (!CurrentVars.manual.items) {
 				if (theMI && visibleAttunement && !currentlyChecked) {
 					// now apply or remove the magic item's features
-					var Fea = ApplyFeatureAttributes(
+					var Fea = await ApplyFeatureAttributes(
 						"item", // type
 						theMI, // fObjName
 						[0, CurrentMagicItems.level, false], // lvlA [old-level, new-level, force-apply]
@@ -3297,7 +3296,7 @@ function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 }
 
 // Add a magic item to the third page or overflow page
-function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forceAttunedVisible) {
+async function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forceAttunedVisible) {
 	// Check if the item is recognized and if that is already known to be present
 	var aParsedItem = ParseMagicItem(item);
 	if (aParsedItem[0] && !MagicItemsList[aParsedItem[0]].allowDuplicates && CurrentMagicItems.known.indexOf(MagicItemsList[0]) !== -1) {
@@ -3321,7 +3320,7 @@ function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forceAttun
 			if (n === 1 && ((RegExItem.test(curItem) && !RegExItemNo.test(curItem)) || curItem.toLowerCase() === itemLower)) {
 				return; // the item already exists
 			} else if (n === 2 && curItem === "") {
-				if (i > FieldNumbers.magicitemsD && !tDoc.getField(BookMarkList["Overflow sheet"])) DoTemplate("ASoverflow", "Add");
+				if (i > FieldNumbers.magicitemsD && !tDoc.getField(BookMarkList["Overflow sheet"])) await DoTemplate("ASoverflow", "Add");
 				Value(MIflds[0], item);
 				var recognizedItem = CurrentMagicItems.known[i - 1];
 				if (!recognizedItem) {
@@ -3331,7 +3330,7 @@ function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forceAttun
 				} else if ((forceAttunedVisible === undefined || forceAttunedVisible) && attuned !== undefined && !attuned && MagicItemsList[recognizedItem].attunement) {
 					// This is an item that requires attunement, but attunement is explicitly set to none, so undo the automation of the magic item
 					Checkbox(MIflds[4], false);
-					ApplyAttunementMI(i);
+					await ApplyAttunementMI(i);
 				}
 				var isAttuneVisible = How("Extra.Magic Item Attuned " + i) == "";
 				if (forceAttunedVisible !== undefined && forceAttunedVisible !== isAttuneVisible) {
@@ -3341,7 +3340,7 @@ function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forceAttun
 						Checkbox(MIflds[4], forceAttunedVisible);
 					} else if (!attuned && forceAttunedVisible) {
 						Checkbox(MIflds[4], false);
-						ApplyAttunementMI(i);
+						await ApplyAttunementMI(i);
 					}
 				}
 				return;
@@ -3384,7 +3383,7 @@ function RemoveMagicItem(item) {
 }
 
 // Insert a magic item at the position wanted
-function MagicItemInsert(itemNmbr) {
+async function MagicItemInsert(itemNmbr) {
 	// Stop the function if the selected slot is already empty
 	if (!What("Extra.Magic Item " + itemNmbr)) return;
 
@@ -3421,7 +3420,7 @@ function MagicItemInsert(itemNmbr) {
 			// Correct the attuned checkbox visibility
 			setMIattunedVisibility(it);
 			// Correct the description (normal/long)
-			if (it == FieldNumbers.magicitemsD + 1) correctMIdescriptionLong(it);
+			if (it == FieldNumbers.magicitemsD + 1) await correctMIdescriptionLong(it);
 		}
 
 		// Clear the selected slot
@@ -3433,7 +3432,7 @@ function MagicItemInsert(itemNmbr) {
 }
 
 // Delete a magic item at the position wanted and move the rest up
-function MagicItemDelete(itemNmbr) {
+async function MagicItemDelete(itemNmbr) {
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Deleting magic item...");
 	calcStop();
@@ -3463,7 +3462,7 @@ function MagicItemDelete(itemNmbr) {
 		// Correct the attuned checkbox visibility
 		setMIattunedVisibility(it);
 		// Correct the description (normal/long)
-		if (it == FieldNumbers.magicitemsD) correctMIdescriptionLong(it);
+		if (it == FieldNumbers.magicitemsD) await correctMIdescriptionLong(it);
 	}
 
 	// Clear the final line
@@ -3496,7 +3495,7 @@ function MagicItemGetShortestName(nameObj) {
 }
 
 // Change the magic item to include a selected weapon, armor, or ammunition
-function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, correctingDescrLong) {
+async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, correctingDescrLong) {
 	if (!event.target || !event.target.name || event.target.name.indexOf("Extra.Magic Item ") == -1 || !typeObj.type) return;
 	if (typeObj.excludeCheck && typeof typeObj.excludeCheck != "function") delete typeObj.excludeCheck;
 	// see what type of thing we are dealing with or return if none is recognized
@@ -3613,7 +3612,7 @@ function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, correct
 			console.println("During importing from another MPMB's Character Record Sheet, the sheet was unable to show a pop-up dialog to let you choose what type of " + typeNm + " the '" + curName + "' is. As a result, '" + userSelected + "' was chosen for you automatically. If you wish to change this, reapply the '" + curName + "'.");
 			console.show();
 		} else {
-			var userSelected = AskUserOptions("Select Type of " + typeNmC, "Choose which " + typeNm + " type this '" + curName + "' is.\nIf you want to change the " + typeNm + " type at a later time, select the magic item again from the drop-down box." + (aMI.choices ? "\nYou will also be prompted to select the " + typeNm + " type again when you select a choice using the button in this magic item line," + (aMIvar ? " even when selecting '" + aMIvar.name + "' again." : ".") : ""), itemChoices, "radio", true);
+			var userSelected = await AskUserOptions("Select Type of " + typeNmC, "Choose which " + typeNm + " type this '" + curName + "' is.\nIf you want to change the " + typeNm + " type at a later time, select the magic item again from the drop-down box." + (aMI.choices ? "\nYou will also be prompted to select the " + typeNm + " type again when you select a choice using the button in this magic item line," + (aMIvar ? " even when selecting '" + aMIvar.name + "' again." : ".") : ""), itemChoices, "radio", true);
 		}
 
 		var theItemName = userSelected.toLowerCase();
@@ -3645,7 +3644,7 @@ function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, correct
 				processAddWeapons(AddRemove, itemToProcess ? itemToProcess : newMIname.replace(/weapon (\+\d)/i, "$1").replace(/(\+\d) *\((.*?)\)/i, "$1 $2"));
 				break;
 			case "armor":
-				processAddArmour(AddRemove, itemToProcess ? itemToProcess : newMIname.replace(/armou?r (\+\d)/i, "$1").replace(/(\+\d) *\((.*?)\)/i, "$1 $2"));
+				await processAddArmour(AddRemove, itemToProcess ? itemToProcess : newMIname.replace(/armou?r (\+\d)/i, "$1").replace(/(\+\d) *\((.*?)\)/i, "$1 $2"));
 				break;
 		}
 	}
@@ -3723,7 +3722,7 @@ function gatherPrereqevalVars() {
 }
 
 // set the checkbox for "Players Make All Rolls" (also field MouseUp)
-function setPlayersMakeAllRolls(enable) {
+async function setPlayersMakeAllRolls(enable) {
 	// See if anything is about to be changed, otherwise just stop
 	var isEvent = event.target && event.target.name == "BlueText.Players Make All Rolls";
 	var changedState = isEvent ? true : tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) != (enable || enable === undefined ? 1 : 0);
@@ -3748,12 +3747,12 @@ function setPlayersMakeAllRolls(enable) {
 	}
 	// If the new state is checked, then show a dialog what that entails
 	if (tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0)) {
-		ShowDialog('What does enabling "Players Make All Rolls" do?', Who("BlueText.Players Make All Rolls"));
+		await ShowDialog('What does enabling "Players Make All Rolls" do?', Who("BlueText.Players Make All Rolls"));
 	}
 }
 
 // if a feature choice offers extrachoices, correct the parent object to accomodate for this aChoice = [stringOldChoice, stringNewChoice] or bOnlyObject = true in FindClasses()
-function applyExtrachoicesOfChoice(sClass, sProp, aChoice, bOnlyObject) {
+async function applyExtrachoicesOfChoice(sClass, sProp, aChoice, bOnlyObject) {
 	var propFea = CurrentClasses[sClass].features[sProp];
 	if (!aChoice && bOnlyObject) aChoice = [false, GetFeatureChoice("classes", sClass, sProp, false)];
 	var propChoiceOld = aChoice[0] && propFea[aChoice[0]] ? propFea[aChoice[0]] : false;
@@ -3769,7 +3768,7 @@ function applyExtrachoicesOfChoice(sClass, sProp, aChoice, bOnlyObject) {
 	if (!bOnlyObject) {
 		// Remove the old autoSelectExtrachoices, if changed
 		if (bChangedAutoSelectExtrachoices) {
-			processClassFeatureExtraChoiceDependencies([classes.known[sClass].level, 0], sClass, sProp, { autoSelectExtrachoices : oldAutoSelectExtrachoices, minlevel : propFea.minlevel }, true);
+			await processClassFeatureExtraChoiceDependencies([classes.known[sClass].level, 0], sClass, sProp, { autoSelectExtrachoices : oldAutoSelectExtrachoices, minlevel : propFea.minlevel }, true);
 		}
 		// Remove any extrachoices that were related to the old choice if there was a change
 		if (propChoiceOld && aChoice[0] !== aChoice[1] && propChoiceOld.extrachoices && propFea.extrachoices) {
@@ -3778,7 +3777,7 @@ function applyExtrachoicesOfChoice(sClass, sProp, aChoice, bOnlyObject) {
 			var skipAutoExtras = propFea.autoSelectExtrachoices ? propFea.autoSelectExtrachoices.map( function (eObj) { return eObj.extrachoice; }) : [];
 			for (var i = 0; i < curExtras.length; i++) {
 				if (skipAutoExtras.indexOf(curExtras[i]) !== -1) continue;
-				ClassFeatureOptions([sClass, sProp, curExtras[i], 'extra'], "remove", propChoiceOld.extraname);
+				await ClassFeatureOptions([sClass, sProp, curExtras[i], 'extra'], "remove", propChoiceOld.extraname);
 			};
 		}
 	}
@@ -3803,6 +3802,6 @@ function applyExtrachoicesOfChoice(sClass, sProp, aChoice, bOnlyObject) {
 	}
 	// If not only changing the object, now process the new autoSelectExtrachoices, if it changed
 	if (!bOnlyObject && bChangedAutoSelectExtrachoices) {
-		processClassFeatureExtraChoiceDependencies([0, classes.known[sClass].level], sClass, sProp, propFea);
+		await processClassFeatureExtraChoiceDependencies([0, classes.known[sClass].level], sClass, sProp, propFea);
 	}
 }

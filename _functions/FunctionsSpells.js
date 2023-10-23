@@ -893,7 +893,7 @@ function SetSpellBluetext(aClass, type, newValue) {
 }
 
 //change the icon of the checkbox based on the value of this field (field validation)
-function SetSpellCheckbox() {
+async function SetSpellCheckbox() {
 	var type = event.target.name.indexOf("checkbox") !== -1 ? "checkbox" : "check";
 
 	if (type === "check") {
@@ -957,7 +957,7 @@ function SetSpellCheckbox() {
 		}
 	} else if (type === "checkbox") {
 		if (event.modifier || event.shift) { //if Shift/Ctrl/Cmd was pressed while clicking
-			MakeSpellLineMenu_SpellLineOptions();
+			await MakeSpellLineMenu_SpellLineOptions();
 		} else {
 			var theCheck = event.target.name.replace("checkbox", "check");
 			switch(What(theCheck).toLowerCase()) {
@@ -968,7 +968,7 @@ function SetSpellCheckbox() {
 				Value(theCheck, "checkedbox");
 				break;
 			 default :
-				MakeSpellLineMenu_SpellLineOptions();
+				await MakeSpellLineMenu_SpellLineOptions();
 			}
 		}
 	}
@@ -1171,7 +1171,7 @@ function CreateSpellObject(inputArray) {
 }
 
 // Find the spell that was typed in the list of the drop-down and select the right one
-function manualInputToSpellObj(dialog, id) {
+async function manualInputToSpellObj(dialog, id) {
 	var aResult = dialog.store()[id];
 	var idPrime = id.substr(0, 2);
 	var idIdx = Number(id.substr(2)) - 1;
@@ -1220,7 +1220,7 @@ function manualInputToSpellObj(dialog, id) {
 		if (partialMatch.names.length) {
 			var noSelect = "None (clear the drop-down)";
 			partialMatch.names.push(noSelect);
-			var ask = AskUserOptions("Select the spell", "The text you entered is a (partial) match for the following spells that the drop-down box contains." + (partialMatch.names.length === 2 ? acroDumb : ""), partialMatch.names, "radio", true);
+			var ask = await AskUserOptions("Select the spell", "The text you entered is a (partial) match for the following spells that the drop-down box contains." + (partialMatch.names.length === 2 ? acroDumb : ""), partialMatch.names, "radio", true);
 			if (partialMatch.refKeys[ask]) {
 				var askKey = partialMatch.refKeys[ask];
 				fndResult = listObj[2][askKey];
@@ -1250,7 +1250,7 @@ function manualInputToSpellObj(dialog, id) {
 }
 
 // Show a dialog with the spell's description
-function showSpellDescriptionDialog(fSpell, aClass, fullDescr, sourceStr) {
+async function showSpellDescriptionDialog(fSpell, aClass, fullDescr, sourceStr) {
 	if ((!fullDescr || !sourceStr) && fSpell) {
 		var aSpell = GetSpellObject(fSpell, aClass, false, true, true);
 		var fullDescr = aSpell.tooltip;
@@ -1264,7 +1264,7 @@ function showSpellDescriptionDialog(fSpell, aClass, fullDescr, sourceStr) {
 			fullDescr += sourceStr;
 		}
 	}
-	ShowDialog("Full spell description", fullDescr);
+	await ShowDialog("Full spell description", fullDescr);
 }
 
 // Function to add a found spell to the right location in the same dialog
@@ -2108,11 +2108,11 @@ function DefineSpellSheetDialogs(force, formHeight) {
 			});
 		},
 
-		bLoS : function(dialog) {
+		bLoS : async function(dialog) {
 			// Show a dialog with the spell's full description
 			var oResult = dialog.store();
 			var fSpell = spDias.fnFindSpell(oResult["AlLo"], this.listAl);
-			showSpellDescriptionDialog(fSpell, this.curCast);
+			await showSpellDescriptionDialog(fSpell, this.curCast);
 		},
 
 		bLoA : function (dialog) {
@@ -2335,11 +2335,11 @@ function DefineSpellSheetDialogs(force, formHeight) {
 			});
 		},
 
-		bLoS : function(dialog) {
+		bLoS : async function(dialog) {
 			// Show a dialog with the spell's full description
 			var oResult = dialog.store();
 			var fSpell = spDias.fnFindSpell(oResult["SpLo"], this.listSp);
-			showSpellDescriptionDialog(fSpell, this.curCast);
+			await showSpellDescriptionDialog(fSpell, this.curCast);
 		},
 
 		bLoA : function (dialog) {
@@ -2554,11 +2554,11 @@ function DefineSpellSheetDialogs(force, formHeight) {
 			});
 		},
 
-		bLoS : function(dialog) {
+		bLoS : async function(dialog) {
 			// Show a dialog with the spell's full description
 			var oResult = dialog.store();
 			var fSpell = spDias.fnFindSpell(oResult["SpLo"], this.listSp);
-			showSpellDescriptionDialog(fSpell, this.curCast);
+			await showSpellDescriptionDialog(fSpell, this.curCast);
 		},
 
 		bLoA : function (dialog) {
@@ -2757,8 +2757,8 @@ function DefineSpellSheetDialogs(force, formHeight) {
 					eval("spDias[" + diaName + "][" + boxID + "] = function (dialog) { this.search(dialog, '" + boxID + "'); };");
 				} else {
 					var doThisInFunction = function(thisID) {
-						spDias[diaName][thisID] = function(dialog) {
-							this.search(dialog, id = thisID);
+						spDias[diaName][thisID] = async function(dialog) {
+							await this.search(dialog, id = thisID);
 						}
 					}(boxID);
 				}
@@ -2768,7 +2768,7 @@ function DefineSpellSheetDialogs(force, formHeight) {
 }
 
 //ask the user to set all the spells for all the classes he has
-function AskUserSpellSheet() {
+async function AskUserSpellSheet() {
 	DefineSpellSheetDialogs();
 	var dia = spDias.spellSelect;
 	var classesArray = [];
@@ -3038,7 +3038,7 @@ function AskUserSpellSheet() {
 		thermoM(0.8);
 
 		//now call the dialog and do something with the results if OK was pressed
-		var diaResult = app.execDialog(dia);
+		var diaResult = await app.execDialog(dia);
 		if (diaResult == "cancel") {
 			SetStringifieds("spells");
 			return "stop"; //don't continue with the rest of the function and let the other function know not to continue either
@@ -3128,7 +3128,7 @@ function AskUserSpellSheet() {
 					diaSB.iteration = (diaSBi + 1) + "/" + Math.max(diaSBi + 1, SBextras.length, 1);
 					diaSB.selectSp = SBextras[diaSBi] ? SBextras[diaSBi] : [];
 					setDialogName(diaSB, "bPre", "name", diaSBi == 0 ? "<< Go Back (also Orders Spellbook)" : "<< Go to Previous Spellbook Dialog");
-					var diaSBResult = app.execDialog(diaSB);
+					var diaSBResult = await app.execDialog(diaSB);
 					// now replace the SBextras entry with the new diaSB.selectSp
 					SBextras[diaSBi] = diaSB.selectSp;
 
@@ -3218,7 +3218,7 @@ function AskUserSpellSheet() {
 				diaPrep.offsetSp = spCast.blueTxt && spCast.blueTxt.prep ? spCast.blueTxt.prep : 0;
 
 				//call the dialog and do something with the results
-				if (app.execDialog(diaPrep) !== "ok") {
+				if (await app.execDialog(diaPrep) !== "ok") {
 					SetStringifieds("spells");
 					return "stop"; //don't continue with the rest of the function and let the other function know not to continue either
 				} else {
@@ -3282,7 +3282,7 @@ function AskUserSpellSheet() {
 		spDias.sheetOrder.dashEmptyFields = CurrentCasters.emptyFields ? false : true;
 		spDias.sheetOrder.amendSpellDescriptions = CurrentCasters.amendSpDescr || CurrentCasters.amendSpDescr === undefined ? true : false;
 		spDias.sheetOrder.allowSpellAdd = CurrentCasters.allowSpellAdd || CurrentCasters.allowSpellAdd === undefined ? true : false;
-		if (app.execDialog(spDias.sheetOrder) !== "ok") {
+		if (await app.execDialog(spDias.sheetOrder) !== "ok") {
 			toReturn = "stop"; //don't continue with the rest of the function and let the other function know not to continue either
 		} else {
 			var exclList = spDias.sheetOrder.bExcL;
@@ -3318,9 +3318,9 @@ function AskUserSpellSheet() {
 }
 
 //generate the spell sheet for all the different classes
-function GenerateSpellSheet(GoOn) {
+async function GenerateSpellSheet(GoOn) {
 	//first ask the user for input on what to do with all the spellcasting classes
-	if (!GoOn) var GoOn = AskUserSpellSheet();
+	if (!GoOn) var GoOn = await AskUserSpellSheet();
 
 	if (!GoOn) {
 		var toAsk = {
@@ -3330,8 +3330,8 @@ function GenerateSpellSheet(GoOn) {
 			nType : 2, //Yes-No
 		}
 		if (app.alert(toAsk) === 4) {
-			RemoveSpellSheets();
-			DoTemplate("SSfront", "Add");
+			await RemoveSpellSheets();
+			await DoTemplate("SSfront", "Add");
 		}
 		return; // do not continue with this function for it is pointless
 	} else if (GoOn === "stop") {
@@ -3346,7 +3346,7 @@ function GenerateSpellSheet(GoOn) {
 	calcStop();
 
 	//then we remove all the existing sheets (if any)
-	RemoveSpellSheets();
+	await RemoveSpellSheets();
 
 	thermoM(2/(CurrentCasters.incl.length + 3)); //increment the progress dialog's progress
 
@@ -3359,9 +3359,9 @@ function GenerateSpellSheet(GoOn) {
 
 	//define a function for adding a new page
 	var SpellPages = 1;
-	var AddPage = function() {
+	var AddPage = async function() {
 		//add one more page and set the corresponding prefix to the variable
-		prefixCurrent = DoTemplate("SSmore", "Add");
+		prefixCurrent = await DoTemplate("SSmore", "Add");
 		SpellPages += 1;
 		//now reset all the incremental variables to 0;
 		lineMax = FieldNumbers.spells[1];
@@ -3464,7 +3464,7 @@ function GenerateSpellSheet(GoOn) {
 
 		if (i === isFirst) {
 			SSfront = true;
-			prefixCurrent = DoTemplate("SSfront", "Add"); //for the first entry we need to make the template
+			prefixCurrent = await DoTemplate("SSfront", "Add"); //for the first entry we need to make the template
 		};
 
 		//now sort each of those new arrays and put them on the sheet
@@ -3484,7 +3484,7 @@ function GenerateSpellSheet(GoOn) {
 			//assume that we need to add at least 10 of the spells, the total of this level of spells, whichever is less
 			// so 3 (divider + title line) + 4 (header, if applicable) + lowest of [10, arrayLength]
 			var needSpace = 3 + (start ? 4 : 0) + Math.min(10, spArray.length);
-			if (needSpace > (lineMax - lineCurrent + 1)) AddPage();
+			if (needSpace > (lineMax - lineCurrent + 1)) await AddPage();
 
 			//the first spells to add needs a header in front of it
 			if (start) {
@@ -3515,7 +3515,7 @@ function GenerateSpellSheet(GoOn) {
 				aSpell = spArray[y];
 				var notDupl = y ? aSpell != spArray[y - 1] : true;
 				//check if not at the end of the page and, if so, create a new page
-				if (lineCurrent > lineMax) AddPage();
+				if (lineCurrent > lineMax) await AddPage();
 				var toCheck = "##";
 				if (notDupl && atwillArray.indexOf(aSpell) !== -1) {
 					toCheck = "##atwill";
@@ -3540,7 +3540,7 @@ function GenerateSpellSheet(GoOn) {
 
 	//after the end of the last run, add a glossary, if so selected
 	if (CurrentCasters.glossary) {
-		if ((lineCurrent + 11) > lineMax) AddPage();
+		if ((lineCurrent + 11) > lineMax) await AddPage();
 		//then add the glossary
 		Value(prefixCurrent + "spells.remember." + lineCurrent, "setglossary");
 	}
@@ -3553,13 +3553,13 @@ function GenerateSpellSheet(GoOn) {
 }
 
 //remove all visible spell sheets and reset the template remember fields
-function RemoveSpellSheets(noFirst) {
-	if (tDoc.info.SpellsOnly) tDoc.getTemplate("blank").spawn(0, false, false);
-	DoTemplate("SSmore", "removeall", false, true);
-	DoTemplate("SSfront", "removeall", false, true);
+async function RemoveSpellSheets(noFirst) {
+	if (tDoc.info.SpellsOnly) await tDoc.getTemplate("blank").spawn(0, false, false);
+	await DoTemplate("SSmore", "removeall", false, true);
+	await DoTemplate("SSfront", "removeall", false, true);
 	if (tDoc.info.SpellsOnly) {
 		var forFirst = noFirst ? "SSmore" : "SSfront";
-		tDoc.getTemplate(forFirst).spawn(0, true, false);
+		await tDoc.getTemplate(forFirst).spawn(0, true, false);
 		Value("Template.extras." + forFirst, ",P0." + forFirst + ".");
 		try {
 			tDoc.deletePages(1);
@@ -3744,11 +3744,11 @@ function MakeSpellMenu() {
 };
 
 //create the spell menu and do something with the menu and its results
-function MakeSpellMenu_SpellOptions(MenuSelection) {
+async function MakeSpellMenu_SpellOptions(MenuSelection) {
 	if (!MenuSelection) {
 		MakeSpellMenu();
 		//now call the menu
-		MenuSelection = getMenu("spells");
+		MenuSelection = await getMenu("spells");
 	};
 
 	//and do something with this menus results
@@ -3759,7 +3759,7 @@ function MakeSpellMenu_SpellOptions(MenuSelection) {
 	var SSmultiple = What("Template.extras.SSmore").split(",").length > 2 || (What("Template.extras.SSfront") !== "" && What("Template.extras.SSmore") !== "");
 	switch (MenuSelection[1]) {
 	 case "generate" :
-		GenerateSpellSheet();
+		await GenerateSpellSheet();
 		break;
 	 case "makeempty" :
 		if (SSvisible) {
@@ -3775,27 +3775,27 @@ function MakeSpellMenu_SpellOptions(MenuSelection) {
 		}
 
 		if (goThrough === 4) {
-			if (SSvisible) RemoveSpellSheets();
-			var thePrefix = DoTemplate("SSfront", "Add");
+			if (SSvisible) await RemoveSpellSheets();
+			var thePrefix = await DoTemplate("SSfront", "Add");
 			if (MenuSelection[2] === "lines") {
 				AddSpellSheetTextLines(thePrefix, MenuSelection[3] === "boxes", FieldNumbers.spells[0]);
 			}
 		}
 		break;
 	 case "addempty" :
-		var thePrefix = DoTemplate("SSmore", "Add");
+		var thePrefix = await DoTemplate("SSmore", "Add");
 		if (MenuSelection[2] === "lines") {
 			AddSpellSheetTextLines(thePrefix, MenuSelection[3] === "boxes");
 		}
 		break;
 	 case "delete" :
-		RemoveSpellSheets();
+		await RemoveSpellSheets();
 		break;
 	 case "deleteone" :
-		DoTemplate("SSmore", "Remove");
+		await DoTemplate("SSmore", "Remove");
 		break;
 	 case "source" :
-		resourceDecisionDialog();
+		await resourceDecisionDialog();
 		break;
 	 case "slots" :
 		if (MenuSelection[3] != "true") { //it wasn't marked, so something is about the change
@@ -3824,7 +3824,7 @@ function MakeSpellMenu_SpellOptions(MenuSelection) {
 		};
 		break;
 	 case "complete" :
-		GenerateCompleteSpellSheet(MenuSelection[2]);
+		await GenerateCompleteSpellSheet(MenuSelection[2]);
 		break;
 	 case "toggleslots" :
 		var hiddenNoPrint = isDisplay("P0.SSfront.SpellSlots.CheckboxesSet.lvl1") > 1 ? "Hide" : "DontPrint";
@@ -3837,7 +3837,7 @@ function MakeSpellMenu_SpellOptions(MenuSelection) {
 		break;
 	 case "showcalcs" :
 		var sSpellEvals = StringEvals(["spellStr", "spellAtkStr"]);
-		if (sSpellEvals) ShowDialog("Things Affecting the Spell Automation", sSpellEvals);
+		if (sSpellEvals) await ShowDialog("Things Affecting the Spell Automation", sSpellEvals);
 		break;
 	};
 };
@@ -3999,9 +3999,6 @@ function ParseSpellMenu() {
 	//start an array of the different menus
 	var spellsMenuArray = [AllSpellsMenu];
 
-	//now to do something that makes it possible to copy this object multiple times
-	var menuString = AllSpellsMenu.toSource();
-
 	var menuExtraTypes = [
 		["with a Checkbox", "checkbox"],
 		["with an 'Always Prepared' Checkbox", "markedbox"],
@@ -4012,7 +4009,7 @@ function ParseSpellMenu() {
 	]
 	//add a menu with a changed name
 	for (var e = 0; e < menuExtraTypes.length; e++) {
-		var aMenu = eval_ish(menuString);
+		var aMenu = newObj(AllSpellsMenu);
 		amendMenu(aMenu, menuExtraTypes[e][0], menuExtraTypes[e][1]);
 		spellsMenuArray.push(aMenu);
 	}
@@ -4118,7 +4115,7 @@ function findNextHeaderDivider(prefix, type) {
 }
 
 //make a menu for each spell line and do something with the results
-function MakeSpellLineMenu_SpellLineOptions() {
+async function MakeSpellLineMenu_SpellLineOptions() {
 	var SSmaxLine = function(inputPrefix) {
 		return inputPrefix.indexOf(".SSfront.") !== -1 ? FieldNumbers.spells[0] : FieldNumbers.spells[1];
 	}
@@ -4292,7 +4289,7 @@ function MakeSpellLineMenu_SpellLineOptions() {
 	Menus.spellsLine = spellsLineMenu;
 
 	//now call the menu
-	var MenuSelection = getMenu("spellsLine");
+	var MenuSelection = await getMenu("spellsLine");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
 	// Start progress bar and stop calculations
@@ -4303,7 +4300,7 @@ function MakeSpellLineMenu_SpellLineOptions() {
 	switch (MenuSelection[0]) {
 	 case "popup" :
 		var sourceStr = Who(base.replace("checkbox", "book"));
-		showSpellDescriptionDialog(false, false, fullDescr, sourceStr);
+		await showSpellDescriptionDialog(false, false, fullDescr, sourceStr);
 		break;
 	 case "move up" :
 		thermoTxt = thermoM("Moving the spell up one row...", false);
@@ -4320,13 +4317,13 @@ function MakeSpellLineMenu_SpellLineOptions() {
 	 case "spell" :
 		thermoTxt = thermoM("Applying the spell...", false);
 		if (MenuSelection[2] === "askuserinput") {
-			MenuSelection[2] = AskUserTwoLetters(false);
+			MenuSelection[2] = await AskUserTwoLetters(false);
 		};
 		Value(RemLine, MenuSelection[1] + "##" + MenuSelection[2]);
 		if (SpellsList[MenuSelection[1]] && SpellsList[MenuSelection[1]].dependencies) {
 			theDeps = SpellsList[MenuSelection[1]].dependencies;
 			var theNextLineValue = What(RemLine.replace("." + lineNmbr, "." + (lineNmbr + 1)));
-			insertSpellRow(prefix, lineNmbr + 1, theDeps.length - (theNextLineValue ? 0 : 1));
+			await insertSpellRow(prefix, lineNmbr + 1, theDeps.length - (theNextLineValue ? 0 : 1));
 			for (var sD = 0; sD < theDeps.length; sD++) {
 				Value(RemLine.replace("." + lineNmbr, "." + (lineNmbr + sD + 1)), theDeps[sD]);
 			};
@@ -4336,7 +4333,7 @@ function MakeSpellLineMenu_SpellLineOptions() {
 	 case "___" :
 	 case "setdivider" :
 		if (MenuSelection[1] === "askuserinput") {
-			MenuSelection[1] = AskUserTwoLetters(MenuSelection[0] !== "___");
+			MenuSelection[1] = await AskUserTwoLetters(MenuSelection[0] !== "___");
 		} else if ((/psionic/i).test(MenuSelection[1])) {
 			MenuSelection[0] = "psionic" + MenuSelection[0];
 			MenuSelection[1] = MenuSelection[1].replace(/psionic/i, "");
@@ -4345,7 +4342,7 @@ function MakeSpellLineMenu_SpellLineOptions() {
 	 case "setglossary" :
 		if ((/set(header|divider|glossary)/i).test(MenuSelection[0])) {
 			tDoc.resetForm([RemLine]);
-			insertSpellRow(prefix, lineNmbr, MenuSelection[0] === "setheader" ? 3 : MenuSelection[0] === "setdivider" ? 1 : 11, true);
+			await insertSpellRow(prefix, lineNmbr, MenuSelection[0] === "setheader" ? 3 : MenuSelection[0] === "setdivider" ? 1 : 11, true);
 		};
 		Value(RemLine, MenuSelection.join("##"));
 		break;
@@ -4355,7 +4352,7 @@ function MakeSpellLineMenu_SpellLineOptions() {
 		break;
 	 case "delete" :
 		thermoTxt = thermoM("Deleting the row and moving the rest up...", false);
-		deleteSpellRow(prefix, lineNmbr);
+		await deleteSpellRow(prefix, lineNmbr);
 		break;
 	 case "insert" :
 		if (MenuSelection[1] === "askuserinput") {
@@ -4363,12 +4360,12 @@ function MakeSpellLineMenu_SpellLineOptions() {
 		}
 		thermoTxt = thermoM("Inserting " + MenuSelection[1] + " spell row(s) ...", false);
 		if (MenuSelection[1] > 0) {
-			insertSpellRow(prefix, lineNmbr, MenuSelection[1]);
+			await insertSpellRow(prefix, lineNmbr, MenuSelection[1]);
 		}
 		break;
 	 case "firstcolumn" :
 		if (MenuSelection[1] === "askuserinput") {
-			MenuSelection[1] = AskUserTwoLetters((/setcaptions/i).test(What(RemLine)));
+			MenuSelection[1] = await AskUserTwoLetters((/setcaptions/i).test(What(RemLine)));
 		}
 		thermoTxt = thermoM("Setting " + MenuSelection[1] + " as the spell row first column...", false);
 		var RemLineValue = What(RemLine).split("##");
@@ -4380,7 +4377,7 @@ function MakeSpellLineMenu_SpellLineOptions() {
 };
 
 //aks the user for 2 characters that are used for the caption of the first column of the spell table
-function AskUserTwoLetters(caption) {
+async function AskUserTwoLetters(caption) {
 	var theDialog = {
 		theTXT : "",
 		initialize : function (dialog) {
@@ -4425,7 +4422,7 @@ function AskUserTwoLetters(caption) {
 			}]
 		}
 	}
-	app.execDialog(theDialog);
+	await app.execDialog(theDialog);
 	return theDialog.theTXT;
 }
 
@@ -4474,7 +4471,7 @@ function AskUserNumber(caption) {
 }
 
 // Delete a row on the spell list (and move all the rows below it up one)
-function deleteSpellRow(prefix, lineNmbr) {
+async function deleteSpellRow(prefix, lineNmbr) {
 	// Function
 	var returnClearance = function(prefix, offsetNmbr) {
 		var fldVal = What(prefix + "spells.remember." + offsetNmbr);
@@ -4580,12 +4577,12 @@ function deleteSpellRow(prefix, lineNmbr) {
 			if (SS == SSmoreA.length - 1 && nextLineVals.join("") === "") pageEmptyLines++;
 		}
 		// Test if this last page is fully empty and remove it if so
-		if (SS == SSmoreA.length - 1 && pageEmptyLines == endRow + 1) DoTemplate("SSmore", "Remove", undefined, true);
+		if (SS == SSmoreA.length - 1 && pageEmptyLines == endRow + 1) await DoTemplate("SSmore", "Remove", undefined, true);
 	}
 };
 
 //insert a number of empty rows on the spell list
-function insertSpellRow(prefix, lineNmbr, toMove, ignoreEmptyTop) {
+async function insertSpellRow(prefix, lineNmbr, toMove, ignoreEmptyTop) {
 	// Validate the input
 	lineNmbr = Number(lineNmbr);
 	toMove = Number(toMove);
@@ -4697,7 +4694,7 @@ function insertSpellRow(prefix, lineNmbr, toMove, ignoreEmptyTop) {
 
 	//add the amount of extra pages that we need
 	for (var page = 1; page <= extraPages; page++) {
-		DoTemplate("SSmore", "Add");
+		await DoTemplate("SSmore", "Add");
 	};
 
 	//if no values to any of the rows, just stop now
@@ -4884,7 +4881,7 @@ function HideSpellSheetElement(theTarget) {
 
 // When changing the spellcasting ability of a manual header, save it to the remember field so that the element can be recreated when inserting/deleting rows (field blur)
 // If this is a header linked to a CurrentSpells object, change its spellcasting ability and offer to re-generate the sheet
-function SaveSpellcastingAbility() {
+async function SaveSpellcastingAbility() {
 	if (!event.target) return;
 	var base = event.target.name;
 	var caster = What(base.replace("ability", "class"));
@@ -4909,7 +4906,7 @@ function SaveSpellcastingAbility() {
 			});
 			if (redosheets === 4) {
 				SetStringifieds("spells");
-				GenerateSpellSheet();
+				await GenerateSpellSheet();
 				return;
 			}
 		}
@@ -4928,12 +4925,12 @@ function SaveSpellcastingAbility() {
 }
 
 //a one-item menu to hide the glossary
-function MakeGlossMenu_GlossOptions() {
+async function MakeGlossMenu_GlossOptions() {
 	Menus.glossary = [{
 		cName : "Remove this glossary",
 		cReturn : "removeglossary"
 	}];
-	var MenuSelection = getMenu("glossary");
+	var MenuSelection = await getMenu("glossary");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] !== "removeglossary") return;
 	HideSpellSheetElement(event.target.name);
 }
@@ -4948,7 +4945,7 @@ function AddSpellSheetTextLines(prefix, boxes, maxLine) {
 }
 
 //generate the spell sheet for all the different classes
-function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
+async function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 	if ((/alphabetical|grouped by level/i).test(thisClass)) {
 		GenerateSpellSheetWithAll((/alphabetical/i).test(thisClass), skipdoGoOn);
 		return;
@@ -4980,7 +4977,7 @@ function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 	thermoM(1/7); //increment the progress dialog's progress
 
 	//then we remove all the existing sheets (if any)
-	RemoveSpellSheets();
+	await RemoveSpellSheets();
 
 	var lineMax = FieldNumbers.spells[0]; //set the maximum we can go on this sheet
 	var lineCurrent = 0; //set the current line on the Spell Sheet
@@ -4990,9 +4987,9 @@ function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 
 	//define a function for adding a new page
 	var SpellPages = 1;
-	var AddPage = function() {
+	var AddPage = async function() {
 		//add one more page and set the corresponding prefix to the variable
-		prefixCurrent = DoTemplate("SSmore", "Add");
+		prefixCurrent = await DoTemplate("SSmore", "Add");
 		SpellPages += 1;
 		thermoTxt = thermoM("Filling out page " + SpellPages + " of the Spell Sheets...", false); //change the progress dialog text
 		//now reset all the incremental variables to 0;
@@ -5017,7 +5014,7 @@ function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 	var orderedSpellList = CreateSpellList(thisClass, false, false, true);
 
 	//for the first entry we need to make the template SSfront appear
-	var prefixCurrent = tDoc.info.SpellsOnly ? "P0.SSfront." : DoTemplate("SSfront", "Add"); //set the current prefix on the Spell Sheet
+	var prefixCurrent = tDoc.info.SpellsOnly ? "P0.SSfront." : await DoTemplate("SSfront", "Add"); //set the current prefix on the Spell Sheet
 	thermoTxt = thermoM("Filling out page 1 of the Spell Sheet...", false); //change the progress dialog text
 
 	//now sort each of those new arrays and put them on the sheet
@@ -5035,7 +5032,7 @@ function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 		//assume that we need to add at least 10 of the spells, the total of this level of spells, whichever is less
 		// so 3 (divider + title line) + 4 (header, if applicable) + lowest of [10, arrayLength]
 		var needSpace = 3 + (start ? 4 : 0) + Math.min(10, spArray.length);
-		if (needSpace > (lineMax - lineCurrent + 1)) AddPage();
+		if (needSpace > (lineMax - lineCurrent + 1)) await AddPage();
 
 		//the first spells to add needs a header in front of it
 		if (start) {
@@ -5059,7 +5056,7 @@ function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 		for (var y = 0; y < spArray.length; y++) {
 			aSpell = spArray[y];
 			//check if not at the end of the page and, if so, create a new page
-			if (lineCurrent > lineMax) AddPage();
+			if (lineCurrent > lineMax) await AddPage();
 			var toCheck = SpellsList[aSpell] && SpellsList[aSpell].firstCol !== undefined ? "##" : "##checkbox";
 			Value(prefixCurrent + "spells.remember." + lineCurrent, aSpell + toCheck + "##" + thisClass);
 			lineCurrent += 1;
@@ -5076,14 +5073,14 @@ function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 }
 
 //a way to hide the 'prepared' section on the first page of the spell sheet //if a "target" is given, assume it has to be hidden
-function MakePreparedMenu_PreparedOptions(target) {
+async function MakePreparedMenu_PreparedOptions(target) {
 	Menus.spellsPrepared = [{
 		cName : "Hide this prepared spells section",
 		cReturn : "removepreps"
 	}];
 
 	//now call the menu
-	var MenuSelection = target ? ["removepreps"] : getMenu("spellsPrepared");
+	var MenuSelection = target ? ["removepreps"] : await getMenu("spellsPrepared");
 	var theTarget = target ? target : event.target.name;
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] !== "removepreps") return;
 
@@ -5093,11 +5090,11 @@ function MakePreparedMenu_PreparedOptions(target) {
 }
 
 //revamp the whole sheet to become a "Complete Spell Sheet"
-function ChangeToCompleteSpellSheet(thisClass, FAQpath) {
+async function ChangeToCompleteSpellSheet(thisClass, FAQpath) {
 	if (minVer) return;
-	ResetAll(true, true);
+	await ResetAll(true, true);
 	thisClass = thisClass ? thisClass : "cleric";
-	tDoc.getTemplate("SSfront").spawn(0, true, false);
+	await tDoc.getTemplate("SSfront").spawn(0, true, false);
 	tDoc.deletePages({nStart: 1, nEnd: tDoc.numPages - 1});
 	tDoc.getTemplate("SSfront").hidden = false;
 	tDoc.getTemplate("SSmore").hidden = false;
@@ -5188,7 +5185,7 @@ function CreateBkmrksCompleteSpellSheet() {
 					color : ["RGB", 0.93, 0.49, 0.098]
 				},
 				"Spell Options" : {
-					cExpr : "MakeSpellMenu_SpellOptions();",
+					cExpr : "await MakeSpellMenu_SpellOptions();",
 					color : ["RGB", 0.2509765625, 0.5176544189453125, 0.67059326171875]
 				},
 				"Flatten" : {
@@ -5210,7 +5207,7 @@ function CreateBkmrksCompleteSpellSheet() {
 			}
 		},
 		"FAQ" : {
-			cExpr : "getFAQ();"
+			cExpr : "await getFAQ();"
 		},
 		"Get Latest Version" : {
 			cName : "Get Latest Version (current: v" + semVers + ")",
@@ -5415,7 +5412,7 @@ function setSpellVariables(reDoAll) {
 }
 
 //a way to generate a spell sheet that has all spells on it (alphabetical = true for an alphabetical list, and false for a list grouped by level)
-function GenerateSpellSheetWithAll(alphabetical, skipdoGoOn) {
+async function GenerateSpellSheetWithAll(alphabetical, skipdoGoOn) {
 	if (app.viewerType !== "Reader" && tDoc.info.SpellsOnly) {
 		tDoc.info.SpellsOnly = alphabetical ? "alphabetical" : "grouped by level";
 		tDoc.info.Title = MakeDocName();
@@ -5441,7 +5438,7 @@ function GenerateSpellSheetWithAll(alphabetical, skipdoGoOn) {
 	thermoM(1/7); //increment the progress dialog's progress
 
 	//then we remove all the existing sheets (if any)
-	RemoveSpellSheets(true);
+	await RemoveSpellSheets(true);
 
 	var lineMax = FieldNumbers.spells[1]; //set the maximum we can go on this sheet
 	var lineCurrent = 0; //set the current line on the Spell Sheet
@@ -5451,9 +5448,9 @@ function GenerateSpellSheetWithAll(alphabetical, skipdoGoOn) {
 
 	//define a function for adding a new page
 	var SpellPages = 1;
-	var AddPage = function() {
+	var AddPage = async function() {
 		//add one more page and set the corresponding prefix to the variable
-		prefixCurrent = DoTemplate("SSmore", "Add");
+		prefixCurrent = await DoTemplate("SSmore", "Add");
 		SpellPages += 1;
 		thermoTxt = thermoM("Filling out page " + SpellPages + " of the Spell Sheets...", false); //change the progress dialog text
 		//now reset all the incremental variables to 0;
@@ -5481,7 +5478,7 @@ function GenerateSpellSheetWithAll(alphabetical, skipdoGoOn) {
 	}
 
 	//for the first entry we need to make the template SSmore appear
-	var prefixCurrent = tDoc.info.SpellsOnly ? "P0.SSmore." : DoTemplate("SSmore", "Add"); //set the current prefix on the Spell Sheet
+	var prefixCurrent = tDoc.info.SpellsOnly ? "P0.SSmore." : await DoTemplate("SSmore", "Add"); //set the current prefix on the Spell Sheet
 
 	thermoTxt = thermoM("Filling out page 1 of the Spell Sheet...", false); //change the progress dialog text
 
@@ -5497,7 +5494,7 @@ function GenerateSpellSheetWithAll(alphabetical, skipdoGoOn) {
 			//assume that we need to add at least 5 of the spells, the total of this level of spells, whichever is less
 			// so 3 (divider + title line) + lowest of [5, arrayLength]
 			var needSpace = 3 + Math.min(5, spArray.length);
-			if (needSpace > (lineMax - lineCurrent + 1)) AddPage();
+			if (needSpace > (lineMax - lineCurrent + 1)) await AddPage();
 
 			//then add the divider
 			//if this is an alphabetical list, we want only four headers: "cantrips", "spells", "talents", "disciplines"
@@ -5514,7 +5511,7 @@ function GenerateSpellSheetWithAll(alphabetical, skipdoGoOn) {
 			for (var y = 0; y < spArray.length; y++) {
 				aSpell = spArray[y];
 				//check if not at the end of the page and, if so, create a new page
-				if (lineCurrent > lineMax) AddPage();
+				if (lineCurrent > lineMax) await AddPage();
 				var spellLvl = alphabetical && !isPsionics && SpellsList[aSpell] && SpellsList[aSpell].level && SpellsList[aSpell].firstCol === undefined ? "##" + SpellsList[aSpell].level : "";
 				Value(prefixCurrent + "spells.remember." + lineCurrent, aSpell + spellLvl);
 				lineCurrent += 1;

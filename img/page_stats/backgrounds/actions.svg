@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="701pt" height="208pt" viewBox="0 0 701 208" version="1.2">
+
+<g id="main_contour" fill="none" stroke-width="2.1" stroke="rgb(4.017639%,3.95813%,4.968262%)" stroke-miterlimit="10">
+	<path d="M 694.2617 197.0938 C 694.3359 198.4336 693.1719 204.7148 700.1055 204.7148 L 0.6094 204.7148 C 7.543 204.7148 6.3789 198.4336 6.4531 197.0938 L 6.4531 10.3984 C 6.3789 9.0625 7.543 2.7813 0.6094 2.7813 L 700.1055 2.7813 C 693.1719 2.7813 694.3359 9.0625 694.2617 10.3984 Z"/>
+</g>
+
+<g id="corner_duds" fill="none" stroke-width="1.5" stroke="rgb(4.017639%,3.95813%,4.968262%)" stroke-miterlimit="10">
+	<path d="M 3.4023 3.3672 L 3.4023 0.7813"/>
+	<path d="M 697.3125 3.3672 L 697.3125 0.7813"/>
+	<path d="M 3.4023 204.125 L 3.4023 206.7148"/>
+	<path d="M 697.3125 204.125 L 697.3125 206.7148"/>
+</g>
+
+<g id="corner_duds" fill="none" stroke="rgb(4.017639%,3.95813%,4.968262%)" stroke-miterlimit="10">
+	<path d="M 2.4023 206.7148 L 2.4023 0.7813"/>
+	<path d="M 698.3125 206.7148 L 698.3125 0.7813"/>
+</g>
+
+</svg>

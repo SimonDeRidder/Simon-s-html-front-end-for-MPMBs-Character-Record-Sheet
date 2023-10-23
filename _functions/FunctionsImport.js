@@ -5,33 +5,33 @@ try {
 	var MPMBImportFunctionsInstalled = false;
 }
 
-function ImportExport_Button() {
+async function ImportExport_Button() {
 	if (minVer) {
-		ImportScriptOptions();
+		await ImportScriptOptions();
 		return;
 	};
-	var theMenu = getMenu("importexport");
+	var theMenu = await getMenu("importexport");
 
 	if (theMenu !== undefined && theMenu[0] !== "nothing") {
 		switch (theMenu[1]) {
 			case "script" :
-				ImportScriptOptions(theMenu);
+				await ImportScriptOptions(theMenu);
 				break;
 			case "import" :
-				Import(theMenu[2]);
+				await Import(theMenu[2]);
 				break;
 			case "export" :
-				MakeXFDFExport(theMenu[2]);
+				await MakeXFDFExport(theMenu[2]);
 				break;
 			case "direct" :
-				StartDirectImport();
+				await StartDirectImport();
 				break;
 		};
 	};
 };
 
 //a function to open the sheet and call a timeout
-function StartDirectImport() {
+async function StartDirectImport() {
 	//test if the version of Acrobat being used is good (DC or later)
 	if (app.viewerVersion < 15) {
 		app.alert({
@@ -40,16 +40,16 @@ function StartDirectImport() {
 		});
 		return;
 	} else if (MPMBImportFunctionsInstalled) {
-		DirectImport();
+		await DirectImport();
 	} else if (event.target === undefined && !MPMBImportFunctionsInstalled) {
-		DirectImport(true);
+		await DirectImport(true);
 	} else if (event.target !== undefined && !MPMBImportFunctionsInstalled) {
-		AddFolderJavaScript(false);
+		await AddFolderJavaScript(false);
 	}
 }
 
 // call this to add the folder level javascript if it is missing
-function AddFolderJavaScript(justConsole) {
+async function AddFolderJavaScript(justConsole) {
 	var isType = app.viewerType === "Exchange-Pro" ? "Pro" : (app.viewerType === "Exchange" ? "Standard" : "Reader");
 	var isContin = app.viewerVersion.substring(6, 8) != 30;
 	var vYear = 20 + app.viewerVersion.substring(0, 2);
@@ -209,7 +209,7 @@ function AddFolderJavaScript(justConsole) {
 
 	if (justConsole) delete AddJS_dialog.description.elements[0].elements[0].elements[4];
 
-	var theDialog = app.execDialog(AddJS_dialog);
+	var theDialog = await app.execDialog(AddJS_dialog);
 
 	if (theDialog === "cons") {
 		console.clear();
@@ -221,7 +221,7 @@ function AddFolderJavaScript(justConsole) {
 }
 
 //the dialog for the DirectImport function that ask for the path to a file to import from
-function DirectImport_Dialogue() {
+async function DirectImport_Dialogue() {
 	var buggedVer = !isWindows && app.viewerVersion > 20 && app.viewerVersion < 20.00920065;
 	var isType = app.viewerType === "Exchange-Pro" ? "Pro" : (app.viewerType === "Exchange" ? "Standard" : "Reader");
 	var Text0 = "This 'Direct Import' function opens another MPMB's Character Record Sheet and goes through every field and layout setting in it to make this sheet similar to the other. This can take a long time and will not copy everything literally as this sheet will run through its automation to benefit from any updates to its code compared to the other sheet.";
@@ -405,14 +405,14 @@ function DirectImport_Dialogue() {
 		}
 	};
 
-	var theDialog = app.execDialog(DirectImport_dialog);
+	var theDialog = await app.execDialog(DirectImport_dialog);
 
 	var goII = false;
 	if (DirectImport_dialog.importIcons) {
 		if (MPMBImportFunctionsInstalled) {
 			goII = true;
 		} else {
-			if (AddFolderJavaScript(true)) theDialog = "cancel"; //if the addJS dialog is cancelled (selected to go on without the user icons), it returns false
+			if (await AddFolderJavaScript(true)) theDialog = "cancel"; //if the addJS dialog is cancelled (selected to go on without the user icons), it returns false
 		}
 	}
 
@@ -420,9 +420,9 @@ function DirectImport_Dialogue() {
 };
 
 //a function to import information directly from another MPMB's Character Record Sheets
-function DirectImport(consoleTrigger) {
+async function DirectImport(consoleTrigger) {
 	//ask the user for the file to import from
-	var importFromPath = DirectImport_Dialogue();
+	var importFromPath = await DirectImport_Dialogue();
 	if (!importFromPath) return; //no reason to go on with this
 
 	// initiate a progress bar, so there is at least something
@@ -489,7 +489,7 @@ function DirectImport(consoleTrigger) {
 
 		IsNotImport = "no progress bar";
 		ignorePrereqs = true;
-		ResetAll(true, true); //first reset the current sheet to its initial state, but without the extra templates generated
+		await ResetAll(true, true); //first reset the current sheet to its initial state, but without the extra templates generated
 		Value("Opening Remember", "Yes");
 		IsNotImport = false;
 
@@ -545,7 +545,7 @@ function DirectImport(consoleTrigger) {
 		};
 		//now update the dropdowns and spell menus with these new settings (without unicode if that was set)
 		ImportField("UseUnicode");
-		setUnicodeUse(What("UseUnicode") != "", true); // also sets the dropdowns
+		await setUnicodeUse(What("UseUnicode") != "", true); // also sets the dropdowns
 		setSpellVariables(true);
 
 		//reset conditions
@@ -562,7 +562,7 @@ function DirectImport(consoleTrigger) {
 			};
 			if (doCondi) {
 				global.docFrom.resetForm(conResets);
-				global.docFrom.ConditionSet();
+				await global.docFrom.ConditionSet();
 			}
 		}
 
@@ -608,7 +608,7 @@ function DirectImport(consoleTrigger) {
 		if (ImportField("League Remember")) {
 			if (FromVersion < semVersToNmbr(12.99)) {
 				if (What("League Remember") === "On") {
-					ToggleAdventureLeague({
+					await ToggleAdventureLeague({
 						dci : true,
 						factionrank : true,
 						renown : true,
@@ -621,7 +621,7 @@ function DirectImport(consoleTrigger) {
 			} else {
 				try {
 					var theAdvL = eval(What("League Remember"));
-					ToggleAdventureLeague({
+					await ToggleAdventureLeague({
 						dci : theAdvL.dci,
 						factionrank : theAdvL.factionrank,
 						renown : theAdvL.renown,
@@ -648,7 +648,7 @@ function DirectImport(consoleTrigger) {
 		}
 
 		//set the order of the skills
-		if (global.docFrom.getField("Text.SkillsNames")) MakeSkillsMenu_SkillsOptions(["go", global.docFrom.Who("Text.SkillsNames")]);
+		if (global.docFrom.getField("Text.SkillsNames")) await MakeSkillsMenu_SkillsOptions(["go", global.docFrom.Who("Text.SkillsNames")]);
 
 		//set the visibility of Honor/Sanity
 		if (ImportField("HoSRememberState")) ShowHonorSanity();
@@ -718,12 +718,12 @@ function DirectImport(consoleTrigger) {
 					var tempExtr = pagesLayout[templ + "Extras"];
 					var templToVis = global.docTo.isTemplVis(templ);
 					if (templToVis && !templAte && !tempExtr) { // remove any visible pages that are not visible in the docFrom
-						DoTemplate(templ, "Remove", false, true);
+						await DoTemplate(templ, "Remove", false, true);
 					} else if (templAte && !templToVis && TemplatesWithExtras.indexOf(templ) === -1) { //add the non-duplicatable templates
-						DoTemplate(templ);
+						await DoTemplate(templ);
 					} else if (tempExtr) { // add templates with dependencies
 						if (sameType || (templ !== "SSmore" && (templ !== "SSfront" || !pagesLayout.SSmoreExtras))) {
-							for (var tE = 0; tE < tempExtr; tE++) DoTemplate(templ, "Add");
+							for (var tE = 0; tE < tempExtr; tE++) await DoTemplate(templ, "Add");
 						};
 						pagesLayout[templ + "ExtraNmTo"] = What("Template.extras." + templ).split(",").splice(1);
 					};
@@ -768,7 +768,7 @@ function DirectImport(consoleTrigger) {
 			global.docTo.SetStringifieds("vars");
 		}
 		ImportField("Race", {notTooltip: true, notSubmitName: true});
-		if (ImportField("Race Remember")) ApplyRace(What("Race Remember"));
+		if (ImportField("Race Remember")) await ApplyRace(What("Race Remember"));
 
 		//set the values of the ability score dialog (after race, so scores manually set for race are not undone)
 		var abiScoreFlds = ["Str", "Dex", "Con", "Int", "Wis", "Cha", "HoS"];
@@ -796,7 +796,7 @@ function DirectImport(consoleTrigger) {
 		//set the class and class features
 		if (fromBefore13) ImportExtraChoices();
 		ImportField("Class and Levels", {notTooltip: true});
-		AddExtraOtherChoices();
+		await AddExtraOtherChoices();
 
 		//set the feats
 		var feaNrFrom = global.docFrom.FieldNumbers && global.docFrom.FieldNumbers.feats ? global.docFrom.FieldNumbers.feats : FieldNumbers.feats;
@@ -825,12 +825,12 @@ function DirectImport(consoleTrigger) {
 		};
 
 		// a function to import the magic items
-		var importMagicItems = function () {
+		var importMagicItems = async function () {
 			var nmbrFlds = global.docFrom.FieldNumbers && global.docFrom.FieldNumbers.magicitems ? global.docFrom.FieldNumbers.magicitems : FieldNumbers.magicitems;
 			for (var i = 1; i <= nmbrFlds; i++) {
 				var fromFld = global.docFrom.getField("Extra.Magic Item " + i);
 				if (!fromFld || !fromFld.value) continue;
-				AddMagicItem(
+				await AddMagicItem(
 					fromFld.value,
 					global.docFrom.getField("Extra.Magic Item Attuned " + i).isBoxChecked(0),
 					global.docFrom.What("Extra.Magic Item Description " + i),
@@ -842,7 +842,7 @@ function DirectImport(consoleTrigger) {
 		}
 
 		// if from version >= 13, do magic items before setting the rest of the fields
-		if (!fromBefore13) importMagicItems();
+		if (!fromBefore13) await importMagicItems();
 
 		//set the ability scores and associated fields
 		for (var a = 0; a < abiScoreFlds.length; a++) {
@@ -1002,7 +1002,7 @@ function DirectImport(consoleTrigger) {
 				var profToChecked = profToFld.isBoxChecked(0) === 1;
 				if (profFromChecked !== profToChecked) {
 					profToFld.checkThisBox(0, profFromChecked);
-					setCheckboxProfsManual(profFldsArray[i]);
+					await setCheckboxProfsManual(profFldsArray[i]);
 				}
 			}
 			// manual weapon additions
@@ -1017,7 +1017,7 @@ function DirectImport(consoleTrigger) {
 			}
 			if (profsManualFrom.length) {
 				Value("Proficiency Weapon Other Description", [What("Proficiency Weapon Other Description")].concat(profsManualFrom).join(", "));
-				setOtherWeaponProfsManual();
+				await setOtherWeaponProfsManual();
 			}
 		} else {
 			// manually set proficiency checkboxes
@@ -1036,13 +1036,13 @@ function DirectImport(consoleTrigger) {
 				var normalState = CurrentProfs[profSort][profType] ? true : false;
 				if (profFromVar[profSort][profType+"_manual" + (normalState ? "off" : "on")]) {
 					CurrentProfs[profSort][profType+"_manual" + (normalState ? "off" : "on")] = true;
-					SetProf(profSort, undefined, profType, undefined, true);
+					await SetProf(profSort, undefined, profType, undefined, true);
 				}
 			};
 			// manual weapon additions
 			if (profFromVar.weapon.otherWea && profFromVar.weapon.otherWea["Manually added"]) {
 				CurrentProfs.weapon.otherWea["Manually added"] = profFromVar.weapon.otherWea["Manually added"];
-				SetProf("weapon", undefined, "other");
+				await SetProf("weapon", undefined, "other");
 			}
 		}
 
@@ -1094,7 +1094,7 @@ function DirectImport(consoleTrigger) {
 		ImportField("AC Armor Description", {notTooltip: true}); ImportField("AC Armor Bonus", {notTooltip: true}); ImportField("AC Armor Weight", {notTooltip: true}); ImportField("AC during Rest");
 		ImportField("AC Shield Bonus Description", {notTooltip: true}); ImportField("AC Shield Bonus", {notTooltip: true}); ImportField("AC Shield Weight", {notTooltip: true});
 		ImportField("Medium Armor", {notTooltip: true}); ImportField("Heavy Armor", {notTooltip: true});
-		if (ImportField("AC Stealth Disadvantage", {notTooltip: true})) ConditionSet();
+		if (ImportField("AC Stealth Disadvantage", {notTooltip: true})) await ConditionSet();
 
 		//hit points, hit die
 		ImportField("HP Max", {notTooltip: true}); ImportField("HP Max Current", {notTooltip: true}); ImportField("HP Temp", {notTooltip: true}); ImportField("HP Current", {notTooltip: true});
@@ -1122,7 +1122,7 @@ function DirectImport(consoleTrigger) {
 
 	//the third page
 		// if from version < 13, do magic items after setting the rest of the fields so their automation is run afterwards
-		if (fromBefore13) importMagicItems();
+		if (fromBefore13) await importMagicItems();
 
 		ImportField("Extra.Other Holdings");
 
@@ -1193,7 +1193,7 @@ function DirectImport(consoleTrigger) {
 			if (compRaceFldFrom.value) {
 				if (compRaceFldFrom.submitName) compRaceFldTo.submitName = compRaceFldFrom.submitName;
 				var compTypeFldFrom = global.docFrom.getField(prefixFrom + "Companion.Remember");
-				global.docTo.ApplyCompRace(compRaceFldFrom.value, prefixTo, compTypeFldFrom ? compTypeFldFrom.value : "");
+				await global.docTo.ApplyCompRace(compRaceFldFrom.value, prefixTo, compTypeFldFrom ? compTypeFldFrom.value : "");
 			}
 
 			//set companion ability scores and modifiers
@@ -1382,7 +1382,7 @@ function DirectImport(consoleTrigger) {
 						var tPrepFldFrom = global.docFrom.getField(prefixFrom + "spellshead." + (fromSheetTypePF ? "Image" : "Text") + ".prepare.0");
 						var tPrepFldToNm = prefixTo + "spellshead." + (typePF ? "Image" : "Text") + ".prepare.0";
 						if (tPrepFldFrom && tPrepFldFrom.display === display.hidden) {
-							MakePreparedMenu_PreparedOptions(tPrepFldToNm);
+							await MakePreparedMenu_PreparedOptions(tPrepFldToNm);
 						};
 					}
 					//set the spell remember fields
@@ -1418,7 +1418,7 @@ function DirectImport(consoleTrigger) {
 			SetToManual_Dialog.mFea = !!global.docFrom.CurrentVars.manual.feats;
 			SetToManual_Dialog.mRac = !!global.docFrom.CurrentVars.manual.race;
 		}
-		SetToManual_Button(true);
+		await SetToManual_Button(true);
 
 	//Recalculate the weapons, for things might have changed since importing them
 		ReCalcWeapons(false);
@@ -1430,7 +1430,7 @@ function DirectImport(consoleTrigger) {
 		};
 
 		//import the icons
-		IIerror = ImportIcons(pagesLayout, app.viewerType !== "Reader" && importFromPath[2]);
+		IIerror = await ImportIcons(pagesLayout, app.viewerType !== "Reader" && importFromPath[2]);
 
 		// set the focus to the top of the first page
 		tDoc.getField("Player Name").setFocus();
@@ -1445,9 +1445,9 @@ function DirectImport(consoleTrigger) {
 
 	// A pop-up to inform the user of the changes
 	if (!closeAlert) {
-		global.docTo.InitializeEverything(consoleTrigger, true);
+		await global.docTo.InitializeEverything(consoleTrigger, true);
 		global.docTo.dirty = true;
-		global.docTo.calcCont();
+		await global.docTo.calcCont();
 		thermoTxt = thermoM("Importing from '" + global.docFrom.documentFileName + "'...");
 		thermoM(0.9);
 
@@ -1599,7 +1599,7 @@ function ImportField(fldNm, actionsObj, fromFldNm) {
 };
 
 //import the icons
-function ImportIcons(pagesLayout, viaSaving) {
+async function ImportIcons(pagesLayout, viaSaving) {
 	if (!global.docTo || !global.docFrom) return true; //either of the documents or fields doesn't exist
 
 	var fromSheetTypePF = global.docFrom.info.SheetType ? (/printer friendly/i).test(global.docFrom.info.SheetType) : false;
@@ -1692,10 +1692,10 @@ function ImportIcons(pagesLayout, viaSaving) {
 
 		//add a blank template page as first page
 		if (global.docFrom.getTemplate("blank")) {
-			global.docFrom.getTemplate("blank").spawn(fromPagT, true, false);
+			await global.docFrom.getTemplate("blank").spawn(fromPagT, true, false);
 			var usePage = fromPagT;
 		} else if (global.docFrom.getTemplate("ASnotes")) { //or add a blank notes template page as first page
-			global.docFrom.getTemplate("ASnotes").spawn(fromPagT, true, false);
+			await global.docFrom.getTemplate("ASnotes").spawn(fromPagT, true, false);
 			global.docFrom.removeField("P0.ASnotes");
 			var usePage = fromPagT;
 		} else { //take the current notes page and delete all fields on it
@@ -1799,7 +1799,7 @@ function ImportExtraChoices() {
 };
 
 // add the extra class features that were added using a feature that grants bonus choices for other class features
-function AddExtraOtherChoices() {
+async function AddExtraOtherChoices() {
 	// NOG TESTEN MET:
 	// - feat met bonus feature voor class die WEL aangezig is, maar nog niet het juiste level heeft
 	if (!CurrentFeatureChoices.bonus) return;
@@ -1827,7 +1827,7 @@ function AddExtraOtherChoices() {
 			}
 			// Add the extra choices to the sheet, one by one
 			for (var i = 0; i < aXtrChc.length; i++) {
-				ClassFeatureOptions([
+				await ClassFeatureOptions([
 					sClass, sFea, aXtrChc[i], 'extra',
 					"add", true, sSubClass
 				], "add");
@@ -1839,7 +1839,7 @@ function AddExtraOtherChoices() {
 };
 
 /* ---- the old, depreciated import function ---- */
-function Import(type) {
+async function Import(type) {
 
 	//first ask if this sheet is already set-up the right way before importing and if we can continue
 	var AskFirst = {
@@ -1874,7 +1874,7 @@ function Import(type) {
 		} else if (type === "xfdf") {
 			tDoc.importAnXFDF();
 		}
-		if (What("Race Remember").split("-")[1]) ApplyRace(What("Race Remember"));
+		if (What("Race Remember").split("-")[1]) await ApplyRace(What("Race Remember"));
 		IsNotImport = true;
 		ignorePrereqs = false;
 	};
@@ -1918,7 +1918,7 @@ function Import(type) {
 
 	//set the visiblity of the adventure league as the imported field has been set to
 	if (What("League Remember") === "On") {
-		ToggleAdventureLeague({
+		await ToggleAdventureLeague({
 			dci : true,
 			factionrank : true,
 			renown : true,
@@ -1928,7 +1928,7 @@ function Import(type) {
 	} else {
 		try {
 			var theAdvL = eval(What("League Remember"));
-			ToggleAdventureLeague({
+			await ToggleAdventureLeague({
 				dci : theAdvL.dci,
 				factionrank : theAdvL.factionrank,
 				renown : theAdvL.renown,
@@ -1991,7 +1991,7 @@ function Import(type) {
 	thermoM(thermoTxt, true); // Stop progress bar
 
 	//re-apply stuff just as when starting the sheet
-	InitializeEverything();
+	await InitializeEverything();
 
 	tDoc.dirty = true;
 };
@@ -2118,9 +2118,9 @@ function MakeDescriptionExportArray() {
 	return tempArray.length > 0 ? tempArray : "";
 }
 
-function MakeXFDFExport(partial) {
+async function MakeXFDFExport(partial) {
 	if (partial !== "all") { // if given the command to only partially export
-		MakeSkillsMenu_SkillsOptions(["go", "alphabeta"]); // first make sure the skills are sorted alphabetically
+		await MakeSkillsMenu_SkillsOptions(["go", "alphabeta"]); // first make sure the skills are sorted alphabetically
 		var theArray = partial === "equipment" ? MakeEquipmentExportArray() : (partial === "description" ? MakeDescriptionExportArray() : MakeExportArray());
 		if (!theArray) {
 			app.alert("Nothing was found that was worthy to export. None of the fields that are not auto-filled seem to have anything but there default values in them. If you still want to export the settings, try exporting all field values.", 0, 0, "Nothing to Export");
@@ -2199,7 +2199,7 @@ function MakeXFDFExport(partial) {
 };
 
 //add a script to be run upon start of the sheet
-function AddUserScript(retResDia) {
+async function AddUserScript(retResDia) {
 	var theUserScripts = What("User Script").match(/(.|\r){1,65500}/g);
 	if (!theUserScripts) theUserScripts = [];
 	var defaultTxt = toUni("The JavaScript") + " you paste into the field below will be run now and whenever the sheet is opened, using eval(). If that script results in an error you will be informed immediately and the script will not be added to the sheet.\n" + toUni("This overwrites") + " whatever code you have previously added to the sheet using this dialog.\n" + toUni("Resetting the sheet is recommended") + " before you enter any custom content into it.";
@@ -2224,7 +2224,7 @@ function AddUserScript(retResDia) {
 		}
 	} while (tries < 5);
 
-	var getDialog = function() {
+	var getDialog = async function() {
 		var diaMax = Math.max(theUserScripts.length, diaIteration);
 		var moreDialogues = diaMax > diaIteration;
 		var AddUserScript_dialog = {
@@ -2254,8 +2254,8 @@ function AddUserScript(retResDia) {
 				this.script = results["jscr"];
 				dialog.end("next");
 			},
-			bFAQ: function(dialog) {
-				if (getFAQ(false, true)) {
+			bFAQ: async function(dialog) {
+				if (await getFAQ(false, true)) {
 					dialog.end("bfaq");
 					var results = dialog.store();
 					this.script = results["jscr"];
@@ -2435,7 +2435,7 @@ function AddUserScript(retResDia) {
 			setDialogName(AddUserScript_dialog, "OKbt", "type", "ok_cancel");
 			setDialogName(AddUserScript_dialog, "OKbt", "ok_name", "Go to Next Dialog >>");
 		};
-		var theDialog = app.execDialog(AddUserScript_dialog);
+		var theDialog = await app.execDialog(AddUserScript_dialog);
 		theUserScripts[diaIteration - 1] = AddUserScript_dialog.script;
 		if (clean(AddUserScript_dialog.script, [" ", "\t"]).slice(-1) === "}") theUserScripts[diaIteration - 1] += ";\n";
 		if (theDialog === "ok" && moreDialogues) theDialog = "next";
@@ -2443,11 +2443,11 @@ function AddUserScript(retResDia) {
 	};
 
 	do {
-		var askForScripts = getDialog();
+		var askForScripts = await getDialog();
 		if (askForScripts === "bpre") {
 			diaIteration -= 1;
 		} else if (askForScripts === "bfaq") {
-			getFAQ(["faq", "pdf"]);
+			await getFAQ(["faq", "pdf"]);
 		} else if (askForScripts === "bcon") {
 			console.println("\nYour code has been copied below, but hasn't been commited/saved to the sheet!\nYou can run code here by selecting the appropriate lines and pressing " + (isWindows ? "Ctrl+Enter" : "Command+Enter") + ".\n\n" + theUserScripts.join(""));
 			console.show();
@@ -2473,7 +2473,7 @@ function AddUserScript(retResDia) {
 		};
 		amendPsionicsToSpellsList();
 	};
-	if (retResDia) resourceDecisionDialog(false, false, retResDia === "also"); // return to the Dialog for Selecting Resources
+	if (retResDia) await resourceDecisionDialog(false, false, retResDia === "also"); // return to the Dialog for Selecting Resources
 };
 
 // Run the custom defined user scripts, if any exist
@@ -2841,11 +2841,11 @@ function FixAutoSelForceChoices(pObj, sExtraname, cObj) {
 }
 
 // side-loading a file and adding it to the field for safe-keeping
-function ImportUserScriptFile(filePath) {
+async function ImportUserScriptFile(filePath) {
 	// open the dialog to select the file or URL
-	var iFileStream = filePath ? util.readFileIntoStream(filePath) : util.readFileIntoStream();
+	var iFileStream = filePath ? await util.readFileIntoStream(filePath) : await util.readFileIntoStream();
 	if (!iFileStream) return false;
-	var iFileCont = util.stringFromStream(iFileStream);
+	var iFileCont = await util.stringFromStream(iFileStream);
 	if ((/<(!DOCTYPE )?html/i).test(iFileCont)) {
 		// Import is probably an HTML file, lets try and get the JavaScript from it in case it's from GitHub or PasteBin
 		var htmlAttr = {
@@ -2931,7 +2931,7 @@ function ImportUserScriptFile(filePath) {
 };
 
 // Open the dialog for importing whole files with content
-function ImportScriptFileDialog(retResDia) {
+async function ImportScriptFileDialog(retResDia) {
 	var defaultTxt = "Import or delete files that add content and/or custom scripts to the sheet.";
 	var defaultTxt2 = "In modern operating systems, you can enter a URL in the 'Open' dialog directly instead of first downloading a file and then navigating to it.";
 	var defaultTxt3 = "Use the \"Get Content\" buttons below to get pre-written files!";
@@ -2958,8 +2958,8 @@ function ImportScriptFileDialog(retResDia) {
 			});
 		},
 		commit: function(dialog) {},
-		bFAQ: function(dialog) {
-			if (getFAQ(false, true)) {
+		bFAQ: async function(dialog) {
+			if (await getFAQ(false, true)) {
 				dialog.end("bfaq");
 				var results = dialog.store();
 				this.script = results["jscr"];
@@ -2988,9 +2988,9 @@ function ImportScriptFileDialog(retResDia) {
 				});
 			};
 		},
-		bAdd: function(dialog) {
-			ImportUserScriptFile();
-			var dialogObj = {};
+		bAdd: async function(dialog) {
+			await ImportUserScriptFile();
+			dialogObj = {};
 			for (var scriptFile in CurrentScriptFiles) {
 				dialogObj[scriptFile] = -1;
 			};
@@ -3004,7 +3004,7 @@ function ImportScriptFileDialog(retResDia) {
 				bSee : false
 			});
 		},
-		removeOrSee: function(dialog, deleteIt) {
+		removeOrSee: async function(dialog, deleteIt) {
 			var allElem = dialog.store()["scrF"];
 			var fndElem = GetPositiveElement(allElem);
 			if (!fndElem) return;
@@ -3013,7 +3013,7 @@ function ImportScriptFileDialog(retResDia) {
 					delete CurrentScriptFiles[fndElem];
 					SetStringifieds("scriptfiles");
 				} else {
-					ShowDialog("Content of '" + fndElem + "'", CurrentScriptFiles[fndElem]);
+					await ShowDialog("Content of '" + fndElem + "'", CurrentScriptFiles[fndElem]);
 				}
 			} else {
 				app.alert("The name '" + fndElem + "' in the dialog was not found in any of the scripts the sheet. It will be removed from the dialog, but nothing in the sheet will change.");
@@ -3021,11 +3021,12 @@ function ImportScriptFileDialog(retResDia) {
 			};
 			if (deleteIt) {
 				delete allElem[fndElem];
+				dialogObj = allElem;
 				dialog.load({ scrF : allElem });
 			}
 		},
-		bRem: function(dialog) { this.removeOrSee(dialog, true); },
-		bSee: function(dialog) { this.removeOrSee(dialog, false); },
+		bRem: async function(dialog) { await this.removeOrSee(dialog, true); },
+		bSee: async function(dialog) { await this.removeOrSee(dialog, false); },
 		description : {
 			name : "IMPORT CUSTOM SCRIPT DIALOG",
 			first_tab : "OKbt",
@@ -3111,7 +3112,7 @@ function ImportScriptFileDialog(retResDia) {
 						name : "How to get/make the JavaScript files to enter here?",
 						elements : [{
 							type : "view",
-							alignmen : "align_fill",
+							alignment : "align_fill",
 							align_children : "align_row",
 							width : 730,
 							elements : [{
@@ -3183,9 +3184,9 @@ function ImportScriptFileDialog(retResDia) {
 
 
 	do {
-		var scriptFilesDialog = app.execDialog(AddScriptFiles_dialog);
+		var scriptFilesDialog = await app.execDialog(AddScriptFiles_dialog);
 		if (scriptFilesDialog === "bfaq") {
-			getFAQ(["faq", "pdf"]);
+			await getFAQ(["faq", "pdf"]);
 		} else if (scriptFilesDialog === "bcon") {
 			console.println("\nAny changes you made in the import script files dialog have not been applied!\nYou can run code here by pasting it in, selecting the appropriate lines and pressing " + (isWindows ? "Ctrl+Enter" : "Command+Enter") + ".");
 			console.show();
@@ -3214,19 +3215,19 @@ function ImportScriptFileDialog(retResDia) {
 		Value("User_Imported_Files.Stringified", filesScriptRem);
 		CurrentScriptFiles = eval(filesScriptRem);
 	};
-	if (retResDia) resourceDecisionDialog(false, false, retResDia === "also"); // return to the Dialog for Selecting Resources
+	if (retResDia) await resourceDecisionDialog(false, false, retResDia === "also"); // return to the Dialog for Selecting Resources
 };
 
 // Open the menu to import materials
-function ImportScriptOptions(input) {
-	var MenuSelection = input ? input : getMenu("importscripts");
+async function ImportScriptOptions(input) {
+	var MenuSelection = input ? input : await getMenu("importscripts");
 	if (MenuSelection === undefined || MenuSelection[0] === "nothing") return;
 	switch (MenuSelection[2]) {
 		case "file" :
-			ImportScriptFileDialog(MenuSelection[3]);
+			await ImportScriptFileDialog(MenuSelection[3]);
 			break;
 		case "manual" :
-			AddUserScript(MenuSelection[3]);
+			await AddUserScript(MenuSelection[3]);
 			break;
 		case "onlinehelp" :
 			contactMPMB("how to add content");

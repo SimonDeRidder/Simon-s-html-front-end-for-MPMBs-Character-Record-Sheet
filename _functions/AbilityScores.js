@@ -1,5 +1,5 @@
 // a function to set ability scores to the global variable
-function processStats(AddRemove, inType, NameEntity, inScoresA, dialogTxt, isSpecial, inAlsoHasMax, maxIsLimitToNow) {
+async function processStats(AddRemove, inType, NameEntity, inScoresA, dialogTxt, isSpecial, inAlsoHasMax, maxIsLimitToNow) {
 	// Redo the arrays, so that they are no longer a reference
 	var scoresA = inScoresA && isArray(inScoresA) ? [].concat(inScoresA) : [];
 	var alsoHasMax = inAlsoHasMax && isArray(inAlsoHasMax) ? [].concat(inAlsoHasMax) : false;
@@ -18,7 +18,7 @@ function processStats(AddRemove, inType, NameEntity, inScoresA, dialogTxt, isSpe
 		}
 	}
 	if (!curStat && type === "background") {
-		ASaddColumn("Backgr-\nound", true);
+		await ASaddColumn("Backgr-\nound", true);
 		i = CurrentStats.cols.length - 1;
 		curStat = CurrentStats.cols[i];
 	} else if (!curStat) {
@@ -115,7 +115,7 @@ function processStats(AddRemove, inType, NameEntity, inScoresA, dialogTxt, isSpe
 		} else {
 			delete CurrentStats.maximumsLinked[NameEntity];
 		}
-		processStats(AddRemove, inType, NameEntity, alsoHasMax, dialogTxt, "maximums", false);
+		await processStats(AddRemove, inType, NameEntity, alsoHasMax, dialogTxt, "maximums", false);
 	} else {
 		// Only do this once, either now or with the above processStats call if there are also maximums
 		SetStringifieds("stats");
@@ -199,7 +199,7 @@ function ASCalcPointBuy(theScore) {
 }
 
 // the function to call to start and apply the ability score dialog
-function AbilityScores_Button(onlySetTooltip) {
+async function AbilityScores_Button(onlySetTooltip) {
 	// initialize some variables
 	initiateCurrentStats();
 	var titleTxt = "Ability Scores";
@@ -341,7 +341,7 @@ function AbilityScores_Button(onlySetTooltip) {
 	}
 
 	// a function to create the dialog from the global CurrentStats variable
-	var openStatsDialog = function() {
+	var openStatsDialog = async function() {
 		// Create the columns
 		var theColumns = [];
 
@@ -847,16 +847,16 @@ function AbilityScores_Button(onlySetTooltip) {
 										SpinEdit : true
 									}]
 								}]
-							}, {
-								type : "static_text",
-								item_id : "tPNm",
-								font : "dialog",
-								bold : true,
-								height : 25,
-								char_width : 8,
-								alignment : "align_right",
-								name : "Point Buy total:"
 							}]
+						}, {
+							type : "static_text",
+							item_id : "tPNm",
+							font : "dialog",
+							bold : true,
+							height : 25,
+							char_width : 8,
+							alignment : "align_right",
+							name : "Point Buy total:"
 						}, {
 							type : "view", // point buy values
 							elements : [{
@@ -1018,7 +1018,7 @@ function AbilityScores_Button(onlySetTooltip) {
 								char_width : 4,
 								height : 32,
 								wrap_name : true,
-								aligabent : "align_left",
+								alignment : "align_left",
 								name : "Ability Abbr."
 							}, {
 								type : "static_text",
@@ -1115,14 +1115,14 @@ function AbilityScores_Button(onlySetTooltip) {
 			}
 		}
 
-		return app.execDialog(AbilityScores_Dialog);
+		return await app.execDialog(AbilityScores_Dialog);
 	};
 
 	do {
-		var theDia = openStatsDialog();
+		var theDia = await openStatsDialog();
 		var reopenDia = theDia !== "ok" && theDia !== "cancel";
-		if (theDia == "cadd") ASaddColumn();
-		if (theDia == "crem") ASremoveColumn();
+		if (theDia == "cadd") await ASaddColumn();
+		if (theDia == "crem") await ASremoveColumn();
 	} while (reopenDia);
 
 	if (theDia == "ok") {
@@ -1133,7 +1133,7 @@ function AbilityScores_Button(onlySetTooltip) {
 }
 
 // a function to ask the user for a new column caption and add that column
-function ASaddColumn(inputName, isBackground) {
+async function ASaddColumn(inputName, isBackground) {
 	var diaHead = "Give the new column an unique caption";
 	var diaText = "The field is intentionally small so that you have an idea of how big the caption can be. If something doesn't fit nicely, it will definitely not display correctly in the ability score dialog.\n\nIf you include the word 'override' in the caption, the column will be treated as an overriding column instead of an adding column. This means that a value will be used if higher than the other values added together.";
 	var diaText2 = "If you leave the above field blank, no column will be created.";
@@ -1195,12 +1195,12 @@ function ASaddColumn(inputName, isBackground) {
 					name : diaText2
 				}, {
 					type : "ok_cancel",
-					ok_nam : "Add Column"
+					ok_name : "Add Column"
 				}]
 			}]
 		}
 	};
-	var newColName = inputName ? inputName : app.execDialog(theDialog) === "ok" && theDialog.column ? theDialog.column : false;
+	var newColName = inputName ? inputName : (await app.execDialog(theDialog)) === "ok" && theDialog.column ? theDialog.column : false;
 	if (newColName) {
 		CurrentStats.cols.push({
 			type : isBackground ? 'background' : 'extra',
@@ -1211,7 +1211,7 @@ function ASaddColumn(inputName, isBackground) {
 }
 
 // a function to ask for the user which column to remove
-function ASremoveColumn() {
+async function ASremoveColumn() {
 	var diaHead = "Select the column to remove";
 	var diaText = "Removing a column can't be undone once you press 'Apply' in the ability scores dialog! Any values in the column will then forever be lost.";
 	var diaText2 = "If you leave the selection blank, nothing will be removed.";
@@ -1279,12 +1279,12 @@ function ASremoveColumn() {
 					name : diaText2
 				}, {
 					type : "ok_cancel",
-					ok_nam : "Add Column"
+					ok_name : "Add Column"
 				}]
 			}]
 		}
 	};
-	if (app.execDialog(theDialog) != "ok" || !theDialog.column || theDialog.column == " ") return;
+	if (await app.execDialog(theDialog) != "ok" || !theDialog.column || theDialog.column == " ") return;
 	for (var i = 6; i < CurrentStats.cols.length; i++) {
 		var theCol = CurrentStats.cols[i];
 		if (theCol.type == 'extra' && theCol.name == theDialog.column) {

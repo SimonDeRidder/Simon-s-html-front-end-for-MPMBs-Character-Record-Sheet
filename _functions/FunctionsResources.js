@@ -370,7 +370,7 @@ function resourceExclusionSetting(spellSources, noChanges, oldResults) {
 
 //a function that sets the global variable of excluded materials
 //inclA must be the same length as inclA_Names, and exclA must be the same length as exclA_Names
-function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
+async function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 	if (!atOpening && app.viewerVersion < 15) FunctionIsNotAvailable();
 	var isFirstTime = atReset ? atReset : CurrentSources.firstTime;
 	var spellSources = [];
@@ -519,13 +519,13 @@ function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 			this.defaultExcl = resourceExclusionSetting(this.spellSources, true, this.defaultExcl);
 			dialog.load({ "ExTx" : this.defaultExcl.str });
 		},
-		ExcL : function (dialog) {
+		ExcL : async function (dialog) {
 			var exclElems = dialog.store()["ExcL"];
 			var isGetItem = GetPositiveElement(exclElems) === getMoreCont;
 			if (isGetItem) {
 				if (this.exclActive != "stop") {
 					this.exclActive = "stop";
-					this.bMor(dialog);
+					await this.bMor(dialog);
 				} else {
 					this.exclActive = false;
 				};
@@ -609,22 +609,22 @@ function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 			this.inclActive = false;
 			this.updateCS(dialog, allExcl);
 		},
-		bCla : function (dialog) {resourceSelectionDialog("class"); this.updateDefExcl(dialog);},
-		bRac : function (dialog) {resourceSelectionDialog("race"); this.updateDefExcl(dialog);},
-		bFea : function (dialog) {resourceSelectionDialog("feat"); this.updateDefExcl(dialog);},
-		bSpe : function (dialog) {resourceSelectionDialog("spell"); this.updateDefExcl(dialog);},
-		bBac : function (dialog) {resourceSelectionDialog("background"); this.updateDefExcl(dialog);},
-		bBaF : function (dialog) {resourceSelectionDialog("background feature"); this.updateDefExcl(dialog);},
-		bCre : function (dialog) {resourceSelectionDialog("creature"); this.updateDefExcl(dialog);},
-		bCom : function (dialog) {resourceSelectionDialog("companion"); this.updateDefExcl(dialog);},
-		bAtk : function (dialog) {resourceSelectionDialog("weapon"); this.updateDefExcl(dialog);},
-		bArm : function (dialog) {resourceSelectionDialog("armor"); this.updateDefExcl(dialog);},
-		bAmm : function (dialog) {resourceSelectionDialog("ammo"); this.updateDefExcl(dialog);},
-		bMag : function (dialog) {resourceSelectionDialog("magic item"); this.updateDefExcl(dialog);},
+		bCla : async function (dialog) {await resourceSelectionDialog("class"); this.updateDefExcl(dialog);},
+		bRac : async function (dialog) {await resourceSelectionDialog("race"); this.updateDefExcl(dialog);},
+		bFea : async function (dialog) {await resourceSelectionDialog("feat"); this.updateDefExcl(dialog);},
+		bSpe : async function (dialog) {await resourceSelectionDialog("spell"); this.updateDefExcl(dialog);},
+		bBac : async function (dialog) {await resourceSelectionDialog("background"); this.updateDefExcl(dialog);},
+		bBaF : async function (dialog) {await resourceSelectionDialog("background feature"); this.updateDefExcl(dialog);},
+		bCre : async function (dialog) {await resourceSelectionDialog("creature"); this.updateDefExcl(dialog);},
+		bCom : async function (dialog) {await resourceSelectionDialog("companion"); this.updateDefExcl(dialog);},
+		bAtk : async function (dialog) {await resourceSelectionDialog("weapon"); this.updateDefExcl(dialog);},
+		bArm : async function (dialog) {await resourceSelectionDialog("armor"); this.updateDefExcl(dialog);},
+		bAmm : async function (dialog) {await resourceSelectionDialog("ammo"); this.updateDefExcl(dialog);},
+		bMag : async function (dialog) {await resourceSelectionDialog("magic item"); this.updateDefExcl(dialog);},
 		bLin : function (dialog) {if (this.sourceLink) app.launchURL(this.sourceLink, true)},
-		bSrc : function (dialog) { MakeSourceMenu_SourceOptions(); },
-		bMor : function (dialog) {
-			var MenuSelection = getMenu("importscripts");
+		bSrc : async function (dialog) { await MakeSourceMenu_SourceOptions(); },
+		bMor : async function (dialog) {
+			var MenuSelection = await getMenu("importscripts");
 			if (MenuSelection !== undefined && MenuSelection[0] !== "nothing") {
 				MenuSelection[3] = true;
 				this.scrpMenu = MenuSelection;
@@ -927,7 +927,7 @@ function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 		}
 	};
 
-	var CallDialogue = app.execDialog(selectionDialogue);
+	var CallDialogue = await app.execDialog(selectionDialogue);
 	if (CallDialogue === "ok" || CallDialogue === "scrp" || (CallDialogue === "cancel" && forceDDupdate)) {
 		cleanExclSources();
 		SetStringifieds("sources");
@@ -935,7 +935,7 @@ function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 		CurrentSources = eval(remCS);
 	};
 	if (CallDialogue === "scrp") {
-		ImportScriptOptions(selectionDialogue.scrpMenu);
+		await ImportScriptOptions(selectionDialogue.scrpMenu);
 	} else if (CallDialogue === "ok" || forceDDupdate) {
 		// Start progress bar and stop calculations
 		var thermoTxt = thermoM("Applying the changes to the sources...");
@@ -943,7 +943,7 @@ function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 		UpdateDropdown("resources");
 
 		// Change how some things are now recognized by the sheet
-		getDynamicFindVariables();
+		await getDynamicFindVariables();
 
 		// Set the visibility of the Choose Feature and Racial Options button
 		ClassMenuVisibility();
@@ -966,7 +966,7 @@ function resourceDecisionDialog(atOpening, atReset, forceDDupdate) {
 };
 
 //the buttons on the main resourceDecisionDialog point here, which can handle classes (type === "class"), races (type === "race"), feats (type === "feat"), spells (type === "spell"), backgrounds (type === "background"), background features (type === "background feature"), creatures (type === "creature")
-function resourceSelectionDialog(type) {
+async function resourceSelectionDialog(type) {
 	var exclObj = {}, inclObj = {}, inclInArr = "elements", refObj = {}, theExtra = ["", 0];
 
 	for (var aSrc in SourceList) {
@@ -1352,7 +1352,7 @@ function resourceSelectionDialog(type) {
 			this.exclActive = true;
 			this.inclActive = false;
 		},
-		bSrc : function (dialog) { MakeSourceMenu_SourceOptions(); },
+		bSrc : async function (dialog) { await MakeSourceMenu_SourceOptions(); },
 		description : {
 			name : theName.toUpperCase() + " SOURCE SELECTION DIALOG",
 			elements : [{
@@ -1435,7 +1435,7 @@ function resourceSelectionDialog(type) {
 		}
 	};
 
-	if (app.execDialog(selectionDialogue) === "ok") {
+	if (await app.execDialog(selectionDialogue) === "ok") {
 		CurrentSources[CSatt] = [];
 		for (var a = 0; a < selectionDialogue.exclArr.length; a++) {
 			var theA = selectionDialogue.exclArr[a];
@@ -1534,7 +1534,7 @@ function stringSource(obj, verbosity, prefix, suffix) {
 };
 
 // make a menu off all the sources where clicking on them gets you to their linked URL
-function MakeSourceMenu_SourceOptions() {
+async function MakeSourceMenu_SourceOptions() {
 	var SourceMenu = [{
 		cName : "[clicking a source will open a web page]",
 		bEnabled : false
@@ -1631,11 +1631,11 @@ function MakeSourceMenu_SourceOptions() {
 	Menus.sources = SourceMenu;
 
 	//now call the menu
-	var MenuSelection = getMenu("sources");
+	var MenuSelection = await getMenu("sources");
 
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	if (MenuSelection[1] === "dialogue") {
-		ShowDialog("List of Sources, sorted by abbreviation", "sources");
+		await ShowDialog("List of Sources, sorted by abbreviation", "sources");
 		return;
 	};
 	var theSrc = abbrObj.lowObj[MenuSelection[1]];

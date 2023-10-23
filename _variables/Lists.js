@@ -4,9 +4,9 @@ var ignoreSearchLength = false; // whether or not to consider the length of the 
 var ignoreDuplicates = false; // whether or not to allow duplicates of feats and magic items
 
 // A function to load all the variables not stored in the sheet, but generated dynamically
-function getDynamicFindVariables() {
+async function getDynamicFindVariables() {
 	FindClasses();
-	FindRace();
+	await FindRace();
 	FindCompRace();
 	FindWeapons();
 	FindCompWeapons();
@@ -756,9 +756,9 @@ var SetPrintPages_Dialog = {
 	},
 
 	//fun whenever the Hide checkbox is clicked
-	Hide : function (dialog) {
+	Hide : async function (dialog) {
 		this.bHide = !this.bHide;
-		HideShowEverything(this.bHide);
+		await HideShowEverything(this.bHide);
 	},
 
 	description : {
@@ -975,7 +975,7 @@ var SetToManual_Dialog = {
 							type : "view",
 							align_children : "align_row",
 							char_height : 2,
-							char_width : 38,
+							char_width : 49,
 							elements : [{
 								type : "check_box",
 								item_id : "Atta",
@@ -990,7 +990,7 @@ var SetToManual_Dialog = {
 							type : "view",
 							align_children : "align_row",
 							char_height : 2,
-							char_width : 38,
+							char_width : 49,
 							elements : [{
 								type : "check_box",
 								item_id : "Back",
@@ -1005,7 +1005,7 @@ var SetToManual_Dialog = {
 							type : "view",
 							align_children : "align_row",
 							char_height : 2,
-							char_width : 38,
+							char_width : 49,
 							elements : [{
 								type : "check_box",
 								item_id : "BaFe",
@@ -1020,7 +1020,7 @@ var SetToManual_Dialog = {
 							type : "view",
 							align_children : "align_row",
 							char_height : 2,
-							char_width : 38,
+							char_width : 49,
 							elements : [{
 								type : "check_box",
 								item_id : "Clas",
@@ -1035,7 +1035,7 @@ var SetToManual_Dialog = {
 							type : "view",
 							align_children : "align_row",
 							char_height : 2,
-							char_width : 38,
+							char_width : 49,
 							elements : [{
 								type : "check_box",
 								item_id : "Feat",
@@ -1050,7 +1050,7 @@ var SetToManual_Dialog = {
 							type : "view",
 							align_children : "align_row",
 							char_height : 2,
-							char_width : 38,
+							char_width : 49,
 							elements : [{
 								type : "check_box",
 								item_id : "Item",
@@ -1065,7 +1065,7 @@ var SetToManual_Dialog = {
 							type : "view",
 							align_children : "align_row",
 							char_height : 2,
-							char_width : 38,
+							char_width : 49,
 							elements : [{
 								type : "check_box",
 								item_id : "Race",
@@ -1248,7 +1248,7 @@ var SetUnitDecimals_Dialog = {
 				}, {
 					type : "view",
 					align_children : "align_row",
-					aligment : "align_center",
+					alignment : "align_center",
 					width : 480,
 					elements : [{
 						type : "cluster",

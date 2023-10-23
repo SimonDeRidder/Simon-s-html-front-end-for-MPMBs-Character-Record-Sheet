@@ -14,7 +14,7 @@ function SetPositiveElement(objIn, element) {
 };
 
 //a dialog that allows immediate feedback on what a class' name will look like and create a comprehensive, complete string to put in the class field
-function SelectClass() {
+async function SelectClass() {
 	if (app.viewerVersion < 15) {
 		FunctionIsNotAvailable();
 		return;
@@ -25,10 +25,12 @@ function SelectClass() {
 			nIcon : 1,
 			cMsg : "Class processing has been turned off. Because of that, the class selection dialog won't work.\n\nWould you like to open the dialog to turn class processing back on?"
 		});
-		if (openManualDia == 4) SetToManual_Button();
+		if (openManualDia == 4) {
+			await SetToManual_Button();
+		}
 		if (CurrentVars.manual.classes) return;
 	}
-	if (CurrentSources.firstTime) OpeningStatement();
+	if (CurrentSources.firstTime) await OpeningStatement();
 	var theChar = What("PC Name") ? What("PC Name") : "your character";
 	var hasUAranger = false;
 	var ClassFld = What("Class and Levels");
@@ -306,7 +308,7 @@ function SelectClass() {
 			this.updateFull(dialog);
 		},
 		bAdR : function (dialog) { dialog.end("bAdR"); },
-		bSrc : function (dialog) { MakeSourceMenu_SourceOptions(); },
+		bSrc : async function (dialog) { await MakeSourceMenu_SourceOptions(); },
 		bCSS : function (dialog) { dialog.end("bCSS"); },
 		r0LV : function (dialog) { this.lvlChange(dialog, 0); },
 		r0TX : function (dialog) { this.textChange(dialog, 0); },
@@ -434,13 +436,13 @@ function SelectClass() {
 								font : "dialog",
 								bold : true,
 								height : 20,
-								char_width : 3,
+								char_width : 5,
 								name : "Level"
 							}, {
 								item_id : "r0LV",
 								type : "edit_text",
 								height : 23,
-								char_width : 2,
+								char_width : 4,
 								SpinEdit : true
 							}]
 						}, {
@@ -537,7 +539,7 @@ function SelectClass() {
 						}, {
 							item_id : "r1LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r1TX",
@@ -573,7 +575,7 @@ function SelectClass() {
 						}, {
 							item_id : "r2LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r2TX",
@@ -609,7 +611,7 @@ function SelectClass() {
 						}, {
 							item_id : "r3LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r3TX",
@@ -645,7 +647,7 @@ function SelectClass() {
 						}, {
 							item_id : "r4LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r4TX",
@@ -681,7 +683,7 @@ function SelectClass() {
 						}, {
 							item_id : "r5LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r5TX",
@@ -717,7 +719,7 @@ function SelectClass() {
 						}, {
 							item_id : "r6LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r6TX",
@@ -741,7 +743,7 @@ function SelectClass() {
 							char_width : 6
 						}]
 					}, {
-						item_id : "r2VW", // row 7
+						item_id : "r7VW", // row 7
 						type : "view",
 						align_children : "align_distribute",
 						elements : [{
@@ -753,7 +755,7 @@ function SelectClass() {
 						}, {
 							item_id : "r7LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r7TX",
@@ -777,7 +779,7 @@ function SelectClass() {
 							char_width : 6
 						}]
 					}, {
-						item_id : "r2VW", // row 8
+						item_id : "r8VW", // row 8
 						type : "view",
 						align_children : "align_distribute",
 						elements : [{
@@ -789,7 +791,7 @@ function SelectClass() {
 						}, {
 							item_id : "r8LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r8TX",
@@ -813,7 +815,7 @@ function SelectClass() {
 							char_width : 6
 						}]
 					}, {
-						item_id : "r2VW", // row 9
+						item_id : "r9VW", // row 9
 						type : "view",
 						align_children : "align_distribute",
 						elements : [{
@@ -825,7 +827,7 @@ function SelectClass() {
 						}, {
 							item_id : "r9LV",
 							type : "edit_text",
-							char_width : 2,
+							char_width : 4,
 							SpinEdit : true
 						}, {
 							item_id : "r9TX",
@@ -991,13 +993,13 @@ function SelectClass() {
 			txtFinal = "";
 			lvlFinal = 0;
 		} else {
-			var dia = app.execDialog(ClassSelection_Dialog);
+			var dia = await app.execDialog(ClassSelection_Dialog);
 			txtFinal = ClassSelection_Dialog.finalText;
 			lvlFinal = ClassSelection_Dialog.finalLevel;
 		}
 		if (dia === "bCSS") {
 			var remUArgr = hasUAranger;
-			resourceDecisionDialog();
+			await resourceDecisionDialog();
 			setClassesToDialog();
 			for (var c = 0; c < ClassSelection_Dialog.curSelec.length; c++) {
 				var sel = ClassSelection_Dialog.curSelec[c];
@@ -1034,7 +1036,7 @@ function SelectClass() {
 		if (!(/\d/).test(txtFinal)) txtFinal += " " + lvlFinal;
 		// update the class field
 		if (ClassFld !== txtFinal) { // text changed
-			delete tDoc.getField("Class and Levels").remVal;
+			tDoc.getField("Class and Levels").deleteRemVal();
 			Value("Class and Levels", txtFinal);
 		} else { // text stayed the same, so just update the class level
 			classes.totallevel = lvlFinal;
@@ -1044,18 +1046,18 @@ function SelectClass() {
 };
 
 //and On Click function for the Class and Levels field
-function ClickClasses() {
+async function ClickClasses() {
 	if (!CurrentVars.manual.classes && app.viewerVersion >= 15 && (!event.target.value || event.modifier || event.shift)) {
 		event.target.remVal = event.target.value;
 		tDoc.getField("Player Name").setFocus();
-		SelectClass();
+		await SelectClass();
 	};
 };
 
 // After changing the level field, ask which class to add a level to, or start multiclassing
-function AskMulticlassing(lvlAlreadyAdded) {
+async function AskMulticlassing(lvlAlreadyAdded) {
 	if (app.viewerVersion >= 15) {
-		SelectClass();
+		await SelectClass();
 		return;
 	};
 	var Multiclassing_Dialog = {
@@ -1305,7 +1307,7 @@ function AskMulticlassing(lvlAlreadyAdded) {
 
 	if (!AddAll || dResult === "") {
 		// not everything was applied yet, so lets ask what to do for the next level
-		AskMulticlassing(dResult === "" ? 0 : lvlAlreadyAdded? lvlAlreadyAdded + 1 : 1);
+		await AskMulticlassing(dResult === "" ? 0 : lvlAlreadyAdded? lvlAlreadyAdded + 1 : 1);
 		return;
 	}
 
@@ -1314,7 +1316,7 @@ function AskMulticlassing(lvlAlreadyAdded) {
 	var newClassText = classes.parsed.map( function (n) { return n.join(" ") }).join(", ")
 	// update the class field
 	if (What("Class and Levels") !== newClassText) { // text changed
-		delete tDoc.getField("Class and Levels").remVal;
+		tDoc.getField("Class and Levels").deleteRemVal();
 		Value("Class and Levels", newClassText);
 	} else { // text stayed the same, so just update the class level
 		classes.totallevel = CharLVL;
@@ -1323,7 +1325,7 @@ function AskMulticlassing(lvlAlreadyAdded) {
 };
 
 //show a dialog when the subclass is not set but the level is high enough to need a subclass
-function PleaseSubclass(aClass, classString) {
+async function PleaseSubclass(aClass, classString) {
 	if (!IsNotImport || What("SubClass Remember").indexOf(aClass) !== -1) return;
 
 	var aclass = ClassList[aClass];
@@ -1488,7 +1490,7 @@ function PleaseSubclass(aClass, classString) {
 		}
 	};
 
-	var theDialog = app.execDialog(SubclassSelect_Dialog);
+	var theDialog = await app.execDialog(SubclassSelect_Dialog);
 	if (theDialog === "ok" && SubclassSelect_Dialog.result > -1) {
 		var selection = aclassObj[aclassArray[SubclassSelect_Dialog.result]];
 		var newName = ClassSubList[selection].fullname ? ClassSubList[selection].fullname : aclass.name + " (" + ClassSubList[selection].subname + ")";

@@ -62,8 +62,8 @@ AddSubClass("warlock", "the dead king", {
 				"As a bonus action, I can command it and any other undead under my control"
 			]),
 			action : ["bonus action", ""],
-			eval : "warlock_the_dead_king_functions.add(newClassLvl.warlock);",
-			removeeval : "warlock_the_dead_king_functions.remove();",
+			eval : "await warlock_the_dead_king_functions.add(newClassLvl.warlock);",
+			removeeval : "await warlock_the_dead_king_functions.remove();",
 			changeeval : "warlock_the_dead_king_functions.update(newClassLvl.warlock);"
 		},
 		"subclassfeature10" : {
@@ -92,7 +92,7 @@ AddSubClass("warlock", "the dead king", {
 });
 
 warlock_the_dead_king_functions = {
-	add : function(wlvl) {
+	add : async function(wlvl) {
 		if (wlvl < 6) return;
 		var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 		var prefix = false;
@@ -104,8 +104,8 @@ warlock_the_dead_king_functions = {
 				}
 			}
 		}
-		if (!prefix) prefix = DoTemplate('AScomp', 'Add');
-		var skelZomb = AskUserOptions('Select Undead Cohort', (sheetVersion > 12.999 ? 'The Warlock (the Dead King) class feature Undead Cohort offers a choice of undead cohort. Select it here to create a companion page for it. ' : '') + 'You can change the race later, but you will have to do it on the companion page made by this feature. You will not be able to create another companion page that works for this feature, so beware not to remove this companion page!', ['Skeleton', 'Zombie'], 'radio', true);
+		if (!prefix) prefix = await DoTemplate('AScomp', 'Add');
+		var skelZomb = await AskUserOptions('Select Undead Cohort', (sheetVersion > 12.999 ? 'The Warlock (the Dead King) class feature Undead Cohort offers a choice of undead cohort. Select it here to create a companion page for it. ' : '') + 'You can change the race later, but you will have to do it on the companion page made by this feature. You will not be able to create another companion page that works for this feature, so beware not to remove this companion page!', ['Skeleton', 'Zombie'], 'radio', true);
 		Value(prefix + 'Comp.Race', skelZomb);
 		var theType = tDoc.getField(prefix + 'Comp.Type');
 		theType.readonly = true;
@@ -118,12 +118,12 @@ warlock_the_dead_king_functions = {
 		tDoc.getField(prefix + 'Comp.Use.AC').submitName = What(prefix + 'Comp.Use.AC');
 		Value(prefix + 'Cnote.Left', "Undead Cohort (the Dead King 6, D\u0026Dwiki):\n\u2022 Add the warlock's proficiency bonus to AC, attack rolls, and damage rolls\n\u2022 Maximum hit points is equal to four times the warlock level\n\u2022 As a bonus action, the warlock can command the Undead Cohort as per the Animate Dead spell\n\u2022 The warlock can fully restore the Undead Cohort after a long rest, even if it as destroyed");
 	},
-	remove : function() {
+	remove : async function() {
 		var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 		if (AScompA) {
 			for (var a = 1; a < AScompA.length; a++) {
 				if (What(AScompA[a] + 'Comp.Type') == 'Undead Cohort') {
-					DoTemplate("AScomp", "Remove", AScompA[a]);
+					await DoTemplate("AScomp", "Remove", AScompA[a]);
 					return;
 				}
 			}

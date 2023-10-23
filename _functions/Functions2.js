@@ -157,7 +157,7 @@ function setCurrentCompRace(prefix, type, found) {
 }
 
 //add a creature to the companion page
-function ApplyCompRace(newRace, prefix, sCompType) {
+async function ApplyCompRace(newRace, prefix, sCompType) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
 	var bIsRaceFld = event.target && event.target.name && event.target.name.indexOf("Comp.Race") !== -1;
 	if (bIsRaceFld && newRace.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
@@ -184,7 +184,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		for (var c = 0; c < clearSubmitNames.length; c++) AddTooltip(clearSubmitNames[c], undefined, "");
 	}
 
-	var undoCreaturePresistents = function(prefix, objCrea) {
+	var undoCreaturePresistents = async function(prefix, objCrea) {
 		// remove special companion type
 		ApplyCompanionType(false, prefix); // also empties Companion.Remember field
 		// undo calcChanges (just calcChanges.hp)
@@ -199,7 +199,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		aHPsets[3] = "nothing";
 		AddTooltip(sHPfld, undefined, aHPsets.join());
 		// execute the function for level-dependent features and doing the removeeval
-		UpdateCompLevelFeatures(prefix, objCrea, strRaceEntry, 0);
+		await UpdateCompLevelFeatures(prefix, objCrea, strRaceEntry, 0);
 		// run callbacks
 		if (objCrea.typeFound === "creature") RunCreatureCallback(prefix, "creature", false);
 	}
@@ -215,7 +215,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 	var oldCrea = CurrentCompRace[prefix];
 	if (newRace === "") {
 		thermoTxt = thermoM("Resetting the companion page...", false); //change the progress dialog text
-		undoCreaturePresistents(prefix, oldCrea);
+		await undoCreaturePresistents(prefix, oldCrea);
 		CurrentCompRace[prefix] = {}; //reset the global variable to nothing
 		thermoM(1/3); //increment the progress dialog's progress
 		tDoc.resetForm(compFields); //reset all the fields
@@ -241,7 +241,9 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 	}
 
 	// Undo things from a previous race, if any
-	undoCreaturePresistents(prefix, oldCrea);
+	if (oldCrea) {
+		await undoCreaturePresistents(prefix, oldCrea);
+	}
 
 	// save the companion type
 	if (sCompType && CompanionList[sCompType]) {
@@ -268,7 +270,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		thermoM(1/11); //increment the progress dialog's progress
 
 		//set race's size
-		SetCreatureSize(prefix, strRaceEntryCap, aCrea.size);
+		await SetCreatureSize(prefix, strRaceEntryCap, aCrea.size);
 
 		//set race's type
 		Value(prefix + "Comp.Desc.MonsterType", "Humanoid");
@@ -485,7 +487,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		if (aCrea.header) Value(prefix + "Comp.Type", aCrea.header);
 
 		//add the size
-		SetCreatureSize(prefix, strRaceEntryCap, aCrea.size);
+		await SetCreatureSize(prefix, strRaceEntryCap, aCrea.size);
 
 		//set race's type
 		var sCompExplStr = oComp ? ", a special companion (" + oComp.name.toLowerCase() + "), " : "";
@@ -493,8 +495,8 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 			"Select creature type for the " + strRaceEntry + " on page " + iPageNo, // title
 			"The " + strRaceEntry + sCompExplStr + " on page " + iPageNo + " can be one of multiple creature types. It is up to you to choose which type will now be input in the dropdown on the companion page." // description
 		]
-		var sCreaType = isArray(aCrea.type) ? AskUserOptions(aCreaTypeDialogTxt[0], aCreaTypeDialogTxt[1], aCrea.type, "radio", true) : aCrea.type;
-		var sCreaSubtype = aCrea.subtype ? " (" + (isArray(aCrea.subtype) ? AskUserOptions(aCreaTypeDialogTxt[0].replace("type", "subtype"), aCreaTypeDialogTxt[1].replace(/type/ig, "subtype"), aCrea.subtype, "radio", true) : aCrea.subtype) + ")" : "";
+		var sCreaType = isArray(aCrea.type) ? await AskUserOptions(aCreaTypeDialogTxt[0], aCreaTypeDialogTxt[1], aCrea.type, "radio", true) : aCrea.type;
+		var sCreaSubtype = aCrea.subtype ? " (" + (isArray(aCrea.subtype) ? await AskUserOptions(aCreaTypeDialogTxt[0].replace("type", "subtype"), aCreaTypeDialogTxt[1].replace(/type/ig, "subtype"), aCrea.subtype, "radio", true) : aCrea.subtype) + ")" : "";
 		Value(prefix + "Comp.Desc.MonsterType", sCreaType + sCreaSubtype);
 
 		//set senses
@@ -615,7 +617,7 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 		thermoM(9/10); //increment the progress dialog's progress
 
 		// Do the level-dependent features, as well as adding the features, traits, actions, and executing the 'eval'
-		UpdateCompLevelFeatures(prefix, aCrea, strRaceEntry);
+		await UpdateCompLevelFeatures(prefix, aCrea, strRaceEntry);
 
 		// Run callback functions, if any are present
 		RunCreatureCallback(prefix, "creature", true);
@@ -624,12 +626,12 @@ function ApplyCompRace(newRace, prefix, sCompType) {
 	// Apply the special companion type (if any)
 	ApplyCompanionType(true, prefix);
 
-	SetHPTooltip(false, true);
+	SetHPTooltip(false, true, prefix);
 	thermoM(thermoTxt, true); // Stop progress bar
 }
 
 // Make menu for the button on the companion page and do something with the result
-function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
+async function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 	if (!prefix) prefix = getTemplPre(event.target.name, "AScomp", true);
 	var aVisLayers = eval_ish(What(prefix + "Companion.Layers.Remember"));
 	var creaCalcStr = StringEvals("creaStr");
@@ -755,7 +757,7 @@ function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 		}
 	// Menu options for changing the current creature to a special companion option
 		if (bAddMenuDivider) menuLVL1(aCompMenu, [["-", "-"]]);
-		if (CurrentCompRace[prefix].typeFound === "creature") {
+		if (CurrentCompRace[prefix] && CurrentCompRace[prefix].typeFound === "creature") {
 			var aSubInstructions = [];
 			for (var sComp in oCompanions) {
 				var oComp = CompanionList[sComp];
@@ -808,7 +810,7 @@ function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 	// Save this menu in the global variable
 		Menus.companion = aCompMenu;
 	}
-	var MenuSelection = MenuSelection ? MenuSelection : getMenu("companion");
+	var MenuSelection = MenuSelection ? MenuSelection : await getMenu("companion");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] != "companion") return;
 
 	// Start progress bar and stop calculations
@@ -820,7 +822,7 @@ function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 			var sRaceName = MenuSelection[3] ? MenuSelection[3].capitalize() : CreatureList[MenuSelection[4]].name;
 		case "change" :
 			if (MenuSelection[1] === "change") var sRaceName = What(prefix + "Comp.Race");
-			ApplyCompRace(sRaceName, prefix, MenuSelection[2]);
+			await ApplyCompRace(sRaceName, prefix, MenuSelection[2]);
 			break;
 		case "reset_page":
 			thermoTxt = thermoM("Resetting the companion page...", false); // Change the progress bar text
@@ -837,10 +839,10 @@ function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 			thermoTxt = thermoM("Applying...", false); // Change the progress bar text
 			break;
 		case "add_page":
-			DoTemplate("AScomp", "Add");
+			await DoTemplate("AScomp", "Add");
 			break;
 		case "remove_page":
-			DoTemplate("AScomp", "Remove", prefix);
+			await DoTemplate("AScomp", "Remove", prefix);
 			break;
 		case "visible":
 			if (MenuSelection[2].indexOf("comp.img") !== -1) {
@@ -853,7 +855,7 @@ function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
 			ShowCompanionLayer(prefix);
 			break;
 		case "showcalcs" :
-			ShowDialog("Things Affecting the Companion Automation", creaCalcStr);
+			await ShowDialog("Things Affecting the Companion Automation", creaCalcStr);
 			break;
 	}
 	thermoM(thermoTxt, true); // Stop progress bar
@@ -917,7 +919,7 @@ function SetCompanionListHeading(bAddRemove, prefix, sCompType, sFld) {
 }
 
 // do the eval for a creature
-function ApplyCreatureEval(prefix, objEval, arrLvl, sType, sName) {
+async function ApplyCreatureEval(prefix, objEval, arrLvl, sType, sName) {
 	if (!objEval[sType] || typeof objEval[sType] != 'function') return;
 	if (arrLvl === undefined) {
 		arrLvl = [
@@ -926,7 +928,7 @@ function ApplyCreatureEval(prefix, objEval, arrLvl, sType, sName) {
 		];
 	}
 	try {
-		return objEval[sType](prefix, arrLvl);
+		return await objEval[sType](prefix, arrLvl);
 	} catch (error) {
 		var iPageNo = tDoc.getField(prefix + 'Comp.Race').page + 1;
 		var eText = "The " + sType + ' for "' + sName + '" on page ' + iPageNo + " produced an error! Please contact the author of the feature to correct this issue and please include this error message:\n " + error;
@@ -938,7 +940,7 @@ function ApplyCreatureEval(prefix, objEval, arrLvl, sType, sName) {
 }
 
 // do the level-dependent features for the companion page
-function UpdateCompLevelFeatures(prefix, objCrea, useName, newLvl) {
+async function UpdateCompLevelFeatures(prefix, objCrea, useName, newLvl) {
 	/* Gather variables */
 	if (!objCrea) objCrea = CurrentCompRace[prefix];
 	if (objCrea.typeFound !== "creature") return; // only do this for CreatureList entries
@@ -1076,7 +1078,7 @@ function UpdateCompLevelFeatures(prefix, objCrea, useName, newLvl) {
 	// Process all the queued evals, in the order they were added
 	// This way, the main `eval` is processed first, but after all the strings are in the right location
 	for (var i = 0; i < arrToEval.length; i++) {
-		ApplyCreatureEval(prefix, arrToEval[i][0], [oldLvl, newLvl], arrToEval[i][1], arrToEval[i][2]);
+		await ApplyCreatureEval(prefix, arrToEval[i][0], [oldLvl, newLvl], arrToEval[i][1], arrToEval[i][2]);
 	}
 }
 
@@ -1122,7 +1124,7 @@ function RunCreatureCallback(sPrefix, sType, bAdd, fOverride, sOverrideNm) {
 
 // set a race on an empty companion page (or add a new page)
 // aCreaAdds is an array with arrays of 3 entries: [sRace (string), bRemoveWholePage (boolean), fCallBack (function)], but the 2nd and 3rd entries are optional
-function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
+async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 	if (!isArray(aCreaAdds)) aCreaAdds = [aCreaAdds];
 	var aChangeMsg = [];
 	var fCallBackError = false;
@@ -1160,9 +1162,9 @@ function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 					}
 				}
 			}
-			if (!prefix) prefix = DoTemplate('AScomp', 'Add');
+			if (!prefix) prefix = await DoTemplate('AScomp', 'Add');
 			if (!stopMatch) {
-				ApplyCompRace(sRace, prefix, sCompanionType);
+				await ApplyCompRace(sRace, prefix, sCompanionType);
 				doCallBack(aCallBack, prefix);
 				var sChangeMsgName = '"' + What(prefix + 'Comp.Race') + '"'; // Get it from the page in case the callback changed it.
 				if (sCompanionType) sChangeMsgName = CompanionList[sCompanionType].nameMenu + " " + sChangeMsgName;
@@ -1173,7 +1175,7 @@ function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 				if (What(AScompA[a] + 'Comp.Race').toLowerCase().indexOf(sRaceLow) !== -1) {
 					var iPageNo = tDoc.getField(AScompA[a] + 'Comp.Race').page + 1;
 					if (bRemoveWholePage) { // remove the whole page
-						DoTemplate("AScomp", "Remove", AScompA[a], true);
+						await DoTemplate("AScomp", "Remove", AScompA[a], true);
 					} else {
 						Value(prefix + 'Comp.Race', ""); // reset the race field
 					}
@@ -1364,7 +1366,7 @@ function addCompEvals(evalObj, prefix, NameEntity, Add) {
 }
 
 //add a wildshape based on the selection and calculation settings
-function ApplyWildshape() {
+async function ApplyWildshape() {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
 	if (event.target && event.value.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
 
@@ -1463,7 +1465,7 @@ function ApplyWildshape() {
 	thermoM(2/10); //increment the progress dialog's progress
 
 	//add the size
-	SetCreatureSize([prefix, Fld], theCrea.name, theCrea.size);
+	await SetCreatureSize([prefix, Fld], theCrea.name, theCrea.size);
 
 	//set race's type
 	var typeString = theCrea.subtype ? theCrea.type + " (" + theCrea.subtype + ")" : theCrea.type;
@@ -1740,7 +1742,7 @@ function ApplyWildshape() {
 }
 
 //add a wild shape to the top most empty place
-function AddWildshape(input, inCrea) {
+async function AddWildshape(input, inCrea) {
 	var prefixA = What("Template.extras.WSfront").split(",").splice(1);
 	var inputLC = input.toLowerCase();
 	inCrea = inCrea && CreatureList[inCrea] ? inCrea : ParseCreature(inputLC);
@@ -1761,7 +1763,7 @@ function AddWildshape(input, inCrea) {
 		}
 	};
 	//if the wildshape to add was not found and there was no room to add it, add another wild shapes page and add the entry to the top of the new page
-	var newPrefix = DoTemplate("WSfront", "Add");
+	var newPrefix = await DoTemplate("WSfront", "Add");
 	Value(newPrefix + "Wildshape.Race.1", input);
 }
 
@@ -2014,7 +2016,7 @@ function MakeWildshapeMenu() {
 };
 
 //call the wildshape menu and do something with the results
-function WildshapeOptions() {
+async function WildshapeOptions() {
 	var MenuSelection = getMenu("wildshape");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	var prefix = getTemplPre(event.target.name, "WSfront", true);
@@ -2030,7 +2032,7 @@ function WildshapeOptions() {
 		tDoc.resetForm([prefix + "Wildshape.Race"]);
 		break;
 	 case "add" :
-		AddWildshape(CreatureList[MenuSelection[1]].name, MenuSelection[1]);
+		await AddWildshape(CreatureList[MenuSelection[1]].name, MenuSelection[1]);
 		break;
 	 case "remove" :
 		RemoveWildshape(MenuSelection[1]);
@@ -2047,10 +2049,10 @@ function WildshapeOptions() {
 		}
 		break;
 	 case "add page" :
-		DoTemplate("WSfront", "Add");
+		await DoTemplate("WSfront", "Add");
 		break;
 	 case "remove page" :
-		DoTemplate("WSfront", "Remove", prefix);
+		await DoTemplate("WSfront", "Remove", prefix);
 		break;
 	}
 }
@@ -2277,7 +2279,7 @@ function ApplyDCColorScheme(colour, DC) {
 }
 
 // Make menu for the button on each Action line and parse it to Menus.actions
-function MakeActionMenu_ActionOptions(MenuSelection, FldNm, itemNmbr) {
+async function MakeActionMenu_ActionOptions(MenuSelection, FldNm, itemNmbr) {
 	var actionMenu = [];
 	if (!itemNmbr) itemNmbr = parseFloat(event.target.name.slice(-2));
 	if (!FldNm) FldNm = event.target.name.match(/bonus action|reaction|action/i)[0];
@@ -2318,7 +2320,7 @@ function MakeActionMenu_ActionOptions(MenuSelection, FldNm, itemNmbr) {
 		Menus.actions = actionMenu;
 		if (MenuSelection == "justMenu") return;
 	}
-	var MenuSelection = MenuSelection ? MenuSelection : getMenu("actions");
+	var MenuSelection = MenuSelection ? MenuSelection : await getMenu("actions");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] != "action") return;
 
 	// Start progress bar and stop calculations
@@ -2510,11 +2512,10 @@ function MakeLimFeaMenu() {
 };
 
 //call the Limited Feature menu and do something with the results
-function LimFeaOptions() {
-	var MenuSelection = getMenu("limfea");
+async function LimFeaOptions(itemNmbr) {
+	var MenuSelection = await getMenu("limfea");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
-	var itemNmbr = parseFloat(event.target.name.slice(-2));
 	var maxNmbr = FieldNumbers.limfea;
 	var FieldNames = [
 		"Limited Feature ",
@@ -2692,7 +2693,7 @@ function LimFeaDelete(itemNmbr) {
 }
 
 //a way of going to a specified field (for making bookmarks independent of templates)
-function Bookmark_Goto(BookNm) {
+async function Bookmark_Goto(BookNm) {
 	// Find the field corresponding to the bookmark name
 	var theTemplate = event.type === "Bookmark" ? getBookmarkTemplate(event.target) : false;
 	var isVisible = theTemplate ? isTemplVis(theTemplate[0], true) : true;
@@ -2719,10 +2720,10 @@ function Bookmark_Goto(BookNm) {
 		};
 		if (app.alert(theMessage) === 4) {
 			if (theTemplate[0] !== "SSfront") {
-				var newPrefix = DoTemplate(theTemplate[0], "Add");
+				var newPrefix = await DoTemplate(theTemplate[0], "Add");
 				tDoc.getField(newPrefix + BookMarkList[BookNm]).setFocus();
 			} else {
-				GenerateSpellSheet();
+				await GenerateSpellSheet();
 			};
 		};
 	};
@@ -2750,7 +2751,7 @@ function deletePage(fldNm, onTemplate) {
 }
 
 // show/hide a template (AddRemove == undefined) or add/remove template with multiple instances (AddRemove == "Add" | "Remove" | "RemoveAll")
-function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
+async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 	MakeMobileReady(false); // Undo flatten, if needed
 
 	//make a function for determining the next page to add the template
@@ -2806,7 +2807,7 @@ function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 			calcStop();
 
 			//now spawn a new instance of the template with the same fields as the template at the desired page
-			tDoc.getTemplate(tempNm).spawn(tempPage, false, false);
+			await tDoc.getTemplate(tempNm).spawn(tempPage, false, false);
 
 			//black out the appropriate bookmarks
 			amendBookmarks(BookMarkList[tempNm + "_Bookmarks"], true);
@@ -2912,7 +2913,7 @@ function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 			var toDeleteArray = [];
 			if (isTempVisible && tempExtras.indexOf(theNewPrefix) !== -1) {
 				while (tempExtras.indexOf(theNewPrefix) !== -1) {
-					tDoc.getTemplate("blank").spawn(tempPage, false, false);
+					await tDoc.getTemplate("blank").spawn(tempPage, false, false);
 					toDeleteArray.push(tempPage);
 					tempPage++;
 					theNewPrefix = "P" + tempPage + "." + tempNm + ".";
@@ -2920,7 +2921,7 @@ function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 			};
 
 			// Add another instance of the template, but with changing the field names
-			tDoc.getTemplate(tempNm).spawn(tempPage, true, false);
+			await tDoc.getTemplate(tempNm).spawn(tempPage, true, false);
 
 			// Put the updated array in the field
 			tempExtras.push(theNewPrefix);
@@ -2963,7 +2964,7 @@ function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 };
 
 //Make menu for the options for hiding, adding, and removing templates (i.e. pages)
-function MakePagesMenu() {
+async function MakePagesMenu() {
 	//the functions for adding the base menu elements
 	var menuLvl1 = function (menu, array) {
 		for (var i = 0; i < array.length; i++) {
@@ -3068,7 +3069,7 @@ function MakePagesMenu() {
 	]);
 
 	//add a menu item for the text fields
-	MakeTextMenu_TextOptions("justMenu");
+	await MakeTextMenu_TextOptions("justMenu");
 	pagesMenu.push({
 		cName : "Text field options",
 		oSubMenu : Menus.texts
@@ -3121,13 +3122,13 @@ function MakePagesMenu() {
 		["Make the 7th ability score 'Sanity'", "sanity"]
 	]);
 	//1st page: add the menu for setting hp on the first page
-	MakeHPMenu_HPOptions("justMenu");
+	await MakeHPMenu_HPOptions("justMenu");
 	pageone.oSubMenu.push({
 		cName : "Hit Points",
 		oSubMenu : Menus.hp
 	});
 	//1st page: add the menu for setting skill order
-	MakeSkillsMenu_SkillsOptions("justMenu");
+	await MakeSkillsMenu_SkillsOptions("justMenu");
 	pageone.oSubMenu.push({
 		cName : "Skills",
 		oSubMenu : Menus.skills
@@ -3204,15 +3205,15 @@ function MakePagesMenu() {
 };
 
 //call the pages menu and do something with the results
-function PagesOptions() {
-	var MenuSelection = getMenu("pages");
+async function PagesOptions() {
+	var MenuSelection = await getMenu("pages");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	switch (MenuSelection[0]) {
 		case "proficiencydice":
 			Checkbox('Proficiency Bonus Dice', Number(MenuSelection[1]));
 			break;
 		case "playerallrolls":
-			setPlayersMakeAllRolls(Number(MenuSelection[1]));
+			await setPlayersMakeAllRolls(Number(MenuSelection[1]));
 			break;
 		case "bluetextfields":
 			ToggleBlueText();
@@ -3222,23 +3223,23 @@ function PagesOptions() {
 			break;
 		case "template" :
 			MenuSelection[1] = MenuSelection[1].substr(0, 2).toUpperCase() + MenuSelection[1].substr(2);
-			DoTemplate(MenuSelection[1], MenuSelection[2]);
+			await DoTemplate(MenuSelection[1], MenuSelection[2]);
 			break;
 		case "advleague" :
-			AdventureLeagueOptions(MenuSelection);
+			await AdventureLeagueOptions(MenuSelection);
 			break;
 		case "ssheet" :
-			MakeSpellMenu_SpellOptions(MenuSelection);
+			await MakeSpellMenu_SpellOptions(MenuSelection);
 			break;
 		case "hp" :
-			MakeHPMenu_HPOptions(MenuSelection);
+			await MakeHPMenu_HPOptions(MenuSelection);
 			break;
 		case "skills" :
-			MakeSkillsMenu_SkillsOptions(MenuSelection);
+			await MakeSkillsMenu_SkillsOptions(MenuSelection);
 			break;
 		case "scores" :
 			if (MenuSelection[1] === "dialog") {
-				AbilityScores_Button();
+				await AbilityScores_Button();
 				break;
 			};
 			ShowHonorSanity(MenuSelection[1].capitalize());
@@ -3247,20 +3248,20 @@ function PagesOptions() {
 			Toggle2ndAbilityDC(MenuSelection[1]);
 			break;
 		case "equip" :
-			if (MenuSelection[3] == "false") InventoryOptions([MenuSelection[1]]);
-			if (MenuSelection[1] == "weight") WeightToCalc_Button();
+			if (MenuSelection[3] == "false") await InventoryOptions([MenuSelection[1]]);
+			if (MenuSelection[1] == "weight") await WeightToCalc_Button();
 			break;
 		case "3rdpage" :
 			LayerVisibilityOptions(false, MenuSelection);
 			break;
 		case "text" :
-			MakeTextMenu_TextOptions(MenuSelection);
+			await MakeTextMenu_TextOptions(MenuSelection);
 			break;
 		case "color" :
 			ColoryOptions(MenuSelection);
 			break;
 		case "unicode" :
-			setUnicodeUse(MenuSelection[2]);
+			await setUnicodeUse(MenuSelection[2]);
 			break;
 	};
 };
@@ -3314,20 +3315,20 @@ function functionBookmarks(theParent) {
 
 	var doTheChildren = function (aParent, colour) {
 		for (var i = 0; i < aParent.length; i++) {
-			aParent[i].setAction("Bookmark_Goto(event.target.name);");
+			aParent[i].setAction("await Bookmark_Goto(event.target.name);");
 			if (aParent[i].children) {
 				doTheChildren(aParent[i].children, colour);
 			}
 		}
 	}
 
-	theParent.setAction("Bookmark_Goto(event.target.name);");
+	theParent.setAction("await Bookmark_Goto(event.target.name);");
 	doTheChildren(theParent.children);
 }
 
 //make a menu to hide/show the lines of the notes on the page
 //after that, do something with the menu and its results
-function MakeNotesMenu_NotesOptions() {
+async function MakeNotesMenu_NotesOptions() {
 	//define some variables
 	var toSearch = event.target.name.indexOf("Notes") !== -1 ? "Notes." : "Cnote.";
 	var prefix = event.target.name.substring(0, event.target.name.indexOf(toSearch));
@@ -3381,10 +3382,10 @@ function MakeNotesMenu_NotesOptions() {
 		toDo = WhiteR;
 		break;
 	 case "add page" :
-		DoTemplate("ASnotes", "Add");
+		await DoTemplate("ASnotes", "Add");
 		break;
 	 case "remove page" :
-		DoTemplate("ASnotes", "Remove", prefix);
+		await DoTemplate("ASnotes", "Remove", prefix);
 		break;
 	 case "comp.img" :
 		toShow[0] = !toShow[0];
@@ -3487,7 +3488,7 @@ function UpdateLogsheetNumbering(prefix, prePrefix) {
 
 //Make menu for the button on the adventurers log page and parse it to Menus.advlog
 //after that, do something with the menu and its results
-function MakeAdvLogMenu_AdvLogOptions(Button) {
+async function MakeAdvLogMenu_AdvLogOptions(Button) {
 	var prefix = Button ? "P0.AdvLog." : getTemplPre(event.target.name, "ALlog", true);
 	var isFirstPrefix = prefix === What("Template.extras.ALlog").split(",")[1];
 	var cLogoDisplay = minVer && typePF ? tDoc.getField("Image.DnDLogo.AL").display : false;
@@ -3573,17 +3574,17 @@ function MakeAdvLogMenu_AdvLogOptions(Button) {
 	var thermoTxt;
 	switch (MenuSelection[0]) {
 	 case "add page" :
-		DoTemplate("ALlog", "Add");
+		await DoTemplate("ALlog", "Add");
 		break;
 	 case "remove page" :
-		DoTemplate("ALlog", "Remove", prefix);
+		await DoTemplate("ALlog", "Remove", prefix);
 		break;
 	 case "remove all" :
 		thermoTxt = thermoM("Removing all Adventure Logsheets...");
 		calcStop();
-		tDoc.getTemplate("blank").spawn(0, false, false);
+		await tDoc.getTemplate("blank").spawn(0, false, false);
 		tDoc.deletePages({nStart: 1, nEnd: tDoc.numPages - 1});
-		tDoc.getTemplate("ALlog").spawn(0, true, false);
+		await tDoc.getTemplate("ALlog").spawn(0, true, false);
 		Value("Template.extras.ALlog", ",P0.ALlog");
 		tDoc.deletePages(1);
 		break;
@@ -3614,7 +3615,7 @@ function MakeAdvLogMenu_AdvLogOptions(Button) {
 		UpdateALdateFormat(MenuSelection[1]);
 		break;
 	 case "generate" :
-		addALlogEntry();
+		await addALlogEntry();
 		break;
 	 case "dndlogo" :
 		DnDlogo(MenuSelection[2]);
@@ -3636,7 +3637,7 @@ function getBookmarkTemplate(bookmark) {
 
 //make menu for the button to (re)set the portrait/organization symbol
 //after that, do something with the menu and its results
-function MakeIconMenu_IconOptions() {
+async function MakeIconMenu_IconOptions() {
 	var SymbPort = event.target.name;
 	var DoAdvLog = SymbPort.indexOf("AdvLog") !== -1;
 	var DisplayName = SymbPort.indexOf("Comp.") !== -1 ? "Companion's Icon" : (SymbPort.indexOf("HeaderIcon") !== -1 ? "Header Icon" : SymbPort);
@@ -3746,7 +3747,7 @@ function MakeIconMenu_IconOptions() {
 	Menus.icon = IconMenu;
 
 	//now call the menu
-	var MenuSelection = getMenu("icon");
+	var MenuSelection = await getMenu("icon");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
 	switch (MenuSelection[0]) {
@@ -4170,7 +4171,7 @@ function SetHPTooltip(resetHP, onlyComp, aPrefix) {
 	}
 };
 
-function MakeHPMenu_HPOptions(preSelect, prefix) {
+async function MakeHPMenu_HPOptions(preSelect, prefix) {
 	//define some variables
 	prefix = prefix === true ? getTemplPre(event.target.name, "AScomp", true) : prefix ? prefix : "";
 	var theFld = prefix ? prefix + "Comp.Use.HP.Max" : "HP Max";
@@ -4220,13 +4221,13 @@ function MakeHPMenu_HPOptions(preSelect, prefix) {
 	};
 
 	//now call the menu
-	var MenuSelection = preSelect ? preSelect : getMenu("hp");
+	var MenuSelection = preSelect ? preSelect : await getMenu("hp");
 	if (!MenuSelection || MenuSelection[0] === "nothing" || MenuSelection[4] === "marked") return;
 
 	if (MenuSelection[1] === "popup") {
 		var aName = What(prefix ? prefix + "Comp.Desc.Name" : "PC Name");
 		if (!aName) aName = !prefix ? "Main character" : What(prefix + "Comp.Race") ? What(prefix + "Comp.Race") : "Companion on page " + tDoc.getField(prefix + "Comp.Race").page;
-		ShowDialog(aName + " HP calculation", Who(theFld));
+		await ShowDialog(aName + " HP calculation", Who(theFld));
 	} else {
 		theInputs[3] = MenuSelection[1] === "auto" ? MenuSelection[3] : "nothing";
 		if (MenuSelection[2]) {
@@ -4327,7 +4328,7 @@ function UpdateFactionSymbols() {
 
 //make a menu for the text fields and text line options
 //after that, do something with the menu and its results
-function MakeTextMenu_TextOptions(input) {
+async function MakeTextMenu_TextOptions(input) {
 	var isBoxesLines = What("BoxesLinesRemember");
 
 	if (!input || input === "justMenu") {
@@ -4377,13 +4378,13 @@ function MakeTextMenu_TextOptions(input) {
 	};
 
 	//now call the menu
-	var MenuSelection = input ? input : getMenu("texts");
+	var MenuSelection = input ? input : await getMenu("texts");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
 	if (MenuSelection !== undefined && MenuSelection[0] !== "nothing") {
 		switch (MenuSelection[1]) {
 		 case "dodialog" :
-			SetTextOptions_Button();
+			await SetTextOptions_Button();
 			break;
 		 case "calc_boxes" :
 		 case "calc_lines" :
@@ -4396,7 +4397,7 @@ function MakeTextMenu_TextOptions(input) {
 			ToggleWhiteout(true);
 			break;
 		 case "unicode" :
-			setUnicodeUse(MenuSelection[2]);
+			await setUnicodeUse(MenuSelection[2]);
 			break;
 		};
 	};
@@ -4600,9 +4601,9 @@ function UpdateDropdown(type, weapon) {
 	IsSetDropDowns = false;
 };
 
-function ChangeToCompleteAdvLogSheet(FAQpath) {
+async function ChangeToCompleteAdvLogSheet(FAQpath) {
 	if (minVer) return;
-	ResetAll(true, true, true); // also removes all custom scripts
+	await ResetAll(true, true, true); // also removes all custom scripts
 	tDoc.getField("AdvLog.Class and Levels").setAction("Calculate", "CalcAdvLogInfo();");
 	tDoc.getField("AdvLog.Class and Levels").setAction("Validate", "ValidateAdvLogInfo();");
 	tDoc.getField("AdvLog.Class and Levels").readonly = false;
@@ -4610,7 +4611,7 @@ function ChangeToCompleteAdvLogSheet(FAQpath) {
 	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("OnBlur", "UpdateFactionSymbols();");
 	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("Keystroke", "");
 
-	tDoc.getTemplate("ALlog").spawn(0, true, false);
+	await tDoc.getTemplate("ALlog").spawn(0, true, false);
 	tDoc.deletePages({nStart: 1, nEnd: tDoc.numPages - 1});
 	tDoc.getTemplate("ALlog").hidden = false;
 	tDoc.getTemplate("remember").hidden = false;
@@ -4691,11 +4692,11 @@ function CreateBkmrksCompleteAdvLogSheet() {
 			cExpr : "MakeButtons(); tDoc.bookmarkRoot.children[0].open = !tDoc.bookmarkRoot.children[0].open;",
 			children : {
 				"Set Pages Layout" : {
-					cExpr : "MakeAdvLogMenu_AdvLogOptions(true);",
+					cExpr : "await MakeAdvLogMenu_AdvLogOptions(true);",
 					color : ["RGB", 0.9098052978515625, 0.196075439453125, 0.48626708984375]
 				},
 				"Text Options" : {
-					cExpr : "MakeTextMenu_TextOptions();",
+					cExpr : "await MakeTextMenu_TextOptions();",
 					color : ["RGB", 0.8000030517578125, 0.6666717529296875, 0.1137237548828125]
 				},
 				"Flatten" : {
@@ -4714,7 +4715,7 @@ function CreateBkmrksCompleteAdvLogSheet() {
 			}
 		},
 		"FAQ" : {
-			cExpr : "getFAQ();"
+			cExpr : "await getFAQ();"
 		},
 		"Get Latest Version" : {
 			cName : "Get Latest Version (current: v" + semVers + ")",
@@ -4732,7 +4733,7 @@ function CreateBkmrksCompleteAdvLogSheet() {
 }
 
 //a function to change the sorting of the skills
-function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
+async function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
 	var sWho = Who("Text.SkillsNames");
 	var sList = Who("Acr Prof").replace(/^.*(\n|\r)*/, "");
 	var remAth = tDoc.getField("Remarkable Athlete").isBoxChecked(0);
@@ -4745,7 +4746,8 @@ function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
 		}, {
 			cName : "Sort skills by ability score",
 			cReturn : "skills#abilities",
-			bMarked : sWho === "abilities"
+			bMarked : sWho === "abilities",
+			bEnabled : false
 		}, {
 			cName : "-"
 		}, {
@@ -4794,7 +4796,7 @@ function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
 		return;
 	};
 
-	var MenuSelection = input ? input : getMenu("skills");
+	var MenuSelection = input ? input : await getMenu("skills");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
 	switch (MenuSelection[1]) {
@@ -4808,7 +4810,7 @@ function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
 			Checkbox('Remarkable Athlete', !remAth);
 			break;
 		case "dialog":
-			ShowDialog("Skill proficiency origins and options", sList);
+			await ShowDialog("Skill proficiency origins and options", sList);
 			break;
 		case "alphabeta":
 		case "abilities":
@@ -4950,7 +4952,7 @@ function setListsUnitSystem(isMetric, onStart) {
 }
 
 // automatically add a new entry on the Adventurers Logsheet with the sheets current values
-function addALlogEntry() {
+async function addALlogEntry() {
 	//first find the next empty logsheet entry
 	var theTypesA = [
 		".xp",
@@ -4980,7 +4982,7 @@ function addALlogEntry() {
 	};
 	//now if no empty log was found, first add another logsheet page
 	if (emptyLog.length === 0) {
-		emptyLog[0] = DoTemplate("ALlog", "Add");
+		emptyLog[0] = await DoTemplate("ALlog", "Add");
 		emptyLog[1] = 1;
 		emptyLog[2] = ALlogA[ALlogA.length - 1];
 	};
@@ -5053,7 +5055,7 @@ function addALlogEntry() {
 };
 
 //menu for logsheet entries to move up, move down, insert, delete, or clear
-function MakeAdvLogLineMenu_AdvLogLineOptions() {
+async function MakeAdvLogLineMenu_AdvLogLineOptions() {
 	var prefix = getTemplPre(event.target.name, "ALlog", true);
 	var firstPrefix = isTemplVis("ALlog", true)[1];
 	var lineNmbr = Number(event.target.name.slice(-1));
@@ -5084,11 +5086,11 @@ function MakeAdvLogLineMenu_AdvLogLineOptions() {
 
 	var MenuSelection = getMenu("advlogline");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
-	doAdvLogLine(MenuSelection[0], lineNmbr, prefix);
+	await doAdvLogLine(MenuSelection[0], lineNmbr, prefix);
 }
 
 //do with logsheet entry, move up, move down, insert, delete, clear
-function doAdvLogLine(action, lineNmbr, prefix) {
+async function doAdvLogLine(action, lineNmbr, prefix) {
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Applying the layout settings...");
 	calcStop();
@@ -5132,7 +5134,7 @@ function doAdvLogLine(action, lineNmbr, prefix) {
 					FieldsDown[F] = ALlogA[ALlogA.indexOf(prefix) + 1] + "AdvLog.1" + FieldNames[F];
 					FieldsDownValue[F] = "";
 				} else {
-					if (!extraPage) extraPage = DoTemplate("ALlog", "Add");
+					if (!extraPage) extraPage = await DoTemplate("ALlog", "Add");
 					FieldsDown[F] = extraPage + "AdvLog.1" + FieldNames[F];
 					FieldsDownValue[F] = "";
 				}
@@ -5169,7 +5171,7 @@ function doAdvLogLine(action, lineNmbr, prefix) {
 				if (tA === (ALlogA.length - 1) && i === FieldNumbers.logs) {
 					for (var F = 0; F < FieldNames.length; F++) {
 						var fieldVal = What(ALlogA[tA] + "AdvLog." + i + FieldNames[F]);
-						if (fieldVal && !extraPage) extraPage = DoTemplate("ALlog", "Add");
+						if (fieldVal && !extraPage) extraPage = await DoTemplate("ALlog", "Add");
 						Value(extraPage + "AdvLog.1" + FieldNames[F], fieldVal);
 						Value(ALlogA[tA] + "AdvLog." + i + FieldNames[F], What(ALlogA[tA] + "AdvLog." + (i - 1) + FieldNames[F]));
 					}
@@ -5996,7 +5998,7 @@ function SetOffHandAction() {
 };
 
 //a way to show a very long piece of text without the dialog overflowing the screen
-function ShowDialog(hdr, strng) {
+async function ShowDialog(hdr, strng) {
 	if (strng === "sources") { // ShowDialog("List of Sources, sorted by abbreviation", "sources");
 		strng = "";
 		var srcRef = {};
@@ -6088,7 +6090,7 @@ function ShowDialog(hdr, strng) {
 			}]
 		}
 	};
-	app.execDialog(ShowString_dialog);
+	await app.execDialog(ShowString_dialog);
 };
 
 //calculate the mod for the Dex field in the initiative section (field calculation)
@@ -6175,7 +6177,7 @@ function EvalDmgDie(input, notComp, isSpecial) {
 };
 
 // add a way to set the value of a field
-function SetThisFldVal() {
+async function SetThisFldVal() {
 	var len = typePF ? 4 : 3;
 	if (event.target.submitName || event.target.value.length > len || event.modifier || event.shift) {
 		var QI = getTemplPre(event.target.name, "AScomp");
@@ -6308,7 +6310,7 @@ function SetThisFldVal() {
 								alignment : "align_left",
 								item_id : "txtC",
 								name : "This calculates to:",
-								char_width : 1,
+								char_width : 11,
 								height : 25
 							}, {
 								type : "static_text",
@@ -6361,7 +6363,7 @@ function SetThisFldVal() {
 				}]
 			}
 		};
-		if (app.execDialog(theDialog) === "ok") {
+		if (await app.execDialog(theDialog) === "ok") {
 			event.target.value = theDialog.theTXT;
 		};
 	};
@@ -6509,7 +6511,7 @@ function processActions(AddRemove, srcNm, itemArr, itemNm) {
 // a way to pass an array of tools to be processed by the SetProf function
 // [["Musical instrument", 3], ["Thieves' tools", "Dex"]]
 // "Land vehicles"
-function processTools(AddRemove, srcNm, itemArr) {
+async function processTools(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	if (!isArray(itemArr) || (itemArr.length === 2 && !isArray(itemArr[0]) && !isArray(itemArr[1]) && (!isNaN(itemArr[1]) || AbilityScores.fields[itemArr[1].substr(0,3).toLowerCase()]))) {
 		itemArr = [itemArr];
@@ -6523,13 +6525,13 @@ function processTools(AddRemove, srcNm, itemArr) {
 			var prof = subj;
 			var extra = false;
 		};
-		SetProf("tool", AddRemove, prof, srcNm, extra);
+		await SetProf("tool", AddRemove, prof, srcNm, extra);
 	};
 };
 
 // a way to pass an array of languages to be processed by the SetProf function
 // ["Elvish", 3] >> elvish and three other languages
-function processLanguages(AddRemove, srcNm, itemArr) {
+async function processLanguages(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	itemArr = isArray(itemArr) ? itemArr : [itemArr];
 	for (var i = 0; i < itemArr.length; i++) {
@@ -6544,13 +6546,13 @@ function processLanguages(AddRemove, srcNm, itemArr) {
 			var prof = "from " + srcNm;
 			var extra = subj;
 		};
-		SetProf("language", AddRemove, prof, srcNm, extra);
+		await SetProf("language", AddRemove, prof, srcNm, extra);
 	};
 };
 
 // a way to pass an array of vision string to be processed by the SetProf function
 // ["Darkvision", 60] >> Darkvision 60 ft
-function processVision(AddRemove, srcNm, itemArr) {
+async function processVision(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	if (!isArray(itemArr) || (itemArr.length === 2 && !isArray(itemArr[0]) && !isArray(itemArr[1]) && (!isNaN(itemArr[1]) || !isNaN(itemArr[1].substr(1))))) {
 		itemArr = [itemArr];
@@ -6567,46 +6569,46 @@ function processVision(AddRemove, srcNm, itemArr) {
 		};
 		if (!profsdone[prof]) { profsdone[prof] = 1; } else { profsdone[prof] += 1; };
 		var useScrNm = srcNm + (profsdone[prof] < 2 ? "" : " (" + profsdone[prof] + ")");
-		SetProf("vision", AddRemove, prof, useScrNm, extra);
+		await SetProf("vision", AddRemove, prof, useScrNm, extra);
 	};
 };
 
 // a way to pass an array of damage resistance strings or arrays to be processed by the SetProf function
 // ["Slashing", "Slash. (nonmagical)"] >> Slash. (nonmagical) or Slashing if another doesn't have the nonmagical clause
-function processResistance(AddRemove, srcNm, itemArr) {
+async function processResistance(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	if (!isArray(itemArr) || (itemArr.length === 2 && !isArray(itemArr[0]) && !isArray(itemArr[1]) && (/\(.*\)|\[.*\]/).test(itemArr[1]))) {
 		itemArr = [itemArr];
 	};
 	for (var i = 0; i < itemArr.length; i++) {
 		var theDmgres = isArray(itemArr[i]) ? itemArr[i] : [itemArr[i], false];
-		SetProf("resistance", AddRemove, theDmgres[0], srcNm, theDmgres[1]);
+		await SetProf("resistance", AddRemove, theDmgres[0], srcNm, theDmgres[1]);
 	}
 };
 
 // a way to pass an array of save proficiency strings to be processed by the SetProf function
 // ["Str", "Dex"]
-function processSaves(AddRemove, srcNm, itemArr) {
+async function processSaves(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	if (!isArray(itemArr)) itemArr = [itemArr];
 	for (var i = 0; i < itemArr.length; i++) {
-		SetProf("save", AddRemove, itemArr[i], srcNm);
+		await SetProf("save", AddRemove, itemArr[i], srcNm);
 	}
 };
 // a way to pass an array of advantage/disadvantage giving arrays strings to be processed by the SetProf function
 // ["Str", true] to give advantage on Strenght saves
 // ["Init", false]  to give disadvantage on Initiative checks
-function processAdvantages(AddRemove, srcNm, itemArr) {
+async function processAdvantages(AddRemove, srcNm, itemArr) {
 	if (!itemArr || !isArray(itemArr)) return;
 	if (itemArr.length == 2 && !isArray(itemArr[0])) itemArr = [itemArr];
 	for (var i = 0; i < itemArr.length; i++) {
-		SetProf("advantage", AddRemove, itemArr[i], srcNm);
+		await SetProf("advantage", AddRemove, itemArr[i], srcNm);
 	}
 };
 
 // a way to pass an array of skill proficiency strings to be processed by the SetProf function
 // ["Persuasion", "full"]
-function processSkills(AddRemove, srcNm, itemArr, descrTxt) {
+async function processSkills(AddRemove, srcNm, itemArr, descrTxt) {
 	// add or remove the descrTxt
 	var setDescr = false;
 	if (!AddRemove) {
@@ -6639,7 +6641,7 @@ function processSkills(AddRemove, srcNm, itemArr, descrTxt) {
 			aSkill = getSkillAbbr(aSkill.substring(0, 3));
 			if (!aSkill) continue; // skill not found, so do the next one
 		}
-		SetProf("skill", AddRemove, aSkill, srcNm, sExp);
+		await SetProf("skill", AddRemove, aSkill, srcNm, sExp);
 		if (setDescr) {
 			var tSkill = SkillsList.names[SkillsList.abbreviations.indexOf(aSkill)];
 			var eSkill = !sExp && !(/full|increment|only/i).test(sExp) ? "" : (/full/i).test(sExp) ? " expertise" : (/increment/i).test(sExp) ? " (expertise if already proficient)" : " expertise (only if already proficient)";
@@ -6679,9 +6681,10 @@ function setSkillTooltips(noPopUp) {
 	AddTooltip("SkillsClick", "Click here to change the order of the skills. You can select either alphabetic order or ordered by ability score." + (tooltipTxt ? "\n\n" + tooltipTxt : ""));
 }
 // manual trigger for clicking the skill proficiency/expertise (MouseUp) on the 1st page
-function applySkillClick(theSkill, isExp) {
+async function applySkillClick(theSkill, isExp) {
 	if (SkillsList.abbreviations.indexOf(theSkill) == -1) return;
-	var isCheck = event.target.isBoxChecked(0) ? true : false;
+	let target = event.target;
+	var isCheck = target.isBoxChecked(0) ? true : false;
 	if (Who('Text.SkillsNames') !== 'alphabeta') {
 		theSkill = SkillsList.abbreviationsByAS[SkillsList.abbreviations.indexOf(theSkill)];
 	}
@@ -6691,21 +6694,21 @@ function applySkillClick(theSkill, isExp) {
 	var alreadyProf = isCheck && CurrentProfs.skill[theSkill];
 	if ((!isExp && alreadyProf) || (isExp && alreadyProf && CurrentProfs.skill[theSkill + " Prof"])) return;
 	// apply the manual skill proficiency changes
-	SetProf("skill", isCheck, theSkill, "manualClick", setExp);
+	await SetProf("skill", isCheck, theSkill, "manualClick", setExp);
 	// if disabling manually, but set to enabled by the CurrentProfs variable, do an extra check to make sure it is manually disabled
-	if (!isCheck && event.target.isBoxChecked(0)) {
-		event.target.checkThisBox(0, false);
+	if (!isCheck && target.isBoxChecked(0)) {
+		target.checkThisBox(0, false);
 	}
 }
 
 // a way to pass an array of weapon proficiency booleans to be processed by the SetProf function
 // [true, true, ["dagger", "sling"]] >> [simple, martial, [other array]]
-function processWeaponProfs(AddRemove, srcNm, itemArr) {
+async function processWeaponProfs(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	var weaponTypes = ["simple", "martial", "other"]
 	for (var i = 0; i < itemArr.length; i++) {
 		if (itemArr[i] && weaponTypes[i]) {
-			SetProf("weapon", AddRemove, weaponTypes[i], srcNm,
+			await SetProf("weapon", AddRemove, weaponTypes[i], srcNm,
 				i != 2 ? false : isArray(itemArr[i]) && itemArr[i].length ? itemArr[i] : itemArr[i] ? [itemArr[i]] : false
 			);
 		}
@@ -6713,15 +6716,15 @@ function processWeaponProfs(AddRemove, srcNm, itemArr) {
 };
 // a way to pass an array of armour proficiency booleans to be processed by the SetProf function
 // [true, true, false, false] >> [light, medium, heavy, shield]
-function processArmourProfs(AddRemove, srcNm, itemArr) {
+async function processArmourProfs(AddRemove, srcNm, itemArr) {
 	if (!itemArr) return;
 	var armorTypes = ["light", "medium", "heavy", "shields"]
 	for (var i = 0; i < itemArr.length; i++) {
-		if (itemArr[i] && armorTypes[i]) SetProf("armour", AddRemove, armorTypes[i], srcNm);
+		if (itemArr[i] && armorTypes[i]) await SetProf("armour", AddRemove, armorTypes[i], srcNm);
 	}
 };
 // set the armour/weapon proficiency manually (field action)
-function setCheckboxProfsManual(theField) {
+async function setCheckboxProfsManual(theField) {
 	calcStop();
 	var fld = theField ? tDoc.getField(theField) : event.target;
 	var isActive = fld.isBoxChecked(0) === 1;
@@ -6731,10 +6734,10 @@ function setCheckboxProfsManual(theField) {
 	delete CurrentProfs[sort][type+"_manualon"];
 	delete CurrentProfs[sort][type+"_manualoff"];
 	if (normalState != isActive) CurrentProfs[sort][type+"_manual" + (isActive ? "on" : "off")] = true;
-	SetProf(sort, undefined, type, undefined, true);
+	await SetProf(sort, undefined, type, undefined, true);
 }
 // do something with the manually entered 'other' weapon proficiencies (field action)
-function setOtherWeaponProfsManual() {
+async function setOtherWeaponProfsManual() {
 	calcStop();
 	var set = CurrentProfs.weapon;
 	if (!set.otherWea) set.otherWea = { finalProfs : [], finalString : "", finalNamesNotManual : [], finalProfsNotManual : [] };
@@ -6774,20 +6777,20 @@ function setOtherWeaponProfsManual() {
 		delete iSet["Manually added"];
 		didChange = true;
 	}
-	if (didChange) SetProf("weapon", undefined, "other");
+	if (didChange) await SetProf("weapon", undefined, "other");
 }
 
 // A way to set the extra AC lines for magic / miscellaneous
-function processExtraAC(AddRemove, srcNm, itemArr, parentName) {
+async function processExtraAC(AddRemove, srcNm, itemArr, parentName) {
 	if (!itemArr) return;
 	if (!isArray(itemArr)) itemArr = [itemArr];
 	for (var i = 0; i < itemArr.length; i++) {
 		if (!itemArr[i].name) itemArr[i].name = parentName ? parentName : "Undefined";
-		SetProf("specialarmour", AddRemove, itemArr[i], srcNm, i.toString());
+		await SetProf("specialarmour", AddRemove, itemArr[i], srcNm, i.toString());
 	}
 }
 // Function is still present for backwards-compatibility. If 'useMod' == 0, remove
-function AddACMisc(useMod, useName, useText, useStopeval) {
+async function AddACMisc(useMod, useName, useText, useStopeval) {
 	var makeObject = {
 		name : useName,
 		mod : useMod,
@@ -6799,7 +6802,7 @@ function AddACMisc(useMod, useName, useText, useStopeval) {
 	if (!useMod && CurrentProfs.specialarmour[useName + extra]) {
 		makeObject.mod = CurrentProfs.specialarmour[useName + extra].mod;
 	}
-	SetProf("specialarmour", !!useMod, makeObject, useName, extra);
+	await SetProf("specialarmour", !!useMod, makeObject, useName, extra);
 }
 
 // ProfType can be: "armour", "weapon", "save", "savetxt", "resistance", "vision", "speed", "language", or "tool"
@@ -6807,7 +6810,7 @@ function AddACMisc(useMod, useName, useText, useStopeval) {
 // ProfObj is the proficiency that is gained/removed
 // ProfSrce is the name of the thing granting the proficiency
 // What "Extra" is, depends on ProfType
-function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
+async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 	ProfType = ProfType.toLowerCase();
 	var set = CurrentProfs[ProfType];
 	var ProfObjLC = typeof ProfObj == "string" ? clean(ProfObj, false, true).toLowerCase() : false;
@@ -6975,7 +6978,7 @@ function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 		if (ProfType == "weapon") {
 			if ((Extra || isOn != fldState) && Who("Proficiency Weapon Other Description")) {
 				// redo the other weapon proficiencies, as they might have changed now
-				SetProf("weapon", undefined, "other");
+				await SetProf("weapon", undefined, "other");
 				return;
 			} else if (Extra || isOn != fldState) {
 				// recalculate the attacks if the proficiency value changed
@@ -7093,7 +7096,7 @@ function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 						var theI = What(ProfType.capitalize() + " " + i);
 						if (theI) knownOpt.push(theI);
 					};
-					set[uID].choices = AskUserOptions(optType, ProfSrc, optSubj, knownOpt);
+					set[uID].choices = await AskUserOptions(optType, ProfSrc, optSubj, knownOpt);
 				} else if (global.docFrom && global.docFrom.CurrentProfs && global.docFrom.CurrentProfs[ProfType] && global.docFrom.CurrentProfs[ProfType][uID] && global.docFrom.CurrentProfs[ProfType][uID].choices) {
 					if (global.docFrom.CurrentProfs[ProfType][uID].choices.length === optNmbr) set[uID].choices = global.docFrom.CurrentProfs[ProfType][uID].choices;
 				};
@@ -7767,7 +7770,7 @@ function getHighestTotal(nmbrObj, notRound, replaceWalk, extraMods, prefix, with
 
 // open a dialog with a number of lines of choices and return the choices in an array; if knownOpt === "radio", show radio buttons instead, and return the entry selected
 // if notProficiencies is set to true, the optType will serve as the dialog header, and optSrc will serve as the multiline explanatory text
-function AskUserOptions(optType, optSrc, optSubj, knownOpt, notProficiencies, sBottomMsg) {
+async function AskUserOptions(optType, optSrc, optSubj, knownOpt, notProficiencies, sBottomMsg) {
 	if (!IsNotImport) return optSubj;
 	//first make the entry lines
 	var selectionLines = [];
@@ -7988,12 +7991,12 @@ function AskUserOptions(optType, optSrc, optSubj, knownOpt, notProficiencies, sB
 	if (knownOpt !== "radio") { for (var i = 0; i < optSubj.length; i++) {
 		theDialog["sl" + ("0" + i).slice(-2)] = Function("dialog", "this.check(dialog, " + i + ");");
 	}; };
-	app.execDialog(theDialog)
+	await app.execDialog(theDialog)
 	return theDialog.choices;
 };
 
 // Ask user for size options and return the index number; prefix == false (1st page); prefix is string (companion page); prefix is array [prefix, nr] (wild shape page)
-function SetCreatureSize(prefix, sName, aSizes) {
+async function SetCreatureSize(prefix, sName, aSizes) {
 	if (!isArray(aSizes)) aSizes = [aSizes];
 	var sNamePl = sName;
 	if (isArray(sName)) {
@@ -8012,7 +8015,7 @@ function SetCreatureSize(prefix, sName, aSizes) {
 	if (!prefix) sTooltip += "\n\nSelected size category will affect encumbrance on the second page.";
 	var bGoAsk = aSizes.length > 1;
 	if (bGoAsk) {
-		var sAsk = AskUserOptions("Select Size Category for " + sName, sNamePl + " can be multiple size categories. It is up to you to select which the sheet will use.", aOptions, "radio", true);
+		var sAsk = await AskUserOptions("Select Size Category for " + sName, sNamePl + " can be multiple size categories. It is up to you to select which the sheet will use.", aOptions, "radio", true);
 		if (oOptionsRef[sAsk]) {
 			PickDropdown(sFldNm, oOptionsRef[sAsk]);
 		} else {
@@ -8027,7 +8030,7 @@ function SetCreatureSize(prefix, sName, aSizes) {
 
 // Process a feature attribute through the AddToNotes function
 // namesArr = [tipNm, displName, fObjName, aParent]
-function processToNotesPage(AddRemove, items, type, mainObj, parentObj, namesArr) {
+async function processToNotesPage(AddRemove, items, type, mainObj, parentObj, namesArr) {
 	if (!isArray(items)) items = [items];
 	// set the alertType, determined by type
 	var fallback = {
@@ -8083,16 +8086,16 @@ function processToNotesPage(AddRemove, items, type, mainObj, parentObj, namesArr
 			}
 		} else { // add to its own section on a notes page
 			if (AddRemove) {
-				AddToNotes(noteStr, alertTxt, false, fallback.alertType, true, noteObj.amendTo);
+				await AddToNotes(noteStr, alertTxt, false, fallback.alertType, true, noteObj.amendTo);
 			} else {
-				AddToNotes("", false, noteStr, false, true);
+				await AddToNotes("", false, noteStr, false, true);
 			}
 		}
 	}
 }
 
 // A way to add a string to a notes page, or generate a notes page if it didn't exist yet
-function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amendToNote) {
+async function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amendToNote) {
 	if (!noteStr && !oldNoteStr) return;
 	
 	var prefix = false;
@@ -8106,7 +8109,7 @@ function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amend
 	};
 	var replaceOldNote = false;
 	if (noteStr && !isTemplVis("ASnotes")) {
-		var noteFld = DoTemplate("ASnotes", "Add");
+		var noteFld = await DoTemplate("ASnotes", "Add");
 		noteFld += "Notes.Left";
 	} else {
 		var noteFld = false, amendFld = false;
@@ -8136,7 +8139,7 @@ function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amend
 			};
 		};
 		if (!noteFld && noteStr) {
-			noteFld = DoTemplate("ASnotes", "Add");
+			noteFld = await DoTemplate("ASnotes", "Add");
 			noteFld += "Notes.Left";
 		} else if (!noteFld && oldNoteStr) {
 			return;
@@ -8155,7 +8158,7 @@ function AddToNotes(noteStr, alertTxt, oldNoteStr, alertType, isProcessed, amend
 		}
 	} else if (replaceOldNote && oldNoteStr && prefix && !What(prefix + "Notes.Left") && !What(prefix + "Notes.Right")) {
 		// if the notes page is now completely empty, remove it completely
-		DoTemplate("ASnotes", "Remove", prefix, true);
+		await DoTemplate("ASnotes", "Remove", prefix, true);
 	}
 };
 
@@ -8300,7 +8303,7 @@ function setCalcOrder() {
 	};
 };
 
-function MakeFaqMenu_FaqOptions(MenuSelection) {
+async function MakeFaqMenu_FaqOptions(MenuSelection) {
 	if (!MenuSelection || MenuSelection === "justMenu") {
 		var arrMenu = Menus.faq.concat({
 			cName : "-"
@@ -8320,7 +8323,7 @@ function MakeFaqMenu_FaqOptions(MenuSelection) {
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	switch (MenuSelection[0]) {
 		case "faq" :
-			getFAQ(MenuSelection);
+			await getFAQ(MenuSelection);
 			break;
 		case "contact" :
 			contactMpmbMenu(MenuSelection);
@@ -8329,8 +8332,8 @@ function MakeFaqMenu_FaqOptions(MenuSelection) {
 }
 
 // The function called when the FAQ button is pressed
-function getFAQ(input, delay) {
-	var MenuSelection = input ? input : getMenu("faq");
+async function getFAQ(input, delay) {
+	var MenuSelection = input ? input : await getMenu("faq");
 	if (!MenuSelection || MenuSelection[0] != "faq") return;
 	switch (MenuSelection[1]) {
 		case "online" :
@@ -8341,10 +8344,10 @@ function getFAQ(input, delay) {
 			tDoc.exportDataObject({ cName: 'FAQ.pdf', nLaunch: 2 });
 			break;
 		case "ogl" :
-			ShowDialog("Open Gaming License, for use of the SRD", licenseOGL.join("\n\n"));
+			await ShowDialog("Open Gaming License, for use of the SRD", licenseOGL.join("\n\n"));
 			break;
 		case "gplv3" :
-			ShowDialog("GNU License, for the software by MPMB", licenseGPLV3.join("\n\n"));
+			await ShowDialog("GNU License, for the software by MPMB", licenseGPLV3.join("\n\n"));
 			break;
 	}
 };
@@ -8360,7 +8363,7 @@ function makeUnicodeMenu() {
 }
 
 // Do something with the menu
-function setUnicodeUse(enable, force) {
+async function setUnicodeUse(enable, force) {
 	enable = enable != "";
 	var isEnabled = What("UseUnicode") != "";
 	if (isEnabled !== enable || force) {
@@ -8378,9 +8381,9 @@ function setUnicodeUse(enable, force) {
 		};
 		// update the tooltips that use unicode
 		UpdateDropdown("tooltips");
-		AbilityScores_Button(true);
+		await AbilityScores_Button(true);
 		setSkillTooltips(true);
-		MakeSkillsMenu_SkillsOptions(true, true);
+		await MakeSkillsMenu_SkillsOptions(true, true);
 		SetHPTooltip();
 		AtHigherLevels = "\n   " + toUni("At Higher Levels") + ": ";
 	}

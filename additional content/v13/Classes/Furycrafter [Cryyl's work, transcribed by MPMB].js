@@ -319,7 +319,7 @@ AddSubClass("furycrafter", "manifestation", {
 			]),
 			additional : "1/4 CR up to medium sized beast",
 			action : [["action", "Command Companion"]],
-			eval : function () {
+			eval : async function () {
 				// Create a list of all Medium CR 1/4 or smaller/lower beasts
 				var cOpt = [];
 				for (var aCrea in CreatureList) {
@@ -330,7 +330,7 @@ AddSubClass("furycrafter", "manifestation", {
 					}
 				}
 				cOpt.names.sort();
-				var selBeast = AskUserOptions('Select Undead Cohort', 'The Fury Companion class offers a choice of companion, any beast of Medium or smaller with a Challenge Rating of 1/4 or lower. Select it here to create a companion page for it. You can change the race later, but you will have to manually add the bonus to skill and save proficiencies and do it on the companion page made by this feature. You will not be able to create another companion page that works for this feature, so beware not to remove this companion page!', cOpt, 'radio', true);
+				var selBeast = await AskUserOptions('Select Undead Cohort', 'The Fury Companion class offers a choice of companion, any beast of Medium or smaller with a Challenge Rating of 1/4 or lower. Select it here to create a companion page for it. You can change the race later, but you will have to manually add the bonus to skill and save proficiencies and do it on the companion page made by this feature. You will not be able to create another companion page that works for this feature, so beware not to remove this companion page!', cOpt, 'radio', true);
 				var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 				var prefix = false;
 				if (AScompA) {
@@ -341,7 +341,7 @@ AddSubClass("furycrafter", "manifestation", {
 						}
 					}
 				}
-				if (!prefix) prefix = DoTemplate('AScomp', 'Add');
+				if (!prefix) prefix = await DoTemplate('AScomp', 'Add');
 				Value(prefix + 'Comp.Race', selBeast);
 				var theType = tDoc.getField(prefix + 'Comp.Type');
 				theType.readonly = true;
@@ -365,14 +365,14 @@ AddSubClass("furycrafter", "manifestation", {
 				}
 				tDoc.getField(prefix + 'Comp.Use.AC').submitName = What(prefix + 'Comp.Use.AC');
 			},
-			removeeval : function () {
+			removeeval : async function () {
 				var AScompA = isTemplVis('AScomp') ? What('Template.extras.AScomp').split(',') : false;
 				if (!AScompA) return;
 				compName = compName.toLowerCase();
 				for (var a = 1; a < AScompA.length; a++) {
 					var theType = tDoc.getField(prefix + 'Comp.Type');
 					if (theType.readonly && theType.value == "Fury") {
-						DoTemplate("AScomp", "Remove", AScompA[a], true);
+						await DoTemplate("AScomp", "Remove", AScompA[a], true);
 					}
 				}
 			},

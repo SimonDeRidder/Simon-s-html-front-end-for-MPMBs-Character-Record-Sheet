@@ -713,8 +713,10 @@
 						event.target.name = prefix + 'zAdvLog.PC Name';
 						CalcAdvLogInfo();
 						if (event.value !== undefined) {
-							let nameElement = document.getElementById(refix + 'zAdvLog.PC Name');
-							nameElement.value = event.value;
+							let nameElement = document.getElementById(prefix + 'zAdvLog.PC Name');
+							if (nameElement != null) {
+								nameElement.value = event.value;
+							}
 						}
 					}
 				)
@@ -865,7 +867,7 @@
 				id="spellshead.ability.1"
 				class="field inputfield"
 				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
-				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_1_change)})}"
+				onchange="{let wrapper = new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_1_change)})}"
 			>
 				<option value="nothing"></option>
 				<option value="Str Mod">  Strength</option>
@@ -1209,8 +1211,8 @@
 				style="position: absolute;width: 14px;height: 14px;left: 2px;top: 2px;font-size: 10px;font-weight: bold;text-align: center;"
 				data-default=""
 				value=""
-				onclick=" event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName;document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=this.getAttribute('value');event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName;document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
+				onclick=" event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;if(!['checkedbox', 'markedbox', 'checkbox', 'atwill', 'oncelr', 'oncesr'].includes(event.target.submitName)){document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName};document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
+				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;if(!['checkedbox', 'markedbox', 'checkbox', 'atwill', 'oncelr', 'oncesr'].includes(event.target.submitName)){document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName};document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
 			>&gt;</button>
 			<button
 				id="spells.checkbox.0"

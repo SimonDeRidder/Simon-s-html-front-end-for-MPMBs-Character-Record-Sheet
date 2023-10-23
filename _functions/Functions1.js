@@ -8,7 +8,7 @@ function MakeButtons() {
 		if (!tDoc.info.SpellsOnly) {
 			app.addToolButton({
 				cName : "LayoutButton",
-				cExec : minVer ? "await MakeAdvLogMenu_AdvLogOptions(true);" : "await MakePagesMenu(); PagesOptions();",
+				cExec : minVer ? "MakeAdvLogMenu_AdvLogOptions(true);" : "MakePagesMenu().then(() => {PagesOptions();});",
 				oIcon : allIcons.layout,
 				cTooltext : toUni("Set Pages Layout") + "\nSelect which pages are visible in the sheet and set the different lay-out options on those pages. Some pages might offer extra options on the page itself.\n\nNote that you can have multiple instances of the following pages:\n   \u2022  Companion page;\n   \u2022  Notes page;\n   \u2022  Wild Shapes page;\n   \u2022  Spell Sheet page.;\n   \u2022  Adventure Logsheet.\n\nIf you add more pages or you hide/show the pages many times, the file size might increase.",
 				nPos : 0,
@@ -47,7 +47,7 @@ function MakeButtons() {
 		if (!tDoc.info.SpellsOnly) {
 			app.addToolButton({
 				cName : "SetTextOptionsButton",
-				cExec : "await MakeTextMenu_TextOptions();",
+				cExec : "MakeTextMenu_TextOptions();",
 				oIcon : allIcons.textsize,
 				cTooltext : toUni("Text Options") + "\nWith this button you can:\n   \u2022  Set the font of all fillable fields" + "\n   \u2022  Set the font size of fields with multiple lines;\n   \u2022  Hide\/show the text lines on all pages" + (!typePF ? "" : ";\n   \u2022  Switch between boxes or lines for single-line fields."),
 				nPos : 4,
@@ -82,7 +82,7 @@ function MakeButtons() {
 			});
 			app.addToolButton({
 				cName : "AbilityScoresButton",
-				cExec : "await AbilityScores_Button();",
+				cExec : "AbilityScores_Button();",
 				oIcon : allIcons.scores,
 				cTooltext : toUni("Ability Scores") + "\nOpen the Ability Scores dialog where you can set them using their separate parts, see the Point Buy value, and apply a magic item that overrides.\n\nThis dialog also gives the option to add Honor/Sanity.",
 				nPos : 8,
@@ -102,7 +102,7 @@ function MakeButtons() {
 		if (!tDoc.info.AdvLogOnly) {
 			app.addToolButton({
 				cName : "SpellsButton",
-				cExec : "await MakeSpellMenu_SpellOptions();",
+				cExec : "MakeSpellMenu_SpellOptions();",
 				oIcon : allIcons.spells,
 				cTooltext : toUni("Spells Options") + "\nGet a menu with the options to:\n   \u2022  Create a Spell Sheet;\n   \u2022  Select the sources for that Spell Sheet;\n   \u2022  Delete an existing Spell Sheet;" + (!typePF ? "\n   \u2022  Set the visibility of the Spell Slot check boxes to the Spell Sheet, the Limited Feature section, or both;" : "") + "\n   \u2022  Set the sheet to use Spell Points instead of Spell Slots.\n\nGenerating a Spell Sheet will involve filling out a dialog for each spellcasting class/race/feat. After that you can select which is included in the Spell Sheet and in what order.", //\n\nAlternatively you can create an empty Spell Sheet which you can fill out manually.",
 				nPos : 10,
@@ -113,7 +113,7 @@ function MakeButtons() {
 		if (!minVer) {
 			app.addToolButton({
 				cName : "AdventureLeagueButton",
-				cExec : "MakeAdventureLeagueMenu(); await AdventureLeagueOptions();",
+				cExec : "MakeAdventureLeagueMenu();AdventureLeagueOptions();",
 				oIcon : allIcons.league,
 				cTooltext : toUni("Adventurers League") + "\nHide\/show fields for Adventurers League play:\n   \u2022  'DCI' on the 1st page;\n   \u2022  'Faction Rank' and 'Renown' on the Background page;\n   \u2022  Sets HP value on the 1st page to 'always fixed';" + (typePF ? "" : "\n   \u2022  Removes the action options from the DMG on the 1st page;") + "\n   \u2022  Adds asterisks for action options taken from the DMG in the reference section.\n\nThis button can also make the \"Adventurers Logsheet\" visible if it isn't already.\n\nNote that this Character Generator\/Sheet offers some options that are not legal in Adventurer's League play regardless of enabling this button or not.",
 				cMarked : "event.rc = Number(tDoc.getField('League Remember').submitName);",
@@ -122,7 +122,7 @@ function MakeButtons() {
 			});
 			app.addToolButton({
 				cName : "PrintButton",
-				cExec : "await PrintButton();",
+				cExec : "PrintButton();",
 				oIcon : allIcons.print,
 				cTooltext : toUni("Print") + "\nSelect what pages you want to print and open the print dialog.\n\nThe pages you select will be remembered for the next time you press this button.\n\nYou also get an option to hide all fields on the sheet before printing.",
 				nPos : 12,
@@ -156,7 +156,7 @@ function MakeButtons() {
 		});
 		app.addToolButton({
 			cName : "FAQButton",
-			cExec : "await MakeFaqMenu_FaqOptions();",
+			cExec : "MakeFaqMenu_FaqOptions();",
 			oIcon : allIcons.faq,
 			cTooltext : toUni("FAQ") + "\nOpen the frequently asked questions website or pdf, find the latest version, or contact MPMB.\n\nThere you can find information on how to add custom code to the sheet, like homebrew races\/weapons\/feats\/etc.",
 			nPos : 16,
@@ -3077,8 +3077,8 @@ async function getMenu(menuname) {
 	if (
 		![
 			"actions", "attacks", "background", "classfeatures", "companion", "faq", "feats", "gearline", "glossary",
-			"hp", "icon", "limfea", "importscripts", "inventory", "magicitems", "pages", "skills", "spells",
-			"spellsLine", "spellsPrepared", "sources"
+			"hp", "icon", "limfea", "importexport", "importscripts", "inventory", "magicitems", "pages", "raceoptions",
+			"skills", "spells", "spellsLine", "spellsPrepared", "sources", "texts"
 		].includes(menuname)
 		) {  // TODO: remove when all done
 		throw "error: unknown context menu: '" + menuname + "', make sure it is async";
@@ -6591,7 +6591,7 @@ async function SetToManual_Button(noDialog) {
 		SetToManual_Dialog.mRac = RaceFld;
 
 		//call the dialog and proceed if Apply is pressed
-		if (app.execDialog(SetToManual_Dialog) != "ok") return;
+		if ((await app.execDialog(SetToManual_Dialog)) != "ok") return;
 	}
 
 	//do something with the results of attacks checkbox
@@ -7122,7 +7122,7 @@ function CalcWeightCarried(manualTrigger) {
 }
 
 //call this to choose which weights to add to the "Total Carried", and which weights not to add
-function WeightToCalc_Button() {
+async function WeightToCalc_Button() {
 	//The dialog for setting what things are added to the total weight carried on page 2
 	var explTxt = 'Note that you can change the weight of the armor, shield, weapons, and ammunition on the 1st page and the magic items on the 3rd page by using the "Modifier" fields that appear when you press the "Mods" button (abacus icon) or the "Modifiers" bookmark.\nFor ammunition, only the listed "total" is counted as that already includes the unchecked ammo icons.';
 	var weightOptions = ["cArm", "cShi", "cWea", "cAmL", "cAmR", "cCoi", "cP2L", "cP2R", "cP3L", "cP3R", "cMaI"];
@@ -7389,7 +7389,7 @@ function WeightToCalc_Button() {
 	var isEnc = tDoc.getField("Weight Carrying Capacity.Field").display === display.hidden;
 	WeightToCalc_Dialog.UseEnc = isEnc;
 
-	app.execDialog(WeightToCalc_Dialog);
+	await app.execDialog(WeightToCalc_Dialog);
 
 	if (WeightToCalc_Dialog.UseEnc !== isEnc) SetEncumbrance(WeightToCalc_Dialog.UseEnc);
 
@@ -8469,7 +8469,7 @@ function MakeRaceMenu() {
 
 //call the Race Features menu and do something with the results
 async function RaceFeatureOptions() {
-	var MenuSelection = getMenu("raceoptions");
+	var MenuSelection = await getMenu("raceoptions");
 
 	if (MenuSelection && MenuSelection[0] !== "nothing") {
 		await ApplyRace(MenuSelection.toString(), true);
@@ -8685,7 +8685,7 @@ function UpdateDecimals(inputString) {
 	return theInput;
 }
 
-function SetUnitDecimals_Button() {
+async function SetUnitDecimals_Button() {
 	var unitSys = What("Unit System");
 	var decSep = What("Decimal Separator");
 
@@ -8694,7 +8694,7 @@ function SetUnitDecimals_Button() {
 	SetUnitDecimals_Dialog.bDec = decSep;
 
 	//call the dialog and do something if ok is pressed
-	if (app.execDialog(SetUnitDecimals_Dialog) != "ok") return;
+	if ((await app.execDialog(SetUnitDecimals_Dialog)) != "ok") return;
 
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Set units and decimals...");
@@ -8955,7 +8955,7 @@ function SetUnitDecimals_Button() {
 	thermoM(thermoTxt, true); // Stop progress bar
 }
 
-function SetTextOptions_Button() {
+async function SetTextOptions_Button() {
 	var FontSize = CurrentVars.fontsize !== undefined ? CurrentVars.fontsize : typePF ? 7 : 5.74;
 	var nowFont = tDoc.getField((tDoc.info.AdvLogOnly ? "AdvLog." : "") + "Player Name").textFont;
 	var FontDef = typePF ? "SegoeUI" : "SegoePrint";
@@ -8978,7 +8978,7 @@ function SetTextOptions_Button() {
 	SetTextOptions_Dialog.bFontsArray = fontArray;
 
 	// Call the dialog and do something if ok is pressed
-	if (app.execDialog(SetTextOptions_Dialog) === "ok") {
+	if ((await app.execDialog(SetTextOptions_Dialog)) === "ok") {
 		if (SetTextOptions_Dialog.bSize !== FontSize) {
 			ToggleTextSize(SetTextOptions_Dialog.bSize);
 		}

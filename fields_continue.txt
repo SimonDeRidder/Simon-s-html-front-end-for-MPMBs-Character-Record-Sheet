@@ -1,48 +1,9 @@
 Bluetext*   -   skipped for now
-PC_Name
+Wildshape*  -   skipped for now
 
 // trigger events on change:
-"Passive Perception": Passive_Perception_change
-"Passive Perception Bonus": Passive_Perception_Bonus_change
-"PC_name": PC_Name_change
-"Perc Bonus": Perc_Bonus_change
-"Perc Exp": Perc_Exp_change
-"Perc Prof": Perc_Prof_change
-"Perf Bonus": Perf_Bonus_change
-"Perf Exp": Perf_Exp_change
-"Perf Prof": Perf_Prof_change
-"Pers Bonus": Pers_Bonus_change
-"Pers Exp": Pers_Exp_change
-"Pers Prof": Pers_Prof_change
-"Proficiency Armor Heavy": Proficiency_Armor_Heavy_change
-"Proficiency Armor Light": Proficiency_Armor_Light_change
-"Proficiency Armor Medium": Proficiency_Armor_Medium_change
-"Proficiency Bonus": Proficiency_Bonus_change
-"Proficiency Bonus Dice": Proficiency_Bonus_Dice_change
-"Proficiency Shields": Proficiency_Shields_change
-"Rel Bonus": Rel_Bonus_change
-"Rel Exp": Rel_Exp_change
-"Rel Prof": Rel_Prof_change
-"Remarkable Athlete": Remarkable_Athlete_change
-"Sle Bonus": Sle_Bonus_change
-"Sle Exp": Sle_Exp_change
-"Sle Prof": Sle_Prof_change
-"Ste Bonus": Ste_Bonus_change
-"Ste Exp": Ste_Exp_change
-"Ste Prof": Ste_Prof_change
-"Str Mod": Str_Mod_change
-"Str_ST_Mod": Str_ST_Mod_change
-"Sur Bonus": Sur_Bonus_change
-"Sur Exp": Sur_Exp_change
-"Sur Prof": Sur_Prof_change
-"Text.SkillsNames": Text_SkillsNames_change
-"Too Bonus": Too_Bonus_change
-"Too Exp": Too_Exp_change
-"Too Prof": Too_Prof_change
-"Unit System": Unit_System_change
-"Wis Mod": Wis_Mod_change
-"Wis_ST_Mod": Wis_ST_Mod_change
 "BlueText.Attack." + i + ".Damage Bonus": BlueText_Attack_<i:1-5>_Damage_Bonus_change
 "BlueText.Attack." + i + ".Damage Die": BlueText_Attack_<i:1-5>_Damage_Die_change
 "BlueText.Attack." + i + ".To Hit Bonus": BlueText_Attack_<i:1-5>_To_Hit_Bonus_change
+"BlueText.Attack." + i + ".Weight": BlueText_Attack_<i:1-5>_Weight_change
 "BlueText.Players Make All Rolls": BlueText_Players_Make_All_Rolls_change

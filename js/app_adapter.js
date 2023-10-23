@@ -1,10 +1,15 @@
 
 const minVer = false;
+const MPMBImportFunctions_isInstalled = true;
 const app = {
 	viewerVersion: 9001,
 
-	setTimeOut: function (command /*str*/, millis /*int*/) {
-		setTimeout(command, millis);
+	setTimeOut: function (command /*str*/, millis /*int*/) /*Number*/ {
+		return setTimeout(command, millis);
+	},
+
+	clearTimeOut: function (timeout /*Number*/) {
+		clearTimeout(timeout);
 	},
 
 	thermometer: {  // combined status bar and load animation (TODO)
@@ -28,8 +33,64 @@ const app = {
 		nPos = -1 /*number*/,
 		cLabel = "" /*str*/,
 	}) {
-		console.log("addToolButton unimplemented, called with name ", cName);
-		// TODO: add a button to tool bar (make a tool bar)
+		// TODO: add a buttons to a decent tool bar
+		if (cName == 'ResetButton') {
+			return;
+		}
+		let container = document.getElementById('tempButtonRibbon');
+		let buttonParent = document.createElement('div');
+		buttonParent.style.width = '100%';
+		buttonParent.style.height = '13px';
+		let newButton = document.createElement('button');
+		newButton.className = "field button";
+		newButton.id = cName;
+		if (oIcon) {
+			console.log("Warning: addToolButton with oIcon not implemented:", cName, ":", oIcon);
+		}
+		newButton.onclick = async function() {
+			let res = eval(cExec);
+			return new Promise((resolve) => {
+				if (res && res.next) {
+					res.next(() => {resolve()});
+				} else {
+					return res;
+				}
+			});
+		};
+		if (cEnable != "true") {
+			throw "addToolButton with cEnable='", cEnable, "' for element ", cName;
+		}
+		if (cMarked != "false") {
+			let event = {};
+			eval(cMarked);
+			let markResult = event.rc;
+			if (!markResult) {
+				console.log("Warning: cMarked evaluates to false, not adding button:", cName);
+				newButton.remove();
+				buttonParent.remove();
+				return;
+			}
+		}
+		newButton.ariaLabel = cTooltext;
+		if (nPos != -1) {
+			console.log("Warning: addToolButton with nPos != -1 not implemented:", cName, ":", nPos);
+		}
+		newButton.innerText = cLabel;
+
+		buttonParent.appendChild(newButton);
+		container.appendChild(buttonParent);
+	},
+
+	removeToolButton: function ({
+		cName /*str*/,
+	}) {
+		let container = document.getElementById('tempButtonRibbon');
+		let el = document.getElementById(cName);
+		if (el) {
+			container.removeChild(el.parentElement);
+			el.parentElement.remove();
+			el.remove();
+		}
 	},
 
 	alert: function ({
@@ -47,7 +108,7 @@ const app = {
 			throw "alert with oDoc not implemented.";
 		}
 		if (oCheckbox != null) {
-			throw "alert with oCheckbox not implemented.";
+			console.log("Warning: alert with oCheckbox not implemented.");
 		}
 		let message = ((cTitle == "Alert") ? "" : cTitle + "\n\n") + cMsg;
 		if (nType == 0) {
@@ -98,6 +159,12 @@ const app = {
 				"SPELL SELECTION DIALOG",
 				"SPELL LIST GENERATION DIALOG",
 				"FIRST COLUMN DIALOG",
+				"Choose the unit system and decimal separator",
+				"CARRIED WEIGHT DIALOG",
+				"ADD FILE TO ACROBAT INSTALLATION DIALOG",
+				"IMPORT FROM PDF DIALOG",
+				"Set the Font, the Font Size, and Hide Text Lines",
+				"Choose the functions you want to set to manual",
 			].includes(monitor.description.name)
 		) {
 			// TODO: remove this if all execDialogs are converted
@@ -249,14 +316,8 @@ this.info = {
 	SheetVersion: "v13.1.2",
 	SpellsOnly: false,
 };
-
-this.bookmarkRoot = {
-	children: [
-		{
-			children: [],
-		}
-	],
-};
+this.path = "./index.html";
+this.documentFileName = "index.html";
 
 this.getField = function (field /*str|AdapterClassFieldReference*/) /*AdapterClassFieldReference|AdapterClassImageReference|null*/ {
 	if (field.constructor.name == 'AdapterClassFieldReference') {
@@ -358,8 +419,26 @@ this.exportDataObject = function(data /*Object*/) {
 }
 
 
-this.getTemplate = function(cName /*String*/) /*AdapterClassTemplate*/ {
-	return new AdapterClassTemplate(cName);
+this.getTemplate = function(cName /*String*/) /*AdapterClassPage*/ {
+	return new AdapterClassPage(cName);
+}
+
+
+this.deletePages = function(nStart /*Number*/, nEnd /*Number*/) {
+	if (nEnd) {
+		throw "deletePages not implemented for multiple pages, nEnd specified:", nEnd;
+	}
+	console.log("Deleting page ", nStart);
+	let page = globalPageInventory[nStart];
+	// remove page
+	rootDeletePage(nStart);
+	// remove button
+	let buttonContainerElement = document.getElementById('button-container');
+	for (let button of buttonContainerElement.children) {
+		if (button.dataset.page == page.id) {
+			buttonContainerElement.removeChild(button);
+		}
+	}
 }
 
 
@@ -672,11 +751,6 @@ class AdapterClassFieldReference {
 		if (this.html_elements[0].tagName.toLowerCase() == 'select') {
 			return this.html_elements[0].selectedIndex;
 		} else if ((this.html_elements[0].tagName.toLowerCase() == 'input') && (this.html_elements[0].getAttribute('list'))) {
-			console.log(
-				"warning: executing currentValueIndices for input list",
-				this.html_elements[0].id,
-				", make sure all innerText is matchable"
-			);
 			let selectedIndex = -1;
 			let value = this.html_elements[0].value.trim().toLowerCase();
 			let counter = 0;
@@ -699,7 +773,11 @@ class AdapterClassFieldReference {
 		} else if ((this.html_elements[0].tagName.toLowerCase() == 'input') && (this.html_elements[0].getAttribute('list'))) {
 			let listElement = document.getElementById(this.html_elements[0].getAttribute('list'));
 			if (listElement) {
-				this.html_elements[0].value = listElement.children[newIndex].value;
+				if (newIndex == -1) {
+					this.html_elements[0].value = "";
+				} else {
+					this.html_elements[0].value = listElement.children[newIndex].value;
+				}
 			} else {
 				throw "Cannot find datalist element " + String(this.html_elements[0].getAttribute('list'));
 			}
@@ -809,6 +887,27 @@ class AdapterClassFieldReference {
 		}
 	}
 
+	getItems() /*[str|[str;2]]*/ {
+		if ((this.html_elements[0].tagName.toLowerCase() != 'input') || !this.html_elements[0].hasAttribute('list')) {
+			throw "called getItems on unsupported element type: " + this.html_elements[0].tagName.toLowerCase();
+		}
+		let listElement = document.getElementById(this.html_elements[0].getAttribute('list'));
+		let items = [];
+		for (let optionElement of listElement.children) {
+			let id_ = optionElement.value;
+			let value = optionElement.innerText;
+			if (id_ == value) {
+				items.push(id_);
+			} else {
+				if ((value.trim() == "") && (id_.trim() != "")) {
+					throw "getItems found empty value for nonempty id in option for", listElement;
+				}
+				items.push([id_, value]);
+			}
+		}
+		return items;
+	}
+
 	setItems(oArray /*[str|[str;2]]*/) {
 		if ((this.html_elements[0].tagName.toLowerCase() != 'input') || !this.html_elements[0].hasAttribute('list')) {
 			throw "called setItems on unsupported element type: " + this.html_elements[0].tagName.toLowerCase();
@@ -835,10 +934,7 @@ class AdapterClassFieldReference {
 
 	buttonSetIcon(icon /*String*/) {
 		this.html_elements[0].style.backgroundImage = "url(" + icon + ")";
-		if (this.html_elements[0].dataset.tempUrl) {
-			URL.revokeObjectURL(this.html_elements[0].dataset.tempUrl);
-			delete this.html_elements[0].dataset.tempUrl;
-		}
+		this.html_elements[0].dataset.customUrl = false;
 	}
 
 	buttonImportIcon(cPath /*String*/, nPage /*Number*/) {
@@ -854,13 +950,12 @@ class AdapterClassFieldReference {
 		let thisElement = this.html_elements[0];
 		elm.addEventListener('change', function () {
 			if (elm.files && elm.files.length > 0) {
-				var tmpPath = URL.createObjectURL(elm.files[0])
-				thisElement.style.backgroundImage = "url(" + tmpPath + ")";
-				if (thisElement.dataset.tempUrl) {
-					URL.revokeObjectURL(thisElement.dataset.tempUrl);
-				}
-				thisElement.dataset.tempUrl = tmpPath;
-
+				let reader = new FileReader();
+				reader.onload = function(e) {
+					thisElement.style.backgroundImage = "url(" + reader.result + ")";
+					thisElement.dataset.customUrl = true;
+				};
+				reader.readAsDataURL(elm.files[0]);
 			}
 			elm.remove();
 		});
@@ -935,16 +1030,39 @@ class AdapterClassFieldReference {
 				nIdx = this.html_elements[0].options.length - 1;
 			}
 			let option = this.html_elements[0].options[nIdx];
-			if (bExportValue) {
-				return option.getAttribute('value');
+			if (option) {
+				if (bExportValue) {
+					return option.getAttribute('value');
+				} else {
+					return option.innerText;
+				}
 			} else {
-				return option.innerText;
+				throw "no option with index", nIdx, "for element", this.html_elements[0].index;
 			}
 		} else {
 			throw "getItemAt called for unsupported type: " + this.html_elements[0].tagName.toLowerCase() + " (" + this.html_elements[0].id + ")";
 		}
 	}
 
+	browseForFileToSubmit() {
+		let elm = document.createElement('input');
+		elm.style.visibility='hidden';
+		elm.setAttribute('type', 'file');
+		let thisElement = this.html_elements[0];
+		elm.addEventListener('change', function () {
+			if (elm.files && elm.files.length > 0) {
+				var tmpPath = URL.createObjectURL(elm.files[0])
+				thisElement.value = tmpPath;
+				if (thisElement.dataset.tempUrl) {
+					URL.revokeObjectURL(thisElement.dataset.tempUrl);
+				}
+				thisElement.dataset.tempUrl = tmpPath;
+
+			}
+			elm.remove();
+		});
+		elm.click();
+	}
 }
 
 
@@ -969,17 +1087,82 @@ class AdapterClassReadStream {
 	}
 }
 
-class AdapterClassTemplate {
-	constructor(type /*String*/) {
-		if (type == 'SSfront') {
+class AdapterClassPage {
+	constructor(type /*String*/, prefix = null /* String|null */) {
+		if (type == 'pstat') {
+			this.page_ = 'pages/page_stats.html';
+			this.prefix_ = (prefix == null) ? '': prefix;
+			this.buttonPrefix_ = "Stats";
+			this.buttonIDPrefix_ = 'tabbuttonstat';
+			this.pageIdPrefix = 'pstat';
+			this.buttonFollower = 'tabbuttonfeaq';
+			this.isTempl = false;
+		} else if (type == 'pfeaq') {
+			this.page_ = 'pages/page_features_equipment.html';
+			this.prefix_ = (prefix == null) ? '': prefix;
+			this.buttonPrefix_ = "Features & Equipment";
+			this.buttonIDPrefix_ = 'tabbuttonfeaq';
+			this.pageIdPrefix = 'pfeaq';
+			this.buttonFollower = 'tabbuttonnofe';
+			this.isTempl = false;
+		} else if (type == 'pnofe') {
+			this.page_ = 'pages/page_notes_feats.html';
+			this.prefix_ = (prefix == null) ? '': prefix;
+			this.buttonPrefix_ = "Notes & Feats";
+			this.buttonIDPrefix_ = 'tabbuttonnofe';
+			this.pageIdPrefix = 'pnofe';
+			this.buttonFollower = 'tabbuttonback';
+			this.isTempl = false;
+		} else if (type == 'pback') {
+			this.page_ = 'pages/page_appearance_background.html';
+			this.prefix_ = (prefix == null) ? '': prefix;
+			this.buttonPrefix_ = "Background";
+			this.buttonIDPrefix_ = 'tabbuttonback';
+			this.pageIdPrefix = 'pback';
+			this.buttonFollower = 'tabbuttoncomp';
+			this.isTempl = false;
+		} else if (type == 'pcomp') {
+			this.page_ = 'pages/page_companion.html';
+			this.prefix_ = (prefix == null) ? 'P4.AScomp.': prefix;
+			this.buttonPrefix_ = "Companion";
+			this.buttonIDPrefix_ = 'tabbuttoncomp';
+			this.pageIdPrefix = 'pcomp';
+			this.buttonFollower = 'tabbuttonnote';
+			this.isTempl = false;
+		} else if (type.startsWith('pwildtempl')) {
+			this.page_ = 'pages/page_wildshape.html';
+			this.prefix_ = (prefix == null) ? 'P#.WSfront.': prefix;
+			this.buttonPrefix_ = "Wildshape";
+			this.buttonIDPrefix_ = null;
+			this.pageIdPrefix = 'pwildtempl';
+			this.buttonFollower = 'tabbuttonnote';
+			this.isTempl = (type == 'pwildtempl') ? false: true;
+		} else if (type == 'pnote') {
+			this.page_ = 'pages/page_notes.html';
+			this.prefix_ = (prefix == null) ? 'P5.ASnotes.': prefix;
+			this.buttonPrefix_ = "Notes";
+			this.buttonIDPrefix_ = 'tabbuttonnote';
+			this.pageIdPrefix = 'pnote';
+			this.buttonFollower = 'tabbuttonrefe';
+			this.isTempl = false;
+		} else if ((type == 'SSfront') || type.startsWith('pspellstempl')) {
 			this.page_ = 'pages/page_spells.html';
-			this.prefix_ = 'P#.SSfront.';
-			this.buttonPrefix_ = 'Spells';
+			this.prefix_ = (prefix == null) ? 'P#.SSfront.': prefix;
+			this.buttonPrefix_ = "Spells";
 			this.buttonIDPrefix_ = 'tabbuttonspel';
 			this.pageIdPrefix = 'pspellstempl';
 			this.buttonFollower = 'tabbuttonrefe';
+			this.isTempl = (type == 'pspellstempl') ? false: true;
+		} else if (type == 'prefe') {
+			this.page_ = 'pages/page_reference.html';
+			this.prefix_ = (prefix == null) ? '': prefix;
+			this.buttonPrefix_ = "Reference";
+			this.buttonIDPrefix_ = 'tabbuttonrefe';
+			this.pageIdPrefix = 'prefe';
+			this.buttonFollower = null;
+			this.isTempl = false;
 		} else {
-			throw "Unimplemented template type:", type;
+			throw "Unimplemented page template type:", type;
 		}
 		this.type = type;
 		this.hidden_ = true;
@@ -1019,8 +1202,10 @@ class AdapterClassTemplate {
 
 
 		let index = 1;
-		while (document.getElementById(self.pageIdPrefix + '_' + String(index)) != null) {
-			index += 1;
+		if (this.isTempl) {
+			while (document.getElementById(self.pageIdPrefix + '_' + String(index)) != null) {
+				index += 1;
+			}
 		}
 
 		let prefix, buttonName;
@@ -1038,22 +1223,57 @@ class AdapterClassTemplate {
 		// insert page
 		let pageWrapperElement = document.getElementById('page-wrapper');
 		let pageElement = document.createElement('div');
-		let pageID = this.pageIdPrefix + '_' + String(index);
+		let pageID = this.pageIdPrefix + ((this.isTempl) ? '_' + String(index) : '');
 		pageElement.id = pageID;
 		pageElement.className = 'page';
 		pageElement.setAttribute('page-url', this.page_);
+		pageElement.setAttribute('page-prefix', prefix);
 		pageWrapperElement.appendChild(pageElement);
 		await insertPage(pageID, nPage, prefix=prefix);
-		// insert button
-		let buttonContainerElement = document.getElementById('button-container');
-		let buttonElement = document.createElement('button');
-		buttonElement.id = this.buttonIDPrefix_ + '_' + String(index);
-		buttonElement.onclick = function() {openPage(pageID, this)};
-		buttonElement.className = 'tablink';
-		buttonElement.innerText = buttonName;
-		buttonContainerElement.insertBefore(buttonElement, document.getElementById(this.buttonFollower));
+		if (this.buttonIDPrefix_) {
+			// insert button
+			let buttonContainerElement = document.getElementById('button-container');
+			let buttonElement = document.createElement('button');
+			buttonElement.id = this.buttonIDPrefix_ + ((this.isTempl) ? '_' + String(index) : '');
+			buttonElement.dataset.page = pageID;
+			buttonElement.onclick = function() {openPage(this)};
+			buttonElement.className = 'tablink';
+			buttonElement.innerText = buttonName;
+			buttonContainerElement.insertBefore(buttonElement, document.getElementById(this.buttonFollower));
+		}
 	}
 }
+
+
+class AdapterClassBookmark {
+	constructor() {}
+
+	set color (newColor /*[char, ...]*/) {}
+	set style (newColor /*Number*/) {}
+}
+
+// Other tdoc functions
+
+
+this.bookmarkRoot = {
+	children: [
+		{
+			children: [
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+				new AdapterClassBookmark(),
+			],
+		}
+	],
+};
 
 
 // Current... adapters
@@ -1270,6 +1490,27 @@ class CurrentProfsAdapter {
 	}
 }
 
+// class CurrentVarsAdapter {
+// 	constructor(
+// 		manual, bluetxt, weight, AbilitySaveDcFound, AbilitySaveDcBonus, extraArmour
+// 	) {
+// 		this.manual = (manual === undefined) ? {} : manual;
+// 		this.bluetxt = (bluetxt === undefined) ? false : bluetxt;
+// 		this.weight = (weight === undefined) ? [] : weight;
+// 		this.AbilitySaveDcFound = (AbilitySaveDcFound === undefined) ? {} : AbilitySaveDcFound;
+// 		this.AbilitySaveDcBonus = (AbilitySaveDcBonus === undefined) ? {} : AbilitySaveDcBonus;
+// 		this.extraArmour = (extraArmour === undefined) ? {} : extraArmour;
+// 	}
+
+// 	toSource() {
+// 		return (
+// 			"new CurrentVarsAdapter("
+// 			// TODO
+// 			+ ")"
+// 		)
+// 	}
+// }
+
 
 // Helper functions
 function adapter_helper_convert_fieldname_to_id(field_name /*str*/) /*str*/ {
@@ -1293,6 +1534,8 @@ function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
 		});
 		result += "]";
 		return result;
+	} else if (object.constructor.name == 'RegExp') {
+		return "new RegExp('" + object.toInnerString() + "')";
 	} else if (typeof object == "object") {
 		// testing that this is DOM
 		if (object.nodeType && typeof object.toSource == "function") {
@@ -1360,18 +1603,22 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 				}
 			}
 			if (elements.length == 0) {
-				if (['AdvLog.Options', 'nothing'].includes(field_id)) {
+				if (
+					[
+						'nothing',
+						'AdvLog.Options',
+						'Attack.1.Description_Tooltip',
+						'AdvLogS.Background_Faction.Text',
+						'AdvLog.HeaderIcon'
+					].includes(field_id)
+				) {
 					return null
 				} else if (field_id == 'Comp.Desc.Name') {
+					console.log("Warning: bookmark field fallback used:", field_id);
 					elements.push(document.getElementById('P4.AScomp.' + field_id)); // bookmark field
 				} else if (field_id == 'Notes.Left') {
+					console.log("Warning: bookmark field fallback used:", field_id);
 					elements.push(document.getElementById('P5.ASnotes.' + field_id)); // bookmark field
-				// } else if (
-				// 	(field_id == 'spells.name.0')
-				// 	|| field_id.startsWith('SpellSlots.CheckboxesSet.lvl')
-				// 	|| field_id.startsWith('SpellSlotsRemember')
-				// ) {
-				// 	elements.push(document.getElementById('P6.SSfront.' + field_id)); // bookmark field or spellslots
 				} else {
 					throw "null element: " + field_id;
 				}
@@ -1380,13 +1627,6 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 	} else {
 		elements.push(element);
 	}
-	// if (field_id.startsWith('Template.extras.')) {
-	// 	let values = (new AdapterClassFieldReference(elements)).value.split(",");
-	// 	if ((values.length == 1) && (values[0] == "")) {
-	// 		values = [];
-	// 	}
-	// 	return new AdapterClassTemplateReference(values);
-	// }
 	return new AdapterClassFieldReference(html_elements=elements);
 }
 
@@ -1426,7 +1666,7 @@ function adapter_helper_get_saveimg_field(img_name /*String*/) /*AdapterClassIma
 	} else if (img_name.startsWith('SpellSlots.')) {
 		return new AdapterClassImageReference('');
 	} else if (img_name.startsWith('Spells.')) {
-		return new AdapterClassImageReference('img/page_spells/checks/' + img_name.toLowerCase().match(/\.([a-z]+)$/)[1] + '.svg');
+		return new AdapterClassImageReference('img/page_spells/checks/' + img_name.toLowerCase().match(/\.([a-z0-9]+)$/)[1] + '.svg');
 	}
 	throw "unknown SaveIMG type: " + String(img_name);
 }
@@ -1513,3 +1753,255 @@ function adapter_helper_convert_colour(color /*[char, ...]*/) /*String|null*/ {
 	}
 	return bgColor;
 }
+
+
+function adapter_helper_save_all() {
+	// save page inventory
+	let pageElmnt;
+	let pages = [];
+	for (page_number in globalPageInventory) {
+		pageElmnt = globalPageInventory[page_number];
+		pages.push({
+			page_number: page_number,
+			page_id: pageElmnt.id,
+			page_prefix: pageElmnt.getAttribute('page-prefix'),
+		})
+	}
+
+	// save field elements
+	let elements = [];
+	for (element of document.getElementsByTagName("*")) {
+		if (element.classList.contains('field')) {
+			if (element.parentElement.parentElement.id != 'tempButtonRibbon') {
+				elements.push(adapter_helper_serialise_field(element));
+			}
+		}
+	}
+
+	// jsonify and save
+	let saveData = "data:application/json;base64," + btoa(escapeUnicode(JSON.stringify({
+		pages: pages,
+		elements: elements,
+	})));
+	let elm = document.createElement('a');
+	elm.style.visibility='hidden';
+	elm.setAttribute('href', saveData);
+	elm.setAttribute("download", "save.json");
+	elm.click();
+}
+
+
+function adapter_helper_load() {
+	async function apply_contents(saveData) {
+		// stop calculations
+		noSheetUpdate = !IsNotReset || !IsNotImport;
+		app.calculate = false;
+		tDoc.calculate = false;
+		tDoc.delay = true;
+
+		// set pages
+		let pages = saveData.pages;
+		while (Object.keys(globalPageInventory).length > 0) {
+			this.deletePages(1);
+		}
+		let pageAdapter;
+		let pageNum = 1;
+		for (page_info of pages.sort((a, b) => a.page_number - b.page_number)) {
+			pageAdapter = new AdapterClassPage(page_info.page_id, page_info.page_prefix);
+			await pageAdapter.spawn(nPage=pageNum, bRename=true, bOverlay=false);
+			pageNum += 1;
+		}
+		let statButton = document.getElementById('tabbuttonstat');
+		if (statButton) {
+			statButton.classList.add('defaultOpen');
+			statButton.click();
+		}
+		makeSaveLoadButtons();
+
+		// set fields
+		for (let element of saveData.elements) {
+			adapter_helper_deserialise_field(element);
+		}
+
+		// initialise global variables etc.
+		InitializeEverything(noButtons=false, noVars=false);
+
+		// continue calculations
+		calcCont();
+	}
+
+	// load file and apply contents
+	var input = document.createElement('input');
+	input.type = 'file';
+	input.setAttribute('accept', "application/json");
+	input.onchange = e => { 
+		let file = e.target.files[0]; 
+		let reader = new FileReader();
+		reader.readAsText(file, 'UTF-8');
+		reader.onload = readerEvent => {
+			apply_contents(JSON.parse(unescapeUnicode(readerEvent.target.result)));
+		}
+	}
+	input.click();
+}
+
+
+function adapter_helper_serialise_field(element /*HTMLElement*/) /*Object*/ {
+	let fieldVar = this.getField(adapter_helper_convert_id_to_fieldname(element.id));
+	if (fieldVar.constructor.name != 'AdapterClassFieldReference') {
+		throw "adapter_helper_serialise_field not implemented for field type '" + String(typeof fieldVar) + "', constructor '" + fieldVar.constructor.name + "'";
+	}
+	let result = {name: fieldVar.name};
+	let submit_name = fieldVar.submitName;
+	if (submit_name != "") {
+		result.submitName = submit_name;
+	}
+	let value = fieldVar.value;
+	if (value != element.dataset.default) {
+		result.value = value;
+	}
+	let useName = fieldVar.useName;
+	if (useName != "") {
+		result.useName = useName;
+	}
+	let display = fieldVar.display;
+	if (display != 0) {
+		result.display = display;
+	}
+	if (fieldVar.type == 'combobox') {
+		result.currentValueIndices = fieldVar.currentValueIndices;
+		if (element.tagName.toLowerCase() == 'input') {
+			result.items = fieldVar.getItems();
+		}
+	}
+	if (['checkbox', 'radiobutton'].includes(fieldVar.type)) {
+		result.boxChecked = fieldVar.isBoxChecked(0);
+	}
+	if (element.dataset.customUrl) {
+		console.log("file_content:", element.style.backgroundImage);
+		result.image_data = element.style.backgroundImage.replace(/^url\(\"/, '').replace(/\"\)$/, '');
+	}
+	if (is_movable_field(result.name)) {
+		result.rect = fieldVar.rect;
+	}
+	return result;
+}
+
+
+function adapter_helper_deserialise_field(element_info /*Object*/) {
+	let fieldVar = this.getField(element_info.name);
+	if (fieldVar.constructor.name!= 'AdapterClassFieldReference') {
+		throw "adapter_helper_serialise_field not implemented for field type '" + String(typeof fieldVar) + "', constructor '" + fieldVar.constructor.name + "'";
+	}
+	fieldVar.submitName = element_info.submitName ? element_info.submitName : "";
+	if (element_info.value) {
+		set_value_no_dispatch(fieldVar, element_info.value);
+	}
+	fieldVar.useName = element_info.useName ? element_info.useName : "";
+	fieldVar.display = element_info.display ? element_info.display : 0;
+	if (fieldVar.type == 'combobox') {
+		if (fieldVar.html_elements[0].tagName.toLowerCase() == 'input') {
+			fieldVar.setItems(element_info.items);
+		}
+		fieldVar.currentValueIndices = element_info.currentValueIndices;
+	}
+	if (['checkbox', 'radiobutton'].includes(fieldVar.type)) {
+		fieldVar.checkThisBox(0, element_info.boxChecked);
+	}
+	if (element_info.image_data) {
+		fieldVar.buttonSetIcon(element_info.image_data);
+		fieldVar.html_elements[0].dataset.customUrl = true;
+	}
+	if (element_info.rect) {
+		fieldVar.rect = element_info.rect;
+	}
+}
+
+
+function set_value_no_dispatch(fieldVar, new_value) {
+	if ((new_value != null) && (new_value.constructor === Array)) {
+		new_value = new_value.join(',');
+	}
+	if (['input', 'select', 'textarea'].includes(this.html_elements[0].tagName.toLowerCase())) {
+		if (
+			(fieldVar.html_elements[0].tagName.toLowerCase() == 'input')
+			&& (fieldVar.html_elements[0].getAttribute('type')?.toLowerCase() == 'number')
+			&& isNaN(new_value)
+		) {
+			// try to strip a unit from the number
+			new_value = new_value.replace(/^\s*(-?\d+\.?\d*)\s*[a-zA-Z]+$/, '$1');
+		}
+		fieldVar.html_elements[0].value = new_value;
+	} else {
+		fieldVar.html_elements[0].setAttribute('value', new_value);
+	}
+}
+
+
+function is_movable_field(fieldName /*String*/) /*boolean*/ {
+	if ([
+		"Text.SaveDC.1",
+		"Image.SaveDCarrow.1",
+		"Image.SaveDC.1",
+		"Spell DC 1 Mod",
+		"Spell save DC 1",
+		"Spell DC 1 Bonus"
+	].includes(fieldName)) {
+		return true;
+	}
+	for (
+		let prefix of [
+			"Adventuring Gear Row ",
+			"Extra.Gear Row ",
+			"Extra.Magic Item ",
+			"Extra.Magic Item Note "
+		]
+	) {
+		if (fieldName.startsWith()) {
+			return true;
+		}
+	}
+	for (
+		let infix of [
+			"spellsgloss.Image",
+			"spellsdiv.Image.",
+			"spellsdiv.Text.",
+			"spellshead.Image.prepare.",
+		]
+	) {
+		if (fieldName.indexOf(infix) != -1) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+function escapeUnicode(uText /*String*/) /*String*/ {
+	let result = "";
+	for(let i = 0; i < uText.length; i++){
+		// Assumption: all characters are < 0xffff
+		let num = uText[i].charCodeAt(0);
+		if (num < 256) {
+			result += uText[i];
+		} else {
+			result += "\\u" + ("000" + num.toString(16)).substr(-4);
+		}
+	}
+	return result;
+}
+
+
+function unescapeUnicode(lText /*String*/) /*String*/ {
+	let result = "";
+	for(let i = 0; i < lText.length; i++){
+		if (/\\u[0-9a-fA-F]{4}/.test(lText.slice(i, i + 6))) {
+			result += String.fromCharCode(Number("0x" + lText.slice(i+2, i + 6)));
+			i += 5;
+		} else {
+			result += lText[i]
+		}
+	}
+	return result;
+}
+

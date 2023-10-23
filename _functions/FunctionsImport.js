@@ -10,7 +10,7 @@ async function ImportExport_Button() {
 		await ImportScriptOptions();
 		return;
 	};
-	var theMenu = getMenu("importexport");
+	var theMenu = await getMenu("importexport");
 
 	if (theMenu !== undefined && theMenu[0] !== "nothing") {
 		switch (theMenu[1]) {
@@ -44,12 +44,12 @@ async function StartDirectImport() {
 	} else if (event.target === undefined && !MPMBImportFunctionsInstalled) {
 		await DirectImport(true);
 	} else if (event.target !== undefined && !MPMBImportFunctionsInstalled) {
-		AddFolderJavaScript(false);
+		await AddFolderJavaScript(false);
 	}
 }
 
 // call this to add the folder level javascript if it is missing
-function AddFolderJavaScript(justConsole) {
+async function AddFolderJavaScript(justConsole) {
 	var isType = app.viewerType === "Exchange-Pro" ? "Pro" : (app.viewerType === "Exchange" ? "Standard" : "Reader");
 	var isContin = app.viewerVersion.substring(6, 8) != 30;
 	var vYear = 20 + app.viewerVersion.substring(0, 2);
@@ -249,7 +249,7 @@ function AddFolderJavaScript(justConsole) {
 		}
 	};
 
-	var theDialog = app.execDialog(AddJS_dialog);
+	var theDialog = await app.execDialog(AddJS_dialog);
 
 	if (theDialog === "cons") {
 		console.clear();
@@ -261,7 +261,7 @@ function AddFolderJavaScript(justConsole) {
 }
 
 //the dialog for the DirectImport function that ask for the path to a file to import from
-function DirectImport_Dialogue() {
+async function DirectImport_Dialogue() {
 	var buggedVer = !isWindows && app.viewerVersion > 20 && app.viewerVersion < 20.00920065;
 	var isType = app.viewerType === "Exchange-Pro" ? "Pro" : (app.viewerType === "Exchange" ? "Standard" : "Reader");
 	var Text0 = "This 'Direct Import' function opens another MPMB's Character Record Sheet and goes through every field and layout setting in it to make this sheet similar to the other. This can take a long time and will not copy everything literally as this sheet will run through its automation to benefit from any updates to its code compared to the other sheet.";
@@ -445,14 +445,14 @@ function DirectImport_Dialogue() {
 		}
 	};
 
-	var theDialog = app.execDialog(DirectImport_dialog);
+	var theDialog = await app.execDialog(DirectImport_dialog);
 
 	var goII = false;
 	if (DirectImport_dialog.importIcons) {
 		if (MPMBImportFunctionsInstalled) {
 			goII = true;
 		} else {
-			if (AddFolderJavaScript(true)) theDialog = "cancel"; //if the addJS dialog is cancelled (selected to go on without the user icons), it returns false
+			if (await AddFolderJavaScript(true)) theDialog = "cancel"; //if the addJS dialog is cancelled (selected to go on without the user icons), it returns false
 		}
 	}
 
@@ -462,7 +462,7 @@ function DirectImport_Dialogue() {
 //a function to import information directly from another MPMB's Character Record Sheets
 async function DirectImport(consoleTrigger) {
 	//ask the user for the file to import from
-	var importFromPath = DirectImport_Dialogue();
+	var importFromPath = await DirectImport_Dialogue();
 	if (!importFromPath) return; //no reason to go on with this
 
 	// initiate a progress bar, so there is at least something

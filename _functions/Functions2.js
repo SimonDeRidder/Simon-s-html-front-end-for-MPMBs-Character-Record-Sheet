@@ -3342,7 +3342,7 @@ async function PagesOptions() {
 			break;
 		case "equip" :
 			if (MenuSelection[3] == "false") await InventoryOptions([MenuSelection[1]]);
-			if (MenuSelection[1] == "weight") WeightToCalc_Button();
+			if (MenuSelection[1] == "weight") await WeightToCalc_Button();
 			break;
 		case "3rdpage" :
 			LayerVisibilityOptions(false, MenuSelection);
@@ -4470,13 +4470,13 @@ async function MakeTextMenu_TextOptions(input) {
 	};
 
 	//now call the menu
-	var MenuSelection = input ? input : getMenu("texts");
+	var MenuSelection = input ? input : await getMenu("texts");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 
 	if (MenuSelection !== undefined && MenuSelection[0] !== "nothing") {
 		switch (MenuSelection[1]) {
 		 case "dodialog" :
-			SetTextOptions_Button();
+			await SetTextOptions_Button();
 			break;
 		 case "calc_boxes" :
 		 case "calc_lines" :
@@ -4847,7 +4847,8 @@ async function MakeSkillsMenu_SkillsOptions(input, onlyTooltips) {
 		}, {
 			cName : "Sort skills by ability score",
 			cReturn : "skills#abilities",
-			bMarked : sWho === "abilities"
+			bMarked : sWho === "abilities",
+			bEnabled : false
 		}, {
 			cName : "-"
 		}, {
@@ -6802,7 +6803,8 @@ function setSkillTooltips(noPopUp) {
 // manual trigger for clicking the skill proficiency/expertise (MouseUp) on the 1st page
 async function applySkillClick(theSkill, isExp) {
 	if (SkillsList.abbreviations.indexOf(theSkill) == -1) return;
-	var isCheck = event.target.isBoxChecked(0) ? true : false;
+	let target = event.target;
+	var isCheck = target.isBoxChecked(0) ? true : false;
 	if (Who('Text.SkillsNames') !== 'alphabeta') {
 		theSkill = SkillsList.abbreviationsByAS[SkillsList.abbreviations.indexOf(theSkill)];
 	}
@@ -6814,8 +6816,8 @@ async function applySkillClick(theSkill, isExp) {
 	// apply the manual skill proficiency changes
 	await SetProf("skill", isCheck, theSkill, "manualClick", setExp);
 	// if disabling manually, but set to enabled by the CurrentProfs variable, do an extra check to make sure it is manually disabled
-	if (!isCheck && event.target.isBoxChecked(0)) {
-		event.target.checkThisBox(0, false);
+	if (!isCheck && target.isBoxChecked(0)) {
+		target.checkThisBox(0, false);
 	}
 }
 

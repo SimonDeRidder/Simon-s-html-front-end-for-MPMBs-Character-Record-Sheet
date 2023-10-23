@@ -1,10 +1,12 @@
 <div id="CSfront" class="field page-container">
 
-	<button id="Show_Buttons" class="button" style="right: 4px; top: 3px;">Show extra features</button>
+	<button
+		id="Show_Buttons"
+		class="button"
+		style="right: 4px; top: 3px;visibility: hidden;"
+	>Show extra features</button><!--disabled on purpose because buttons are now persistent-->
 
-	<!--Temporary buttons for ribbon-->
-	<button class="field button" onclick="MakePagesMenu().then(PagesOptions())">Pages</button>
-		
+	<div id="tempButtonRibbon" style="position: absolute;width: 50px; height: 200px;"></div>
 
 	<div id="character_general_info" class="pane" style="width: var(--page-width); height: 195px;">
 		<img class="pane-bg" alt="" src="img/bg_splashy_stripes.svg" style="width: var(--page-width); height: 195px;">
@@ -29,7 +31,15 @@
 			style="position: absolute;top: 40px;left: 166px;width: 190px;height: 41.3px;visibility: hidden"
 		/>
 
-		<input id="PC_Name" class="field inputfield" style="top: 108px;left: 85px;font-size: 21.4px;width: 200px;height: 24px;font-family: 'scala-sans'" type="text">
+		<input
+			id="PC_Name"
+			class="field inputfield"
+			style="top: 108px;left: 85px;font-size: 21.4px;width: 200px;height: 24px;text-align: center;"
+			data-default=""
+			type="text"
+			spellcheck="true"
+			onchange="eventManager.handle_event(EventType.PC_Name_change)"
+		/>
 		<input
 			id="DCI.Text"
 			class="field inputfield"
@@ -59,7 +69,14 @@
 			onclick="event.target.value=this.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;ClickClasses();this.dataset.remVal=event.target.remVal"
 			onchange="event.target.remVal=this.dataset.remVal == 'undefined' ? undefined : this.dataset.remVal;event.value=this.value;classesFieldVal();this.value=event.value;if (event.target.remVal === undefined) {delete this.dataset.remVal;}"
 		/>
-		<input id="Player_Name" class="field inputfield" style="top: 85px;left: 660px;font-size: 11pt;width: 120pt;height: 15pt;font-family: 'scala-sans'" type="text">
+		<input
+			id="Player_Name"
+			class="field inputfield"
+			style="top: 85px;left: 660px;font-size: 11pt;width: 120pt;height: 15pt"
+			type="text"
+			data-default=""
+			spellcheck="true"
+		/>
 
 		<input
 			id="Background"
@@ -84,11 +101,40 @@
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 		/>
 		<datalist id="background_sub_options">
-			<option value="">
+			<option value=""></option>
 		</datalist>
-		<input id="Race" class="field inputfield" list="race_options" style="top: 124px;left: 545px;font-size: 11pt;width: 81pt;height: 15pt;font-family: 'scala-sans'">
-		<datalist id="race_options"></datalist>
-		<input id="Total_Experience" class="field inputfield" style="top: 124px;left: 660px;font-size: 11pt;width: 32pt;height: 15pt;font-family: 'scala-sans'" type="number">
+		<input
+			id="Race"
+			class="field inputfield"
+			list="race_options"
+			style="top: 124px;left: 545px;font-size: 14.7px;width: 108px;height: 20px"
+			aria-label="Race"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			spellcheck="true"
+			onchange="ApplyRace(this.value)"
+		/>
+		<datalist id="race_options">
+			<option value=""></option>
+			<option value="Dragonborn"></option>
+			<option value="Dwarf, Hill"></option>
+			<option value="Elf, High"></option>
+			<option value="Gnome, Rock"></option>
+			<option value="Half-elf"></option>
+			<option value="Half-orc"></option>
+			<option value="Halfling, Lightfoot"></option>
+			<option value="Human"></option>
+			<option value="Tiefling"></option>
+		</datalist>
+		<input
+			id="Total_Experience"
+			class="field inputfield"
+			style="top: 124px;left: 660px;font-size: 11pt;width: 32pt;height: 15pt"
+			type="number"
+			aria-label="The current total amount of experience points."
+			data-default=""
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="event.value=this.value;format1(0, 0);this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};CalcExperienceLevel(true)"
+		/>
 		<input
 			id="Add_Experience"
 			class="field inputfield nonprintable"
@@ -144,7 +190,13 @@
 		<div class="textlabel-bold" style="top: 357px;left: 7px;width: 77px;">INTELLIGENCE</div>
 		<div class="textlabel-bold" style="top: 465px;left: 7px;width: 77px;">WISDOM</div>
 		<div class="textlabel-bold" style="top: 573px;left: 7px;width: 77px;">CHARISMA</div>
-		<div id="Text.HoS.Ability" class="field textlabel-bold" style="visibility: hidden;top: 681px;left: 7px;width: 77px;z-index: 2" onchange="this.innerText=this.getAttribute('value')"></div>
+		<div
+			id="Text.HoS.Ability"
+			class="field textlabel-bold"
+			style="visibility: hidden;top: 681px;left: 7px;width: 77px;z-index: 2"
+			data-default=""
+			onchange="this.innerText=this.getAttribute('value')"
+		></div>
 
 		<div
 			id="Image.calc_boxes.CSfront"
@@ -152,13 +204,27 @@
 			style="visibility: hidden"
 		></div>
 
-		<input id="Str" class="field inputfield" style="top:  93px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input
+			id="Str"
+			class="field inputfield"
+			style="top: 93px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center"
+			type="number"
+			min="0"
+			step="1"
+			aria-label="Racial ability score improvements"
+			data-default=""
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="eventManager.handle_event(EventType.Str_change)"
+		/>
 		<input
 			id="Dex"
 			class="field inputfield"
 			style="top: 201px;left: 27px;font-size: 15px;width: 25pt;height: 16pt;text-align: center"
 			type="number"
+			min="0"
+			step="1"
 			aria-label="Primary class abilities & Multiclassing prerequisites"
+			data-default=""
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
 			onchange="eventManager.handle_event(EventType.Dex_change)"
 		/>
@@ -169,6 +235,7 @@
 			type="number"
 			min="0"
 			step="1"
+			data-default=""
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.Con_change)"
 		/>
@@ -179,10 +246,21 @@
 			type="number"
 			min="0"
 			step="1"
+			data-default=""
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
 			onchange="eventManager.handle_event(EventType.Int_change)"
 		/>
-		<input id="Wis" class="field inputfield" style="top: 525px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;font-family: 'scala-sans'" type="number"/>
+		<input
+			id="Wis"
+			class="field inputfield"
+			style="top: 525px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center"
+			type="number"
+			min="0"
+			step="1"
+			data-default=""
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="eventManager.handle_event(EventType.Wis_change)"
+		/>
 		<input
 			id="Cha"
 			class="field inputfield"
@@ -190,6 +268,7 @@
 			type="number"
 			min="0"
 			step="1"
+			data-default=""
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
 			onchange="eventManager.handle_event(EventType.Cha_change)"
 		/>
@@ -200,16 +279,27 @@
 			type="number"
 			min="0"
 			step="1"
+			data-default=""
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
 			onchange="eventManager.handle_event(EventType.HoS_change)"
 		/>
 
-		<input id="Str_Mod" class="field isNumber inputfield-noneditable" style="top:  48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input
+			id="Str_Mod"
+			class="field isNumber inputfield-noneditable"
+			style="top: 48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0"
+			type="text"
+			value="0"
+			data-default=""
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Str_Mod_change)"
+		/>
 		<input
 			id="Dex_Mod"
 			class="field isNumber inputfield-noneditable"
 			style="top: 156px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
+			type="text"
 			value="0"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Dex_Mod_change)"
 		/>
 		<input
@@ -217,6 +307,8 @@
 			class="field isNumber inputfield-noneditable"
 			style="top: 264px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
 			type="text"
+			value="0"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Con_Mod_change)"
 		/>
 		<input
@@ -224,14 +316,26 @@
 			class="field isNumber inputfield-noneditable"
 			style="top: 372px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
 			type="text"
+			value="0"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Int_Mod_change)"
 		/>
-		<input id="Wis_Mod" class="field isNumber inputfield-noneditable" style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0;font-family: 'scala-sans'" value="0"/>
+		<input
+			id="Wis_Mod"
+			class="field isNumber inputfield-noneditable"
+			style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0"
+			type="text"
+			value="0"
+			data-default=""
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Wis_Mod_change)"
+		/>
 		<input
 			id="Cha_Mod"
 			class="field isNumber inputfield-noneditable"
 			style="top: 580px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
 			type="text"
+			value="0"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Cha_Mod_change)"
 		/>
 		<input
@@ -239,6 +343,8 @@
 			class="field isNumber inputfield-noneditable"
 			style="visibility: hidden;top: 696px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0;z-index: 2"
 			type="text"
+			value="0"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.HoS_Mod_change)"
 		/>
 
@@ -250,7 +356,14 @@
 			<div class="textlabel" style="top: 56px;left: 175px;width: 83px;height: 20px;font-size: 8.6px;text-align:center">PASSIVE WISDOM (PERCEPTION)</div>
 			<div class="textlabel-bold" style="top: 149px;left: 106.5px;width: 170px;">SENSES</div>
 		</div>
-		<div id="Text.HoS.Save" class="field" style="position: absolute;z-index: 2;top: 802px;left: 58px;font-size: 9px;line-height: 8px;width: 24px;height: 16px;visibility: hidden" onchange="this.innerText=this.getAttribute('value').slice(0,3) + ' SAVE'"></div>
+		<div
+			id="Text.HoS.Save"
+			class="field"
+			style="position: absolute;z-index: 2;top: 802px;left: 58px;font-size: 9px;line-height: 8px;width: 24px;height: 16px;visibility: hidden"
+			onchange="this.innerText=this.getAttribute('value').slice(0,3) + ' SAVE'"
+			data-default=""
+			type="text"
+		></div>
 		<div
 			id="Image.calc_boxes.HoS"
 			class="field"
@@ -259,7 +372,7 @@
 
 		<script type="text/javascript">
 			// Ability Mods
-			['Dex', 'Con', 'Int', 'Cha', 'HoS'].forEach(function(ability) {
+			['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha', 'HoS'].forEach(function(ability) {
 				eventManager.add_listener(
 					EventType[ability + '_change'],
 					function () {
@@ -293,12 +406,20 @@
 			<span class="textlabel-dimmed rotate_m16" style="top: 0.3px;left: 7.2px;font-size: 7px">F</span>
 		</div>
 
-		<input id="Str_ST_Prof" class="field checkcircle" type="checkbox" style="top: 10.4px;left: 14.9px;">
+		<input
+			id="Str_ST_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 10.4px;left: 14.9px"
+			data-default="false"
+			onchange="eventManager.handle_event(EventType.Str_ST_Prof_change)"
+		/>
 		<input
 			id="Dex_ST_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 30.0px;left: 14.9px"
+			data-default="false"
 			onchange="eventManager.handle_event(EventType.Dex_ST_Prof_change)"
 		/>
 		<input
@@ -306,6 +427,7 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 49.6px;left: 14.9px"
+			data-default="false"
 			onchange="eventManager.handle_event(EventType.Con_ST_Prof_change)"
 		/>
 		<input
@@ -313,15 +435,24 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 10.4px;left: 101.6px"
+			data-default="false"
 			onchange="eventManager.handle_event(EventType.Int_ST_Prof_change)"
 			aria-label="Intelligence saving throws proficiency was gained from:"
 		/>
-		<input id="Wis_ST_Prof" class="field checkcircle" type="checkbox" style="top: 30.0px;left: 101.6px;">
+		<input
+			id="Wis_ST_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 30.0px;left: 101.6px"
+			data-default="false"
+			onchange="eventManager.handle_event(EventType.Wis_ST_Prof_change)"
+		/>
 		<input
 			id="Cha_ST_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 49.6px;left: 101.6px"
+			data-default="false"
 			onchange="eventManager.handle_event(EventType.Cha_ST_Prof_change)"
 		/>
 		<input
@@ -329,15 +460,24 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 802px;left: -87px;z-index: 1;visibility: hidden"
+			data-default="false"
 			onchange="eventManager.handle_event(EventType.HoS_ST_Prof_change)"
 		/>
 
-		<input id="Str_ST_Mod" class="field inputfield-notched" style="top: 10.4px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
+		<input
+			id="Str_ST_Mod"
+			class="field inputfield-notched"
+			style="top: 10.4px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none"
+			type="text"
+			data-default=""
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Str_ST_Mod_change)"
+		/>
 		<input
 			id="Dex_ST_Mod"
 			class="field inputfield-notched"
 			style="top: 30.0px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none"
 			type="text"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Dex_ST_Mod_change)"
 		/>
 		<input
@@ -345,6 +485,7 @@
 			class="field inputfield-notched"
 			style="top: 49.6px;left: 32px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none"
 			type="text"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Con_ST_Mod_change)"
 		/>
 		<input
@@ -352,14 +493,23 @@
 			class="field inputfield-notched"
 			style="top: 10.4px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none"
 			type="text"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Int_ST_Mod_change)"
 		/>
-		<input id="Wis_ST_Mod" class="field inputfield-notched" style="top: 30.0px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;" type="text">
+		<input
+			id="Wis_ST_Mod"
+			class="field inputfield-notched"
+			style="top: 30.0px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none"
+			type="text"
+			data-default=""
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Wis_ST_Mod_change)"
+		/>
 		<input
 			id="Cha_ST_Mod"
 			class="field inputfield-notched"
 			style="top: 49.6px;left: 118.7px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none;"
 			type="text"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Cha_ST_Mod_change)"
 		/>
 		<input
@@ -367,33 +517,89 @@
 			class="field inputfield-notched"
 			style="top: 802px;left: -70px;font-size: 14px;width: 21.3px;height: 13.3px;pointer-events: none;z-index: 1;visibility: hidden"
 			type="text"
+			data-default=""
 			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.HoS_ST_Mod_change)"
 		/>
 
-		<input id="Resistance_Damage_Type_1" class="field inputfield" list="resistances_options" style="top:  84.8px;left:   16px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
-		<input id="Resistance_Damage_Type_2" class="field inputfield" list="resistances_options" style="top: 104.4px;left:   16px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
-		<input id="Resistance_Damage_Type_3" class="field inputfield" list="resistances_options" style="top: 123.9px;left:   16px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
-		<input id="Resistance_Damage_Type_4" class="field inputfield" list="resistances_options" style="top:  84.8px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
-		<input id="Resistance_Damage_Type_5" class="field inputfield" list="resistances_options" style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
-		<input id="Resistance_Damage_Type_6" class="field inputfield" list="resistances_options" style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px;font-family: 'scala-sans'">
-			<datalist id="resistances_options">
-				<option value=""></option>
-				<option value="Acid">Acid</option>
-				<option value="Bludgeoning">Bludgeoning</option>
-				<option value="Cold">Cold</option>
-				<option value="Fire">Fire</option>
-				<option value="Force">Force</option>
-				<option value="Lightning">Lightning</option>
-				<option value="Necrotic">Necrotic</option>
-				<option value="Piercing">Piercing</option>
-				<option value="Poison">Poison</option>
-				<option value="Psychic">Psychic</option>
-				<option value="Radiant">Radiant</option>
-				<option value="Slashing">Slashing</option>
-				<option value="Thunder">Thunder</option>
-			</datalist>
+		<input
+			id="Resistance_Damage_Type_1"
+			class="field inputfield"
+			list="resistances_options"
+			style="top: 84.8px;left: 16px;font-size: 12px;width: 73.6px;height: 14px"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Resistance_Damage_Type_2"
+			class="field inputfield"
+			list="resistances_options"
+			style="top: 104.4px;left: 16px;font-size: 12px;width: 73.6px;height: 14px"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Resistance_Damage_Type_3"
+			class="field inputfield"
+			list="resistances_options"
+			style="top: 123.9px;left: 16px;font-size: 12px;width: 73.6px;height: 14px"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Resistance_Damage_Type_4"
+			class="field inputfield"
+			list="resistances_options"
+			style="top: 84.8px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Resistance_Damage_Type_5"
+			class="field inputfield"
+			list="resistances_options"
+			style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Resistance_Damage_Type_6"
+			class="field inputfield"
+			list="resistances_options"
+			style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<datalist id="resistances_options">
+			<option value=""></option>
+			<option value="Acid">Acid</option>
+			<option value="Bludgeoning">Bludgeoning</option>
+			<option value="Cold">Cold</option>
+			<option value="Fire">Fire</option>
+			<option value="Force">Force</option>
+			<option value="Lightning">Lightning</option>
+			<option value="Necrotic">Necrotic</option>
+			<option value="Piercing">Piercing</option>
+			<option value="Poison">Poison</option>
+			<option value="Psychic">Psychic</option>
+			<option value="Radiant">Radiant</option>
+			<option value="Slashing">Slashing</option>
+			<option value="Thunder">Thunder</option>
+		</datalist>
 
-		<textarea id="Saving_Throw_advantages_/_disadvantages" class="field inputfield" rows="6" style="top: 141px;left: 13px;width: 159.7px;height: 96px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
+		<textarea
+			id="Saving_Throw_advantages_/_disadvantages"
+			class="field inputfield"
+			rows="6"
+			style="top: 141px;left: 13px;width: 159.7px;height: 96px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
+			spellcheck="true"
+			data-default=""
+		></textarea>
 
 		<!-- Bluetext -->
 		<input
@@ -406,11 +612,22 @@
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
+			id="Str_ST_Bonus"
+			class="field inputfield bluetext"
+			aria-label="Strenght Saving Throw Bonus Modifier"
+			style="top: 10.4px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Str_ST_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
 			id="Dex_ST_Bonus"
 			class="field inputfield bluetext"
 			aria-label="Dexterity Saving Throw Bonus Modifier"
 			style="top: 30px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dex_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -420,6 +637,7 @@
 			aria-label="Constitution Saving Throw Bonus Modifier"
 			style="top: 49.6px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Con_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -429,6 +647,17 @@
 			aria-label="Intelligence Saving Throw Bonus Modifier"
 			style="top: 10.4px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
+			data-default="0"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Wis_ST_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
+			id="Wis_ST_Bonus"
+			class="field inputfield bluetext"
+			aria-label="Wisdom Saving Throw Bonus Modifier"
+			style="top: 10.4px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
+			value="0"
+			data-default="0"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Int_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -438,6 +667,7 @@
 			aria-label="Charisma Saving Throw Bonus Modifier"
 			style="top: 49.6px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -447,12 +677,29 @@
 			aria-label="Honor/Sanity Saving Throw Bonus Modifier"
 			style="top: 802px;left: -107px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
+		<div
+			id="Save_Modifiers_All_Text"
+			class="field textlabel bluetext"
+			style="top: -10px;left: 87px;height: 14px;width: 54px;visibility: hidden"
+		>to all Saves</div>
+		<div
+			id="Save_Modifiers_Title#0"
+			class="field textlabel bluetext"
+			style="top: -10px;left: 160px;height: 20px;width: 58px;text-align: center;visibility: hidden"
+		>SAVE MODS</div>
+		<div
+			id="Save_Modifiers_Title#1"
+			class="field textlabel bluetext"
+			style="top: -10px;left: -28px;height: 20px;width: 58px;text-align: center;visibility: hidden"
+		>SAVE MODS</div>
+
 		<script type="text/javascript">
 			// Ability Saving Throws
-			['Dex', 'Con', 'Int', 'Cha', 'HoS'].forEach(function(ability) {
+			['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha', 'HoS'].forEach(function(ability) {
 				[
 					EventType[ability + "_Mod_change"],
 					EventType[ability + "_ST_Prof_change"],
@@ -516,7 +763,14 @@
 			aria-label="The total hit points (with averages and max for 1st level)"
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
 		/>
-		<input id="Proficiency_Bonus" class="field inputfield-noneditable" style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
+		<input
+			id="Proficiency_Bonus"
+			class="field inputfield-noneditable"
+			style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0"
+			type="text"
+			data-default=""
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=this.value;ProfBonusDisplay();this.value=event.value;eventManager.handle_event(EventType.Proficiency_Bonus_change)"
+		/>
 
 		<input
 			id="AC"
@@ -677,8 +931,57 @@
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
 		/>
 
-		<input id="Speed_encumbered" class="field inputfield" style="top: 211px;left: 215.2px;font-size: 10px;width: 66.7px;height: 12px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
-		<input id="Speed" class="field inputfield" style="top: 225px;left: 215.2px;font-size: 20px;width: 66.7px;height: 50px;text-align: center;padding: 0 0 0 0;font-family: 'scala-sans'" type="text">
+		<input
+			id="Speed_encumbered"
+			class="field inputfield"
+			style="top: 211px;left: 215.2px;font-size: 10px;width: 66.7px;height: 12px;text-align: center;padding: 0 0 0 0"
+			type="text"
+			aria-label="The total encumbered walink speed comes from:"
+			data-default=""
+			spellcheck="true"
+		/>
+		<input
+			id="Speed"
+			class="field inputfield"
+			style="top: 225px;left: 215.2px;font-size: 20px;width: 66.7px;height: 50px;text-align: center;padding: 0 0 0 0"
+			type="text"
+			aria-label="The total walking speed comes from:"
+			data-default=""
+			spellcheck="true"
+		/>
+
+		<!-- BlueText -->
+		<div
+			id="Proficiency_Bonus_Dice_Title"
+			class="field bluetext"
+			style="position: absolute;top: 0px;left: 164px;width: 42px;height: 12px;text-align: center;visibility: hidden"
+			data-default="Use Dice"
+		>Use Dice</div>
+		<div
+			id="Proficiency_Bonus_Modifier_Title"
+			class="field bluetext"
+			style="position: absolute;top: 0px;left: 99px;width: 42px;height: 12px;text-align: center;visibility: hidden"
+			data-default="Use Dice"
+			data-page="1"
+		>Modifier</div>
+		<input
+			id="Proficiency_Bonus_Dice"
+			class="field checkcircle bluetext"
+			style="top: -13px;left: 179px;width: 12px;height: 12px;visibility: hidden"
+			type="checkbox"
+			data-default="false"
+			onchange="eventManager.handle_event(EventType.Proficiency_Bonus_Dice_change)"
+		/>
+		<input
+			id="Proficiency_Bonus_Modifier"
+			class="field inputfield bluetext"
+			style="top: -12px;left: 114px;width: 12px;height: 12px;text-align: center;visibility: hidden"
+			data-default="0"
+			value="0"
+			type="number"
+			onchange="eventManager.handle_event(EventType.Proficiency_Bonus_Modifier_change)"
+		/>
+
 		<script type="text/javascript">
 			// AC
 			[
@@ -745,6 +1048,20 @@
 						let IBElement = document.getElementById("Initiative_bonus");
 						IBElement.value = event.value;
 						IBElement.dispatchEvent(new Event('change'));
+					}
+				);
+			});
+
+			// Proficiency Bonus
+			[
+				EventType.Character_Level_change,
+				EventType.Proficiency_Bonus_Dice_change,
+				EventType.Proficiency_Bonus_Modifier_change,
+			].forEach(function (event_type) {
+				eventManager.add_listener(
+					event_type,
+					function () {
+						ProfBonus("Proficiency Bonus");
 					}
 				);
 			});
@@ -905,7 +1222,7 @@
 			value="0"
 			type="text"
 			oninput="{event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=event.target.selectionStart;event.selEnd=event.target.selectionEnd;keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value"
+			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.AC_Armor_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -916,7 +1233,7 @@
 			value="0"
 			type="text"
 			oninput="{event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=event.target.selectionStart;event.selEnd=event.target.selectionEnd;keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value"
+			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.AC_Shield_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -989,23 +1306,139 @@
 			<div class="textlabel-bold" style="top: 9.3px;left: 80.8px;width: 64px;text-align: left;font-size: 8.6px;line-height: 10.4px;">ABILITY SAVE DC</div>
 		</div>
 
-		<input id="Spell_save_DC_1" class="field inputfield-noneditable" style="top: 11px;left: 14.5px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
-		<input id="Spell_save_DC_2" class="field inputfield-noneditable" style="visibility: hidden;top: 11px;left: 191px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
+		<input
+			id="Spell_save_DC_1"
+			class="field inputfield-noneditable"
+			style="top: 11px;left: 14.5px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0"
+			type="number"
+			value="12"
+			data-default="12"
+			spellcheck="true"
+		/>
+		<input
+			id="Spell_save_DC_2"
+			class="field inputfield-noneditable"
+			style="visibility: hidden;top: 11px;left: 191px;font-size: 28px;width: 35px;height: 29.5px;padding: 0 0 0 0"
+			type="number"
+			value="12"
+			data-default="12"
+			spellcheck="true"
+		/>
 
-		<input id="Spell_DC_1_Mod.0" class="field inputfield" list="ability_save_dc_options" style="top: 19px;font-size: 8px;font-weight: bold;height: 10px;left: 130px;text-align: center;width: 75px;font-family: 'scala-sans'">
-		<input id="Spell_DC_1_Mod.1" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;font-family: 'scala-sans'">
-		<input id="Spell_DC_2_Mod" class="field inputfield" list="ability_save_dc_options" style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 121.5px;text-align: center;width: 54px;font-family: 'scala-sans'">
-			<datalist id="ability_save_dc_options">
-				<option value=""></option>
-				<option value="Str Mod">STRENGTH</option>
-				<option value="Dex Mod">DEXTERITY</option>
-				<option value="Con Mod">CONSTITUTION</option>
-				<option value="Int Mod">INTELLIGENCE</option>
-				<option value="Wis Mod">WISDOM</option>
-				<option value="Cha Mod">CHARISMA</option>
-			</datalist>
+		<select
+			id="Spell_DC_1_Mod.0"
+			class="field inputfield"
+			list="ability_save_dc_options"
+			style="top: 19px;font-size: 8px;height: 10px;left: 130px;text-align: center;width: 75px;font-family: 'scala-sans';font-weight: bold"
+			onchange="eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
+		>
+			<option value=""></option>
+			<option value="Str Mod">  STRENGTH</option>
+			<option value="Dex Mod">  DEXTERITY</option>
+			<option value="Con Mod">CONSTITUTION</option>
+			<option value="Int Mod">INTELLIGENCE</option>
+			<option value="Wis Mod">   WISDOM</option>
+			<option value="Cha Mod">  CHARISMA</option>
+		</select>
+		<select
+			id="Spell_DC_1_Mod.1"
+			class="field inputfield"
+			list="ability_save_dc_options"
+			style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;font-family: 'scala-sans'"
+			onchange="eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
+		>
+			<option value=""></option>
+			<option value="Str Mod">  STRENGTH</option>
+			<option value="Dex Mod">  DEXTERITY</option>
+			<option value="Con Mod">CONSTITUTION</option>
+			<option value="Int Mod">INTELLIGENCE</option>
+			<option value="Wis Mod">   WISDOM</option>
+			<option value="Cha Mod">  CHARISMA</option>
+		</select>
+		<select
+			id="Spell_DC_2_Mod"
+			class="field inputfield"
+			list="ability_save_dc_options"
+			style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 121.5px;text-align: center;width: 54px;font-family: 'scala-sans'"
+			onchange="eventManager.handle_event(EventType.Spell_DC_2_Mod_change)"
+		>
+			<option value=""></option>
+			<option value="Str Mod">  STRENGTH</option>
+			<option value="Dex Mod">  DEXTERITY</option>
+			<option value="Con Mod"> CONSTITUTION</option>
+			<option value="Int Mod">INTELLIGENCE</option>
+			<option value="Wis Mod">WISDOM</option>
+			<option value="Cha Mod">CHARISMA</option>
+		</select>
 
-		<button id="ShowHide_2nd_DC" class="field button" style="top: -6.4px;left: 94.3px">Show 2nd DC</button>
+		<button
+			id="ShowHide_2nd_DC"
+			class="field button nonprintable"
+			style="top: -6.4px;left: 94.3px"
+			aria-label="Toggle visibility of the second Ability save DC"
+			onclick="Toggle2ndAbilityDC()"
+		>Show 2nd DC</button>
+
+		<!--BlueText-->
+		<input
+			id="Spell_DC_1_Bonus"
+			class="field inputfield bluetext"
+			style="top: -7.5px;left: 53px;width: 14px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="1st Ability Save DC Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Spell_DC_1_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
+			id="Spell_DC_2_Bonus"
+			class="field inputfield bluetext"
+			style="top: -7.5px;left: 170px;width: 14px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="2nd Ability Save DC Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Spell_DC_2_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+
+		<script type="text/javascript">
+			for (let i = 1;i <= 2; i += 1) {
+				[
+					EventType.Proficiency_Bonus_change,
+					EventType.BlueText_Players_Make_All_Rolls_change,
+					EventType.Str_Mod_change,
+					EventType.Dex_Mod_change,
+					EventType.Con_Mod_change,
+					EventType.Int_Mod_change,
+					EventType.Wis_Mod_change,
+					EventType.Cha_Mod_change,
+					EventType.HoS_Mod_change,
+					EventType.Str_change,
+					EventType.Dex_change,
+					EventType.Con_change,
+					EventType.Int_change,
+					EventType.Wis_change,
+					EventType.Cha_change,
+					EventType.HoS_change,
+					EventType['Spell_DC_' + String(i) + '_Mod_change'],
+					EventType['Spell_DC_' + String(i) + '_Bonus_change'],
+				].forEach(function (event_type) {
+					eventManager.add_listener(
+						event_type,
+						function () {
+							event.target.name = "Spell save DC " + String(i);
+							let element = document.getElementById("Spell_save_DC_" + String(i));
+							CalcAbilityDC();
+							let currentVal = element.value;
+							if (event.value != currentVal) {
+								element.value = event.value;
+								element.dispatchEvent(new Event('change'));
+							}
+						}
+					);
+				});
+			}
+		</script>
 	</div>
 
 
@@ -1030,35 +1463,40 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 16px;left: 22.3px;width: 8px;height: 8px"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Acr', true).then(() => {eventManager.handle_event(EventType.Acr_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Acr', true).then(() => {eventManager.handle_event(EventType.Acr_Exp_change);});}"
 		/>
 		<input
 			id="Ani_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 35.5px;left: 22.3px;width: 8px;height: 8px"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ani', true).then(() => {eventManager.handle_event(EventType.Ani_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ani', true).then(() => {eventManager.handle_event(EventType.Ani_Exp_change);});}"
 		/>
 		<input
 			id="Arc_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 55.0px;left: 22.3px;width: 8px;height: 8px"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Arc', true).then(() => {eventManager.handle_event(EventType.Arc_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Arc', true).then(() => {eventManager.handle_event(EventType.Arc_Exp_change);});}"
 		/>
 		<input
 			id="Ath_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 74.5px;left: 22.3px;width: 8px;height: 8px"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ath', true).then(() => {eventManager.handle_event(EventType.Ath_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ath', true).then(() => {eventManager.handle_event(EventType.Ath_Exp_change);});}"
 		/>
 		<input
 			id="Dec_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 94.0px;left: 22.3px;width: 8px;height: 8px"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Dec', true).then(() => {eventManager.handle_event(EventType.Dec_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Dec', true).then(() => {eventManager.handle_event(EventType.Dec_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1066,14 +1504,16 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 113.5px;left: 22.3px;width: 8px;height: 8px"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('His', true).then(() => {eventManager.handle_event(EventType.His_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('His', true).then(() => {eventManager.handle_event(EventType.His_Exp_change);});}"
 		/>
 		<input
 			id="Ins_Exp"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 133.0px;left: 22.3px;width: 8px;height: 8px"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ins', true).then(() => {eventManager.handle_event(EventType.Ins_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ins', true).then(() => {eventManager.handle_event(EventType.Ins_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1081,7 +1521,8 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 152.5px;left: 22.3px;width: 8px;height: 8px"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Inti', true).then(() => {eventManager.handle_event(EventType.Inti_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inti', true).then(() => {eventManager.handle_event(EventType.Inti_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1089,7 +1530,8 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 172.0px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Inv', true).then(() => {eventManager.handle_event(EventType.Inv_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inv', true).then(() => {eventManager.handle_event(EventType.Inv_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1097,7 +1539,8 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 191.5px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Med', true).then(() => {eventManager.handle_event(EventType.Med_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Med', true).then(() => {eventManager.handle_event(EventType.Med_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1105,52 +1548,114 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 211.0px;left: 22.3px;width: 8px;height: 8px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Nat', true).then(() => {eventManager.handle_event(EventType.Nat_Exp_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Nat', true).then(() => {eventManager.handle_event(EventType.Nat_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
-		<input id="Perc_Exp" class="field checkcircle" type="checkbox" style="top: 230.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="Perf_Exp" class="field checkcircle" type="checkbox" style="top: 250.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="Pers_Exp" class="field checkcircle" type="checkbox" style="top: 269.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="Rel_Exp" class="field checkcircle" type="checkbox" style="top: 289.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="Sle_Exp" class="field checkcircle" type="checkbox" style="top: 308.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="Ste_Exp" class="field checkcircle" type="checkbox" style="top: 328.0px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="Sur_Exp" class="field checkcircle" type="checkbox" style="top: 347.5px;left: 22.3px;width: 8px;height: 8px;">
-		<input id="Too_Exp" class="field checkcircle" type="checkbox" style="top: 367.0px;left: 22.3px;width: 8px;height: 8px;">
+		<input
+			id="Perc_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 230.5px;left: 22.3px;width: 8px;height: 8px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Perc', true).then(() => {eventManager.handle_event(EventType.Perc_Exp_change);});}"
+		/>
+		<input
+			id="Perf_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 250.0px;left: 22.3px;width: 8px;height: 8px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Perf', true).then(() => {eventManager.handle_event(EventType.Perf_Exp_change);});}"
+		/>
+		<input
+			id="Pers_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 269.5px;left: 22.3px;width: 8px;height: 8px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Pers', true).then(() => {eventManager.handle_event(EventType.Pers_Exp_change);});}"
+		/>
+		<input
+			id="Rel_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 289.0px;left: 22.3px;width: 8px;height: 8px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Rel', true).then(() => {eventManager.handle_event(EventType.Rel_Exp_change);});}"
+		/>
+		<input
+			id="Sle_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 308.5px;left: 22.3px;width: 8px;height: 8px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Sle', true).then(() => {eventManager.handle_event(EventType.Sle_Exp_change);});}"
+		/>
+		<input
+			id="Ste_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 328.0px;left: 22.3px;width: 8px;height: 8px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ste', true).then(() => {eventManager.handle_event(EventType.Ste_Exp_change);});}"
+		/>
+		<input
+			id="Sur_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 347.5px;left: 22.3px;width: 8px;height: 8px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Sur', true).then(() => {eventManager.handle_event(EventType.Sur_Exp_change);});}"
+		/>
+		<input
+			id="Too_Exp"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 367.0px;left: 22.3px;width: 8px;height: 8px"
+			data-default="false"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applyCompSkillClick();eventManager.handle_event(EventType.Too_Exp_change);}"
+		/>
 
 		<input
 			id="Acr_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 18px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Acr').then(() => {eventManager.handle_event(EventType.Acr_Prof_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Acr').then(() => {eventManager.handle_event(EventType.Acr_Prof_change);});}"
 		/>
 		<input
 			id="Ani_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 37.5px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ani').then(() => {eventManager.handle_event(EventType.Ani_Prof_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ani').then(() => {eventManager.handle_event(EventType.Ani_Prof_change);});}"
 		/>
 		<input
 			id="Arc_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 57.0px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Arc').then(() => {eventManager.handle_event(EventType.Arc_Prof_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Arc').then(() => {eventManager.handle_event(EventType.Arc_Prof_change);});}"
 		/>
 		<input
 			id="Ath_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 76.5px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ath').then(() => {eventManager.handle_event(EventType.Ath_Prof_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ath').then(() => {eventManager.handle_event(EventType.Ath_Prof_change);});}"
 		/>
 		<input
 			id="Dec_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 96.0px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Dec').then(() => {eventManager.handle_event(EventType.Dec_Prof_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Dec').then(() => {eventManager.handle_event(EventType.Dec_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1158,14 +1663,16 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 115.5px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('His').then(() => {eventManager.handle_event(EventType.His_Prof_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('His').then(() => {eventManager.handle_event(EventType.His_Prof_change);});}"
 		/>
 		<input
 			id="Ins_Prof"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 135.0px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ins').then(() => {eventManager.handle_event(EventType.Ins_Prof_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ins').then(() => {eventManager.handle_event(EventType.Ins_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1173,43 +1680,109 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 154.5px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Inti').then(() => {eventManager.handle_event(EventType.Inti_Prof_change);});}"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inti').then(() => {eventManager.handle_event(EventType.Inti_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
 			id="Inv_Prof"
 			class="field checkcircle"
 			type="checkbox"
-			style="top: 174.0px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Inv').then(() => {eventManager.handle_event(EventType.Inv_Prof_change);});}"
+			style="top: 174.0px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inv').then(() => {eventManager.handle_event(EventType.Inv_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
 			id="Med_Prof"
 			class="field checkcircle"
 			type="checkbox"
-			style="top: 193.5px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Med').then(() => {eventManager.handle_event(EventType.Med_Prof_change);});}"
+			style="top: 193.5px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Med').then(() => {eventManager.handle_event(EventType.Med_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
 			id="Nat_Prof"
 			class="field checkcircle"
 			type="checkbox"
-			style="top: 213.0px;left: 15.2px;"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Nat').then(() => {eventManager.handle_event(EventType.Nat_Prof_change);});}"
+			style="top: 213.0px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Nat').then(() => {eventManager.handle_event(EventType.Nat_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
-		<input id="Perc_Prof" class="field checkcircle" type="checkbox" style="top: 232.5px;left: 15.2px;">
-		<input id="Perf_Prof" class="field checkcircle" type="checkbox" style="top: 252.0px;left: 15.2px;">
-		<input id="Pers_Prof" class="field checkcircle" type="checkbox" style="top: 271.5px;left: 15.2px;">
-		<input id="Rel_Prof" class="field checkcircle" type="checkbox" style="top: 291.0px;left: 15.2px;">
-		<input id="Sle_Prof" class="field checkcircle" type="checkbox" style="top: 310.5px;left: 15.2px;">
-		<input id="Ste_Prof" class="field checkcircle" type="checkbox" style="top: 330.0px;left: 15.2px;">
-		<input id="Sur_Prof" class="field checkcircle" type="checkbox" style="top: 349.5px;left: 15.2px;">
-		<input id="Too_Prof" class="field checkcircle" type="checkbox" style="top: 369.0px;left: 15.2px;">
+		<input
+			id="Perc_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 232.5px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Perc').then(() => {eventManager.handle_event(EventType.Perc_Prof_change);});}"
+		/>
+		<input
+			id="Perf_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 252.0px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Perf').then(() => {eventManager.handle_event(EventType.Perf_Prof_change);});}"
+		/>
+		<input
+			id="Pers_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 271.5px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Pers').then(() => {eventManager.handle_event(EventType.Pers_Prof_change);});}"
+		/>
+		<input
+			id="Rel_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 291.0px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Rel').then(() => {eventManager.handle_event(EventType.Rel_Prof_change);});}"
+		/>
+		<input
+			id="Sle_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 310.5px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Sle').then(() => {eventManager.handle_event(EventType.Sle_Prof_change);});}"
+		/>
+		<input
+			id="Ste_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 330.0px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ste').then(() => {eventManager.handle_event(EventType.Ste_Prof_change);});}"
+		/>
+		<input
+			id="Sur_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 349.5px;left: 15.2px"
+			data-default="false"
+			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Sur').then(() => {eventManager.handle_event(EventType.Sur_Prof_change);});}"
+		/>
+		<input
+			id="Too_Prof"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 369.0px;left: 15.2px"
+			data-default="false"
+			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applyCompSkillClick();eventManager.handle_event(EventType.Too_Prof_change);}"
+		/>
 
-		<div id="SkillsClick" class="field" style="position:absolute;top:19px;left:40px;width: 130px;height: 346px;">
+		<div
+			id="SkillsClick"
+			class="field"
+			style="position:absolute;top:19px;left:40px;width: 130px;height: 346px;cursor: pointer"
+			aria-label="Click here to change the order of the skills. You can select either alphabetic order or ordered by ability score."
+			onclick="MakeSkillsMenu_SkillsOptions()"
+		>
 			<input
 				id="Acr"
 				class="field inputfield-notched"
@@ -1298,15 +1871,76 @@
 				type="text"
 				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
 			/>
-			<input id="Perc" class="field inputfield-notched" style="top: 214.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="Perf" class="field inputfield-notched" style="top: 234.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="Pers" class="field inputfield-notched" style="top: 253.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="Rel" class="field inputfield-notched" style="top: 273.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="Sle" class="field inputfield-notched" style="top: 292.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="Ste" class="field inputfield-notched" style="top: 312.0px;font-size: 12px;width: 20px;height: 12px;" type="text">
-			<input id="Sur" class="field inputfield-notched" style="top: 331.5px;font-size: 12px;width: 20px;height: 12px;" type="text">
+			<input
+				id="Perc"
+				class="field inputfield-notched"
+				style="top: 214.5px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
+				type="text"
+				data-default=""
+				spellcheck="true"
+				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+			/>
+			<input
+				id="Perf"
+				class="field inputfield-notched"
+				style="top: 234.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
+				type="text"
+				data-default=""
+				spellcheck="true"
+				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+			/>
+			<input
+				id="Pers"
+				class="field inputfield-notched"
+				style="top: 253.5px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
+				type="text"
+				data-default=""
+				spellcheck="true"
+				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+			/>
+			<input
+				id="Rel"
+				class="field inputfield-notched"
+				style="top: 273.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
+				type="text"
+				data-default=""
+				spellcheck="true"
+				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+			/>
+			<input
+				id="Sle"
+				class="field inputfield-notched"
+				style="top: 292.5px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
+				type="text"
+				data-default=""
+				spellcheck="true"
+				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+			/>
+			<input
+				id="Ste"
+				class="field inputfield-notched"
+				style="top: 312.0px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
+				type="text"
+				data-default=""
+				spellcheck="true"
+				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+			/>
+			<input
+				id="Sur"
+				class="field inputfield-notched"
+				style="top: 331.5px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
+				type="text"
+				data-default=""
+				spellcheck="true"
+				onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+			/>
 
-			<div id="Text.SkillsNames" class="field" aria-label="alphabeta">
+			<div
+				id="Text.SkillsNames"
+				class="field"
+				aria-label="alphabeta"
+				onchange="eventManager.handle_event(EventType.Text_SkillsNames_change)"
+			>
 				<div id="character_skills_label_Acr" class="textlabel" style="top: 1.3px;left: 27.7px;width: fit-content"><span>Acrobatics</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
 				<div id="character_skills_label_Ani" class="textlabel" style="top: 20.8px;left: 27.7px;width: fit-content"><span>Animal Handling</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
 				<div id="character_skills_label_Arc" class="textlabel" style="top: 40.3px;left: 27.7px;width: fit-content"><span>Arcana</span> <span style="color: var(--text-dimmed)">(Int)</span></div>
@@ -1326,18 +1960,62 @@
 				<div id="character_skills_label_Ste" class="textlabel" style="top: 313.3px;left: 27.7px;width: fit-content"><span>Stealth</span> <span style="color: var(--text-dimmed)">(Dex)</span></div>
 				<div id="character_skills_label_Sur" class="textlabel" style="top: 332.8px;left: 27.7px;width: fit-content"><span>Survival</span> <span style="color: var(--text-dimmed)">(Wis)</span></div>
 			</div>
+
+			<div
+				id="Stealth_Disadv.abilities"
+				class="field textlabel"
+				style="top: 61px;left: 89px;width: 18px;height: 12px;font-size: 7.2px;visibility: hidden"
+				data-default=" [disadv.]"
+			> [disadv.]</div>
+			<div
+				id="Stealth_Disadv.alphabeta"
+				class="field textlabel"
+				style="top: 314px;left: 89px;width: 18px;height: 12px;font-size: 7.2px;visibility: hidden"
+				data-default=" [disadv.]"
+			> [disadv.]</div>
 		</div>
 
-		<input id="Too" class="field inputfield-notched" style="top: 370.0px;left: 40px;font-size: 12px;width: 20px;height: 12px;" type="text">
-		<input id="Too_Text" class="field inputfield" style="top: 371px;left: 66px;font-size: 10.6px;height: 11px;width: 105px;font-family: 'scala-sans'" type="text" value="Tool">
+		<input
+			id="Too"
+			class="field inputfield-notched"
+			style="top: 370.0px;left: 40px;font-size: 12px;width: 20px;height: 12px;pointer-events: none;overflow-x: scroll"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value;}"
+		/>
+		<input
+			id="Too_Text"
+			class="field inputfield"
+			style="top: 371px;left: 66px;font-size: 10.6px;height: 11px;width: 105px;font-family: 'scala-sans'"
+			type="text"
+			value="Tool"
+			data-default="Tool"
+			aria-label="Tool or custom skill"
+			spellcheck="True"
+			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;UpdateTooSkill()"
+		/>
 
 		<!-- BlueText -->
+		<span
+			id="Skill_Modifiers_All_Text"
+			class="field textlabel bluetext"
+			style="top: -3px;left: 68px;font-size: 9.4px;visibility: hidden"
+			data-default="to all Skills"
+		>to all Skills</span>
+		<span
+			id="Skill_Modifiers_Title"
+			class="field textlabel bluetext"
+			style="top: 0px;left: 138px;font-size: 9.4px;visibility: hidden"
+			data-default="SKILL MODS"
+		>SKILL MODS</span>
 		<input
 			id="All_Skills_Bonus"
 			class="field inputfield bluetext"
 			style="top: -5px;left: 40px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="All Skills Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus(true);this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.All_Skills_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1347,6 +2025,7 @@
 			style="top: 19px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Acrobatics Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Acr_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1356,6 +2035,7 @@
 			style="top: 38.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Animal Handling Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ani_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1365,6 +2045,7 @@
 			style="top: 58px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Arcana Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Arc_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1374,6 +2055,7 @@
 			style="top: 77.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Athletics Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ath_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1383,6 +2065,7 @@
 			style="top: 97px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Deception Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dec_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1392,6 +2075,7 @@
 			style="top: 116.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="History Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.His_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1401,6 +2085,7 @@
 			style="top: 136px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Insight Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ins_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1410,6 +2095,7 @@
 			style="top: 155.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Intimidation Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Inti_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1419,6 +2105,7 @@
 			style="top: 175px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Investigation Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Inv_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1428,6 +2115,7 @@
 			style="top: 194.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Medicine Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Med_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
@@ -1437,23 +2125,120 @@
 			style="top: 214px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
 			aria-label="Nature Bonus Modifier"
 			value="0"
+			data-default="0"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Nat_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
-
+		<input
+			id="Perc_Bonus"
+			class="field inputfield bluetext"
+			style="top: 233.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Perception Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Perc_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
+			id="Perf_Bonus"
+			class="field inputfield bluetext"
+			style="top: 253.0px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Performance Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Perf_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
+			id="Pers_Bonus"
+			class="field inputfield bluetext"
+			style="top: 272.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Persuasion Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Pers_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
+			id="Rel_Bonus"
+			class="field inputfield bluetext"
+			style="top: 292.0px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Religion Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Rel_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
+			id="Sle_Bonus"
+			class="field inputfield bluetext"
+			style="top: 311.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Sleight of Hand Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Sle_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
+			id="Ste_Bonus"
+			class="field inputfield bluetext"
+			style="top: 331.0px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Stealth Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ste_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
+			id="Sur_Bonus"
+			class="field inputfield bluetext"
+			style="top: 350.5px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Survival Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Sur_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+		<input
+			id="Too_Bonus"
+			class="field inputfield bluetext"
+			style="top: 370.0px;left: 153px;width: 20px;height: 12px;text-align: center;visibility: hidden"
+			aria-label="Tool Bonus Modifier"
+			value="0"
+			data-default="0"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Too_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
 		<input
 			id="Jack_of_All_Trades"
 			class="field inputfield checkcircle"
 			type="checkbox"
 			style="top: 403px;left: 99px;visibility: hidden;z-index: 3"
 			aria-label="This enables the 'Jack of All Trades' class feature."
+			data-default="false"
 			onclick="eventManager.handle_event(EventType.Jack_of_All_Trades_change)"
 		/>
 		<span
 			id="Jack_of_All_Trades_Title"
 			class="field textlabel bluetext"
 			style="top: 406px;left: 116px;font-size: 9.4px;visibility: hidden"
+			data-default="Jack of All Trades"
 		>Jack of All Trades</span>
+		<input
+			id="Remarkable_Athlete"
+			class="field inputfield checkcircle bluetext"
+			type="checkbox"
+			style="top: 403px;left: -8px;visibility: hidden;z-index: 3"
+			aria-label="This enables the 'Remarkable Athlete' class feature."
+			data-default="false"
+			onclick="eventManager.handle_event(EventType.Remarkable_Athlete_change)"
+		/>
+		<span
+			id="Remarkable_Athlete_Title"
+			class="field textlabel bluetext"
+			style="top: 406px;left: 8px;font-size: 9.4px;visibility: hidden"
+			data-default="Remarkable Athlete"
+		>Remarkable Athlete</span>
 
 		<!-- event listeners -->
 		<script type="text/javascript">
@@ -2052,7 +2837,13 @@
 			onchange="eventManager.handle_event(EventType.Limited_Feature_Used_16_change)"
 		/>
 
-		<button id="SR" class="field button" style="top: 186px;left: 210.9px">SR</button>
+		<button
+			id="SR"
+			class="field button nonprintable"
+			style="top: 186px;left: 210.9px"
+			aria-label="Click here to reset the 'Used' fields of limited features that recover on a short rest ('SR')."
+			onclick="ResetFeaSR();"
+		>SR</button>
 		<button
 			id="LR"
 			class="field button nonprintable"
@@ -2189,16 +2980,73 @@
 			<span class="textlabel-dimmed rotate_m16" style="top: 0.3px;left: 7.2px;font-size: 7px">F</span>
 		</div>
 
-		<input id="Proficiency_Armor_Light" class="field checkcircle" type="checkbox" style="top: 24.9px;left: 17.2px;">
-		<input id="Proficiency_Armor_Medium" class="field checkcircle" type="checkbox" style="top: 24.9px;left: 61px;">
-		<input id="Proficiency_Armor_Heavy" class="field checkcircle" type="checkbox" style="top: 24.9px;left: 119.8px;">
-		<input id="Proficiency_Shields" class="field checkcircle" type="checkbox" style="top: 24.9px;left: 168.6px;">
+		<input
+			id="Proficiency_Armor_Light"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 24.9px;left: 17.2px"
+			data-default="false"
+			onchange="setCheckboxProfsManual(adapter_helper_convert_id_to_fieldname(this.id)).then(() => {eventManager.handle_event(EventType.Proficiency_Armor_Light_change)})"
+		/>
+		<input
+			id="Proficiency_Armor_Medium"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 24.9px;left: 61px"
+			data-default="false"
+			onchange="setCheckboxProfsManual(adapter_helper_convert_id_to_fieldname(this.id)).then(() => {eventManager.handle_event(EventType.Proficiency_Armor_Medium_change)})"
+		/>
+		<input
+			id="Proficiency_Armor_Heavy"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 24.9px;left: 119.8px"
+			data-default="false"
+			onchange="setCheckboxProfsManual(adapter_helper_convert_id_to_fieldname(this.id)).then(() => {eventManager.handle_event(EventType.Proficiency_Armor_Heavy_change)})"
+		/>
+		<input
+			id="Proficiency_Shields"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 24.9px;left: 168.6px"
+			data-default="false"
+			onchange="setCheckboxProfsManual(adapter_helper_convert_id_to_fieldname(this.id)).then(() => {eventManager.handle_event(EventType.Proficiency_Shields_change)})"
+		/>
 
-		<input id="Proficiency_Weapon_Simple" class="field checkcircle" type="checkbox" style="top: 55.8px;left: 17.2px;">
-		<input id="Proficiency_Weapon_Martial" class="field checkcircle" type="checkbox" style="top: 55.8px;left: 69.4px;">
-		<input id="Proficiency_Weapon_Other" class="field checkcircle" type="checkbox" style="top: 55.8px;left: 122.8px;">
+		<input
+			id="Proficiency_Weapon_Simple"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 55.8px;left: 17.2px"
+			data-default="false"
+			onchange="setCheckboxProfsManual(adapter_helper_convert_id_to_fieldname(this.id))"
+		/>
+		<input
+			id="Proficiency_Weapon_Martial"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 55.8px;left: 69.4px"
+			data-default="false"
+			onchange="setCheckboxProfsManual(adapter_helper_convert_id_to_fieldname(this.id))"
+		/>
+		<input
+			id="Proficiency_Weapon_Other"
+			class="field checkcircle"
+			type="checkbox"
+			style="top: 55.8px;left: 122.8px;pointer-events: none"
+			data-default="false"
+			onclick="{let remField='Proficiencies Remember';if (this.checked) {RemoveString(remField, 'lightoff');AddString(remField, 'lighton')} else {RemoveString(remField, 'lighton');AddString(remField, 'lightoff')}}"
+		/>
 
-		<input id="Proficiency_Weapon_Other_Description" class="field inputfield" style="top: 70px;left: 19px;font-size: 9.1px;height: 14px;width: 194px;font-family: 'scala-sans'" type="text">
+		<input
+			id="Proficiency_Weapon_Other_Description"
+			class="field inputfield"
+			style="top: 70px;left: 19px;font-size: 9.1px;height: 14px;width: 194px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="setOtherWeaponProfsManual()"
+		/>
 
 		<input
 			id="Language_1"
@@ -2256,12 +3104,60 @@
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 
-		<input id="Tool_1" class="field inputfield" style="top: 110px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
-		<input id="Tool_2" class="field inputfield" style="top: 130px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
-		<input id="Tool_3" class="field inputfield" style="top: 150px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
-		<input id="Tool_4" class="field inputfield" style="top: 170px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
-		<input id="Tool_5" class="field inputfield" style="top: 190px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
-		<input id="Tool_6" class="field inputfield" style="top: 210px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px;font-family: 'scala-sans'" type="text">
+		<input
+			id="Tool_1"
+			class="field inputfield"
+			style="top: 110px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+		/>
+		<input
+			id="Tool_2"
+			class="field inputfield"
+			style="top: 130px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+		/>
+		<input
+			id="Tool_3"
+			class="field inputfield"
+			style="top: 150px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+		/>
+		<input
+			id="Tool_4"
+			class="field inputfield"
+			style="top: 170px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+		/>
+		<input
+			id="Tool_5"
+			class="field inputfield"
+			style="top: 190px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+		/>
+		<input
+			id="Tool_6"
+			class="field inputfield"
+			style="top: 210px;left: 121.5px;font-size: 12.5px;height: 15px;width: 95.5px;padding: 0px 1px 2px 3px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+		/>
 	</div>
 
 
@@ -2491,18 +3387,114 @@
 			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
 		/>
 
-		<input id="Reaction_1" class="field inputfield" style="top:  25px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_2" class="field inputfield" style="top:  45px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_3" class="field inputfield" style="top:  65px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_4" class="field inputfield" style="top:  85px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_5" class="field inputfield" style="top: 105px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_6" class="field inputfield" style="top: 125px;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_7" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_8" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_9" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_10" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_11" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
-		<input id="Reaction_12" class="field inputfield" style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px;font-family: 'scala-sans'" type="text">
+		<input
+			id="Reaction_1"
+			class="field inputfield"
+			style="top: 25px;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_2"
+			class="field inputfield"
+			style="top: 45px;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_3"
+			class="field inputfield"
+			style="top: 65px;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_4"
+			class="field inputfield"
+			style="top: 85px;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_5"
+			class="field inputfield"
+			style="top: 105px;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_6"
+			class="field inputfield"
+			style="top: 125px;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_7"
+			class="field inputfield"
+			style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_8"
+			class="field inputfield"
+			style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_9"
+			class="field inputfield"
+			style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_10"
+			class="field inputfield"
+			style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_11"
+			class="field inputfield"
+			style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
+		<input
+			id="Reaction_12"
+			class="field inputfield"
+			style="visibility: hidden;left: 356px;font-size: 12.5px;height: 15px;width: 162px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+		/>
 
 		<button
 			id="Button.Action_1"
@@ -2731,11 +3723,89 @@
 		<span class="textlabel" style="top: 35px;left: 105px;font-size: 8.6px">PASSIVE WISDOM (PERCEPTION)</span>
 		<div class="textlabel-bold" style="top: 126px;left: 12.5px;width: 264.3px">SENSES</div>
 
-		<input id="Passive_Perception.0" class="field inputfield-noneditable" style="top: 26.5px;left: 31px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans'" type="number">
-		<input id="Passive_Perception.1" class="field inputfield-noneditable" style="top: 26.5px;left: 124.75px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0;font-family: 'scala-sans';visibility: hidden;z-index: 2" type="number">
+		<input
+			id="Passive_Perception.0"
+			class="field inputfield-noneditable"
+			style="top: 26.5px;left: 31px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0"
+			type="number"
+			data-default="12"
+			onchange="eventManager.handle_event(EventType.Passive_Perception_change)"
+		/>
+		<input
+			id="Passive_Perception.1"
+			class="field inputfield-noneditable"
+			style="top: 26.5px;left: 124.75px;font-size: 24px;width: 37px;height: 27px;padding: 0 0 0 0;visibility: hidden;z-index: 2"
+			type="number"
+			data-default="12"
+			onchange="eventManager.handle_event(EventType.Passive_Perception_change)"
+		/>
 
-		<textarea id="Vision.0" class="field inputfield" rows="3" style="top: 63px;left: 15px;width: 255px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
-		<textarea id="Vision.1" class="field inputfield" rows="3" style="top: 63px;left: 108.75px;width: 161.25px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans';visibility: hidden;z-index: 2"></textarea>
+		<textarea
+			id="Vision.0"
+			class="field inputfield"
+			rows="3"
+			style="top: 63px;left: 15px;width: 255px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
+			data-default=""
+			spellcheck="true"
+		></textarea>
+		<textarea
+			id="Vision.1"
+			class="field inputfield"
+			rows="3"
+			style="top: 63px;left: 108.75px;width: 161.25px;height: 50px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;visibility: hidden;z-index: 2"
+			data-default=""
+			spellcheck="true"
+		></textarea>
+
+		<!-- BlueText -->
+		<input
+			id="Passive_Perception_Bonus"
+			class="field inputfield bluetext"
+			aria-label="Passive Perception Bonus Modifier"
+			style="top: 34px;left: 253px;width: 16px;height: 12px;text-align: center;visibility: hidden"
+			data-default="0"
+			value="0"
+			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Passive_Perception_Bonus_change)"
+			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+		/>
+
+		<script type="text/javascript">
+			// Passive Perception
+			[
+				EventType.Passive_Perception_Bonus_change,
+				EventType.Cha_Mod_change,
+				EventType.Con_Mod_change,
+				EventType.Dex_Mod_change,
+				EventType.HoS_Mod_change,
+				EventType.Int_Mod_change,
+				EventType.Str_Mod_change,
+				EventType.Wis_Mod_change,
+				EventType.Proficiency_Bonus_change,
+				EventType.Proficiency_Bonus_Dice_change,
+				EventType.Perc_Bonus_change,
+				EventType.Perc_Exp_change,
+				EventType.Perc_Prof_change,
+				EventType.Jack_of_All_Trades_change,
+			].forEach(function (event_type) {
+				eventManager.add_listener(
+					event_type,
+					function () {
+						event.target.name = "Passive Perception";
+						CalcAllSkills(); // also calls CalcSkill
+						if (event.value != null) {
+							for (let passElID of ["Passive_Perception.0", "Passive_Perception.1"]) {
+								let element = document.getElementById(passElID);
+								let currentVal = element.value;
+								if (event.value != currentVal) {
+									element.value = event.value;
+									element.dispatchEvent(new Event('change'));
+								}
+							}
+						}
+					}
+				);
+			});
+		</script>
 	</div>
 
 
@@ -2797,7 +3867,7 @@
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoLeftDisplay_Amount_change)"
 		/>
 		<input
 			id="AmmoRightDisplay.Amount"
@@ -2806,7 +3876,7 @@
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
+			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoRightDisplay_Amount_change)"
 		/>
 
 		<button
@@ -3912,7 +4982,7 @@
 			aria-label="Ammunition's weight"
 			value="0"
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;format1();this.value=event.value;"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.AmmoLeftDisplay_Weight_change)"
 		/>
 		<input
 			id="AmmoRightDisplay.Weight"
@@ -3921,7 +4991,7 @@
 			aria-label="Ammunition's weight"
 			value="0"
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;format1();this.value=event.value;"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.AmmoRightDisplay_Weight_change)"
 		/>
 		<input
 			id="AmmoLeftDisplay.MaxAmount"
@@ -3995,61 +5065,63 @@
 			}
 
 			// Set listeners for ammo icon change
-			let axeIndices = [2, 4, 6, 8, 13, 15, 17, 19];
-			for (let leftRight of ['Left', 'Right']) {
-				for (let names of [['Arrows', 'arrow'], ['Flasks', 'flask'], ['Vials', 'vial']]) {
-					document.getElementById('Ammo' + leftRight + '.Icon.' + names[0]).addEventListener("displayShow", (event) => {
-						for (let i = 1; i <= 20; i++) {
-							let topBase = (i<=10 ? 'Top' : 'Base') + (axeIndices.includes(i) ? '.Axe' : '');
-							let ammoElement = document.getElementById('Ammo' + leftRight + '.' + topBase + '.' + String(i));
+			{
+				let axeIndices = [2, 4, 6, 8, 13, 15, 17, 19];
+				for (let leftRight of ['Left', 'Right']) {
+					for (let names of [['Arrows', 'arrow'], ['Flasks', 'flask'], ['Vials', 'vial']]) {
+						document.getElementById('Ammo' + leftRight + '.Icon.' + names[0]).addEventListener("displayShow", (event) => {
+							for (let i = 1; i <= 20; i++) {
+								let topBase = (i<=10 ? 'Top' : 'Base') + (axeIndices.includes(i) ? '.Axe' : '');
+								let ammoElement = document.getElementById('Ammo' + leftRight + '.' + topBase + '.' + String(i));
+								if (ammoElement) {
+									removeAmmoClass(ammoElement.classList);
+									ammoElement.classList.add('ammunition-' + names[1]);
+								}
+							}
+						});
+					}
+					for (let names of [['Axes', 'axe'], ['Hammers', 'hammer']]) {
+						document.getElementById('Ammo' + leftRight + '.Icon.' + names[0]).addEventListener("displayShow", (event) => {
+							for (let i of axeIndices) {
+								let topBase = (i<=10 ? 'Top' : 'Base');
+								let ammoElement = document.getElementById('Ammo' + leftRight + '.' + topBase + '.Axe.' + String(i));
+								if (ammoElement) {
+									removeAmmoClass(ammoElement.classList);
+									ammoElement.classList.add('ammunition-' + names[1] + '-' + (i<=10 ? 'top' : 'base'));
+								}
+							}
+						});
+					}
+					document.getElementById('Ammo' + leftRight + '.Icon.Bullets').addEventListener("displayShow", (event) => {
+						for (let i = 1; i <= 50; i++) {
+							let ammoElement = document.getElementById('Ammo' + leftRight + '.Bullet.' + String(i));
 							if (ammoElement) {
 								removeAmmoClass(ammoElement.classList);
-								ammoElement.classList.add('ammunition-' + names[1]);
+								ammoElement.classList.add('ammunition-bullet');
+							}
+						}
+					});
+					document.getElementById('Ammo' + leftRight + '.Icon.Daggers').addEventListener("displayShow", (event) => {
+						for (let i = 1; i <= 10; i++) {
+							let axeInfix = (axeIndices.includes(i) ? '.Axe' : '');
+							let ammoElement = document.getElementById('Ammo' + leftRight + '.Top' + axeInfix + '.' + String(i));
+							if (ammoElement) {
+								removeAmmoClass(ammoElement.classList);
+								ammoElement.classList.add('ammunition-dagger');
+							}
+						}
+					});
+					document.getElementById('Ammo' + leftRight + '.Icon.Spears').addEventListener("displayShow", (event) => {
+						for (let i = 11; i <= 20; i++) {
+							let axeInfix = (axeIndices.includes(i) ? '.Axe' : '');
+							let ammoElement = document.getElementById('Ammo' + leftRight + '.Base' + axeInfix + '.' + String(i));
+							if (ammoElement) {
+								removeAmmoClass(ammoElement.classList);
+								ammoElement.classList.add('ammunition-spear');
 							}
 						}
 					});
 				}
-				for (let names of [['Axes', 'axe'], ['Hammers', 'hammer']]) {
-					document.getElementById('Ammo' + leftRight + '.Icon.' + names[0]).addEventListener("displayShow", (event) => {
-						for (let i of axeIndices) {
-							let topBase = (i<=10 ? 'Top' : 'Base');
-							let ammoElement = document.getElementById('Ammo' + leftRight + '.' + topBase + '.Axe.' + String(i));
-							if (ammoElement) {
-								removeAmmoClass(ammoElement.classList);
-								ammoElement.classList.add('ammunition-' + names[1] + '-' + (i<=10 ? 'top' : 'base'));
-							}
-						}
-					});
-				}
-				document.getElementById('Ammo' + leftRight + '.Icon.Bullets').addEventListener("displayShow", (event) => {
-					for (let i = 1; i <= 50; i++) {
-						let ammoElement = document.getElementById('Ammo' + leftRight + '.Bullet.' + String(i));
-						if (ammoElement) {
-							removeAmmoClass(ammoElement.classList);
-							ammoElement.classList.add('ammunition-bullet');
-						}
-					}
-				});
-				document.getElementById('Ammo' + leftRight + '.Icon.Daggers').addEventListener("displayShow", (event) => {
-					for (let i = 1; i <= 10; i++) {
-						let axeInfix = (axeIndices.includes(i) ? '.Axe' : '');
-						let ammoElement = document.getElementById('Ammo' + leftRight + '.Top' + axeInfix + '.' + String(i));
-						if (ammoElement) {
-							removeAmmoClass(ammoElement.classList);
-							ammoElement.classList.add('ammunition-dagger');
-						}
-					}
-				});
-				document.getElementById('Ammo' + leftRight + '.Icon.Spears').addEventListener("displayShow", (event) => {
-					for (let i = 11; i <= 20; i++) {
-						let axeInfix = (axeIndices.includes(i) ? '.Axe' : '');
-						let ammoElement = document.getElementById('Ammo' + leftRight + '.Base' + axeInfix + '.' + String(i));
-						if (ammoElement) {
-							removeAmmoClass(ammoElement.classList);
-							ammoElement.classList.add('ammunition-spear');
-						}
-					}
-				});
 			}
 		</script>
 	</div>
@@ -4478,95 +5550,95 @@
 		</div>
 
 		<datalist id="attacks_names">
-			<option value="">
-			<option value="Unarmed Strike">
-			<option value="Battleaxe">
-			<option value="Blowgun">
-			<option value="Club">
-			<option value="Dagger">
-			<option value="Dart">
-			<option value="Flail">
-			<option value="Glaive">
-			<option value="Greataxe">
-			<option value="Greatclub">
-			<option value="Greatsword">
-			<option value="Halberd">
-			<option value="Hand Crossbow">
-			<option value="Handaxe">
-			<option value="Heavy Crossbow">
-			<option value="Javelin">
-			<option value="Lance">
-			<option value="Light Crossbow">
-			<option value="Light Hammer">
-			<option value="Longbow">
-			<option value="Longsword">
-			<option value="Mace">
-			<option value="Maul">
-			<option value="Morningstar">
-			<option value="Net">
-			<option value="Pike">
-			<option value="Quarterstaff">
-			<option value="Rapier">
-			<option value="Scimitar">
-			<option value="Shortbow">
-			<option value="Shortsword">
-			<option value="Sickle">
-			<option value="Sling">
-			<option value="Spear">
-			<option value="Trident">
-			<option value="War Pick">
-			<option value="Warhammer">
-			<option value="Whip">
-			<option value="">
-			<option value="Improvised Weapon">
-			<option value="Alchemist's Fire">
-			<option value="Holy Water">
-			<option value="Torch, Burning">
-			<option value="Vial of Acid">
-			<option value="">
-			<option value="Spell Attack">
-			<option value="Acid Splash">
-			<option value="Chill Touch">
-			<option value="Eldritch Blast">
-			<option value="Fire Bolt">
-			<option value="Poison Spray">
-			<option value="Produce Flame">
-			<option value="Ray of Frost">
-			<option value="Sacred Flame">
-			<option value="Shillelagh">
-			<option value="Shocking Grasp">
-			<option value="Vicious Mockery">
-			<option value="">
-			<option value="Axe, Hand">
-			<option value="Axe, Battle">
-			<option value="Axe, Great">
-			<option value="Bow, Short">
-			<option value="Bow, Long">
-			<option value="Crossbow, Hand">
-			<option value="Crossbow, Light">
-			<option value="Crossbow, Heavy">
-			<option value="Hammer, Light">
-			<option value="Hammer, War">
-			<option value="Hammer, Great">
-			<option value="Sword, Short">
-			<option value="Sword, Long">
-			<option value="Sword, Great">
+			<option value=""></option>
+			<option value="Unarmed Strike">Unarmed Strike</option>
+			<option value="Battleaxe">Battleaxe</option>
+			<option value="Blowgun">Blowgun</option>
+			<option value="Club">Club</option>
+			<option value="Dagger">Dagger</option>
+			<option value="Dart">Dart</option>
+			<option value="Flail">Flail</option>
+			<option value="Glaive">Glaive</option>
+			<option value="Greataxe">Greataxe</option>
+			<option value="Greatclub">Greatclub</option>
+			<option value="Greatsword">Greatsword</option>
+			<option value="Halberd">Halberd</option>
+			<option value="Hand Crossbow">Hand Crossbow</option>
+			<option value="Handaxe">Handaxe</option>
+			<option value="Heavy Crossbow">Heavy Crossbow</option>
+			<option value="Javelin">Javelin</option>
+			<option value="Lance">Lance</option>
+			<option value="Light Crossbow">Light Crossbow</option>
+			<option value="Light Hammer">Light Hammer</option>
+			<option value="Longbow">Longbow</option>
+			<option value="Longsword">Longsword</option>
+			<option value="Mace">Mace</option>
+			<option value="Maul">Maul</option>
+			<option value="Morningstar">Morningstar</option>
+			<option value="Net">Net</option>
+			<option value="Pike">Pike</option>
+			<option value="Quarterstaff">Quarterstaff</option>
+			<option value="Rapier">Rapier</option>
+			<option value="Scimitar">Scimitar</option>
+			<option value="Shortbow">Shortbow</option>
+			<option value="Shortsword">Shortsword</option>
+			<option value="Sickle">Sickle</option>
+			<option value="Sling">Sling</option>
+			<option value="Spear">Spear</option>
+			<option value="Trident">Trident</option>
+			<option value="War Pick">War Pick</option>
+			<option value="Warhammer">Warhammer</option>
+			<option value="Whip">Whip</option>
+			<option value=""></option>
+			<option value="Improvised Weapon">Improvised Weapon</option>
+			<option value="Alchemist's Fire">Alchemist's Fire</option>
+			<option value="Holy Water">Holy Water</option>
+			<option value="Torch, Burning">Torch, Burning</option>
+			<option value="Vial of Acid">Vial of Acid</option>
+			<option value=""></option>
+			<option value="Spell Attack">Spell Attack</option>
+			<option value="Acid Splash">Acid Splash</option>
+			<option value="Chill Touch">Chill Touch</option>
+			<option value="Eldritch Blast">Eldritch Blast</option>
+			<option value="Fire Bolt">Fire Bolt</option>
+			<option value="Poison Spray">Poison Spray</option>
+			<option value="Produce Flame">Produce Flame</option>
+			<option value="Ray of Frost">Ray of Frost</option>
+			<option value="Sacred Flame">Sacred Flame</option>
+			<option value="Shillelagh">Shillelagh</option>
+			<option value="Shocking Grasp">Shocking Grasp</option>
+			<option value="Vicious Mockery">Vicious Mockery</option>
+			<option value=""></option>
+			<option value="Axe, Hand">Axe, Hand</option>
+			<option value="Axe, Battle">Axe, Battle</option>
+			<option value="Axe, Great">Axe, Great</option>
+			<option value="Bow, Short">Bow, Short</option>
+			<option value="Bow, Long">Bow, Long</option>
+			<option value="Crossbow, Hand">Crossbow, Hand</option>
+			<option value="Crossbow, Light">Crossbow, Light</option>
+			<option value="Crossbow, Heavy">Crossbow, Heavy</option>
+			<option value="Hammer, Light">Hammer, Light</option>
+			<option value="Hammer, War">Hammer, War</option>
+			<option value="Hammer, Great">Hammer, Great</option>
+			<option value="Sword, Short">Sword, Short</option>
+			<option value="Sword, Long">Sword, Long</option>
+			<option value="Sword, Great">Sword, Great</option>
 		</datalist>
 		<datalist id="attacks_damage_types">
-			<option value="">
-			<option value="Acid">
-			<option value="Bludgeoning">
-			<option value="Cold">
-			<option value="Fire">
-			<option value="Force">
-			<option value="Lightning">
-			<option value="Necrotic">
-			<option value="Piercing">
-			<option value="Poison">
-			<option value="Psychic">
-			<option value="Radiant">
-			<option value="Slashing">
-			<option value="Thunder">
+			<option value=""></option>
+			<option value="Acid">Acid</option>
+			<option value="Bludgeoning">Bludgeoning</option>
+			<option value="Cold">Cold</option>
+			<option value="Fire">Fire</option>
+			<option value="Force">Force</option>
+			<option value="Lightning">Lightning</option>
+			<option value="Necrotic">Necrotic</option>
+			<option value="Piercing">Piercing</option>
+			<option value="Poison">Poison</option>
+			<option value="Psychic">Psychic</option>
+			<option value="Radiant">Radiant</option>
+			<option value="Slashing">Slashing</option>
+			<option value="Thunder">Thunder</option>
 		</datalist>
 
 		<button
@@ -4650,55 +5722,14 @@
 
 	<!-- Invisible fields (some are bluetext mods, sort these out later) -->
 	<div style="visibility:hidden">
-		<div id="Passive_Perception_Bonus" class="field"></div>
 		<div id="MoreProficiencies" class="field" value=""></div>
-		<input id="Remarkable_Athlete" class="field inputfield" type="checkbox"/>
-		<div id="Proficiency_Bonus_Dice" class="field"></div>
-		<div id="Proficiency_Bonus_Modifier" class="field"></div>
-		<div id="Perc_Adv" class="field"></div><!--?-->
-		<div id="Perc_Dis" class="field"></div><!--?-->
-		<div id="Stealth_Disadv" class="field"></div>
+
+		<div id="Proficiency_Bonus_Modifiers_Title" class="field"></div>
 		<div id="Text.Header.Combat" class="field"></div>
-		<div id="Spell_DC_1_Bonus" class="field"></div>
-		<div id="Spell_DC_2_Bonus" class="field"></div>
-		<div id="Text.SaveDC.1" class="field"></div>
-		<div id="Nat_Bonus" class="field"></div>
-		<div id="Perc_Bonus" class="field"></div>
-		<div id="Perf_Bonus" class="field"></div>
-		<div id="Pers_Bonus" class="field"></div>
-		<div id="Rel_Bonus" class="field"></div>
-		<div id="Sle_Bonus" class="field"></div>
-		<div id="Ste_Bonus" class="field"></div>
-		<div id="Sur_Bonus" class="field"></div>
-		<div id="Too_Bonus" class="field"></div>
+		<div id="Text.SaveDC.1" class="field" style="top: 0px;left: 0px;width: 0px;height: 0px"></div>
 		<div id="Extra.Layers_Remember" class="field"></div>
-		<div id="HoSRememberState" class="field" value="0"></div>
+		<div id="HoSRememberState" class="field" value=""></div>
 		<div id="HP_Max_Current" class="field"></div>
-		<div id="Attack.1.Description_Tooltip" class="field"></div>
-		<div id="Attack.1.To_Hit_Bonus" class="field"></div>
-		<div id="Attack.1.Damage_Bonus" class="field"></div>
-		<div id="Attack.1.Damage_Die" class="field"></div>
-		<div id="Attack.1.Weight" class="field"></div>
-		<div id="Attack.2.Description_Tooltip" class="field"></div>
-		<div id="Attack.2.To_Hit_Bonus" class="field"></div>
-		<div id="Attack.2.Damage_Bonus" class="field"></div>
-		<div id="Attack.2.Damage_Die" class="field"></div>
-		<div id="Attack.2.Weight" class="field"></div>
-		<div id="Attack.3.Description_Tooltip" class="field"></div>
-		<div id="Attack.3.To_Hit_Bonus" class="field"></div>
-		<div id="Attack.3.Damage_Bonus" class="field"></div>
-		<div id="Attack.3.Damage_Die" class="field"></div>
-		<div id="Attack.3.Weight" class="field"></div>
-		<div id="Attack.4.Description_Tooltip" class="field"></div>
-		<div id="Attack.4.To_Hit_Bonus" class="field"></div>
-		<div id="Attack.4.Damage_Bonus" class="field"></div>
-		<div id="Attack.4.Damage_Die" class="field"></div>
-		<div id="Attack.4.Weight" class="field"></div>
-		<div id="Attack.5.Description_Tooltip" class="field"></div>
-		<div id="Attack.5.To_Hit_Bonus" class="field"></div>
-		<div id="Attack.5.Damage_Bonus" class="field"></div>
-		<div id="Attack.5.Damage_Die" class="field"></div>
-		<div id="Attack.5.Weight" class="field"></div>
 		<div id="BlueText.Players_Make_All_Rolls" class="field"></div>
 		<div id="BlueText.Attack" class="field"></div>
 		<div id="BlueText.Attack.1.Weight" class="field"></div>

@@ -24,19 +24,14 @@ const dialogManager = {
 				canvas = addElementNode("div", document.body, null, modalCanvasID);
 			}
 			canvas.style.display = "block";
-			let dialog = document.getElementById(modalDialogID);
-			if (dialog) {
-				let i = 0;
-				while (dialog) {
-					i += 1;
-					dialog = document.getElementById(modalDialogID + i);
-				}
-				dialog = addElementNode("div", document.body, null, modalDialogID + i, modalDialogID);
-				dialog.idPrefix = 'dialog'+i;
-			} else {
-				dialog = addElementNode("div", document.body, null, modalDialogID, modalDialogID);
-				dialog.idPrefix = '';
+			let i = 0;
+			let dialog = document.getElementById(modalDialogID + i);
+			while (dialog) {
+				i += 1;
+				dialog = document.getElementById(modalDialogID + i);
 			}
+			dialog = addElementNode("div", document.body, null, modalDialogID + i, modalDialogID);
+			dialog.idPrefix = 'dialog' + i;
 			dialog.end = function (result) {
 				if (destroyCallback) {
 					monitor[destroyCallback](dialog);
@@ -50,7 +45,7 @@ const dialogManager = {
 						continue;
 					}
 					let elementType = theElement.getAttribute('elementType');
-					if ((elementType == 'edit_text') && !theElement.hasAttribute('list')) {
+					if ((elementType == 'edit_text') && ((typeof thingsToLoad[elementID]) != 'object')) {
 						theElement.value = thingsToLoad[elementID];
 					} else if (elementType == 'image') {
 						theElement.style.width = thingsToLoad[elementID].width + 'px';
@@ -60,11 +55,31 @@ const dialogManager = {
 						theElement.innerText = thingsToLoad[elementID];
 					} else if (
 						['popup', 'list_box', 'hier_list_box'].includes(elementType)
-						|| ((elementType == 'edit_text') && theElement.hasAttribute('list'))
+						|| ((elementType == 'edit_text') && ((typeof thingsToLoad[elementID]) == 'object'))
 					) {
 						let currentParent, rootElement;
 						if (elementType == 'edit_text') {
-							rootElement = document.getElementById(theElement.getAttribute('list'));
+							if (theElement.hasAttribute('list')) {
+								rootElement = document.getElementById(theElement.getAttribute('list'));
+							} else {
+								let listName = theElement.id + '_datalist';
+								rootElement = addElementNode('datalist', theElement.parentElement, null, listName);
+								theElement.setAttribute('list', listName);
+								theElement.onclick = function (event) {
+									let elWidth = this.style.width.trim();
+									if (elWidth.endsWith('px')) {
+										if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {
+											this.value='';
+										}
+									} else if (elWidth.endsWith('ch')) {
+										if (event.offsetX > Number(this.offsetWidth)-26) {
+											this.value='';
+										}
+									} else {
+										throw "Unknown width type for list input:", elWidth
+									}
+								}
+							}
 						} else {
 							rootElement = theElement;
 						}
@@ -263,14 +278,15 @@ const dialogManager = {
 		}
 
 		let element;
+		let elID = (body.item_id !== undefined) ? dialog.idPrefix + body.item_id : undefined;
 		if (body.type == 'view') {
 			let style = this._parse_element_style(body);
-			element = addElementNode('div', parent, null, dialog.idPrefix + body.item_id, 'modalDialogViewElement', style);
+			element = addElementNode('div', parent, null, elID, 'modalDialogViewElement', style);
 			for (let i = 0; i < body.elements.length; i++) {
 				this._add_body_recursive(element, body.elements[i], callbacksToInsert, inputList, buttonList, dialog, monitor, resolve_cb);
 			}
 		} else if (body.type == 'cluster') {
-			element = addElementNode('fieldset', parent, null, dialog.idPrefix + body.item_id, null, null);
+			element = addElementNode('fieldset', parent, null, elID, null, null);
 			addElementNode('legend', element, body.name, null, null, null);
 			let style = this._parse_element_style(body);
 			style.borderWidth = 1;
@@ -280,12 +296,14 @@ const dialogManager = {
 			}
 		} else if (body.type == 'static_text') {
 			let style = this._parse_element_style(body);
-			element = addElementNode('div', parent, body.name, dialog.idPrefix + body.item_id, 'modalDialogStaticTextElement', style);
-			inputList.push(body.item_id);
+			element = addElementNode('div', parent, body.name, elID, 'modalDialogStaticTextElement', style);
+			if (body.item_id) {
+				inputList.push(body.item_id);
+			}
 		} else if (body.type == 'ok') {
 			let containerFloat = (body.alignment == 'align_center') ? 'center' : ((body.alignment == 'align_right') ? 'right' : 'left');
 			element = addElementNode(
-				'div', parent, null, dialog.idPrefix + body.item_id, 'modalDialogButtonsElement', {gridTemplateColumns: 'auto', float: containerFloat}
+				'div', parent, null, elID, 'modalDialogButtonsElement', {gridTemplateColumns: 'auto', float: containerFloat}
 			);
 			const { type, item_id, ok_name, other_name, alignment, ...body_style } = body;
 			let style = this._parse_element_style(body_style);
@@ -294,7 +312,7 @@ const dialogManager = {
 		} else if (body.type == 'ok_cancel') {
 			let containerFloat = (body.alignment == 'align_center') ? 'center' : ((body.alignment == 'align_right') ? 'right' : 'left');
 			element = addElementNode(
-				'div', parent, null, dialog.idPrefix + body.item_id, 'modalDialogButtonsElement', {gridTemplateColumns: 'auto auto', float: containerFloat}
+				'div', parent, null, elID, 'modalDialogButtonsElement', {gridTemplateColumns: 'auto auto', float: containerFloat}
 			);
 			const { type, item_id, ok_name, cancel_name, other_name, alignment, ...body_style } = body;
 			let style = this._parse_element_style(body_style);
@@ -305,7 +323,7 @@ const dialogManager = {
 		} else if (body.type == 'ok_cancel_other') {
 			let containerFloat = (body.alignment == 'align_center') ? 'center' : ((body.alignment == 'align_right') ? 'right' : 'left');
 			element = addElementNode(
-				'div', parent, null, dialog.idPrefix + body.item_id, 'modalDialogButtonsElement', {gridTemplateColumns: 'auto auto auto', float: containerFloat}
+				'div', parent, null, elID, 'modalDialogButtonsElement', {gridTemplateColumns: 'auto auto auto', float: containerFloat}
 			);
 			const { type, item_id, ok_name, cancel_name, other_name, alignment, ...body_style } = body;
 			let style = this._parse_element_style(body_style);
@@ -331,7 +349,7 @@ const dialogManager = {
 			}
 			let listName = null;
 			if (body.PopupEdit != null) {
-				listName = dialog.idPrefix + body.item_id + '_datalist';
+				listName = elID + '_datalist';
 				addElementNode('datalist', parent, null, listName);
 				delete body.PopupEdit;
 			}
@@ -343,7 +361,7 @@ const dialogManager = {
 				delete body.SpinEdit;
 			}
 			let style = this._parse_element_style(body);
-			element = addElementNode(tag, parent, null, dialog.idPrefix + body.item_id, null, style);
+			element = addElementNode(tag, parent, null, elID, null, style);
 			if (type != null) {
 				element.setAttribute('type', type);
 			}
@@ -378,13 +396,13 @@ const dialogManager = {
 			}
 			inputList.push(body.item_id);
 		} else if (body.type == 'gap') {
-			element = addElementNode('div', parent, null, dialog.idPrefix + body.item_id, '', this._parse_element_style(body));
+			element = addElementNode('div', parent, null, elID, '', this._parse_element_style(body));
 		} else if (body.type == 'image') {
-			element = addElementNode('img', parent, null, dialog.idPrefix + body.item_id, '', this._parse_element_style(body));
+			element = addElementNode('img', parent, null, elID, '', this._parse_element_style(body));
 		} else if (['list_box', 'popup'].includes(body.type)) {
 			let style = this._parse_element_style(body);
 			style.height = "27.5px";
-			element = addElementNode('select', parent, null, dialog.idPrefix + body.item_id, '', style);
+			element = addElementNode('select', parent, null, elID, '', style);
 			if (callbacksToInsert.has(body.item_id)) {
 				element.onchange = async function () {
 					await monitor[callbacksToInsert.get(body.item_id)](dialog);
@@ -406,7 +424,7 @@ const dialogManager = {
 			)
 		} else if (body.type == 'hier_list_box') {
 			let style = this._parse_element_style(body);
-			element = addElementNode('select', parent, null, dialog.idPrefix + body.item_id, 'modalDialogListBox', style);
+			element = addElementNode('select', parent, null, elID, 'modalDialogListBox', style);
 			element.setAttribute('multiple',  true);
 			if (callbacksToInsert.has(body.item_id)) {
 				element.onclick = async function () {
@@ -416,7 +434,7 @@ const dialogManager = {
 			inputList.push(body.item_id);
 		} else if (body.type == 'link_text') {
 			let style = this._parse_element_style(body);
-			element = addElementNode('a', parent, null, dialog.idPrefix + body.item_id, null, style);
+			element = addElementNode('a', parent, null, elID, null, style);
 			element.href = "#";
 			if (callbacksToInsert.has(body.item_id)) {
 				element.onclick = async function () {
@@ -428,22 +446,22 @@ const dialogManager = {
 			let { type, item_id, group_id, name, ...body_style } = body;
 			let style = this._parse_element_style(body_style);
 			let container = addElementNode('div', parent, null, null, null, style);
-			element = addElementNode('input', container, '', dialog.idPrefix + item_id, null);
+			element = addElementNode('input', container, '', elID, null);
 			element.setAttribute('type', 'radio');
 			element.setAttribute('name', group_id);
 			element.setAttribute('value', name);
 			let labelElement = addElementNode('label', container, name, null, null);
-			labelElement.setAttribute('for', dialog.idPrefix + item_id);
+			labelElement.setAttribute('for', elID);
 			inputList.push(body.item_id);
 		} else if (body.type == 'check_box') {
 			let { type, item_id, name, ...body_style } = body;
 			let style = this._parse_element_style(body_style);
 			let container = addElementNode('div', parent, null, null, null, style);
-			element = addElementNode('input', container, '', dialog.idPrefix + item_id, null);
+			element = addElementNode('input', container, '', elID, null);
 			element.setAttribute('type', 'checkbox');
 			element.setAttribute('value', name);
 			let labelElement = addElementNode('label', container, name, null, null);
-			labelElement.setAttribute('for', dialog.idPrefix + item_id);
+			labelElement.setAttribute('for', elID);
 			inputList.push(body.item_id);
 		} else {
 			throw "unimplemented element type for execDialog: " + body.type;
@@ -493,18 +511,14 @@ const dialogManager = {
 	},
 
 	_hide_modal: function () {
-		let dialog = document.getElementById(modalDialogID);
-		let i = 1;
-		let upperDialog = document.getElementById(modalDialogID + i);
-		if (upperDialog) {
-			while (upperDialog) {
-				i += 1;
-				upperDialog = document.getElementById(modalDialogID + i);
-			}
-			document.body.removeChild(document.getElementById(modalDialogID + (i - 1)));
-		} else {
-			document.body.removeChild(dialog);
-
+		let i = 0;
+		let upperDialog = document.getElementById(modalDialogID + (i + 1));
+		while (upperDialog) {
+			i += 1;
+			upperDialog = document.getElementById(modalDialogID + (i + 1));
+		}
+		document.body.removeChild(document.getElementById(modalDialogID + i));
+		if (i == 0) {
 			let canvas = document.getElementById(modalCanvasID);
 			if (canvas) {
 				canvas.style.display = "none";
@@ -516,6 +530,7 @@ const dialogManager = {
 		let styleElements = [
 			'item_id', 'type', 'alignment', 'align_children', 'back_color', 'bold', 'char_height', 'char_width', 'font',
 			'gradient_direction', 'gradient_type', 'height', 'margin_height', 'name', 'truncate', 'width', 'wrap_name',
+			'next_tab',
 		];
 		let ignoredElements = ['elements', 'skipType'];
 		for (let prop in element) {  // TODO: remove this check when complete
@@ -524,6 +539,9 @@ const dialogManager = {
 			}
 		}
 		let style = {};
+		if (element.type == 'view') {
+			style.display = 'grid';
+		}
 		if (element.alignment == 'align_top') {
 			style.textAlign = 'center';
 			style.display = 'grid';
@@ -564,19 +582,40 @@ const dialogManager = {
 			throw "unimplemented font type for static_text element in execDialog: " + element.font;
 		}
 		if (element.char_width) {
-			style.width = String(element.char_width * 20 / Number(style.fontSize.slice(0, 2))) + 'ch';
+			let width = element.char_width * 21 / Number(style.fontSize.slice(0, 2));
+			if (element.type == 'edit_text') {
+				width -= 1.03; // subtract padding
+			}
+			style.width = String(width) + 'ch';
 		}
 		if (element.width) {
-			style.width = String(element.width * 4 / 3) + 'px';
+			let width = element.width * 4 / 3;
+			if (element.type == 'edit_text') {
+				width -= 6; // subtract padding
+			}
+			style.width = String(width) + 'px';
 		}
+		// } else {
+		// 	if (element.name) {
+		// 		style.width = String(element.name.length + 2) + 'ch';
+		// 	}
+		// }
 		if (element.bold) {
 			style.fontWeight = 'bold';
 		}
 		if (element.char_height) {
-			style.height = String(element.char_height * 20 / Number(style.fontSize.slice(0, 2))) + 'ch';
+			let height = element.char_height * 20 / Number(style.fontSize.slice(0, 2));
+			if (element.type == 'edit_text') {
+				height -= 1.03; // subtract padding
+			}
+			style.height = String(height) + 'ch';
 		}
 		if (element.height) {
-			style.height = String(element.height * 4 / 3) + 'px';
+			let height = element.height * 4 / 3;
+			if (element.type == 'edit_text') {
+				height -= 6; // subtract padding
+			}
+			style.height = String(height) + 'px';
 		}
 		if (element.wrap_name) {
 			style.overflowWrap = 'break-word';

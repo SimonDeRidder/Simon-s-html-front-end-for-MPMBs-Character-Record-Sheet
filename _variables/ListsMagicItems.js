@@ -375,7 +375,7 @@ var Base_MagicItemsList = {
 		shieldAdd : "Arrow-Catching Shield (+\u200A2 vs. ranged)"
 	},
 	"arrow of slaying" : {
-		name : "Arro\u200Aw of Slaying",
+		name : "Arrow of Slaying",
 		nameTest : "of Slaying",
 		source : [["SRD", 209], ["D", 152]],
 		type : "weapon (any ammunition)",

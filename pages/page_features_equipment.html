@@ -31,12 +31,20 @@
 		<span class="textlabel-bold" style="top: 272.5px;left: 25.5px;width: 315px">BONDS</span>
 		<span class="textlabel-bold" style="top: 358px;left: 25.5px;width: 315px">FLAWS</span>
 
-		<textarea id="Personality_Trait" class="field inputfield" rows="4" style="top: 29px;left: 33.5px;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
+		<textarea
+			id="Personality_Trait"
+			class="field inputfield"
+			rows="4"
+			style="top: 29px;left: 33.5px;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
+			data-default=""
+			spellcheck="true"
+		></textarea>
 		<textarea
 			id="Ideal"
 			class="field inputfield"
 			rows="3"
 			style="top: 130px;left: 33.5px;width: 295px;height: 48px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
+			data-default=""
 			spellcheck="true"
 		></textarea>
 		<textarea
@@ -44,6 +52,7 @@
 			class="field inputfield"
 			rows="3"
 			style="top: 215.5px;left: 33.5px;width: 295px;height: 48px;font-size: 9.4px;line-height: 16.5px;padding-top: 3.6px"
+			data-default=""
 			spellcheck="true"
 		></textarea>
 		<textarea
@@ -51,6 +60,7 @@
 			class="field inputfield"
 			rows="3"
 			style="top: 300.5px;left: 33.5px;width: 295px;height: 48px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
+			data-default=""
 			spellcheck="true"
 		></textarea>
 
@@ -105,9 +115,22 @@
 
 		<span class="textlabel-bold" style="top: 183.7px;left: 18.6px;width: 329px">RACIAL TRAITS</span>
 
-		<textarea id="Racial_Traits" class="field inputfield" rows="10" style="top: 10.7px;left: 24.5px;width: 313.5px;height: 165px;font-size: 10.2px;line-height: 16.52px;padding-top: 3.6px;font-family: 'scala-sans'"></textarea>
+		<textarea
+			id="Racial_Traits"
+			class="field inputfield"
+			rows="10"
+			style="top: 10.7px;left: 24.5px;width: 313.5px;height: 165px;font-size: 10.2px;line-height: 16.52px;padding-top: 3.6px"
+			data-default=""
+			spellcheck="true"
+		></textarea>
 
-		<button id="Race_Features_Menu" class="field button" style="top: 181px;left: 261.5px;visibility: hidden">Race Features Menu</button>
+		<button
+			id="Race_Features_Menu"
+			class="field button"
+			style="top: 181px;left: 261.5px;visibility: hidden"
+			aria-label="If a race offers you a choice, click this button to pick one of the options."
+			onclick="MakeRaceMenu();RaceFeatureOptions()"
+		>Racial Options</button>
 	</div>
 
 
@@ -1583,58 +1606,120 @@
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 214.5px;font-size: 11px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed)"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value;"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Adventuring_Gear_Weight_Subtotal_Left_change)"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_Subtotal_Middle"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 453.2px;font-size: 11px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed)"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value;"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Adventuring_Gear_Weight_Subtotal_Middle_change)"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_Subtotal_Right"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 691.9px;font-size: 11px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed)"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value;"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Adventuring_Gear_Weight_Subtotal_Right_change)"
 		/>
-
 
 		<input
 			id="Copper_Pieces"
 			class="field inputfield"
 			style="top: 22.5px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
+			data-default=""
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Copper_Pieces_change)"
 		/>
-		<input id="Silver_Pieces" class="field inputfield" style="top: 63.7px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input
+			id="Silver_Pieces"
+			class="field inputfield"
+			style="top: 63.7px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
+			type="number"
+			data-default=""
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Silver_Pieces_change)"
+		/>
 		<input
 			id="Electrum_Pieces"
 			class="field inputfield"
 			style="top: 104.9px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
+			data-default=""
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Electrum_Pieces_change)"
 		/>
 		<input
 			id="Gold_Pieces"
 			class="field inputfield"
 			style="top: 146.1px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
+			data-default=""
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Gold_Pieces_change)"
 		/>
-		<input id="Platinum_Pieces" class="field inputfield" style="top: 187.3px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center;font-family: 'scala-sans'" type="number">
+		<input
+			id="Platinum_Pieces"
+			class="field inputfield"
+			style="top: 187.3px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
+			type="number"
+			data-default=""
+			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Platinum_Pieces_change)"
+		/>
 
-		<div id="Weight_Carried_Button" class="field" style="top: 220px;left:736px;width:87px;height: 123px;position:absolute">
-			<input id="Weight_Carried" class="field inputfield-notched-wide" style="top: 15px;left: 0px;font-size: 12px;width: 83px;height: 15px;pointer-events: none" type="text">
+		<div
+			id="Weight_Carried_Button"
+			class="field"
+			style="top: 220px;left:736px;width:87px;height: 123px;position:absolute;cursor: pointer"
+			onclick="WeightToCalc_Button()"
+		>
+			<input
+				id="Weight_Carried"
+				class="field inputfield-notched-wide"
+				style="top: 15px;left: 0px;font-size: 12px;width: 83px;height: 15px;pointer-events: none"
+				type="text"
+				data-default=""
+				onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value"
+			/>
 
-			<div id="Weight_Carrying_Capacity.Button" class="field" style="top: 40px;left: 0px;font-size: 12px;width: 87px;height: 37px;pointer-events: none;visibility: hidden;position: absolute;" type="text"></div>
-			<input id="Weight_Carrying_Capacity.Field" class="field inputfield-notched-wide" style="top: 79px;left: 0px;font-size: 12px;width: 83px;height: 15px;pointer-events: none" type="text">
+			<input
+				id="Weight_Encumbered"
+				class="field inputfield-noneditable"
+				style="top: 40px;left:0px;width:87px;height: 15px"
+				value=""
+				data-default=""
+			/>
 
-			<input id="Weight_Push.Drag.Lift" class="field inputfield-notched-wide" style="top: 110px;left: 0px;font-size: 12px;width: 83px;height: 15px;pointer-events: none" type="text">
+			<div
+				id="Weight_Carrying_Capacity.Button"
+				class="field"
+				style="top: 40px;left: 0px;font-size: 12px;width: 87px;height: 37px;pointer-events: none;visibility: hidden;position: absolute;"
+				type="text"
+			></div>
+			<input
+				id="Weight_Carrying_Capacity.Field"
+				class="field inputfield-notched-wide"
+				style="top: 79px;left: 0px;font-size: 12px;width: 83px;height: 15px;pointer-events: none"
+				type="text"
+				data-default=""
+			/>
+			<input
+				id="Weight_Heavily_Encumbered"
+				class="field inputfield-notched-wide"
+				style="top: 79px;left: 0px;font-size: 12px;width: 83px;height: 15px;pointer-events: none;/*visibility: hidden;*/"
+				type="text"
+				data-default=""
+			/>
+
+			<input
+				id="Weight_Push/Drag/Lift"
+				class="field inputfield-notched-wide"
+				style="top: 110px;left: 0px;font-size: 12px;width: 83px;height: 15px;pointer-events: none"
+				type="text"
+				data-default=""
+			/>
 		</div>
 
 
@@ -2575,7 +2660,7 @@
 			value="1"
 			type="text"
 			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=(this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd)).replace(/,/, '.');} else {this.value=(this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd)).replace(/,/, '.');}}"
-			onchange="event.value=this.value;format2();this.value=event.value"
+			onchange="event.value=this.value;format2();this.value=event.value;eventManager.handle_event(EventType.Carrying_Capacity_Multiplier_change)"
 		/>
 
 		<script type="text/javascript">
@@ -2617,11 +2702,94 @@
 							let subTotalId = 'Adventuring_Gear_Weight_Subtotal_' + loc;
 							event.target.name = adapter_helper_convert_id_to_fieldname(subTotalId);
 							CalcWeightSubtotal();
-							document.getElementById(subTotalId).value = event.value;
+							let weightElement = document.getElementById(subTotalId);
+							if (weightElement.value != event.value) {
+								weightElement.value = event.value;
+								weightElement.dispatchEvent(new Event('change'));
+							}
 						}
 					)
 				});
 			})
+			// Weight carried
+			console.log("waiting for some racing thing...");
+			[
+				EventType.AC_Armor_Weight_change,
+				EventType.AC_Shield_Weight_change,
+				EventType.Adventuring_Gear_Weight_Subtotal_Left_change,
+				EventType.Adventuring_Gear_Weight_Subtotal_Middle_change,
+				EventType.Adventuring_Gear_Weight_Subtotal_Right_change,
+				EventType.AmmoLeftDisplay_Amount_change,
+				EventType.AmmoRightDisplay_Amount_change,
+				EventType.AmmoLeftDisplay_Weight_change,
+				EventType.AmmoRightDisplay_Weight_change,
+				EventType.BlueText_Attack_1_Weight_change,
+				EventType.BlueText_Attack_2_Weight_change,
+				EventType.BlueText_Attack_3_Weight_change,
+				EventType.BlueText_Attack_4_Weight_change,
+				EventType.BlueText_Attack_5_Weight_change,
+				EventType.Copper_Pieces_change,
+				EventType.Electrum_Pieces_change,
+				EventType.Extra_Gear_Weight_Subtotal_Left_change,
+				EventType.Extra_Gear_Weight_Subtotal_Right_change,
+				EventType.Extra_Magic_Item_Weight_1_change,
+				EventType.Extra_Magic_Item_Weight_2_change,
+				EventType.Extra_Magic_Item_Weight_3_change,
+				EventType.Extra_Magic_Item_Weight_4_change,
+				EventType.Extra_Magic_Item_Weight_5_change,
+				EventType.Extra_Magic_Item_Weight_6_change,
+				EventType.Extra_Magic_Item_Weight_7_change,
+				EventType.Extra_Magic_Item_Weight_8_change,
+				EventType.Extra_Magic_Item_Weight_9_change,
+				EventType.Extra_Magic_Item_Weight_10_change,
+				EventType.Extra_Magic_Item_Weight_11_change,
+				EventType.Extra_Magic_Item_Weight_12_change,
+				EventType.Gold_Pieces_change,
+				EventType.Platinum_Pieces_change,
+				EventType.Silver_Pieces_change,
+				EventType.Unit_System_change
+			].forEach(function(event_type) {
+				eventManager.add_listener(
+					event_type,
+					function() {
+						CalcWeightCarried();
+						let newValue = event.value;
+						let weightCarriedElement = document.getElementById('Weight_Carried');
+						if (newValue != weightCarriedElement.value) {
+							weightCarriedElement.value = newValue;
+							weightCarriedElement.dispatchEvent(new Event('change'));
+						}
+					}
+				);
+			});
+			// Encumbrance
+			[
+				'Weight_Carrying_Capacity.Field',
+				'Weight_Encumbered',
+				'Weight_Heavily_Encumbered',
+				'Weight_Push/Drag/Lift'
+			].forEach(function (field_id) {
+				[
+					EventType.Carrying_Capacity_Multiplier_change,
+					EventType.Decimal_Separator_change,
+					EventType.Str_change,
+					EventType.Size_Category_change,
+					EventType.Unit_System_change
+				].forEach(function(event_type) {
+					eventManager.add_listener(
+						event_type,
+						function() {
+							event.target.name = adapter_helper_convert_id_to_fieldname(field_id);
+							CalcEncumbrance();
+							let capElement = document.getElementById(field_id);
+							if (event.value != capElement.value) {
+								capElement.value = event.value;
+								capElement.dispatchEvent(new Event('change'));
+							}
+						}
+					);
+				});
+			});
 		</script>
 	</div>
 

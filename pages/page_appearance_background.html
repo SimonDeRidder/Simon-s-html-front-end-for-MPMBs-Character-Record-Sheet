@@ -23,7 +23,14 @@
 		<span class="textlabel" style="top: 145.4px;left: 642.2px">EYES</span>
 		<span class="textlabel" style="top: 145.4px;left: 732.3px">SKIN</span>
 
-		<input id="PC_Name#2" class="field inputfield" style="top: 108px;left: 55px;font-size: 16pt;width: 227px;height: 24px;text-align: center;font-family: 'scala-sans'" type="text">
+		<input
+			id="PC_Name#2"
+			class="field inputfield"
+			style="top: 108px;left: 55px;font-size: 16pt;width: 227px;height: 24px;text-align: center"
+			type="text"
+			data-default=""
+			spellcheck="true"
+		/>
 		<input
 			id="Background_Renown.Text"
 			class="field inputfield"
@@ -31,7 +38,14 @@
 			style="top: 108px;left: 290px;width: 61px;height: 24px;text-align: center;padding-top: 0px;visibility: hidden;"
 		/>
 
-		<input id="Sex" class="field inputfield" style="top: 88px;left: 364.5px;font-size: 11pt;width: 91px;height: 17px;padding-top: 0px;font-family: 'scala-sans'" type="text">
+		<input
+			id="Sex"
+			class="field inputfield"
+			style="top: 88px;left: 364.5px;font-size: 11pt;width: 91px;height: 17px;padding-top: 0px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+		/>
 		<input
 			id="Age"
 			class="field inputfield"
@@ -39,10 +53,19 @@
 			spellcheck="true"
 			type="number"
 		/>
-		<input id="Size_Category" class="field inputfield" style="top: 88px;left: 552px;font-size: 11pt;width: 84.5px;height: 17px;font-family: 'scala-sans'" type="text" list="size_category_options">
-		<datalist id="size_category_options">
-			<option value="Medium">
-		</datalist>
+		<select
+			id="Size_Category"
+			class="field inputfield"
+			style="top: 88px;left: 552px;font-size: 11pt;width: 84.5px;height: 17px"
+			onchange="eventManager.handle_event(EventType.Size_Category_change)"
+		>
+			<option value="8">Gargantuan</option>
+			<option value="4">Huge</option>
+			<option value="2">Large</option>
+			<option value="1">Medium</option>
+			<option value="1">Small</option>
+			<option value="0.5">Tiny</option>
+		</select>
 		<input
 			id="Height"
 			class="field inputfield"
@@ -50,7 +73,14 @@
 			type="text"
 			spellcheck="true"
 		/>
-		<input id="Weight" class="field inputfield" style="top: 88px;left: 732.5px;font-size: 11pt;width: 90px;height: 17px;padding-top: 0px;font-family: 'scala-sans'" type="text">
+		<input
+			id="Weight"
+			class="field inputfield"
+			style="top: 88px;left: 732.5px;font-size: 11pt;width: 90px;height: 17px;padding-top: 0px"
+			type="text"
+			data-default=""
+			spellcheck="true"
+		/>
 		<input
 			id="Alignment"
 			class="field inputfield"
@@ -61,15 +91,15 @@
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 		/>
 		<datalist id="alignment_options">
-			<option value="Lawful Good">
-			<option value="Neutral Good">
-			<option value="Chaotic Good">
-			<option value="Lawful Neutral">
-			<option value="Neutral">
-			<option value="Chaotic Neutral">
-			<option value="Lawful Evil">
-			<option value="Neutral Evil">
-			<option value="Chaotic Evil">
+			<option value="Lawful Good">Lawful Good</option>
+			<option value="Neutral Good">Neutral Good</option>
+			<option value="Chaotic Good">Chaotic Good</option>
+			<option value="Lawful Neutral">Lawful Neutral</option>
+			<option value="Neutral">Neutral</option>
+			<option value="Chaotic Neutral">Chaotic Neutral</option>
+			<option value="Lawful Evil">Lawful Evil</option>
+			<option value="Neutral Evil">Neutral Evil</option>
+			<option value="Chaotic Evil">Chaotic Evil</option>
 		</datalist>
 		<input
 			id="Faith/Deity"
@@ -93,7 +123,14 @@
 			type="text"
 			spellcheck="true"
 		/>
-		<input id="Skin_colour" class="field inputfield" style="top: 127px;left: 732.5px;font-size: 11pt;width: 90px;height: 17px;padding-top: 0px;font-family: 'scala-sans'" type="text">
+		<input
+			id="Skin_colour"
+			class="field inputfield"
+			style="top: 127px;left: 732.5px;font-size: 11pt;width: 90px;height: 17px;padding-top: 0px"
+			type="text"
+			spellcheck="true"
+			data-default=""
+		/>
 	</div>
 
 
@@ -102,9 +139,13 @@
 
 		<div class="textlabel-bold" style="top: 357px;left: 14.6px;width: 258px">CHARACTER PORTRAIT</div>
 
-		<div id="Portrait" class="field" style="position: absolute;top: 24.6px;left: 14.6px;width: 258.2px;height: 327px;text-align: center;display: table;font-size: 16.7pt;line-height: 20pt;cursor: pointer">
-			<span id="placeholder" style="display:table-cell;vertical-align: middle">CLICK HERE<br>TO CHANGE<br>THIS ICON</span>
-		</div>
+		<div
+			id="Portrait"
+			class="field nonprintable"
+			style="position: absolute;top: 24.6px;left: 14.6px;width: 258.2px;height: 327px;text-align: center;display: table;font-size: 16.7pt;line-height: 20pt;cursor: pointer;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/page_appearance_background/portrait/blank.svg')"
+			aria-label="Click here to change the Character Portrait"
+			onclick="{let thisElement=this;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.buttonGetIcon=function() {return thisElement.style.backgroundImage.match(/\b(img\/.*\.svg)\b/)[1];};event.target.contextTransfers=['buttonGetIcon'];MakeIconMenu_IconOptions()}"
+		></div>
 	</div>
 
 
@@ -147,25 +188,31 @@
 			onchange="SetFactionSymbol('Background_Faction.Text', this.value, true);"
 		/>
 		<datalist id="faction_options">
-			<option value="">
-			<option value="The Emerald Enclave">
-			<option value="The Harpers">
-			<option value="The Lords' Alliance">
-			<option value="The Order of the Gauntlet">
-			<option value="The Zhentarim">
-			<option value="Azorius Senate">
-			<option value="Boros Legion">
-			<option value="House Dimir">
-			<option value="Golgari Swarm">
-			<option value="Gruul Clans">
-			<option value="Izzet League">
-			<option value="Orzhov Syndicate">
-			<option value="Cult of Rakdos">
-			<option value="Selesnya Conclave">
-			<option value="Simic Combine">
+			<option value=""></option>
+			<option value="The Emerald Enclave">The Emerald Enclave</option>
+			<option value="The Harpers">The Harpers</option>
+			<option value="The Lords' Alliance">The Lords' Alliance</option>
+			<option value="The Order of the Gauntlet">The Order of the Gauntlet</option>
+			<option value="The Zhentarim">The Zhentarim</option>
+			<option value="Azorius Senate">Azorius Senate</option>
+			<option value="Boros Legion">Boros Legion</option>
+			<option value="House Dimir">House Dimir</option>
+			<option value="Golgari Swarm">Golgari Swarm</option>
+			<option value="Gruul Clans">Gruul Clans</option>
+			<option value="Izzet League">Izzet League</option>
+			<option value="Orzhov Syndicate">Orzhov Syndicate</option>
+			<option value="Cult of Rakdos">Cult of Rakdos</option>
+			<option value="Selesnya Conclave">Selesnya Conclave</option>
+			<option value="Simic Combine">Simic Combine</option>
 		</datalist>
 
-		<div id="Symbol" class="field" style="position: absolute;top: 65px;left: 298px;width: 222.5px;height: 181.2px;font-size: 11.6pt;line-height: 14pt;cursor: pointer;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/factions/blank.svg');"></div>
+		<div
+			id="Symbol"
+			class="field nonprintable"
+			style="position: absolute;top: 65px;left: 298px;width: 222.5px;height: 181.2px;font-size: 11.6pt;line-height: 14pt;cursor: pointer;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/factions/blank.svg');"
+			aria-label="Click here to change the Symbol"
+			onclick="{let thisElement=this;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.buttonGetIcon=function() {return thisElement.style.backgroundImage.match(/\b(img\/.*\.svg)\b/)[1];};event.target.contextTransfers=['buttonGetIcon'];MakeIconMenu_IconOptions()}"
+		></div>
 
 		<div
 			id="Image.Background_FactionRank.Text"

@@ -1,5 +1,4 @@
 
-// TODO: connect Field "SelectFile" to a file picker for import
 // TODO: Make a field "Whiteout.Standard.0" that controls the lines in multi-line inputs fields (I think)
 // TODO: connect "Color.Theme"
 // TODO: "SaveIMG.Header.Left." + colour, "SaveIMG.Divider." + colour
@@ -13,6 +12,7 @@
 // TODO: make sure field getters in CurrentEvals.hp trigger calculation of (Comp.Use.)HP.Max
 // TODO: set default values up to P4.AScomp.Comp.Type
 // TODO: parse CurrentEvals stuff for proper event triggering
+// TODO: find a way to import from pdf (MPMBOpenFile in DirectImport)
 
 // Load functions
 
@@ -22,6 +22,24 @@ function loadScript(path /*str*/) /*Promise*/ {
 		scriptElement.src = path;
 		scriptElement.onload = () => resolve(scriptElement);
 		document.body.appendChild(scriptElement);
+	});
+}
+
+function makeSaveLoadButtons() {
+	return new Promise(function (resolve, reject) {
+		app.addToolButton({
+			cName: "save",
+			oIcon: null,
+			cExec: "adapter_helper_save_all()",
+			cLabel: "Save"
+		});
+		app.addToolButton({
+			cName: "load",
+			oIcon: null,
+			cExec: "adapter_helper_load()",
+			cLabel: "Load"
+		});
+		resolve();
 	});
 }
 
@@ -43,7 +61,8 @@ function initialCalculationEvents() {
 	document.getElementById('Dex').dispatchEvent(new Event('change'));
 	document.getElementById('Int').dispatchEvent(new Event('change'));
 	document.getElementById('HoS').dispatchEvent(new Event('change'));
-	// TODO: Str, Wis
+	document.getElementById('Str').dispatchEvent(new Event('change'));
+	document.getElementById('Wis').dispatchEvent(new Event('change'));
 	// trigger weight texts
 	document.getElementById('Unit_System').dispatchEvent(new Event('change'));
 }
@@ -74,6 +93,7 @@ loadScript('_functions/AbilityScores_old.js')
 	.then(script => loadScript('_variables/ListsRaces.js'))
 	.then(script => loadScript('_variables/ListsSources.js'))
 	.then(script => loadScript('_variables/ListsSpells.js'))
+	.then(script => makeSaveLoadButtons())
 	.then(script => loadScript('_functions/Startup.js'));
 	// .then(script => loadScript('import_utils/overwrite_Startup.js'))
 	// .then(script => initialCalculationEvents());

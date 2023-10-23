@@ -13,6 +13,7 @@
 // TODO: set default values up to P4.AScomp.Comp.Type
 // TODO: parse CurrentEvals stuff for proper event triggering
 // TODO: find a way to import from pdf (MPMBOpenFile in DirectImport)
+// TODO: better context menu (with scroll for long options)
 
 // Load functions
 

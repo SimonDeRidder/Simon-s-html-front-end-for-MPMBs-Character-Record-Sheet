@@ -1,4 +1,0 @@
-finish fieldnames_continue.txt
-finish fields_continue
-better context menu (with scroll for long options)
-defaultValue

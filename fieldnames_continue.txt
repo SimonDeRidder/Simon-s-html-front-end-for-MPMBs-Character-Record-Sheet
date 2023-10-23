@@ -1,3 +1,0 @@
-fn --color=always tDoc.getField | head -279 | tail -10
-fn "What(" --color=always| head -680 | tail -10
-// 955

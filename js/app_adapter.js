@@ -1755,6 +1755,26 @@ function adapter_helper_convert_colour(color /*[char, ...]*/) /*String|null*/ {
 }
 
 
+function adapter_helper_keystroke1(element /*HTMLElement*/, arg1 /*boolean*/, arg2 /*boolean*/) {
+	let current_selection;
+	if (arg1 != arg2) {
+		current_selection = [event.target.selectionStart, event.target.selectionEnd];
+	} else {
+		current_selection = adapter_helper_get_number_field_selection();
+	}
+	event.change = event.data ? event.data : '';
+	let origLen = event.change.length;
+	event.selStart = event.target.selectionStart;
+	event.selEnd = event.target.selectionEnd;
+	keystroke1(arg1, arg2);
+	if (!event.rc) {
+		element.value = element.value.substring(0,event.selStart-origLen)+element.value.substring(event.selEnd);
+	} else {
+		element.value = element.value.substring(0,event.selStart-origLen)+event.change+element.value.substring(event.selEnd);
+	}
+}
+
+
 function adapter_helper_save_all() {
 	// save page inventory
 	let pageElmnt;

@@ -54,21 +54,79 @@ async function AddFolderJavaScript(justConsole) {
 	var isContin = app.viewerVersion.substring(6, 8) != 30;
 	var vYear = 20 + app.viewerVersion.substring(0, 2);
 
-	var textLoc = "The 'JavaScripts' folder for Adobe Acrobat " + isType + " DC on " + (isWindows ? "Windows 10 x64" : "Mac OS") + " is:";
+	var textLoc = "The 'JavaScripts' folder" + (isWindows ? 's' : '') + " for Adobe Acrobat " + isType + " DC on " + (isWindows ? "Windows are:" : "macOS is:");
 	var locWin = "C:\\Program Files (x86)\\Adobe\\Acrobat " + (isType === "Reader" ? "Reader " : "") + (isContin ? "DC" : vYear) + "\\" + (isType === "Reader" ? "Reader" : "Acrobat") + "\\Javascripts\\";
+	var locWin64 = locWin.replace(' (x86)', '');
 	var locMac = "/Applications/Adobe Acrobat " + (isType === "Reader" ? "Reader " : "") + (isContin ? "DC" : vYear) + ".app/Contents/Resources/JavaScripts/";
 
 	var Text0 = justConsole ? "In order to import user-defined icons, you will have to manually add a JavaScript file to your Adobe Acrobat installation. This is necessary, because of Adobe Acrobat's security protocol. You will have to do this only once to get this function working." : "In order to use the 'Direct Import' functionality, you will need to do something to appease Adobe Acrobat's security settings. You have two options:\nOption 1 is that you add a JavaScript file to your installation. After you've done this, you will never see this dialog again.\nOption 2 is that you run the code from console, but you will have to do this every time if you want to use this function.";
 	var Text1 = "Do the following steps:\n   1)  Use the button below to save the file somewhere (don't change the filename).\n   2)  Rename the file so that its extension is \".js\" (can't be done while saving).\n   3)  Move the file to the right location mentioned below (can't be saved there directly).\n   4)  Restart Adobe Acrobat and try the 'Direct Import' function again.";
-	var Text2 = "The directory where you have to put this file depends on your version of Adobe Acrobat and your operating system. The path shown here is an estimated guess for your installation. It is possible that this folder doesn't exist yet, or that it is hidden.\n" + toUni("Note that you can't save the file directly to this location!");
-	var Text3 = "Open the console (a.k.a. \"JavaScript Debugger\") and run the code that is printed there. Running the code is done by selecting the line it is on and pressing " + (isWindows ? "Ctrl+Enter" : "Command+Enter") + " (or the numpad Enter).";
-	var LocJS = isWindows ? locWin : locMac;
+	var Text2 = (isWindows ? "The paths shown above are an estimated guess for your installation. Use the x64 or x86 path, depending on which version of Adobe Acrobat you have installed." : "The path shown above is an estimated guess for your installation.")+
+		" You can select and copy the path above. It is possible that this folder doesn't exist yet, or that it is hidden.\n" + toUni("Note that you can't save the file directly to this location!\n ");
+	var Text3 = 'Open the console (a.k.a. "JavaScript Debugger") and run the code that is printed there. Running the code is done by selecting the line it is on and pressing ' + (isWindows ? "Ctrl+Enter" : "Command+Enter") + " (or the numpad Enter).";
 
+	var windowsLocations = {
+		type : "view",
+		align_children : "align_left",
+		elements : [{
+			type : "view",
+			align_children : "align_row",
+			elements : [{
+				type : "static_text",
+				item_id : "l1tx",
+				name : " 32-bit Acrobat (x86):",
+				width : 80,
+				font : "dialog",
+				bold : true
+			}, {
+				type : "edit_text",
+				item_id : "loc1",
+				alignment : "align_fill",
+				font : "dialog",
+				width : 390,
+				readonly : true
+			}]
+		}, {
+			type : "view",
+			align_children : "align_row",
+			elements : [{
+				type : "static_text",
+				item_id : "l2tx",
+				name : " 64-bit Acrobat (x64):",
+				width : 80,
+				font : "dialog",
+				bold : true
+			}, {
+				type : "edit_text",
+				item_id : "loc2",
+				alignment : "align_fill",
+				font : "dialog",
+				width : 390,
+				readonly : true
+			}]
+		}]
+	};
+	var macLocations = {
+		type : "edit_text",
+		item_id : "loc1",
+		alignment : "align_fill",
+		font : "dialog",
+		width : 470,
+		readonly : true
+	};
 	var AddJS_dialog = {
 		initialize : function(dialog) {
-			dialog.load({
-				locJ : LocJS
-			});
+			if (isWindows) {
+				var toLoad = {
+					loc1 : locWin,
+					loc2 : locWin64
+				};
+			} else {
+				var toLoad = {
+					loc1 : locMac
+				};
+			}
+			dialog.load(toLoad);
 		},
 		bADD : function(dialog) {
 			tDoc.exportDataObject({ cName: "MPMB-IF Remove '.txt' from the end.js.txt", nLaunch: 0});
@@ -137,37 +195,21 @@ async function AddFolderJavaScript(justConsole) {
 								back_color: "windowDialog",
 								alignment : "align_fill",
 								width : 500,
-								elements : [{
-									type : "cluster",
-									item_id : "txtJ",
+								elements : [isWindows ? windowsLocations : macLocations].concat([{
+									type : "static_text",
+									item_id : "txt2",
 									alignment : "align_fill",
 									font : "dialog",
-									bold : true,
-									width : 500,
-									name : textLoc,
-									elements : [{
-										type : "edit_text",
-										item_id : "locJ",
-										alignment : "align_fill",
-										font : "dialog",
-										width : 470,
-										readonly : true
-									}, {
-										type : "static_text",
-										item_id : "txt2",
-										alignment : "align_fill",
-										font : "dialog",
-										wrap_name : true,
-										width : 470,
-										name : Text2
-									}, ]
-								}, ]
-							}, ]
-						}, ]
+									wrap_name : true,
+									width : 470,
+									name : Text2
+								}])
+							}]
+						}]
 					}, {
 						type : "gap",
 						height : 5
-					}, {
+					}].concat(justConsole ? [] : [{
 						type : "view",
 						item_id : "vieC",
 						back_color: "windowBackground",
@@ -195,19 +237,17 @@ async function AddFolderJavaScript(justConsole) {
 								font : "heading",
 								bold : true,
 								alignment : "align_center"
-							}, ]
-						}, ]
-					}, ]
+							}]
+						}]
+					}])
 				}, {
 					type : justConsole ? "ok_cancel" : "ok",
 					ok_name : "Done",
 					cancel_name : "Continue without importing icons"
-				}, ]
-			}, ]
+				}]
+			}]
 		}
 	};
-
-	if (justConsole) delete AddJS_dialog.description.elements[0].elements[0].elements[4];
 
 	var theDialog = await app.execDialog(AddJS_dialog);
 
@@ -465,6 +505,7 @@ async function DirectImport(consoleTrigger) {
 		var FromVersion = semVersToNmbr(FromVersionSem);
 		var ToVersion = global.docTo.sheetVersion;
 		var fromBefore13 = FromVersion < semVersToNmbr("13.0.0-beta14");
+		var fromBefore13_1_5 = FromVersion < semVersToNmbr("13.1.5");
 		if (FromVersion > ToVersion || (FromVersion >= semVersToNmbr("13.0.0-beta1") && fromBefore13)) {
 			// If importing from a newer version or from a v13.0.0-beta1-beta13
 			var versTypeTxt = FromVersion > ToVersion ? ["this sheet is", "newer", "than the one you are importing"] : ["the other sheet is an", "unsupported beta", "that can't be imported to any other MPMB's Character Record Sheet"];
@@ -501,6 +542,7 @@ async function DirectImport(consoleTrigger) {
 		var bothPF = typePF && fromSheetTypePF;
 		var bothCF = !typePF && !fromSheetTypePF;
 		var sameType = bothPF || (bothCF && fromSheetTypeLR === typeLR);
+		var aTextExtra = []; // anything in this array is added to the warning dialog after the import, joined with a line break
 
 		// Make sure to remove the flattened state from the sheet to import from
 		if (fromBefore13) {
@@ -1170,7 +1212,7 @@ async function DirectImport(consoleTrigger) {
 			parentA = parentA.getArray();
 			for (var pA =  0; pA < parentA.length; pA++) {
 				var pAnameTo = parentA[pA].name;
-				if (excludeRegEx && (excludeRegEx).test(pAnameTo)) continue;
+				if (excludeRegEx && excludeRegEx.test(pAnameTo)) continue;
 				var pAnameFrom = pAnameTo.replace(toPre, fromPre);
 				ImportField(pAnameTo, actionsObj ? actionsObj : {notTooltip: true, doVisiblity: inclVisibility}, pAnameFrom);
 			}
@@ -1209,8 +1251,26 @@ async function DirectImport(consoleTrigger) {
 			//do the description fields
 			doChildren("Comp.Desc", prefixFrom, prefixTo);
 
-			//do the bulk of the fields
-			doChildren("Comp.Use", prefixFrom, prefixTo, /\.Score|\.Mod|Text|Calculated|Button|Init\.Dex|HD\.Con/i);
+			//do the bulk of the fields (but not HP Max, see below)
+			doChildren("Comp.Use", prefixFrom, prefixTo, /\.Score|\.Mod|Text|Calculated|Button|Init\.Dex|HD\.Con|HP\.Max$/i);
+
+			//do HP
+			// Because of a bug in v13.1.4 and older, we need to do something special for creatures that have an alt HP calculation
+			var keepCompRaceHPsetting = false;
+			if (fromBefore13_1_5 && global.docTo.CurrentEvals.Comp && global.docTo.CurrentEvals.Comp[prefixTo] && global.docTo.CurrentEvals.Comp[prefixTo].hp) {
+				var compRaceHPsetFrom = global.docFrom.getField(prefixFrom + "Comp.Use.HP.Max").submitName.split(',');
+				var compRaceHPsetTo = global.docTo.getField(prefixTo + "Comp.Use.HP.Max").submitName.split(',');
+				keepCompRaceHPsetting = compRaceHPsetFrom[3] !== compRaceHPsetTo[3] && compRaceHPsetTo[3].indexOf('alt') !== -1;
+				if (keepCompRaceHPsetting) {
+					// add text to the dialog
+					var sCompHpTitle = toUni("\nFixed special HP calculation for companions");
+					if (aTextExtra.indexOf(sCompHpTitle) === -1) aTextExtra.push(sCompHpTitle);
+					var sCompName = What(prefixTo + 'Comp.Desc.Name');
+					if (!sCompName) sCompName = compRaceFldTo.value;
+					aTextExtra.push('  \u2022 For the companion "' + sCompName + '" on page ' + (compRaceFldFrom.page+1));
+				}
+			}
+			ImportField(prefixTo + "Comp.Use.HP.Max", {notTooltip: true, notSubmitName: keepCompRaceHPsetting}, prefixFrom + "Comp.Use.HP.Max");
 
 			//do the BlueText fields
 			doChildren("BlueText.Comp.Use", prefixFrom, prefixTo);
@@ -1414,8 +1474,10 @@ async function DirectImport(consoleTrigger) {
 		} else {
 			SetToManual_Dialog.mAtt = !!global.docFrom.CurrentVars.manual.attacks;
 			SetToManual_Dialog.mBac = !!global.docFrom.CurrentVars.manual.background;
+			SetToManual_Dialog.mBFe = !!global.docFrom.CurrentVars.manual.backgroundFeature;
 			SetToManual_Dialog.mCla = !!global.docFrom.CurrentVars.manual.classes;
 			SetToManual_Dialog.mFea = !!global.docFrom.CurrentVars.manual.feats;
+			SetToManual_Dialog.mMag = !!global.docFrom.CurrentVars.manual.items;
 			SetToManual_Dialog.mRac = !!global.docFrom.CurrentVars.manual.race;
 		}
 		await SetToManual_Button(true);
@@ -1495,6 +1557,7 @@ async function DirectImport(consoleTrigger) {
 				"Things manually added/changed in the fields for Saving Throw Advantages/Disadvantages and Senses have not been copied."
 			].join("\n  \u2022 ");
 		};
+		if (aTextExtra.length) aText += '\n' + aTextExtra.join("\n");
 		app.alert({
 			cMsg : aText,
 			nIcon : 3,
@@ -1800,41 +1863,30 @@ function ImportExtraChoices() {
 
 // add the extra class features that were added using a feature that grants bonus choices for other class features
 async function AddExtraOtherChoices() {
-	// NOG TESTEN MET:
-	// - feat met bonus feature voor class die WEL aangezig is, maar nog niet het juiste level heeft
-	if (!CurrentFeatureChoices.bonus) return;
-	Menus.classfeatures_tempClassesKnown = [];
-	for (var sClass in CurrentFeatureChoices.bonus) {
-		// No need to process this here if it is for a known class, or there are no known selected choices
-		if (classes.known[sClass] || !CurrentFeatureChoices.classes[sClass]) continue;
-		// Map all the features to their subclasses for reference
-		var oRef = {};
-		for (var sSubClass in CurrentFeatureChoices.bonus[sClass]) {
-			for (var sFea in CurrentFeatureChoices.bonus[sClass][sSubClass]) {
-				if (!oRef[sFea]) oRef[sFea] = sSubClass;
-			}
+	var bonusClassFeatures = getBonusClassExtraChoices(true);
+	for (var i = 0; i < bonusClassFeatures.length; i++) {
+		var oBonus = bonusClassFeatures[i];
+		// temporarily add the (sub)class to classes.known
+		addTempClassesKnown(oBonus);
+		// get the extrachoices for this feature
+		var aChoices = GetFeatureChoice("classes", oBonus.class, oBonus.feature, true);
+		// get the object with the choices
+		var oProp = oBonus.subclass && ClassSubList[oBonus.subclass] ? ClassSubList[oBonus.subclass].features[oBonus.feature] : ClassList[oBonus.class].features[oBonus.feature];
+		// don't proceed if this feature wasn't found
+		if (!oProp) continue;
+		// loop through the selected choices for this feature
+		for (var c = 0; c < aChoices.length; c++) {
+			aChoices[c];
+			// only continue if this choice exists within the specified feature
+			if (!oProp[aChoices[c]]) continue;
+			// add the feature
+			await ClassFeatureOptions([
+				oBonus.class, oBonus.feature, aChoices[c], 'extra',
+				"add", true, oBonus.subclass
+			], "add");
 		}
-		// Loop through the selected features of this class
-		for (var sFea in CurrentFeatureChoices.classes[sClass]) {
-			var aXtrChc = CurrentFeatureChoices.classes[sClass][sFea].extrachoices;
-			if (!aXtrChc || !oRef[sFea]) continue; // not something to add as a bonus extrachoice
-			// Create a temporary classes.known entry
-			var sSubClass = oRef[sFea] && oRef[sFea] !== "mainClass" ? oRef[sFea] : "";
-			classes.known[sClass] = {
-				name : sClass,
-				level : 0,
-				subclass : sSubClass
-			}
-			// Add the extra choices to the sheet, one by one
-			for (var i = 0; i < aXtrChc.length; i++) {
-				await ClassFeatureOptions([
-					sClass, sFea, aXtrChc[i], 'extra',
-					"add", true, sSubClass
-				], "add");
-			}
-			// Delete the temporary classes.known entry
-			delete classes.known[sClass];
-		}
+		// remove the temporary addition to classes.known
+		cleanTempClassesKnown();
 	}
 };
 
@@ -2187,11 +2239,11 @@ async function MakeXFDFExport(partial) {
 						}, {
 							type : "gap",
 							height : 5
-						}, ]
+						}]
 					}, {
 						type : "ok"
-					}, ]
-				}, ]
+					}]
+				}]
 			}
 		}
 		app.execDialog(DisplayExport_dialog);

@@ -267,6 +267,17 @@ function setPrototypes() {
 		var iIndx = this.find(del);
 		return iIndx === -1 ? -1 : this.splice(iIndx, 1);
 	};
+	Array.prototype.merge = function (arr) {
+		// Merge array with another, but ignoring duplicates
+		// Does not alter original array
+		try {
+			// This should work in ES6
+			return [...new Set([...this, ...arr])];
+		} catch (e) {
+			// ES5 and older will have to rely on old, slow method
+			return this.concat(arr.filter(function(item) { return this.indexOf(item) < 0; }));
+		}
+	};
 };
 setPrototypes();
 
@@ -1056,26 +1067,78 @@ function similarLen(str1, str2) {
 
 //test if a template is visible or not
 function isTemplVis(tempNm, returnPrefix) {
-	if (!BookMarkList[tempNm] || !tDoc.getField(BookMarkList[tempNm])) return false;
-	var isVisible = false;
+	var bkmrkFld = BookMarkList[tempNm];
+	if (!bkmrkFld || !tDoc.getField(bkmrkFld)) return false;
+	var isVisible = false, firstTempl = false, prefixes = false;
 	var multiTemp = TemplatesWithExtras.indexOf(tempNm) !== -1;
-	var firstTempl = "";
 	if (!multiTemp) {
-		var tempPage = tDoc.getField(BookMarkList[tempNm]).page;
+		var tempPage = tDoc.getField(bkmrkFld).page;
 		isVisible = (isArray(tempPage) ? Math.max.apply(Math, tempPage) : tempPage) !== -1;
 	} else {
-		isVisible = What("Template.extras." + tempNm) !== "";
-		firstTempl = What("Template.extras." + tempNm).split(",")[1];
+		prefixes = What("Template.extras." + tempNm).split(",");
+		isVisible = prefixes.length > 1;
+		firstTempl = prefixes[1];
+		lastTempl = prefixes.slice(-1)[0];
 	};
 	if (!isVisible && tempNm === "SSfront") {
-		isVisible = isTemplVis("SSmore", returnPrefix);
-		if (isArray(isVisible)) {
-			firstTempl = isVisible[1];
-			isVisible = isVisible[0];
-		};
+		return isTemplVis("SSmore", returnPrefix);
 	};
-	return returnPrefix && firstTempl ? [isVisible, firstTempl] : isVisible;
+	if (isVisible && prefixes) {
+		// check all the template prefixes if they actually exist, otherwise fix the issue
+		var errorPrefixes = [];
+		for (var i = 1; i < prefixes.length; i++) {
+			if (!tDoc.getField(prefixes[i] + bkmrkFld)) errorPrefixes.push(prefixes[i]);
+		}
+		if (errorPrefixes.length) {
+			// error with one or more pages, fix that and then start this function again
+			pageErrorCleanup(tempNm, errorPrefixes);
+			return isTemplVis(tempNm, returnPrefix);
+		}
+	}
+	return isVisible && returnPrefix && firstTempl ? [isVisible, returnPrefix === "last" ? lastTempl : firstTempl] : isVisible;
 };
+
+// Error fixing: remove pages without form fields
+function pageErrorCleanup(tempNm, prefixes) {
+	// Cleanup the saved field for extra generated templates
+	var tempPrefixList = What("Template.extras." + tempNm).split(",");
+	for (var i = 0; i < prefixes.length; i++) {
+		tempPrefixList.splice(tempPrefixList.indexOf(prefixes[i]), 1);
+	}
+	Value("Template.extras." + tempNm, tempPrefixList);
+	// Distill the template prefixes to just their page number (0-index)
+	var expectedPageNo = prefixes.map(function(n) {
+		return Number(n.replace(/P(\d+)\..+/, '$1'));
+	});
+	// Find all pages with fields on them
+	var pagesWithFields = {};
+	for (var i = 0; i < tDoc.numFields; i++) {
+		var fld = tDoc.getField(tDoc.getNthFieldName(i));
+		var arrPageNo = isArray(fld.page) ? fld.page : [fld.page];
+		for (var n = 0; n < arrPageNo.length; n++) {
+			var pageNo = arrPageNo[n];
+			if ( !pagesWithFields[pageNo] ) pagesWithFields[pageNo] = true;
+		}
+	}
+	// Compare that to the actual pages
+	for (var i = 0; i < tDoc.numPages; i++) {
+		if ( !pagesWithFields[i] ) {
+			// A page without any fields on it, should probably delete
+			var goOn = expectedPageNo.indexOf(i) !== -1 || expectedPageNo.indexOf(i+1) !== -1 || expectedPageNo.indexOf(i-1) !== -1; // Test if matches (or close enough) an expected page number
+			if ( !goOn ) { // Didn't match, so ask the user if this page should be deleted
+				var userResponse = app.alert({
+					cMsg: "Delete erroneous page " + (i+1) + "?",
+					cTitle: "Page number " + (i+1) + " seems to have no fields on it. This is probably due to an error when generating new pages or deleting them."+
+					"\n\nWould you like to delete page " + (i+1) + "?",
+					nIcon: 2,
+					nType: 2
+				});
+				goOn = userResponse === 4;
+			}
+			if (goOn) tDoc.deletePages(i);
+		}
+	}
+}
 
 // A way to return a new, fresh object
 function newObj(inObj) {
@@ -1242,4 +1305,18 @@ function outOfMemoryErrorHandling(closeFile) {
 	}
 	app.execMenuItem("Close");
 	tDoc.closeDoc();
+};
+
+// return which range of the ones given in `aOpt` the starting character of `str` belongs to. e.g. aOpt = ["A-F", "G-Q", "R-Z"];
+function getLetterRange(str, aOpt) {
+	var iCharNr = removeDiacritics(str)[0].toLowerCase().charCodeAt(0) - 97;
+	var oOpt = {};
+	aOpt.sort();
+	for (var i = 0; i < aOpt.length; i++) {
+		oOpt[aOpt[i]] = aOpt[i].slice(-1).toLowerCase().charCodeAt(0) - 97;
+	}
+	for (var sRng in oOpt) {
+		if (iCharNr <= oOpt[sRng]) return sRng;
+	}
+	return sRng; // higher than the last, so just return the last
 };

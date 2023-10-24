@@ -5,7 +5,7 @@ var FightingStyles = {
 		calcChanges : {
 			atkCalc : [
 				function (fields, v, output) {
-					if (v.isRangedWeapon) output.extraHit += 2;
+					if (v.isRangedWeapon && !v.isNaturalWeapon && !v.isDC) output.extraHit += 2;
 				},
 				"My ranged weapons get a +2 bonus on the To Hit."
 			]
@@ -106,7 +106,7 @@ var Base_ClassList = {
 				source : [["SRD", 8], ["P", 48]],
 				minlevel : 1,
 				description : desc([
-					"Start/end as bonus action; add damage to melee weapons that use Str; lasts 1 min",
+					"Start/end as bonus action; bonus damage to melee weapon attacks using Str; lasts 1 min",
 					"Adv. on Strength checks/saves (not attacks); resistance to bludgeoning/piercing/slashing",
 					"Stops if I end turn without attacking or taking damage since last turn, or unconscious"
 				]),
@@ -121,11 +121,11 @@ var Base_ClassList = {
 				calcChanges : {
 					atkCalc : [
 						function (fields, v, output) {
-							if (v.isMeleeWeapon && classes.known.barbarian && classes.known.barbarian.level && (/\brage\b/i).test(v.WeaponTextName)) {
+							if (v.isMeleeWeapon && fields.Mod === 1 && classes.known.barbarian && classes.known.barbarian.level && /\brage\b/i.test(v.WeaponTextName)) {
 								output.extraDmg += classes.known.barbarian.level < 9 ? 2 : classes.known.barbarian.level < 16 ? 3 : 4;
 							}
 						},
-						"If I include the word 'Rage' in a melee weapon's name, the calculation will add my Rage's bonus damage to it."
+						"If I include the word 'Rage' in a melee weapon's name that uses Strength, the calculation will add my Rage's bonus damage to it. Be aware that if the weapon is used to make a ranged attack, the rage bonus damage shouldn't be added (e.g. when using a thrown weapon)."
 					]
 				}
 			},
@@ -316,7 +316,7 @@ var Base_ClassList = {
 				name : "Jack of All Trades",
 				source : [["SRD", 12], ["P", 54]],
 				minlevel : 2,
-				description : desc("I can add half my proficiency bonus to any ability check that doesn't already include it"),
+				description : desc("I can add half my Proficiency Bonus to any ability check that doesn't already include it"),
 				eval : function() { Checkbox('Jack of All Trades', true); },
 				removeeval : function() { Checkbox('Jack of All Trades', false); }
 			},
@@ -541,7 +541,7 @@ var Base_ClassList = {
 				name : "Druidic",
 				source : [["SRD", 19], ["P", 66]],
 				minlevel : 1,
-				description : desc("I know Druidic; Hidden messages with it can only be understood by who know Druidic"),
+				description : desc("I know Druidic; Hidden messages with it are only understood by those who know Druidic"),
 				languageProfs : ["Druidic"]
 			},
 			"spellcasting" : {
@@ -782,7 +782,7 @@ var Base_ClassList = {
 								if (isNaN(curDie) || curDie < aMonkDie) {
 									fields.Damage_Die = '1d' + aMonkDie;
 								};
-								if (fields.Mod == 1 || fields.Mod == 2 || What(AbilityScores.abbreviations[fields.Mod - 1] + " Mod") < What(AbilityScores.abbreviations[v.StrDex - 1] + " Mod")) {
+								if (fields.Mod === 1 || fields.Mod === 2 || What(AbilityScores.abbreviations[fields.Mod - 1] + " Mod") < What(AbilityScores.abbreviations[v.StrDex - 1] + " Mod")) {
 									fields.Mod = v.StrDex;
 								}
 							};
@@ -1321,7 +1321,7 @@ var Base_ClassList = {
 					source : [["SRD", 36], ["P", 91]],
 					extraname : "Ranger 1",
 					description : desc([
-						"I can double my proficiency bonus for Int/Wis checks concerning my favored terrains",
+						"I can double my Proficiency Bonus for Int/Wis checks concerning my favored terrains",
 						"While traveling for an hour or more in a favored terrain, I gain the following benefits:",
 						" \u2022 My allies and I are not slowed by difficult terrain and can't get lost except by magic",
 						" \u2022 I am alert to danger even when doing something else; I forage twice as much food",
@@ -1560,7 +1560,7 @@ var Base_ClassList = {
 				name : "Reliable Talent",
 				source : [["SRD", 40], ["P", 96]],
 				minlevel : 11,
-				description : desc("If I make an ability check where I add my proficiency bonus, rolls of 9 or lower are 10")
+				description : desc("If I make an ability check where I add my Proficiency Bonus, rolls of 9 or lower are 10")
 			},
 			"blindsense" : {
 				name : "Blindsense",
@@ -2890,7 +2890,7 @@ var Base_ClassSubList = {
 				source : [["SRD", 25], ["P", 72]],
 				minlevel : 7,
 				description : desc([
-					"I add half my proficiency bonus to Str/Dex/Con checks if I would otherwise add none",
+					"I add half my Proficiency Bonus to Str/Dex/Con checks if I would otherwise add none",
 					"When making running long jumps, I add my Strength modifier to the distance in feet"
 				]),
 				eval : function() { Checkbox('Remarkable Athlete', true); },
@@ -3198,14 +3198,14 @@ var Base_ClassSubList = {
 				minlevel : 1,
 				description : desc([
 					'Choose a Dragon Ancestor using the "Choose Feature" button above',
-					"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+					"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 				]),
 				choices : ["Black Dragon Ancestor", "Blue Dragon Ancestor", "Brass Dragon Ancestor", "Bronze Dragon Ancestor", "Copper Dragon Ancestor", "Gold Dragon Ancestor", "Green Dragon Ancestor", "Red Dragon Ancestor", "Silver Dragon Ancestor", "White Dragon Ancestor"],
 				"black dragon ancestor" : {
 					name : "Black Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with black dragons, which are affiliated with acid damage",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "acid"
 				},
@@ -3213,7 +3213,7 @@ var Base_ClassSubList = {
 					name : "Blue Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with blue dragons, which are affiliated with lightning damage",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "lightning"
 				},
@@ -3221,7 +3221,7 @@ var Base_ClassSubList = {
 					name : "Brass Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with brass dragons, which are affiliated with fire damage",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "fire"
 				},
@@ -3229,7 +3229,7 @@ var Base_ClassSubList = {
 					name : "Bronze Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with bronze dragons, which are affiliated with lightning dmg",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "lightning"
 				},
@@ -3237,7 +3237,7 @@ var Base_ClassSubList = {
 					name : "Copper Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with copper dragons, which are affiliated with acid damage",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "acid"
 				},
@@ -3245,7 +3245,7 @@ var Base_ClassSubList = {
 					name : "Gold Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with gold dragons, which are affiliated with fire damage",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "fire"
 				},
@@ -3253,7 +3253,7 @@ var Base_ClassSubList = {
 					name : "Green Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with green dragons, which are affiliated with poison damage",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "poison"
 				},
@@ -3261,7 +3261,7 @@ var Base_ClassSubList = {
 					name : "Red Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with red dragons, which are affiliated with fire damage",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "fire"
 				},
@@ -3269,7 +3269,7 @@ var Base_ClassSubList = {
 					name : "Silver Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with silver dragons, which are affiliated with cold damage",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "cold"
 				},
@@ -3277,7 +3277,7 @@ var Base_ClassSubList = {
 					name : "White Dragon Ancestor",
 					description : desc([
 						"I have draconic ancestry with white dragons, which are affiliated with cold damage",
-						"When interacting with dragons, if I can add my proficiency bonus, I can double it"
+						"When interacting with dragons, if I can add my Proficiency Bonus, I can double it"
 					]),
 					dependentChoices : "cold"
 				},

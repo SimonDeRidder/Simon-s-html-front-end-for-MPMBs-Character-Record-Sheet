@@ -387,7 +387,6 @@ function ToggleWhiteout(toggle) {
 
 	// Show/hide the whiteout field on page 3 depending on the state of the layers
 	if (!typePF && !minVer) {
-		if (CurrentVars.vislayers == undefined) CurrentVars.vislayers = ["rules", "equipment"];
 		if (nowWhat) {
 			if (CurrentVars.vislayers[0] === "notes") Show("Extra.Notes Whiteout");
 			if (CurrentVars.vislayers[1] === "equipment") Show("Extra.Other Holdings Whiteout");
@@ -669,7 +668,7 @@ function LayerVisibilityOptions(showMenu, useSelect) {
 	if (typePF || minVer) return; //don't do this function in the Printer-Friendly version
 
 	var isReset = false;
-	if (CurrentVars.vislayers == undefined) {
+	if (CurrentVars.vislayers === undefined) {
 		isReset = !showMenu;
 		CurrentVars.vislayers = ["rules", "equipment"];
 	}
@@ -706,7 +705,6 @@ function LayerVisibilityOptions(showMenu, useSelect) {
 	var thermoTxt = thermoM("Show the 3rd page " + selection[0] + " and " + selection[1] + " sections...");
 	calcStop();
 
-	Value("Extra.Layers Remember", selection);
 	var LNotesFlds = [
 		"Text.Header.Notes.Left",
 		"Extra.Notes",
@@ -1712,7 +1710,8 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 	}
 
 	// Reset the global classes variables
-	classes.hd = [];
+	classes.oldhd = eval_ish(classes.hd.toSource());
+	classes.hd = {};
 	classes.hp = 0;
 
 	//find known classes and push them into known array, add hd
@@ -1726,11 +1725,10 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 		var tempSubClass = tempFound[1];
 		var tempSubClassOld = classes.old[aClass] && classes.old[aClass].subclass ? classes.old[aClass].subclass : false;
 		var tempClObj = ClassList[tempClass];
-		var tempDie = tempSubClass && ClassSubList[tempSubClass].die ? ClassSubList[tempSubClass].die : tempClObj.die;
 
-		// see if the found class isn't a prestige class and if all prereqs are met. If not, skip this class
-		var tempPrereq = !ignorePrereqs && tempClObj.prestigeClassPrereq ? tempClObj.prestigeClassPrereq : false;
-		if (tempPrereq) {
+		// see if the found class isn't a prestige class and if all prereqs are met. If not, skip this class (only if not a reset, import, or load on startup)
+		var tempPrereq = !ignorePrereqs && tempClObj.prestigeClassPrereq ? tempClObj.prestigeClassPrereq : tempClObj.prereqeval ? tempClObj.prereqeval : false;
+		if (tempPrereq && IsNotReset && IsNotImport && NotAtStartup) {
 			if (!isNaN(tempPrereq)) {
 				tempPrereq = Number(tempPrereq) <= (classes.totallevel - tempLevel);
 			} else {
@@ -1739,21 +1737,26 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 						tempPrereq = eval(tempPrereq);
 					} else if (typeof tempPrereq == 'function') {
 						if (!gatherVars) gatherVars = gatherPrereqevalVars();
-						tempPrereq(gatherVars);
+						gatherVars['class'] = tempClass;
+						gatherVars.subclass = tempSubClass;
+						gatherVars.classlevel = tempLevel;
+						tempPrereq = tempPrereq(gatherVars);
 					}
 				} catch (err) {
 					tempPrereq = true;
 				}
 			}
-			// ask the user if we should apply this prestige class (only if not a reset, import, or load on startup)
-			if (tempPrereq === false && IsNotReset && IsNotImport && NotAtStartup) {
-				var prestClMsg = app.alert({
+			// ask the user if we should apply this class or skip it if the prereqeval returned "skip"
+			if (tempPrereq === "skip") {
+				continue;
+			} else if (tempPrereq === false) {
+				var prestClMsg = {
 					nType : 2, // Yes,No
 					nIcon : 1, // Warning
-					cTitle : "Prestige class prerequisites not met!",
-					cMsg : "The prestige class '" + tempClObj.name + "' has a prerequisite which wasn't met. Apply this prestige class anyway?\n\nIf you select 'No', the " + tempLevel + " level(s) of this prestige class will be counted towards the total character level, but none of its features will be added."
-				});
-				if (prestClMsg == 3) continue; // user decided not to apply the prestige class
+					cTitle : "(Prestige) Class prerequisites not met!",
+					cMsg : "The (prestige) class '" + tempClObj.name + "' has a prerequisite which wasn't met. Apply this class anyway?\n\nIf you select 'No', the " + tempLevel + " level(s) of this class will be counted towards the total character level, but none of its features will be added."
+				};
+				if (app.alert(prestClMsg) === 3) continue; // user decided not to apply the class
 			}
 		}
 
@@ -1789,15 +1792,12 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 			}
 		}
 
-		if (classes.hd[tempDie] === undefined) { //add hd
-			classes.hd[tempDie] = [tempDie, tempLevel];
-		} else {
-			classes.hd[tempDie][1] += tempLevel;
-		};
-
-		if (classes.hp === 0) { //add first level hp
-			classes.hp = tempDie;
-		};
+		// add hd
+		var tempDie = tempSubClass && ClassSubList[tempSubClass].die ? ClassSubList[tempSubClass].die : tempClObj.die;
+		if (!classes.hd[tempDie]) classes.hd[tempDie] = 0;
+		classes.hd[tempDie] += tempLevel;
+		// add first level hp
+		if (classes.hp === 0) classes.hp = tempDie;
 	};
 
 	// if there is only a single class, remove the level from the classes.field (if present)
@@ -2069,6 +2069,7 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 		}
 		classes.oldspellcastlvl = classes.spellcastlvl;
 		classes.oldprimary = classes.primary;
+		classes.oldhd = eval_ish(classes.hd.toSource());
 	} else { // if not a startup event, update the field with the CurrentSpells variable
 		SetStringifieds("spells");
 	}
@@ -2092,18 +2093,8 @@ async function ApplyClasses(inputclasstxt, isFieldVal) {
 	// Tell prompt there was a class change
 	CurrentUpdates.types.push("classes");
 
-	// Put hit dice on sheet
-	var hdChanged = false;
-	if (classes.hd.length > 0) classes.hd.sort(function (a, b) { return a - b; }); // sort by biggest HD
-	for (var i = 0; i < 3; i++) { // loop through the 3 HD fields
-		var hdLvl = classes.hd[i] ? Math.min(classes.hd[i][1], 999) : "";
-		var hdDie = classes.hd[i] ? classes.hd[i][0] : "";
-		if (!hdChanged) hdChanged = What("HD" + (i+1) + " Level") != hdLvl || What("HD" + (i+1) + " Die") != hdDie;
-		Value("HD" + (i+1) + " Level", hdLvl);
-		Value("HD" + (i+1) + " Die", hdDie);
-	}
-	// If the HD changed, prompt the user about this and update the HP tooltip
-	if (hdChanged || CurrentEvals.hp) CurrentUpdates.types.push("hp");
+	// Update the HD fields
+	SetClassHD();
 
 	thermoM(2/4); // Increment the progress bar
 
@@ -2162,6 +2153,56 @@ async function ApplyClasses(inputclasstxt, isFieldVal) {
 	AddAttacksPerAction();
 	ClassMenuVisibility();
 };
+
+// update the HD fields using the classes.oldhd and classes.hd objects
+function SetClassHD() {
+	// Get the current HD field values
+	var oCurHD = {};
+	for (var i = 1; i <= 3; i++) {
+		var curHDice = What("HD" + i + " Die");
+		var curHDlvl = What("HD" + i + " Level");
+		if (curHDice && curHDlvl) {
+			if (!oCurHD[curHDice]) oCurHD[curHDice] = 0;
+			oCurHD[curHDice] += curHDlvl;
+		}
+	}
+	// Create a difference object to account for manually changed HD
+	var oDifHD = {};
+	for (var sHD in oCurHD) {
+		if (!classes.oldhd[sHD] || classes.oldhd[sHD] == oCurHD[sHD]) continue;
+		oDifHD[sHD] = oCurHD[sHD] - classes.oldhd[sHD];
+	}
+	// and the HD in oldhd that were manually removed from the sheet
+	for (var sHD in classes.oldhd) {
+		if ( !(sHD in oCurHD) ) oDifHD[sHD] = classes.oldhd[sHD] * -1;
+	}
+
+	// sort by biggest HD
+	var arrAllHD = Object.keys(classes.hd).merge(Object.keys(oDifHD));
+	var oTotHD = {};
+	// create a new HD object for the totals including manual additions
+	for (var i = 0; i < arrAllHD.length; i++) {
+		oTotHD[arrAllHD[i]] = 0;
+		if (classes.hd[arrAllHD[i]]) oTotHD[arrAllHD[i]] += classes.hd[arrAllHD[i]];
+		if (oDifHD[arrAllHD[i]]) oTotHD[arrAllHD[i]] += oDifHD[arrAllHD[i]];
+		if (oTotHD[arrAllHD[i]] <= 0) delete oTotHD[arrAllHD[i]];
+	}
+	// Put hit dice on sheet
+	var hdChanged = false, hdDie, hdLvl;
+	var arrSizedHD = Object.keys(oTotHD).sort(function (a, b) { return b - a; });
+	for (var i = 0; i < 3; i++) { // loop through the 3 HD fields
+		hdDie = "", hdLvl = "";
+		if (arrSizedHD[i] && oTotHD[arrSizedHD[i]]) {
+			hdDie = arrSizedHD[i];
+			hdLvl = Math.min(oTotHD[arrSizedHD[i]], 999);
+		}
+		if (!hdChanged) hdChanged = oTotHD[arrSizedHD[i]] != oCurHD[arrSizedHD[i]];
+		Value("HD" + (i+1) + " Level", hdLvl);
+		Value("HD" + (i+1) + " Die", hdDie);
+	}
+	// If the HD changed, prompt the user about this and update the HP tooltip
+	if (hdChanged || CurrentEvals.hp) CurrentUpdates.types.push("hp");
+}
 
 function ClassMenuVisibility() {
 	// Show the option button if a class has features that offers a choice
@@ -2461,6 +2502,20 @@ async function FindRace(inputracetxt, novardialog, aOldRace) {
 			if (!CurrentRace.age) CurrentRace.age = " typically live to be around 100 years old";
 			if (!CurrentRace.languageProfs) CurrentRace.languageProfs = ["Common", 1];
 		}
+		// if the abilitySave is an array, have the user select which one to use and remember that
+		if (CurrentRace.abilitySave && (isArray(CurrentRace.abilitySave) || isNaN(CurrentRace.abilitySave))) {
+			if (CurrentVars.raceAbilitySave !== undefined) {
+				CurrentRace.abilitySave = CurrentVars.raceAbilitySave;
+			} else {
+				if (!IsNotImport) {
+					CurrentRace.abilitySave = CurrentRace.abilitySave[0];
+				} else {
+					CurrentRace.abilitySave = await ReturnSpellcastingAbility(CurrentRace.name, CurrentRace.abilitySave, true);
+				}
+				CurrentVars.raceAbilitySave = CurrentRace.abilitySave;
+				SetStringifieds("vars");
+			}
+		}
 	}
 
 	// set the current race level when loading the sheet
@@ -2498,6 +2553,9 @@ async function ApplyRace(inputracetxt, novardialog) {
 
 			// Remove the common attributes from the CurrentRace object and remove the CurrentRace features
 			UpdateLevelFeatures("race", 0);
+
+			// Remove the remembered ability save, if any
+			if (CurrentVars.raceAbilitySave !== undefined) delete CurrentVars.raceAbilitySave;
 		}
 		await FindRace(inputracetxt, novardialog, oldRace);
 		Value("Race Remember", CurrentRace.known + (CurrentRace.variant ? "-" + CurrentRace.variant : ""));
@@ -3053,6 +3111,8 @@ function SetGearWeightOnBlur() {
 			var massMod = What("Unit System") === "imperial" ? 1 : UnitsList.metric.mass;
 			if (theGear[0] === "MagicItemsList") {
 				var theWeight = theGear[2] && MagicItemsList[theGear[1]][theGear[2]].weight ? MagicItemsList[theGear[1]][theGear[2]].weight : MagicItemsList[theGear[1]].weight;
+			} else if (theGear[0] === "localObject") {
+				var theWeight = theGear[2].weight;
 			} else {
 				var theWeight = tDoc[theGear[0]][theGear[1]].weight;
 			}
@@ -3155,6 +3215,15 @@ function ParseGear(input) {
 			};
 		};
 	};
+
+	//see if it is a shield
+	var sShield = "shield";
+	if (foundLen <= sShield.length && tempString.indexOf(sShield) !== -1) {
+		result = ["localObject", "shield", {
+			name : "Shield",
+			weight : 6
+		}]
+	}
 
 	return result;
 };
@@ -4662,7 +4731,7 @@ function RemoveFeature(identifier, usages, additionaltxt, recovery, tooltip, Upd
 				usageFld.value -= usages;
 				if (tooltip && featureFld.userName.indexOf(tooltip) !== -1) featureFld.userName = featureFld.userName.replace(tooltip, "").replace(/, *$/, "").replace(/, , /g, ", ");
 			}
-			i = FieldNumbers.limfea + 1;
+			return;
 		}
 	}
 }
@@ -5321,37 +5390,45 @@ function ChangeSpeed(input) {
 	console.show();
 };
 
-function ResetFeaSR() {
-	for (var z = 1; z <= FieldNumbers.limfea; z++) {
-		var recoveryFld = What("Limited Feature Recovery " + z).toLowerCase();
-		if (recoveryFld.indexOf("short rest") !== -1 || recoveryFld.indexOf("sr") !== -1) {
-			resetForm(["Limited Feature Used " + z]);
-		}
+// Reset the limited feature uses, buttons on the 1st page
+function resetLimFeaUsed(rxType) {
+	var bResetSpellSlots = false, aFldsToReset = [];
+	var sType = !rxType ? 'long rest' : rxType.toString().toLowerCase().replace(/^\/|\/[igm]$/g, "");
+	switch (sType) {
+		case 'long rest':
+			rxType = /\b(long rest|lr)\b/i;
+			bResetSpellSlots = true;
+			break;
+		case 'short rest':
+			rxType = /\b(short rest|sr)\b/i;
+			break;
+		case 'day':
+		case 'dawn':
+		case 'dusk':
+		case 'night':
+			rxType = /\b(day|dawn|dusk|night)\b/i;
+			break;
+		default:
+			if (typeof rxType === "string") {
+				rxType = RegExp(rxType.RegEscape(), "i");
+			} else if (typeof rxType !== "object") {
+				return;
+			}
 	}
-}
-
-function ResetFeaLR() {
-	calcStop();
-	for (var z = 1; z <= FieldNumbers.limfea; z++) {
-		var recoveryFld = What("Limited Feature Recovery " + z).toLowerCase();
-		if (recoveryFld.indexOf("short rest") !== -1 || recoveryFld.indexOf("sr") !== -1 || recoveryFld.indexOf("long rest") !== -1 || recoveryFld.indexOf("lr") !== -1) {
-			resetForm(["Limited Feature Used " + z]);
-		}
+	for (var i = 1; i <= FieldNumbers.limfea; i++) {
+		var sFldVal = What("Limited Feature Recovery " + i).toString();
+		if (rxType.test(sFldVal)) aFldsToReset.push("Limited Feature Used " + i);
 	}
-	var SpellSlotsReset = [];
-	var SSfrontA = What("Template.extras.SSfront").split(",")[1];
-	if (SSfrontA) SpellSlotsReset.push(SSfrontA + "SpellSlots.Checkboxes");
-	if (!typePF) SpellSlotsReset.push("SpellSlots.Checkboxes");
-	if (!typePF && SSfrontA) SpellSlotsReset.push(SSfrontA + "SpellSlots2.Checkboxes");
-	if (SpellSlotsReset.length > 0) tDoc.resetForm(SpellSlotsReset);
-}
-
-function ResetFeaDawn() {
-	for (var z = 1; z <= FieldNumbers.limfea; z++) {
-		var recoveryFld = What("Limited Feature Recovery " + z).toLowerCase();
-		if (recoveryFld.indexOf("dawn") !== -1 || recoveryFld.indexOf("day") !== -1) {
-			resetForm(["Limited Feature Used " + z]);
-		}
+	if (bResetSpellSlots) {
+		var SSfrontA = What("Template.extras.SSfront").split(",")[1];
+		if (SSfrontA) aFldsToReset.push(SSfrontA + "SpellSlots.Checkboxes");
+		if (!typePF) aFldsToReset.push("SpellSlots.Checkboxes");
+		if (!typePF && SSfrontA) aFldsToReset.push(SSfrontA + "SpellSlots2.Checkboxes");
+		
+	}
+	if (aFldsToReset.length > 0) {
+		calcStop();
+		tDoc.resetForm(aFldsToReset);
 	}
 }
 
@@ -5838,7 +5915,7 @@ async function UpdateLevelFeatures(Typeswitch, newLvlForce) {
 };
 
 // Make menu for 'choose class feature' button and parse it to Menus.classfeatures
-function MakeClassMenu(bKeepTempClassesKnown) {
+function MakeClassMenu() {
 	var gatherVars, hasEldritchBlast, isFS = false, selFS = GetFightingStyleSelection();
 	var testPrereqs = function(toEval, objNm, feaNm) {
 		if (!gatherVars) {
@@ -5998,42 +6075,25 @@ function MakeClassMenu(bKeepTempClassesKnown) {
 	};
 
 	var bonusClassFeatures = getBonusClassExtraChoices();
-	if (bonusClassFeatures) {
-		Menus.classfeatures_tempClassesKnown = [];
-		ClassMenu.push({ cName : "-" }); // Add a divider
-		for (var i = 0; i < bonusClassFeatures.length; i++) {
-			var oBonus = bonusClassFeatures[i];
-			aClass = oBonus["class"];
-			cl = oBonus.subclass ? ClassSubList[oBonus.subclass] : ClassList[aClass];
-			prop = oBonus.feature;
-			propFea = cl.features[prop];
-			propFea.extrachoices.sort();
-			toTest = GetFeatureChoice("classes", aClass, prop, true);
-			toTestNr = nrFoundInExtraChoices(toTest, propFea.extrachoices);
-			var clName = !oBonus.subclass ? cl.name : cl.fullname ? cl.fullname : ClassList[aClass].name + " (" + cl.subname + ")";
-			var menuName = "Bonus " + clName + " " + propFea.extraname + " (selected " + toTestNr + " of " + oBonus.bonus + ")";
-			var sMoreReturn = "#extrabonus" + (oBonus.subclass ? "#" + oBonus.subclass : "");
-			// temporarily add the class to classes.known, so that prereq scripts will not produce errors
-			var tempClassesKnown = false;
-			if (!classes.known[aClass]) {
-				classes.known[aClass] = {
-					name : aClass,
-					level : 0,
-					subclass : oBonus.subclass ? oBonus.subclass : ""
-				}
-				if (bKeepTempClassesKnown) {
-					Menus.classfeatures_tempClassesKnown.push(aClass);
-				} else {
-					tempClassesKnown = true;
-				}
-			} else if (oBonus.subclass && !classes.known[aClass].subclass && Menus.classfeatures_tempClassesKnown.indexOf(aClass) !== -1) {
-				classes.known[aClass].subclass = oBonus.subclass;
-			}
-			menuLVL3(ClassMenu, menuName, propFea.extrachoices, aClass, prop, "extra", propFea, toTest, sMoreReturn);
-			if (tempClassesKnown) {
-				delete classes.known[aClass];
-			}
-		}
+	if (bonusClassFeatures.length) ClassMenu.push({ cName : "-" }); // Add a divider
+	for (var i = 0; i < bonusClassFeatures.length; i++) {
+		var oBonus = bonusClassFeatures[i];
+		aClass = oBonus.class;
+		cl = oBonus.subclass ? ClassSubList[oBonus.subclass] : ClassList[aClass];
+		prop = oBonus.feature;
+		propFea = cl.features[prop];
+		propFea.extrachoices.sort();
+		toTest = GetFeatureChoice("classes", aClass, prop, true);
+		toTestNr = nrFoundInExtraChoices(toTest, propFea.extrachoices);
+		var clName = !oBonus.subclass ? cl.name : cl.fullname ? cl.fullname : ClassList[aClass].name + " (" + cl.subname + ")";
+		var menuName = "Bonus " + clName + " " + propFea.extraname + " (selected " + toTestNr + " of " + oBonus.bonus + ")";
+		var sMoreReturn = "#extrabonus" + (oBonus.subclass ? "#" + oBonus.subclass : "");
+		// temporarily add the (sub)class to classes.known, so that prereq scripts won't produce errors
+		addTempClassesKnown(oBonus);
+		// make the menu entry
+		menuLVL3(ClassMenu, menuName, propFea.extrachoices, aClass, prop, "extra", propFea, toTest, sMoreReturn);
+		// remove the temporary addition to classes.known
+		cleanTempClassesKnown();
 	}
 
 	// if no options were found, set the menu to something else and make the return false
@@ -6055,14 +6115,14 @@ async function ClassFeatureOptions(Input, AddRemove, ForceExtraname) {
 	// first see if we have something to do
 	var MenuSelection = Input;
 	if (!Input) {
-		MakeClassMenu(true);
+		MakeClassMenu();
 		MenuSelection = await getMenu("classfeatures");
 	}
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[4] == "stop") return cleanTempClassesKnown();
 
 	// initialize some variables
 	var triggerIsMenu = event.target && event.target.name && event.target.name == "Class Features Menu";
-	var addIt = AddRemove ? AddRemove.toLowerCase() == "add" : MenuSelection[4] ? MenuSelection[4] == "add" : true;
+	var addIt = (AddRemove !== undefined ? AddRemove : MenuSelection[4] !== undefined ? MenuSelection[4] : "add").toString().toLowerCase() === "add"; // default add, remove if second variable or 5th array entry is defined and not "add"
 	var aClass = MenuSelection[0];
 	var prop = MenuSelection[1];
 	var choice = MenuSelection[2];
@@ -6072,6 +6132,11 @@ async function ClassFeatureOptions(Input, AddRemove, ForceExtraname) {
 	var propFea = false;
 	if (extraBonus && (sSubclass || !CurrentClasses[aClass])) {
 		propFea = sSubclass && ClassSubList[sSubclass] ? ClassSubList[sSubclass].features[prop] : ClassList[aClass].features[prop];
+		// temporarily add the (sub)class to classes.known, so that scripts won't produce errors
+		addTempClassesKnown({
+			class : aClass,
+			subclass : sSubclass
+		});
 		var unknownClass = true;
 	} else if (CurrentClasses[aClass]) {
 		propFea = CurrentClasses[aClass].features[prop];
@@ -6158,12 +6223,31 @@ async function ClassFeatureOptions(Input, AddRemove, ForceExtraname) {
 	thermoM(thermoTxt, true); // Stop progress bar
 }
 
-// Delete the temporary additions to classes.known, if any
-function cleanTempClassesKnown() {
-	for (var i = 0; i < Menus.classfeatures_tempClassesKnown.length; i++) {
-		delete classes.known[Menus.classfeatures_tempClassesKnown[i]];
+// Add a temporary addition to classes.known, if applicable
+function addTempClassesKnown(oBonus) {
+	if (!classes.known[oBonus.class]) {
+		classes.known[oBonus.class] = {
+			name : oBonus.class,
+			level : 0,
+			subclass : oBonus.subclass ? oBonus.subclass : "",
+			isTempKnown : true
+		}
+	} else if (oBonus.subclass && oBonus.subclass !== classes.known[oBonus.class].subclass) {
+		classes.known[oBonus.class].subclassRem = classes.known[oBonus.class].subclass;
+		classes.known[oBonus.class].subclass = oBonus.subclass;
 	}
-	Menus.classfeatures_tempClassesKnown = [];
+}
+
+// Delete or revert all temporary changes to classes.known, if applicable
+function cleanTempClassesKnown() {
+	for (var sClass in classes.known) {
+		if (classes.known[sClass].isTempKnown === true) {
+			delete classes.known[sClass];
+		} else if (classes.known[sClass].subclassRem) {
+			classes.known[sClass].subclass = classes.known[sClass].subclassRem;
+			delete classes.known[sClass].subclassRem;
+		}
+	}
 }
 
 // Set the choice for other class features dependent on the choice of this class feature
@@ -6212,7 +6296,7 @@ async function processClassFeatureExtraChoiceDependencies(lvlA, aClass, aFeature
 		// set or remove the class feature, depending on its level
 		await ClassFeatureOptions(
 			[aClass, aFeature, aDep.extrachoice, 'extra'],
-			lvlA[1] < minLvl ? 'remove' : false,
+			lvlA[1] < minLvl ? 'remove' : 'add',
 			aDep.extraname
 		);
 	}
@@ -9251,7 +9335,7 @@ function HideInvLocationColumn(type, currentstate) {
 		RowName.rect = gRect; // Update the value of b.rect
 		RowName.value = RowName.value; //re-input the value as to counteract the changing of font
 	}
-	if (typePF || (type === "Extra.Gear " && What("Extra.Layers Remember").split(",")[1] === "equipment") || type === "Adventuring Gear ") { //only show things on the third page, if the extra equipment section is visible
+	if (typePF || (type === "Extra.Gear " && CurrentVars.vislayers[1] === "equipment") || type === "Adventuring Gear ") { //only show things on the third page, if the extra equipment section is visible
 		tDoc[HideShow](type + "Location");
 		if (!currentstate && type === "Adventuring Gear " && What("Adventuring Gear Remember") === false) {
 			Hide("Adventuring Gear Location.Row " + FieldNumbers.gearMIrow);

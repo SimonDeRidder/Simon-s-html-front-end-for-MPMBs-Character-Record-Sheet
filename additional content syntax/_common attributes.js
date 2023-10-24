@@ -1362,6 +1362,7 @@ creaturesAdd : [
 	USE:	adds a creature to a companion page (adds companion page if none empty)
 	ADDED:	v13.0.6
 	CHANGE:	v13.0.10 (added 4th array entry)
+	CHANGE:	v13.1.3 (added "stop" option to 2nd array entry)
 
 	Each array must contain 1, 2, 3, or 4 entries, which are the following:
 	1) String with the name of the race to add to the companion page // REQUIRED
@@ -1374,13 +1375,17 @@ creaturesAdd : [
 		When the parent feature is removed, any companion page with this filled out as
 		the race, will have the race reset. Thus, all stats of that race will be removed.
 
-	2) Boolean, set to true if the whole page should be removed // OPTIONAL
+	2) Boolean or "stop", set to true if the whole page should be removed // OPTIONAL
 		If set to true, when the parent feature is removed, any companion page with the
 		1st entry filled out as the race, will be deleted without warning.
 		Deleted pages can not be recovered, any information on them is lost.
 
 		Setting this to false will cause the sheet to do the default action, which is to only
 		reset the race of the companion pages with the 1st entry filled out as the race.
+
+		Alternatively, you can set this to the string "stop", which causes the creature
+		not te be removed from the companion page at all when the parent feature is removed.
+		This was added in v13.1.3
 
 	3) Function called when the creature is added/removed // OPTIONAL
 		This function is called after the creature race in the 1st entry is added or
@@ -2511,7 +2516,7 @@ eval : function(lvl, chc) {
 */
 
 removeeval : "Checkbox('Jack of All Trades', false);",
-removeeval : function(v) {
+removeeval : function(lvl, chc) {
 	RemoveString('Extra.Notes', 'Monk features:\n\u25C6 Lose Unarmored Defense, Martial Arts, and Unarmored Movement with armor/shields', true);
 },
 /*	removeeval // OPTIONAL //
@@ -2547,10 +2552,10 @@ removeeval : function(v) {
 	This attribute is processed first, before all other attributes are processed.
 */
 
-changeeval : "var monkSpd = function(n) {return '+' + (n < 2 ? 0 : n < 6 ? 10 : n < 10 ? 15 : n < 14 ? 20 : n < 18 ? 25 : 30);}(classes.known.monk.level); await SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, displName);",
-changeeval : async function(v) {
-	var monkSpd = '+' + (v[1] < 2 ? 0 : v[1] < 6 ? 10 : v[1] < 10 ? 15 : v[1] < 14 ? 20 : v[1] < 18 ? 25 : 30);
-	await SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, "Monk: Unarmored Movement");
+changeeval : "var monkSpd = function(n) {return '+' + (n < 2 ? 0 : n < 6 ? 10 : n < 10 ? 15 : n < 14 ? 20 : n < 18 ? 25 : 30);}(classes.known.monk.level); SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, displName);",
+changeeval : function(lvl, chc) {
+	var monkSpd = '+' + (lvl[1] < 2 ? 0 : lvl[1] < 6 ? 10 : lvl[1] < 10 ? 15 : lvl[1] < 14 ? 20 : lvl[1] < 18 ? 25 : 30);
+	SetProf('speed', monkSpd !== '+0', {allModes : monkSpd}, "Monk: Unarmored Movement");
 },
 /*	changeeval // OPTIONAL //
 	TYPE:	function or, for backwards-compatibility, string that is evaluated using eval()

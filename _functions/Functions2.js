@@ -1087,7 +1087,7 @@ function RunCreatureCallback(sPrefix, sType, bAdd, fOverride, sOverrideNm) {
 	var sEvalType = (/companion/i).test(sType) ? "companionCallback" : "creatureCallback";
 	var aPrefix = (/all/i).test(sPrefix) ? What("Template.extras.AScomp").split(",").splice(1) : [sPrefix];
 	if (bAdd === undefined) bAdd = true;
-	var prefix, oCrea, sCompType, sEval;
+	var prefix, oCrea, sCompType;
 	var doEval = function(evalThing, evalName) {
 		if (!evalThing) return;
 		try {
@@ -1170,7 +1170,7 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 				if (sCompanionType) sChangeMsgName = CompanionList[sCompanionType].nameMenu + " " + sChangeMsgName;
 				aChangeMsg.push('A ' + sChangeMsgName + ' has been added to the companion page at page number ' + (tDoc.getField(prefix + 'Comp.Race').page + 1) + '.');
 			}
-		} else { // remove
+		} else if (!/stop/i.test(bRemoveWholePage)) { // remove, unless bRemoveWholePage == "stop"
 			for (var a = 1; a < AScompA.length; a++) {
 				if (What(AScompA[a] + 'Comp.Race').toLowerCase().indexOf(sRaceLow) !== -1) {
 					var iPageNo = tDoc.getField(AScompA[a] + 'Comp.Race').page + 1;
@@ -1363,6 +1363,8 @@ function addCompEvals(evalObj, prefix, NameEntity, Add) {
 			}
 		}
 	}
+	// Finally, set this global variable to its field for safekeeping
+	SetStringifieds("evals");
 }
 
 //add a wildshape based on the selection and calculation settings
@@ -1430,9 +1432,9 @@ async function ApplyWildshape() {
 	//get the proficiency bonuses
 	ProfBonus("Proficiency Bonus"); // first make sure it is up to date
 	var creaProfBcalc = theCrea.proficiencyBonus;
-	var charProfBcalc = Number(What("Proficiency Bonus"));
+	var charProfBcalc = Number(How("Proficiency Bonus"));
 	var creaProfBfix = theCrea.proficiencyBonus;
-	var charProfBfix = Number(What("Proficiency Bonus"));
+	var charProfBfix = Number(How("Proficiency Bonus"));
 
 	//get the setting field
 	var setting = What("Wildshapes.Remember").split("!#TheListSeparator#!");
@@ -1505,7 +1507,7 @@ async function ApplyWildshape() {
 		}
 	}
 	if (CurrentArmour.known && ArmourList[CurrentArmour.known].affectsWildShape) {
-		var newAC = Number(EvalBonus(CurrentArmour.acString, prefix, Fld)) + calcCompMaxDexToAC(false, anArmour, mods[1]);
+		var newAC = Number(EvalBonus(CurrentArmour.acString, prefix, Fld)) + calcCompMaxDexToAC(false, CurrentArmour.known, mods[1]);
 		theAC.push(newAC);
 		theACtt.push("\n\nThe AC used here is calculated using " + What("AC Armor Description"));
 	}
@@ -1663,9 +1665,10 @@ async function ApplyWildshape() {
 		var atkMod = mods[atk.ability - 1];
 		var atkAlt = atk.modifiers ? atk.modifiers : [];
 		var atkRange = What("Unit System") === "imperial" ? atk.range : ConvertToMetric(atk.range, 0.5);
+		var atkDescription = !atk.description ? "" : What("Unit System") === "imperial" ? atk.description : ConvertToMetric(atk.description, 0.5);
 		Value(atkStr + ".Weapon", atk.name); //set attack name
 		Value(atkStr + ".Range", atkRange); //set attack range
-		Value(atkStr + ".Description", atk.description, atk.tooltip ? atk.tooltip : ""); //set attack description
+		Value(atkStr + ".Description", atkDescription, atk.tooltip ? atk.tooltip : ""); //set attack description
 
 		//set to hit
 		var tohitProfB = setting[1].indexOf("attacks") !== -1 ? charProfBfix : creaProfBfix;
@@ -1691,7 +1694,7 @@ async function ApplyWildshape() {
 
 	//add traits & features
 	var strTraits = "";
-	if (theCrea.wildshapeString) {
+	if (theCrea.wildshapeString !== undefined && typeof theCrea.wildshapeString === "string") {
 		strTraits = theCrea.wildshapeString;
 	} else {
 		//set senses
@@ -1776,9 +1779,8 @@ function RemoveWildshape(input) {
 			next = tDoc.getField(prefix + "Wildshape.Race." + i);
 			if (next.value.toLowerCase().indexOf(input.toLowerCase()) !== -1) {
 				next.value = next.defaultValue;
-				i = 5;
-				p = prefixA.length;
 				WildshapeRecalc();
+				return;
 			}
 		}
 	}
@@ -1794,12 +1796,13 @@ function MakeWildshapeMenu() {
 	}
 
 	//make a list of the current wild shapes entered
-	var usedShapes = [];
+	var usedShapes = [], usedShapeNames = [];
 	var prefixA = What("Template.extras.WSfront").split(",").splice(1);
 	for (var p = 0; p < prefixA.length; p++) {
 		for (var i = 1; i <= 4; i++) {
 			var theFld = What(prefixA[p] + "Wildshape.Race." + i);
 			if (!theFld || theFld.toLowerCase() === "make a selection") continue;
+			if (usedShapeNames.indexOf(theFld) === -1) usedShapeNames.push(theFld);
 			var theShape = ParseCreature(theFld);
 			if (theShape) usedShapes.push(theShape);
 		}
@@ -1828,17 +1831,42 @@ function MakeWildshapeMenu() {
 	};
 
 	var menuLVL3 = function (menu, name, array) {
+		array.sort();
 		var temp = [];
 		for (var i = 0; i < array.length; i++) {
 			temp.push({
 				cName : array[i][0],
-				cReturn : "add" + "#" + array[i][1],
-				bMarked : usedShapes.indexOf(array[i][1]) !== -1
+				cReturn : "add" + "#" + array[i][1] + "#" + array[i][2],
+				bMarked : usedShapes.indexOf(array[i][2]) !== -1
 			});
 		};
 		menu.oSubMenu.push({
 			cName : name,
 			oSubMenu : temp
+		});
+	};
+
+	var menuLVL4 = function (menu, name, object) {
+		var tempMenu = [];
+		for (var range in object) {
+			var array = object[range];
+			array.sort();
+			var temp = [];
+			for (var i = 0; i < array.length; i++) {
+				temp.push({
+					cName : array[i][0],
+					cReturn : "add" + "#" + array[i][1] + "#" + array[i][2],
+					bMarked : usedShapes.indexOf(array[i][2]) !== -1
+				});
+			};
+			tempMenu.push({
+				cName : range,
+				oSubMenu : temp
+			});
+		}
+		menu.oSubMenu.push({
+			cName : name,
+			oSubMenu : tempMenu
 		});
 	};
 
@@ -1871,29 +1899,21 @@ function MakeWildshapeMenu() {
 	};
 
 	var WildshapeMenu = [];
-
-	var allCrea = {
-		names : [],
-		keys : {}
-	};
-
-	for (var crea in CreatureList) {
-		var thisCrea = CreatureList[crea];
-		if ((!(/^(air|earth|fire|water) elemental$/i).test(crea) && thisCrea.type !== "Beast")
-			|| allCrea.keys[thisCrea.name]
-			|| (CurrentVars.extraCreatures && CurrentVars.extraCreatures[crea])
-			|| testSource(crea, thisCrea, "creaExcl")) {
-			continue; //go on to the next creature if the creature is not a beast, was already added, is added by a creatureOptions attribute, or its source isn't excluded
-		};
-		allCrea.keys[thisCrea.name] = crea;
-		allCrea.names.push(thisCrea.name);
-	};
-	allCrea.names.sort();
-
+	var allCreaturesTest = [];
 	var elementals = [];
+	var arrSplitAlphabet = ["A-C", "D-F", "G-I", "J-L", "M-O", "P-R", "S-U", "V-Z"];
 	var shapesBeast = {
 		all : [],
-		CR1_4 : [],
+		CR1_4 : {
+			"A-C" : [],
+			"D-F" : [],
+			"G-I" : [],
+			"J-L" : [],
+			"M-O" : [],
+			"P-R" : [],
+			"S-U" : [],
+			"V-Z" : []
+		},
 		CR1_2 : [],
 		CR1 : [],
 		CR2 : [],
@@ -1903,62 +1923,77 @@ function MakeWildshapeMenu() {
 		CR6 : []
 	};
 
-	for (var C = 0; C < allCrea.names.length; C++) {
-		var aCrea = allCrea.keys[allCrea.names[C]];
-		var theCrea = CreatureList[aCrea];
-
-		if ((/^(air|earth|fire|water) elemental$/i).test(aCrea))  {
-			elementals.push([theCrea.name, aCrea]);
-			continue; //it is not one of the other things, so just stop here
+	// loop through all the creatures
+	for (var sCrea in CreatureList) {
+		var oCrea = CreatureList[sCrea];
+		// skip this creature if it is not a beast and not one of the four elementals, is added by a creatureOptions attribute, or it or its source is excluded
+		var bIsElemental = /^(air|earth|fire|water) elemental$/i.test(sCrea);
+		if ((!bIsElemental && !/beast/i.test(oCrea.type))
+			|| (CurrentVars.extraCreatures && CurrentVars.extraCreatures[sCrea])
+			|| testSource(sCrea, oCrea, "creaExcl")) {
+			continue;
 		};
 
-		//see if the creature has a fly and/or swim speed
-		var Spd = theCrea.speed.match(/fly|swim/ig);
+		if (bIsElemental)  {
+			elementals.push([oCrea.name, oCrea.name, sCrea]);
+			continue; // it is not one of the other things, so just stop here
+		};
+
+		// see if the creature has a fly and/or swim speed
+		var Spd = oCrea.speed.match(/fly|swim/ig);
 		if (Spd) {
 			switch (Spd.toLowerCase()) {
 				case "fly,swim" :
 				case "swim,fly" :
-				 Spd = "Fly and Swim speeds";
-				 break;
+					Spd = "Fly and Swim speeds";
+					break;
 				case "fly" :
-				 Spd = "Fly speed";
-				 break;
+					Spd = "Fly speed";
+					break;
 				case "swim" :
-				 Spd = "Swim speed";
-				 break;
+					Spd = "Swim speed";
+					break;
 			}
 		}
 
-		//select based on challenge Rating
-		var CR = theCrea.challengeRating;
-		var CRname = false;
-		var creaName = theCrea.name;
+		// select based on challenge Rating
+		var CR = oCrea.challengeRating;
+		var CRname = CR;
+		var creaNameAdd = Spd ? " (" + Spd + ")" : "";
+		var creaNameAddFull = " (CR " + CR + (Spd ? ", " + Spd : "") + ")";
 		switch (CR) {
 			case "0" :
 			case "1/8" :
 			case "1/4" :
-			 CRname = "1_4";
-			 creaName += " (CR " + CR + (Spd ? ", " + Spd : "") + ")";
-			 break;
+				CRname = "1_4";
+				creaNameAdd = creaNameAddFull;
+				break;
 			case "1/2" :
-			 CRname = "1_2";
-			 creaName += (Spd ? " (" + Spd + ")" : "");
-			 break;
-			case "1" :
-			case "2" :
-			case "3" :
-			case "4" :
-			case "5" :
-			case "6" :
-			 CRname = CR;
-			 creaName += (Spd ? " (" + Spd + ")" : "");
+				CRname = "1_2";
 		};
 
-		//add it to the array of all
-		shapesBeast.all.push([theCrea.name + " (CR " + CR + (Spd ? ", " + Spd : "") + ")", aCrea]);
+		// loop through all its names
+		var aCreaNames = [oCrea.name];
+		if (oCrea.nameAlt) {
+			aCreaNames = aCreaNames.concat(isArray(oCrea.nameAlt) ? oCrea.nameAlt : [oCrea.nameAlt]);
+		}
+		for (var i = 0; i < aCreaNames.length; i++) {
+			var creaName = aCreaNames[i];
+			if (allCreaturesTest.indexOf(creaName) !== -1) continue; // already added
+			allCreaturesTest.push(creaName);
 
-		//add it to the CR specific array
-		if (CRname) shapesBeast["CR" + CRname].push([creaName, aCrea]);
+			//add it to the array of all
+			shapesBeast.all.push([creaName + creaNameAddFull, creaName, sCrea]);
+
+			//add it to the CR specific array
+			if (CRname === "1_4") {
+				var CRsub = getLetterRange(creaName, arrSplitAlphabet);
+				if (!shapesBeast["CR1_4"][CRsub]) continue;
+				shapesBeast["CR1_4"][CRsub].push([creaName + creaNameAdd, creaName, sCrea]);
+			} else if (shapesBeast["CR" + CRname]) {
+				shapesBeast["CR" + CRname].push([creaName + creaNameAdd, creaName, sCrea]);
+			}
+		}
 	};
 
 	//add all the options for "Add Wild Shape"
@@ -1975,7 +2010,7 @@ function MakeWildshapeMenu() {
 	};
 	menuLVL3(BeastMenu, "All Beasts", shapesBeast.all);
 	menuLVL3(BeastMenu, "Elementals", elementals);
-	menuLVL3(BeastMenu, "Beasts up to CR 1/4", shapesBeast.CR1_4);
+	menuLVL4(BeastMenu, "Beasts up to CR 1/4", shapesBeast.CR1_4);
 	menuLVL3(BeastMenu, "Beasts of CR 1/2", shapesBeast.CR1_2);
 	menuLVL3(BeastMenu, "Beasts of CR 1", shapesBeast.CR1);
 	menuLVL3(BeastMenu, "Beasts of CR 2", shapesBeast.CR2);
@@ -1988,8 +2023,8 @@ function MakeWildshapeMenu() {
 	WildshapeMenu.push({cName : "-"}); //add a divider
 
 	//add all the options for "Remove Wild Shape"
-	if (usedShapes.length > 0) { //if any shapes are currently present
-		menuLVL2(WildshapeMenu, ["Remove Wild Shape", "remove"], usedShapes)
+	if (usedShapeNames.length > 0) { //if any shapes are currently present
+		menuLVL2(WildshapeMenu, ["Remove Wild Shape", "remove"], usedShapeNames)
 	} else { //if no shapes are present to be removed, add the item, but grey it out
 		WildshapeMenu.push({cName : "Remove Wild Shape", cReturn : "nothing", bEnabled : false});
 	}
@@ -2001,11 +2036,11 @@ function MakeWildshapeMenu() {
 		cName : "Calculation options",
 		oSubMenu : []
 	};
-	menuLVL2Ext(calcMenu, [["Use druid's prof. bonus if druid is prof.", "default"]], "wildshapeSelect");
+	menuLVL2Ext(calcMenu, [["Use druid's Prof Bonus if druid is prof.", "default"]], "wildshapeSelect");
 	//add a submenu for the next options
-	menuLVL3Ext(calcMenu, ["Use druid's prof. bonus for all prof.", "all_druid"], [["Excluding attacks and expertise", "excluding"], ["Including attacks", "attacks"], ["Including expertise", "expertise"], ["Including attacks and expertise", "attacks_expertise"]], "wildshapeSelect");
+	menuLVL3Ext(calcMenu, ["Use druid's Prof Bonus for all prof.", "all_druid"], [["Excluding attacks and expertise", "excluding"], ["Including attacks", "attacks"], ["Including expertise", "expertise"], ["Including attacks and expertise", "attacks_expertise"]], "wildshapeSelect");
 	//add two more options
-	menuLVL2Ext(calcMenu, [["Use creature's prof. bonus for all prof.", "all_creature"], ["Only compare based on total number", "by_the_numbers"]], "wildshapeSelect");
+	menuLVL2Ext(calcMenu, [["Use creature's Prof Bonus for all prof.", "all_creature"], ["Only compare based on total number", "by_the_numbers"]], "wildshapeSelect");
 
 	WildshapeMenu.push(calcMenu);
 
@@ -2032,7 +2067,7 @@ async function WildshapeOptions() {
 		tDoc.resetForm([prefix + "Wildshape.Race"]);
 		break;
 	 case "add" :
-		await AddWildshape(CreatureList[MenuSelection[1]].name, MenuSelection[1]);
+		await AddWildshape(MenuSelection[1].capitalize(), MenuSelection[2]);
 		break;
 	 case "remove" :
 		RemoveWildshape(MenuSelection[1]);
@@ -2105,9 +2140,15 @@ function SetWildshapeDropdown(forceTooltips) {
 
 	for (var key in CreatureList) {
 		if (CurrentVars.extraCreatures && CurrentVars.extraCreatures[key]) continue;
-		if ((CreatureList[key].type === "Beast" && eval_ish(CreatureList[key].challengeRating) <= 6) || (/^(air|earth|fire|water) elemental$/i).test(key)) {
-			if (testSource(key, CreatureList[key], "creaExcl") || theList.indexOf(CreatureList[key].name) !== -1) continue;
-			theList.push(CreatureList[key].name);
+		if ((CreatureList[key].type === "Beast" && eval_ish(CreatureList[key].challengeRating) <= 6) || /^(air|earth|fire|water) elemental$/i.test(key)) {
+			// see if source is not excluded
+			if (testSource(key, CreatureList[key], "creaExcl")) continue;
+			// add name to list if it isn't already there
+			var aNameAlts = !CreatureList[key].nameAlt ? [] : isArray(CreatureList[key].nameAlt) ? CreatureList[key].nameAlt : [CreatureList[key].nameAlt];
+			var aNames = [CreatureList[key].name].concat(aNameAlts);
+			for (var i = 0; i < aNames.length; i++) {
+				if (theList.indexOf(aNames[i]) === -1) theList.push(aNames[i]);
+			}
 		}
 	}
 	theList.sort();
@@ -2138,7 +2179,7 @@ function SetCompDropdown(forceTooltips) {
 	var tempString = "Type (or select) the name of the race you want to have on this page. Note that first a list of player races is given, followed by an alphabetical list of creatures. You are not limited by the names in the list. Just typing \"Drow\" will also be recognized, for example.";
 	tempString += "\n\n" + toUni("Selecting a creature") + "\nAll information of the creature will automatically be added. This includes ability scores, proficiencies, senses, weapons, etc. You can change the things afterwards.\nBecause not all creatures need the same amount of space for all their feature text,some fields may overflow. You can manually edit these fields so that everything is visible when printed (e.g. move things to the \"Noted\" below).";
 	tempString += "\n\n" + toUni("Selecting a player race") + "\nAll the same things as selecting a player race on the first page will happen, with the exception that no limited feature or ability DC is added as there is no room for that."
-	tempString += "\n\n" + toUni("Changing the race") + "\nIf you entered a race that was recognized and then change the entry to something that is not recognized, all the features and abilities of the recognized race will remain in place. This way, you can change the name of the race to something, while keeping the stats of something else. For example, you can choose \"Frog\" and then change it to \"Toad\", creating a toad with the stats of a frog.";
+	tempString += "\n\n" + toUni("Changing the race") + "\nIf you entered a race that was recognized and then change the entry to something that is not recognized, all the features and abilities of the recognized race will remain in place. This way, you can change the name of the race to something, while keeping the stats of something else. For example, you can choose \"Frog\" and then change it to \"Salamander\", creating a salamander with the stats of a frog.";
 
 	var theListStart = [], theListR = [], theListC = [];
 
@@ -2151,11 +2192,18 @@ function SetCompDropdown(forceTooltips) {
 
 	for (var key in CreatureList) {
 		if (testSource(key, CreatureList[key], "creaExcl")) continue;
-		if (CurrentVars.extraCreatures && CurrentVars.extraCreatures[key] && theListStart.indexOf(CreatureList[key].name) === -1) {
-			theListStart.push(CreatureList[key].name);
-			continue;
+		var aNameAlts = !CreatureList[key].nameAlt ? [] : isArray(CreatureList[key].nameAlt) ? CreatureList[key].nameAlt : [CreatureList[key].nameAlt];
+		var aNames = [CreatureList[key].name].concat(aNameAlts);
+		if (CurrentVars.extraCreatures && CurrentVars.extraCreatures[key]) {
+			for (var i = 0; i < aNames.length; i++) {
+				if (theListStart.indexOf(aNames[i]) === -1) theListStart.push(aNames[i]);
+			}
+		} else {
+			for (var i = 0; i < aNames.length; i++) {
+				if (theListC.indexOf(aNames[i]) === -1) theListC.push(aNames[i]);
+			}
 		}
-		if (theListC.indexOf(CreatureList[key].name) === -1) theListC.push(CreatureList[key].name);
+		
 	}
 	if (theListStart.length) theListStart.sort().unshift("");
 	theListC.sort().unshift("");
@@ -2766,10 +2814,10 @@ async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 					return Math.max.apply(Math, DepTypeFld.page) + 1;
 				};
 			} else {
-				var DepTypeFlds = What("Template.extras." + theDep);
-				if (DepTypeFlds) {
-					return tDoc.getField(DepTypeFlds.split(",").slice(-1)[0] + BookMarkList[theDep]).page + 1;
-				};
+				var depVisible = isTemplVis(theDep, "last");
+				if (depVisible) {
+					return tDoc.getField(depVisible[1] + BookMarkList[theDep]).page + 1;
+				}
 			};
 		};
 		return 2;
@@ -4133,7 +4181,7 @@ function SetHPTooltip(resetHP, onlyComp, aPrefix) {
 			"\n \u2022 " + toUni(HD.average + extrahp) + " is the total average HP" +
 			"\n \u2022 " + toUni(HD.fixed + extrahp) + " is the total HP when using fixed values" +
 			"\n \u2022 " + toUni(HD.max + extrahp) + " is the total maximum HP" +
-			(HD.conCorrection ? "\n\nNote that the Constitution modifier can't bring the HP gained from a single HD below 1 before adding other bonuses. Thus, the totals may seem off from the calculation above them. See PHB, page 15." : "");
+			(HD.conCorrection ? "\n\nNote that the Constitution modifier can't bring the HP gained from a single HD below 1 before adding other bonuses. Thus, the totals may seem off from the calculation above. See PHB, page 15." : "");
 		if (HD.altStr.length) {
 			tooltip += "\n\n>> ALTERNATIVE TOTAL HP CALCULATIONS <<" + HD.altStr.join("\n\n");
 		}
@@ -5571,7 +5619,7 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 		thermoTxt = thermoM("Applying the weapon's features...", false); //change the progress dialog text
 		var curDescr = What(fldBase + "Description");
 		var curRange = What(fldBase + "Range");
-		fields.Description = theWea.description; //add description
+		fields.Description = theWea.description ? theWea.description : ""; //add description
 		fields.Description_Tooltip = theWea.tooltip ? theWea.tooltip : ""; //add the tooltip for the description
 		fields.Range = theWea.range; //add range
 		fields.Damage_Type = theWea.damage[2]; //add Damage Type
@@ -5597,7 +5645,7 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 
 		//add mod
 		var StrDex = What(QI ? "Str" : prefix + "Comp.Use.Ability.Str.Score") < What(QI ? "Dex" : prefix + "Comp.Use.Ability.Dex.Score") ? 2 : 1;
-		fields.Mod = isReCalc && !theWea.ability ? What(fldBase + "Mod") :
+		fields.Mod = isReCalc && !theWea.ability ? tDoc.getField(fldBase + "Mod").currentValueIndices :
 			(/finesse/i).test(theWea.description) ? StrDex : theWea.ability;
 
 		//change mod if this is concerning a spell/cantrip
@@ -5634,7 +5682,7 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 			var WeaponText = inputText + " " + fields.Description;
 			var isDC = (/dc/i).test(fields.To_Hit_Bonus);
 			var isSpell = thisWeapon[3] || (theWea && (/cantrip|spell/i).test(theWea.type)) || (!theWea && (/\b(cantrip|spell)\b/i).test(WeaponText)) ? true : false;
-			var isWeapon = !isSpell || (isSpell && theWea && !(/cantrip|spell/i).test(theWea.type));
+			var isWeapon = theWea && theWea.isNotWeapon ? false : !isSpell || (isSpell && theWea && !(/cantrip|spell/i).test(theWea.type));
 			var isMeleeWeapon = isWeapon && (/melee/i).test(fields.Range);
 			var isRangedWeapon = isWeapon && (/^(?!.*melee).*\d+.*$/i).test(fields.Range);
 			var isNaturalWeapon = isWeapon && theWea && (/natural/i).test(theWea.type);
@@ -5752,7 +5800,7 @@ function CalcAttackDmgHit(fldName) {
 	var fldBaseBT = prefix + "BlueText." + Q + "Attack." + fldNmbr + ".";
 	var fields = {
 		Proficiency : tDoc.getField(fldBase + "Proficiency").isBoxChecked(0),
-		Mod : What(fldBase + "Mod"),
+		Mod : tDoc.getField(fldBase + "Mod").currentValueIndices,
 		Range : What(fldBase + "Range"),
 		Damage_Type : What(fldBase + "Damage Type"),
 		Description : What(fldBase + "Description"),
@@ -5788,7 +5836,7 @@ function CalcAttackDmgHit(fldName) {
 		prof : !fields.Proficiency ? 0 : (QI ? (tDoc.getField("Proficiency Bonus Dice").isBoxChecked(0) ? 0 : Number(How("Proficiency Bonus"))) : (tDoc.getField(prefix + "BlueText.Comp.Use.Proficiency Bonus Dice").isBoxChecked(0) ? 0 : What(prefix + "Comp.Use.Proficiency Bonus"))),
 		die : fields.Damage_Die,
 		modToDmg : thisWeapon[2],
-		mod : !fields.Mod || fields.Mod === "empty" ? 0 : What(prefix + fields.Mod),
+		mod : getAbiModValue(fields.Mod, prefix),
 		magic : thisWeapon[1],
 		bHit : fields.To_Hit_Bonus,
 		bDmg : fields.Damage_Bonus,
@@ -5801,7 +5849,7 @@ function CalcAttackDmgHit(fldName) {
 
 	// Gather some information on the weapon
 	var isSpell = thisWeapon[3] || (theWea && (/cantrip|spell/i).test(theWea.type)) || (!theWea && (/\b(cantrip|spell)\b/i).test(WeaponText)) ? true : false;
-	var isWeapon = !isSpell || (isSpell && theWea && !(/cantrip|spell/i).test(theWea.type));
+	var isWeapon = theWea && theWea.isNotWeapon ? false : !isSpell || (isSpell && theWea && !(/cantrip|spell/i).test(theWea.type));
 	var isMeleeWeapon = isWeapon && (/melee/i).test(fields.Range);
 	var isRangedWeapon = isWeapon && (/^(?!.*melee).*\d+.*$/i).test(fields.Range);
 	var isNaturalWeapon = isWeapon && theWea && (/natural/i).test(theWea.type);
@@ -6106,6 +6154,24 @@ function FunctionIsNotAvailable() {
 		cMsg : "This feature doesn't work (correctly) with the version of Adobe Acrobat you are using. This version of Adobe Acrobat is not supported for use with MPMB's D&D 5e Character Tools. Please update to Adobe Acrobat DC.\n\nYou can get Adobe Acrobat Reader DC for free at https://get.adobe.com/reader/"
 	});
 };
+
+// get the string for the modifier field
+// this can be based on index number Str = 1, Dex = 2, etc.
+// or on the abbreviation string "Str", "Dex", etc.
+// wildshapeNo is the index of the monser on wild shape page, starting with 1
+function getAbiModValue(ability, prefix, wildshapeNo) {
+	var mod = 0;
+	var abi = !isNaN(ability) && ability > 0 && ability <= AbilityScores.abbreviations.length ?  AbilityScores.abbreviations[ability - 1] : AbilityScores.abbreviations.indexOf(ability) !== -1 ? ability : "error";
+	if (abi === "error") return mod;
+	if (!prefix) {
+		mod = Number(What(abi + " Mod"));
+	} else if (wildshapeNo) {
+		mod = Number(What(prefix + "Wildshape." + wildshapeNo + ".Ability." + abi + ".Mod"));
+	} else {
+		mod = Number(What(prefix + "Comp.Use.Ability." + abi + ".Mod"));
+	}
+	return mod;
+}
 
 // a way to eval the content of a modifier field; prefix === true if it is the character (true) or a string if it is for a companion page (the prefix of the companion page); if isSpecial === "test" it will output undefined if an error occurs; if isSpecial is a number it will look for that entry on the Wild Shape page with the corresponding prefix variable as a prefix;
 function EvalBonus(input, prefix, isSpecial) {
@@ -7217,7 +7283,7 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 							setT[iAddLC].conditionBase = iAddLC.replace(aMatchCond[1], "");
 						}
 						if (attr === "text") {
-							AddString(fld, metric ? iAdd : iAddM, "; ");
+							AddString(fld, metric ? iAddM : iAdd, "; ");
 						} else if (attr === "immune" && CurrentProfs.resistance[iAddLC]) {
 							//adding immunity to something that the character also has resistance to, so remove the resistance
 							var theRes = CurrentProfs.resistance[iAddLC];
@@ -7237,7 +7303,7 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 					if (setT[iAddLC].src.length === 0) {
 						delete setT[iAddLC];
 						if (attr === "text") {
-							RemoveString(fld, metric ? iAdd : iAddM);
+							RemoveString(fld, metric ? iAddM : iAdd);
 						} else if (attr === "immune" && CurrentProfs.resistance[iAddLC]) {
 							//removing immunity to something that the character also has resistance to, so add the resistance (again)
 							DoResistance(iAddLC);
@@ -7788,17 +7854,17 @@ async function AskUserOptions(optType, optSrc, optSubj, knownOpt, notProficienci
 				alignment : "align_fill",
 				align_children : "align_row",
 				elements : [{
-					type : "static_text",
-					alignment : "align_left",
-					item_id : "st" + ("0" + i).slice(-2),
-					font : "dialog",
-					name : "Already known!"
-				}, {
 					type : "edit_text",
-					alignment : "align_right",
+					alignment : "align_left",
 					item_id : "sl" + ("0" + i).slice(-2),
 					char_width : 30,
 					height : 20
+				}, {
+					type : "static_text",
+					alignment : "align_right",
+					item_id : "st" + ("0" + i).slice(-2),
+					font : "dialog",
+					name : "Already known!"
 				}]
 			});
 		};

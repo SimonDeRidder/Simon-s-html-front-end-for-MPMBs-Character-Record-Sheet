@@ -149,7 +149,6 @@ var Menus = {
 	"inventory" : "",
 	"background" : "",
 	"classfeatures" : "",
-	"classfeatures_tempClassesKnown" : [],
 	"chooselayers" : "",
 	"gear" : "",
 	"gearline" : "",
@@ -282,7 +281,8 @@ var classes = {
 	parsed : [],
 	known : {},
 	old : {},
-	hd : [],
+	hd : {},
+	oldhd : {},
 	hp : 0,
 	attacks : 1,
 	totallevel : 0, // classes.parsed.reduce(function(acc, val) { return acc + val[1]; }, 0);
@@ -302,7 +302,7 @@ var CurrentCasters = {};
 var CurrentSources = {firstTime : true, globalExcl : [], globalKnown : []};
 var CurrentEvals = {};
 var CurrentScriptFiles = {};
-var CurrentVars = { manual : {} };
+var CurrentVars = { manual : {}, vislayers : ["rules", "equipment"] };
 var UpdateSpellSheets = {};
 var CurrentFeatureChoices = {};
 var CurrentStats = {};
@@ -2099,8 +2099,8 @@ var factions = {
 
 var LinksLatest = {
 	advlog : {
-		PF : "http://www.dmsguild.com/product/194068",
-		CF : "http://www.dmsguild.com/product/194069"
+		PF : "https://www.dmsguild.com/product/194068",
+		CF : "https://www.dmsguild.com/product/194069"
 	},
 	character : {
 		PF : "https://www.patreon.com/posts/19406992", // while website is not finished "https://flapkan.com/#download",

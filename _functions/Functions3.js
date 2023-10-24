@@ -217,11 +217,16 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 
 		// spellcasting
 		if (uObj.spellcastingBonus) await processSpBonus(addIt, uniqueObjNm, uObj.spellcastingBonus, type, aParent, objNm, forceNonCurrent ? true : false);
-		if (addIt && CurrentSpells[useSpCasting] && (uObj.spellFirstColTitle || uObj.spellcastingExtra || uObj.spellChanges || uObj.spellcastingExtraApplyNonconform !== undefined)) {
-			CurrentUpdates.types.push("spells");
+		if (CurrentSpells[useSpCasting] && (uObj.spellFirstColTitle || uObj.spellcastingExtra || uObj.spellChanges || uObj.spellcastingExtraApplyNonconform !== undefined)) {
 			var aCast = CurrentSpells[useSpCasting];
 
-			if (uObj.spellFirstColTitle) aCast.firstCol = addIt ? uObj.spellFirstColTitle : false;
+			if (uObj.spellFirstColTitle) {
+				aCast.firstCol = addIt ? uObj.spellFirstColTitle : false;
+				if (!uObj.spellcastingBonus && !uObj.spellcastingExtra && !uObj.spellChanges) {
+					SetStringifieds('spells');
+					CurrentUpdates.types.push("spells");
+				}
+			}
 
 			if (uObj.spellcastingExtra || uObj.spellcastingExtraApplyNonconform !== undefined) {
 				processSpellcastingExtra(addIt, useSpCasting, fObj.minlevel, tipNmF, uObj.spellcastingExtra, uObj.spellcastingExtraApplyNonconform);
@@ -230,7 +235,6 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		}
 		if (!uObj.spellcastingBonus && addIt && CurrentSpells[useSpCasting] && type !== "classes" && type !== "race" && (uObj.spellcastingAbility !== undefined || uObj.fixedDC || uObj.fixedSpAttack || uObj.allowUpCasting !== undefined || uObj.magicItemComponents !== undefined)) {
 			// will already have been processed if uObj has `spellcastingBonus`
-			CurrentUpdates.types.push("spells");
 			var aCast = CurrentSpells[useSpCasting];
 			if (uObj.spellcastingAbility !== undefined) {
 				aCast.ability = await ReturnSpellcastingAbility(useSpCasting, uObj.spellcastingAbility);
@@ -240,6 +244,9 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 			if (uObj.fixedSpAttack) aCast.fixedSpAttack = Number(uObj.fixedSpAttack);
 			if (uObj.allowUpCasting !== undefined) aCast.allowUpCasting = uObj.allowUpCasting;
 			if (uObj.magicItemComponents !== undefined) aCast.magicItemComponents = uObj.magicItemComponents;
+
+			SetStringifieds('spells');
+			CurrentUpdates.types.push("spells");
 		};
 		if (uObj.spellcastingBonusElsewhere) await processSpellcastingBonusElsewhere(addIt, type, tipNm, uniqueObjNm, uObj.spellcastingBonusElsewhere);
 
@@ -645,9 +652,9 @@ function getBonusClassExtraChoiceNr(sClass, sFeaNm) {
 }
 
 // return an object with bonus class features that are not normally accessible
-function getBonusClassExtraChoices() {
-	if (!CurrentFeatureChoices.bonus) return false;
+function getBonusClassExtraChoices(bIgnoreNotInMenu) {
 	var aReturn = [];
+	if (!CurrentFeatureChoices.bonus) return aReturn;
 	for (var sClass in CurrentFeatureChoices.bonus) {
 		var oClassList = ClassList[sClass];
 		if (!oClassList) continue; // class doesn't exist
@@ -662,7 +669,7 @@ function getBonusClassExtraChoices() {
 			var oUseObj = bTestLvl ? CurrentClasses[sClass].features : bIsMainClass ? oClassList.features : ClassSubList[sSubclass].features;
 			for (var sFeaNm in oSubclass) {
 				// see if the feature exists and if it isn't already available for the character or if the features are not meant to be displayed in the menu
-				if (!oUseObj[sFeaNm] || !oUseObj[sFeaNm].extrachoices || oUseObj[sFeaNm].extrachoicesNotInMenu || (bTestLvl && oUseObj[sFeaNm].minlevel <= iClassLvl)) continue;
+				if (!oUseObj[sFeaNm] || !oUseObj[sFeaNm].extrachoices || (!bIgnoreNotInMenu && oUseObj[sFeaNm].extrachoicesNotInMenu) || (bTestLvl && oUseObj[sFeaNm].minlevel <= iClassLvl)) continue;
 				// feature is not available for the character, so return its object
 				aReturn.push({
 					"class" : sClass,
@@ -673,7 +680,7 @@ function getBonusClassExtraChoices() {
 			}
 		}
 	}
-	return aReturn.length ? aReturn : false;
+	return aReturn;
 }
 
 // a function to get all currently selected fighting styles
@@ -715,8 +722,8 @@ function classFeaChoiceBackwardsComp() {
 }
 
 // a function to return the spellcasting ability, ask the user which to use if it is an array
-async function ReturnSpellcastingAbility(sCast, vAbility) {
-	if (vAbility === undefined) return 0;
+async function ReturnSpellcastingAbility(sCast, vAbility, bAbilitySave) {
+	if (vAbility === undefined || (!isArray(vAbility) && isNaN(vAbility) && bAbilitySave)) return 0;
 	if (!isArray(vAbility)) return !isNaN(vAbility) || /^(class|race)$/i.test(vAbility) ? vAbility : 0;
 	var sCastName = CurrentSpells[sCast] ? CurrentSpells[sCast].name : sCast;
 	var aAbiOptions = [], oAbiRef = {};
@@ -730,7 +737,10 @@ async function ReturnSpellcastingAbility(sCast, vAbility) {
 		}
 	}
 	if (aAbiOptions.length < 2) return aAbiOptions.length ? aAbiOptions[0] : 0;
-	var sAsk = await AskUserOptions("Select Spellcasting Ability Score for " + sCastName, "The spellcasting ability for " + sCastName + " can be one of multiple options. It is up to you to select which the sheet will use from now on.", aAbiOptions, "radio", true, 'You can always change the spellcasting ability for ' + sCastName + ' on the spell sheet once you generate the spell sheet. What you select here is the \"default\" spellcasting ability.');
+	var sType = bAbilitySave ? "Ability Save DC" : "Spellcasting Ability";
+	var sTypeLC = sType.replace("A", "a").replace("S", "s");
+	var sTypePage = bAbilitySave ? "first page" : "spell sheet once you generate the spell sheet";
+	var sAsk = await AskUserOptions("Select " + sType + " for " + sCastName, "The " + sTypeLC + " for " + sCastName + " can be one of multiple options. It is up to you to select which the sheet will use from now on.", aAbiOptions, "radio", true, 'You can always change the ' + sTypeLC + ' for ' + sCastName + ' on the ' + sTypePage + '. What you select here is the "default" ' + sTypeLC + '.');
 	if (oAbiRef[sAsk]) {
 		return oAbiRef[sAsk];
 	} else {
@@ -837,23 +847,17 @@ async function processSpBonus(AddRemove, srcNm, spBon, type, parentName, choice,
 		// create the spellcasting object if it doesn't yet exist
 		if (!CurrentSpells[useSpName]) sObj = await CreateCurrentSpellsEntry(type, parentName, choice, forceNonCurrent);
 		if (!sObj) return; // failed to create CurrentSpells entry, so stop now
+		if (!isArray(spBon)) spBon = [spBon];
 		sObj.bonus[srcNm] = spBon;
 		// see if this wants to change the spellcasting ability
-		var spFeatItemLvl = false;
-		var spAbility = !isArray(spBon) ? spBon.spellcastingAbility : false;
-		var spFixedDC = !isArray(spBon) ? spBon.fixedDC : false;
-		var spFixedSpAttack = !isArray(spBon) ? spBon.fixedSpAttack : false;
-		var spAllowUpCasting = !isArray(spBon) ? spBon.allowUpCasting : undefined;
-		var spMagicItemComponents = !isArray(spBon) ? spBon.magicItemComponents : undefined;
-		if (isArray(spBon)) {
-			for (var i = 0; i < spBon.length; i++) {
-				if (!spFeatItemLvl && spBon[i].times && isArray(spBon[i].times)) spFeatItemLvl = true;
-				if (spBon[i].spellcastingAbility) spAbility = spBon[i].spellcastingAbility;
-				if (spBon[i].fixedDC) spFixedDC = spBon[i].fixedDC;
-				if (spBon[i].fixedSpAttack) spFixedSpAttack = spBon[i].fixedSpAttack;
-				if (spBon[i].allowUpCasting !== undefined) spAllowUpCasting = spBon[i].allowUpCasting;
-				if (spBon[i].magicItemComponents !== undefined) spMagicItemComponents = spBon[i].magicItemComponents;
-			}
+		var spFeatItemLvl, spAbility, spFixedDC, spFixedSpAttack, spAllowUpCasting, spMagicItemComponents;
+		for (var i = 0; i < spBon.length; i++) {
+			if (!spFeatItemLvl && spBon[i].times && isArray(spBon[i].times)) spFeatItemLvl = true;
+			if (spBon[i].spellcastingAbility) spAbility = spBon[i].spellcastingAbility;
+			if (spBon[i].fixedDC) spFixedDC = spBon[i].fixedDC;
+			if (spBon[i].fixedSpAttack) spFixedSpAttack = spBon[i].fixedSpAttack;
+			if (spBon[i].allowUpCasting !== undefined) spAllowUpCasting = spBon[i].allowUpCasting;
+			if (spBon[i].magicItemComponents !== undefined) spMagicItemComponents = spBon[i].magicItemComponents;
 		}
 		if (spAbility) {
 			sObj.ability = await ReturnSpellcastingAbility(useSpName, spAbility);
@@ -864,7 +868,7 @@ async function processSpBonus(AddRemove, srcNm, spBon, type, parentName, choice,
 		if (spAllowUpCasting !== undefined) sObj.allowUpCasting = spAllowUpCasting;
 		if (spMagicItemComponents !== undefined) sObj.magicItemComponents = spMagicItemComponents;
 		// if concerning a feat or item, set the level only if the spellcastingBonus needs it
-		if ((/feat|item/i).test(sObj.typeSp) && spFeatItemLvl) sObj.level = Math.max(Number(What("Character Level")), 1);
+		if (/feat|item/i.test(sObj.typeSp) && spFeatItemLvl) sObj.level = Math.max(Number(What("Character Level")), 1);
 	}
 	SetStringifieds('spells');
 	CurrentUpdates.types.push("spells");
@@ -901,6 +905,8 @@ function processSpChanges(AddRemove, srcNm, spChng, spObjName) {
 		// now maybe delete the whole spellAttrOverride if it is empty
 		if (!ObjLength(spCast.spellAttrOverride)) delete spCast.spellAttrOverride;
 	}
+	SetStringifieds('spells');
+	CurrentUpdates.types.push("spells");
 }
 
 // process the spellcastingExtra and spellcastingExtraApplyNonconform attributes
@@ -933,6 +939,7 @@ function processSpellcastingExtra(AddRemove, spObjName, lvl, name, spExtra, spNo
 		var keysArrSort = Object.keys(aCast[remNm]).sort().reverse();
 		aCast[useNm] = aCast[remNm][keysArrSort[0]];
 	}
+	SetStringifieds('spells');
 	CurrentUpdates.types.push("spells");
 }
 

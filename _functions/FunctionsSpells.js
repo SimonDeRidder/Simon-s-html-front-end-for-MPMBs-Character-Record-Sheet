@@ -470,9 +470,10 @@ function ApplySpell(FldValue, rememberFldName) {
 			var parseSrc = parseSource(aSpell.source);
 			// Only use the first source, as there is no more space
 			var spBook = parseSrc ? parseSrc[0][0] : "";
-			var spBookAbbr = spBook && SourceList[spBook].abbreviationSpellsheet ? SourceList[spBook].abbreviationSpellsheet : spBook.substr(0,1);
+			var isUnearthedArcana = spBook && spBook !== "UA:TMC" && SourceList[spBook].group === "Unearthed Arcana";
+			var spBookAbbr = spBook && SourceList[spBook].abbreviationSpellsheet ? SourceList[spBook].abbreviationSpellsheet : isUnearthedArcana ? "UA" : spBook.substr(0,1);
 			// Get the page number, unless it is Unearthed Arcana, then get the abbreviation (the first three characters after the colon)
-			var spPage = spBook && spBook !== "UA:TMC" && SourceList[spBook].group === "Unearthed Arcana" ? spBook.replace("UA:", "").substr(0,3) : parseSrc && parseSrc[0][1] ? parseSrc[0][1] : "";
+			var spPage = isUnearthedArcana ? spBook.replace("UA:", "").substr(0,3) : parseSrc && parseSrc[0][1] ? parseSrc[0][1] : "";
 			// Add them to the sheet
 			Value(base.replace("remember", "book"), spBookAbbr, aSpell.tooltipSource);
 			Value(base.replace("remember", "page"), spPage, aSpell.tooltipSource);
@@ -783,12 +784,11 @@ function CalcSpellScores() {
 		return;
 	}
 
-	var profBonus = Number(What("Proficiency Bonus"));
-	var profBonusFixed = Number(How("Proficiency Bonus"));
+	var profBonus = Number(How("Proficiency Bonus"));
 	// fixed DC of 8 means the prof bonus still needs to be added
 	if (fixedDC === 8) fixedDC += profBonus;
 	// the DC
-	theResult.dc = fixedDC ? fixedDC : fixedSpAttack ? fixedSpAttack + 8 : profBonusFixed + theMod + 8;
+	theResult.dc = fixedDC ? fixedDC : fixedSpAttack ? fixedSpAttack + 8 : profBonus + theMod + 8;
 	// the spell attack
 	theResult.attack = fixedSpAttack ? fixedSpAttack : fixedDC ? fixedDC - 8 : profBonus + theMod;
 	// the number of prepared spells
@@ -999,7 +999,7 @@ function CreateSpellList(inputObject, toDisplay, extraArray, returnOrdered, objN
 			try {
 				evalThing(inputObject, objName, objType);
 			} catch (error) {
-				var eText = "The custom calcChange.spellList function '" + evalName + "' produced an error! It will be removed from the sheet for now, but please contact the author of the feature to have this issue corrected:\n " + error;
+				var eText = "The custom calcChanges.spellList function '" + evalName + "' produced an error! It will be removed from the sheet for now, but please contact the author of the feature to have this issue corrected:\n " + error;
 				for (var e in error) eText += "\n " + e + ": " + error[e];
 				console.println(eText);
 				console.show();
@@ -2793,11 +2793,11 @@ async function AskUserSpellSheet() {
 		// get the ability score to use for save DCs/spell attacks/prepared
 		spCast.abilityToUse = getSpellcastingAbility(aCast);
 		if (spCast.level !== undefined) {
-			if ((/feat|item/i).test(spCast.typeSp)) {
-				//set the level if concerning a feat/item
-				spCast.level = Math.max(1, Number(What("Character Level")));
-			} else if (classes.known[aCast]) {
+			if (classes.known[aCast]) {
 				spCast.level = classes.known[aCast].level;
+			} else if (/feat|item/i.test(spCast.refType)) {
+				//set the level if concerning a feat/item/race
+				spCast.level = Math.max(1, Number(What("Character Level")));
 			}
 		}
 
@@ -5553,6 +5553,11 @@ function getSpellcastingAbility(theCast) {
 	var testFixedDC = (/race|class/i).test(spObj.abilityBackup);
 	var bContinueAsClass = false;
 	if (spObj && spObj.ability && isNaN(spObj.ability) && !(/race|class/i).test(spObj.ability) && spObj.ability !== theCast) {
+		// First delete the fixedDC if previously added because the ability resulted in 0
+		if (spObj.fixedDC_becauseAbi0) {
+			delete spObj.fixedDC;
+			delete spObj.fixedDC_becauseAbi0;
+		}
 		// It is a string, but not "race" or "class", so it must be made to match another
 		// Make sure it doesn't match this CurrentSpells entry name to avoid recursion
 		if (CurrentSpells[spObj.ability] && CurrentSpells[spObj.ability].ability && CurrentSpells[spObj.ability].ability !== theCast) {
@@ -5593,7 +5598,9 @@ function getSpellcastingAbility(theCast) {
 	// if the spellcasting ability is still 0 after testing class/race, set a fixed DC as if a +0 ability modifier, so just 8 + Prof
 	if (testFixedDC) {
 		if (spAbility == 0) {
-			spObj.fixedDC = 8; // a fixed DC of 8 will always get the prof bonus added
+			// a fixed DC of 8 will always get the prof bonus added
+			spObj.fixedDC = 8;
+			spObj.fixedDC_becauseAbi0 = true;
 		} else {
 			delete spObj.fixedDC;
 		}

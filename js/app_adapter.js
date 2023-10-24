@@ -313,7 +313,7 @@ AdapterParsePopUpMenu = function (aParams, resolve) {
 
 this.info = {
 	SheetType: "printer friendly",
-	SheetVersion: "v13.1.2",
+	SheetVersion: "v13.1.10",
 	SpellsOnly: false,
 };
 this.path = "./index.html";
@@ -1752,6 +1752,26 @@ function adapter_helper_convert_colour(color /*[char, ...]*/) /*String|null*/ {
 		throw "Setting unimplemented color:", color;
 	}
 	return bgColor;
+}
+
+
+function adapter_helper_keystroke1(element /*HTMLElement*/, arg1 /*boolean*/, arg2 /*boolean*/) {
+	let current_selection;
+	if (arg1 != arg2) {
+		current_selection = [event.target.selectionStart, event.target.selectionEnd];
+	} else {
+		current_selection = adapter_helper_get_number_field_selection();
+	}
+	event.change = event.data ? event.data : '';
+	let origLen = event.change.length;
+	event.selStart = event.target.selectionStart;
+	event.selEnd = event.target.selectionEnd;
+	keystroke1(arg1, arg2);
+	if (!event.rc) {
+		element.value = element.value.substring(0,event.selStart-origLen)+element.value.substring(event.selEnd);
+	} else {
+		element.value = element.value.substring(0,event.selStart-origLen)+event.change+element.value.substring(event.selEnd);
+	}
 }
 
 

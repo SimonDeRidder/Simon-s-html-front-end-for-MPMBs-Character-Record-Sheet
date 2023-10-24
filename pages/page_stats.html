@@ -56,7 +56,7 @@
 			required
 			spellcheck="true"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.dWata:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(false, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}};"
+			oninput="adapter_helper_keystroke1(this, false, false)"
 			onchange="event.value=this.value;this.value=this.dataset.temp?this.dataset.temp:0;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);levelFieldVal();this.value=event.value;eventManager.handle_event(EventType.Character_Level_change)"
 		/>
 		<input
@@ -132,7 +132,7 @@
 			type="number"
 			aria-label="The current total amount of experience points."
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1(0, 0);this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};CalcExperienceLevel(true)"
 		/>
 		<input
@@ -141,7 +141,7 @@
 			style="top: 124px;left: 730px;font-size: 11pt;width: 32pt;height: 15pt;color: #0056D3;text-align: center;overflow-x: scroll"
 			type="number"
 			aria-label="Experience points that are to be added to the total to the left."
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true, true)"
 			onchange="event.value=this.value;format1(0, 0);this.value=event.value"
 		/>
 		<span
@@ -213,7 +213,7 @@
 			step="1"
 			aria-label="Racial ability score improvements"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="eventManager.handle_event(EventType.Str_change)"
 		/>
 		<input
@@ -225,7 +225,7 @@
 			step="1"
 			aria-label="Primary class abilities & Multiclassing prerequisites"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="eventManager.handle_event(EventType.Dex_change)"
 		/>
 		<input
@@ -236,7 +236,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.Con_change)"
 		/>
 		<input
@@ -247,7 +247,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="eventManager.handle_event(EventType.Int_change)"
 		/>
 		<input
@@ -258,7 +258,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="eventManager.handle_event(EventType.Wis_change)"
 		/>
 		<input
@@ -269,7 +269,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="eventManager.handle_event(EventType.Cha_change)"
 		/>
 		<input
@@ -280,7 +280,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="eventManager.handle_event(EventType.HoS_change)"
 		/>
 
@@ -761,7 +761,7 @@
 			type="number"
 			data-submit_name="0,0,0,fixed"
 			aria-label="The total hit points (with averages and max for 1st level)"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 		/>
 		<input
 			id="Proficiency_Bonus"
@@ -784,7 +784,7 @@
 			class="field inputfield"
 			style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0"
 			type="number"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 		/>
 		<textarea
 			id="HP_Current"
@@ -859,7 +859,7 @@
 			style="top: 211px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
 			type="number"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD1_Level_change)"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 		/>
 		<input
 			id="HD2_Level"
@@ -867,7 +867,7 @@
 			style="top: 230px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
 			type="number"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD2_Level_change)"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 		/>
 		<input
 			id="HD3_Level"
@@ -875,7 +875,7 @@
 			style="top: 249px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
 			type="number"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD3_Level_change)"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 		/>
 
 		<input
@@ -884,7 +884,7 @@
 			style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD1_Die_change)"
 			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
 		/>
@@ -894,7 +894,7 @@
 			style="top: 230px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD2_Die_change)"
 			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
 		/>
@@ -904,7 +904,7 @@
 			style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD3_Die_change)"
 			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
 		/>
@@ -914,21 +914,21 @@
 			class="field inputfield-notched"
 			style="top: 211px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
 			type="number"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 		/>
 		<input
 			id="HD2_Used"
 			class="field inputfield-notched"
 			style="top: 230px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
 			type="number"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 		/>
 		<input
 			id="HD3_Used"
 			class="field inputfield-notched"
 			style="top: 249px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
 			type="number"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 		/>
 
 		<input
@@ -1221,7 +1221,7 @@
 			aria-label="Armor's weight"
 			value="0"
 			type="text"
-			oninput="{event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=event.target.selectionStart;event.selEnd=event.target.selectionEnd;keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.AC_Armor_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1232,7 +1232,7 @@
 			aria-label="Shield's weight"
 			value="0"
 			type="text"
-			oninput="{event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=event.target.selectionStart;event.selEnd=event.target.selectionEnd;keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.AC_Shield_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -3866,7 +3866,7 @@
 			style="top: 20px;left: 100px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center"
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoLeftDisplay_Amount_change)"
 		/>
 		<input
@@ -3875,7 +3875,7 @@
 			style="top: 20px;left: 245px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center"
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1();if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this)"
 			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoRightDisplay_Amount_change)"
 		/>
 
@@ -4981,7 +4981,7 @@
 			style="top: -8px;left: 90px;width: 35px;height: 14px;font-size: 10.6px;visibility: hidden;"
 			aria-label="Ammunition's weight"
 			value="0"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.AmmoLeftDisplay_Weight_change)"
 		/>
 		<input
@@ -4990,7 +4990,7 @@
 			style="top: -8px;left: 235.5px;width: 35px;height: 14px;font-size: 10.6px;visibility: hidden;"
 			aria-label="Ammunition's weight"
 			value="0"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.AmmoRightDisplay_Weight_change)"
 		/>
 		<input
@@ -5711,7 +5711,7 @@
 		</script>
 	</div>
 
-	<span id="SheetInformation" class="field textlabel-dimmed" style="top: 1155px;left: 43px;font-size: 6.43px;font-weight: bold">MorePurpleMoreBetter&apos;s D&amp;D 5th edition Character Record Sheet v13.1.2 (Printer Friendly)</span>
+	<span id="SheetInformation" class="field textlabel-dimmed" style="top: 1155px;left: 43px;font-size: 6.43px;font-weight: bold">MorePurpleMoreBetter&apos;s D&amp;D 5th edition Character Record Sheet v13.1.10 (Printer Friendly)</span>
 	<span
 		id="CopyrightInformationFront"
 		class="field textlabel-dimmed"

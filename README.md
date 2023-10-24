@@ -36,7 +36,6 @@ For syntax to write your own, consult [additional content syntax](https://github
 
 Put the files in the `additional_content`` folder and import them into the sheet using the "Import" button.
 Each file is a complete script. You can add multiple files, but take note that they will be processed in the order they are added.
-Please see the [How-To Guide - Add More Content](https://www.flapkan.com/how-to/add-more-content) on my website for an explanation how to add these scripts to the PDF.
 
 ## Known issues
 

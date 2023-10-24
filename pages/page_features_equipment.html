@@ -1065,7 +1065,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_1_change);"
 		/>
 		<input
@@ -1075,7 +1075,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_2_change);"
 		/>
 		<input
@@ -1085,7 +1085,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_3_change);"
 		/>
 		<input
@@ -1095,7 +1095,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_4_change);"
 		/>
 		<input
@@ -1105,7 +1105,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_5_change);"
 		/>
 		<input
@@ -1115,7 +1115,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_6_change);"
 		/>
 		<input
@@ -1125,7 +1125,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_7_change);"
 		/>
 		<input
@@ -1135,7 +1135,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_8_change);"
 		/>
 		<input
@@ -1145,7 +1145,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_9_change);"
 		/>
 		<input
@@ -1155,7 +1155,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_10_change);"
 		/>
 		<input
@@ -1165,7 +1165,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_11_change);"
 		/>
 		<input
@@ -1175,7 +1175,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_12_change);"
 		/>
 		<input
@@ -1185,7 +1185,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_13_change);"
 		/>
 		<input
@@ -1195,7 +1195,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_14_change);"
 		/>
 		<input
@@ -1205,7 +1205,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_15_change);"
 		/>
 		<input
@@ -1215,7 +1215,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_16_change);"
 		/>
 		<input
@@ -1225,7 +1225,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_17_change);"
 		/>
 		<input
@@ -1235,7 +1235,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_18_change);"
 		/>
 
@@ -1246,7 +1246,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_19_change);"
 		/>
 		<input
@@ -1256,7 +1256,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_20_change);"
 		/>
 		<input
@@ -1266,7 +1266,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_21_change);"
 		/>
 		<input
@@ -1276,7 +1276,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_22_change);"
 		/>
 		<input
@@ -1286,7 +1286,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_23_change);"
 		/>
 		<input
@@ -1296,7 +1296,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_24_change);"
 		/>
 		<input
@@ -1306,7 +1306,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_25_change);"
 		/>
 		<input
@@ -1316,7 +1316,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_26_change);"
 		/>
 		<input
@@ -1326,7 +1326,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_27_change);"
 		/>
 		<input
@@ -1336,7 +1336,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_28_change);"
 		/>
 		<input
@@ -1346,7 +1346,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_29_change);"
 		/>
 		<input
@@ -1356,7 +1356,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_30_change);"
 		/>
 		<input
@@ -1366,7 +1366,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_31_change);"
 		/>
 		<input
@@ -1376,7 +1376,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_32_change);"
 		/>
 		<input
@@ -1386,7 +1386,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_33_change);"
 		/>
 		<input
@@ -1396,7 +1396,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_34_change);"
 		/>
 		<input
@@ -1406,7 +1406,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_35_change);"
 		/>
 		<input
@@ -1416,7 +1416,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_36_change);"
 		/>
 
@@ -1427,7 +1427,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_37_change);"
 		/>
 		<input
@@ -1437,7 +1437,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_38_change);"
 		/>
 		<input
@@ -1447,7 +1447,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_39_change);"
 		/>
 		<input
@@ -1457,7 +1457,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_40_change);"
 		/>
 		<input
@@ -1467,7 +1467,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_41_change);"
 		/>
 		<input
@@ -1477,7 +1477,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_42_change);"
 		/>
 		<input
@@ -1487,7 +1487,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_43_change);"
 		/>
 		<input
@@ -1497,7 +1497,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_44_change);"
 		/>
 		<input
@@ -1507,7 +1507,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_45_change);"
 		/>
 		<input
@@ -1517,7 +1517,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_46_change);"
 		/>
 		<input
@@ -1527,7 +1527,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_47_change);"
 		/>
 		<input
@@ -1537,7 +1537,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_48_change);"
 		/>
 		<input
@@ -1547,7 +1547,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_49_change);"
 		/>
 		<input
@@ -1557,7 +1557,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_50_change);"
 		/>
 		<input
@@ -1567,7 +1567,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_51_change);"
 		/>
 		<input
@@ -1577,7 +1577,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_52_change);"
 		/>
 		<input
@@ -1587,7 +1587,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_53_change);"
 		/>
 		<input
@@ -1597,7 +1597,7 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true)"
 			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_54_change);"
 		/>
 
@@ -1629,7 +1629,7 @@
 			style="top: 22.5px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true, false)"
 			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Copper_Pieces_change)"
 		/>
 		<input
@@ -1638,7 +1638,7 @@
 			style="top: 63.7px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true, false)"
 			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Silver_Pieces_change)"
 		/>
 		<input
@@ -1647,7 +1647,7 @@
 			style="top: 104.9px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true, false)"
 			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Electrum_Pieces_change)"
 		/>
 		<input
@@ -1656,7 +1656,7 @@
 			style="top: 146.1px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true, false)"
 			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Gold_Pieces_change)"
 		/>
 		<input
@@ -1665,7 +1665,7 @@
 			style="top: 187.3px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd);} else {this.value=this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd);}}"
+			oninput="adapter_helper_keystroke1(this, true, false)"
 			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Platinum_Pieces_change)"
 		/>
 
@@ -2659,7 +2659,7 @@
 			style="top: 307px;left: 840px;width: 20px;text-align: center;visibility: hidden;"
 			value="1"
 			type="text"
-			oninput="{let current_selection=adapter_helper_get_number_field_selection();event.change=event.data?event.data:'';let origLen=event.change.length;event.selStart=current_selection[0];event.selEnd=current_selection[1];keystroke1(true, false);if (!event.rc) {this.value=(this.value.substring(0,event.selStart-origLen)+this.value.substring(event.selEnd)).replace(/,/, '.');} else {this.value=(this.value.substring(0,event.selStart-origLen)+event.change+this.value.substring(event.selEnd)).replace(/,/, '.');}}"
+			oninput="adapter_helper_keystroke1(this, true, false)"
 			onchange="event.value=this.value;format2();this.value=event.value;eventManager.handle_event(EventType.Carrying_Capacity_Multiplier_change)"
 		/>
 

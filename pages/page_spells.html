@@ -727,17 +727,18 @@
 
 	<div id="spell_sheet_table" class="pane" style="top: 180px;left: 34px;width: 825px;height: 972px">
 
-		<div
-			id="spellshead.Image.Header.Left.0"
-			class="field"
-			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px"
-		>
-			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
+		<div id="spellshead.container.0" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px">
+			<div
+				id="spellshead.Image.Header.Left.0"
+				class="field"
+				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px"
+			>
+				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
-			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
-			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
-			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
-
+				<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
+				<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
+				<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+			</div>
 			<input
 				id="spellshead.Text.header.0"
 				class="field inputfield"
@@ -779,15 +780,17 @@
 				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_0_change)"
 			/>
 
-			<div
-				id="spellshead.Image.prepare.0"
-				class="field"
-				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
-				onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.contextTransfers=['name'];MakePreparedMenu_PreparedOptions()"
-			>
-				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
+			<div id="spellshead.prepare.container.0" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px">
+				<div
+					id="spellshead.Image.prepare.0"
+					class="field"
+					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer"
+					onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.contextTransfers=['name'];MakePreparedMenu_PreparedOptions()"
+				>
+					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
-				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+					<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+				</div>
 
 				<input
 					id="spellshead.prepare.0"
@@ -842,21 +845,24 @@
 			/>
 		</div>
 
-		<div
-			id="spellshead.Image.Header.Left.1"
-			class="field"
-			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
-		>
-			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
-			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
-			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
-			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+		<div id="spellshead.container.1" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px">
+			<div
+				id="spellshead.Image.Header.Left.1"
+				class="field"
+				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
+			>
+				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
+
+				<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
+				<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
+				<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+			</div>
 
 			<input
 				id="spellshead.Text.header.1"
 				class="field inputfield"
-				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
 				data-submit_name=""
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
@@ -866,7 +872,7 @@
 			<select
 				id="spellshead.ability.1"
 				class="field inputfield"
-				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
 				onchange="{let wrapper = new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_1_change)})}"
 			>
 				<option value="nothing"></option>
@@ -880,7 +886,7 @@
 			<input
 				id="spellshead.attack.1"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_1_change)"
@@ -888,26 +894,28 @@
 			<input
 				id="spellshead.dc.1"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_1_change)"
 			/>
 
-			<div
-				id="spellshead.Image.prepare.1"
-				class="field"
-				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
-				onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
-			>
-				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
+			<div id="spellshead.prepare.container.1" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px">
+				<div
+					id="spellshead.Image.prepare.1"
+					class="field"
+					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer;visibility: hidden"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
+				>
+					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
-				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+					<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+				</div>
 
 				<input
 					id="spellshead.prepare.1"
 					class="field inputfield-noneditable"
-					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;visibility: hidden"
 					type="number"
 					data-default=""
 					onchange="eventManager.handle_event(EventType.spellshead_prepare_1_change)"
@@ -957,21 +965,23 @@
 			/>
 		</div>
 
-		<div
-			id="spellshead.Image.Header.Left.2"
-			class="field"
-			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
-		>
-			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
+		<div id="spellshead.container.2" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px">
+			<div
+				id="spellshead.Image.Header.Left.2"
+				class="field"
+				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
+			>
+				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
-			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
-			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
-			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+				<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
+				<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
+				<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+			</div>
 
 			<input
 				id="spellshead.Text.header.2"
 				class="field inputfield"
-				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
 				data-submit_name=""
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
@@ -981,7 +991,7 @@
 			<select
 				id="spellshead.ability.2"
 				class="field inputfield"
-				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
 				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_2_change)})}"
 			>
 				<option value="nothing"></option>
@@ -995,7 +1005,7 @@
 			<input
 				id="spellshead.attack.2"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
@@ -1003,26 +1013,28 @@
 			<input
 				id="spellshead.dc.2"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_2_change)"
 			/>
 
-			<div
-				id="spellshead.Image.prepare.2"
-				class="field"
-				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
-				onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
-			>
-				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
+			<div id="spellshead.prepare.container.2" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px">
+				<div
+					id="spellshead.Image.prepare.2"
+					class="field"
+					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
+				>
+					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px">
 
-				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+					<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+				</div>
 
 				<input
 					id="spellshead.prepare.2"
 					class="field inputfield-noneditable"
-					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;visibility: hidden"
 					type="number"
 					data-default=""
 					onchange="eventManager.handle_event(EventType.spellshead_prepare_2_change)"
@@ -1072,21 +1084,24 @@
 			/>
 		</div>
 
-		<div
-			id="spellshead.Image.Header.Left.3"
-			class="field"
-			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
-		>
-			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
-			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
-			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
-			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+		<div id="spellshead.container.3" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px">
+			<div
+				id="spellshead.Image.Header.Left.3"
+				class="field"
+				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
+			>
+				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
+
+				<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
+				<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
+				<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+			</div>
 
 			<input
 				id="spellshead.Text.header.3"
 				class="field inputfield"
-				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
 				data-submit_name=""
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
@@ -1096,7 +1111,7 @@
 			<select
 				id="spellshead.ability.3"
 				class="field inputfield"
-				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
 				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_3_change)})}"
 			>
 				<option value="nothing"></option>
@@ -1110,7 +1125,7 @@
 			<input
 				id="spellshead.attack.3"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
@@ -1118,26 +1133,29 @@
 			<input
 				id="spellshead.dc.3"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_3_change)"
 			/>
 
-			<div
-				id="spellshead.Image.prepare.3"
-				class="field"
-				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
-				onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
-			>
-				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
-				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+			<div id="spellshead.prepare.container.3" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px">
+				<div
+					id="spellshead.Image.prepare.3"
+					class="field"
+					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer;visibility: hidden"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
+				>
+					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
+
+					<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+				</div>
 
 				<input
 					id="spellshead.prepare.3"
 					class="field inputfield-noneditable"
-					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;visibility: hidden"
 					type="number"
 					data-default=""
 					onchange="eventManager.handle_event(EventType.spellshead_prepare_3_change)"

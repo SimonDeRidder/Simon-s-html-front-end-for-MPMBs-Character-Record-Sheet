@@ -559,6 +559,8 @@ Array.prototype.toSource = function () /*str*/ {
 			str += "'" + this[i] + "'";
 		} else if ((typeof this[i]) == 'boolean') {
 			str += this[i] ? "true" : "false";
+		} else if ((typeof this[i]) == "object") {
+			str += adapter_helper_recursive_toSource(this[i]);
 		} else {
 			throw "unsupported element type in array toSource: " + (typeof this[i]);
 		}
@@ -1007,6 +1009,18 @@ class AdapterClassFieldReference {
 	}
 
 	setFocus() {
+		let parent = this.html_elements[0];
+		while (!parent.classList.contains('page')) {
+			parent = parent.parentElement;
+		}
+		let page_id = parent.id;
+
+		let buttonContainer = document.getElementById('button-container');
+		for (let child of buttonContainer.children) {
+			if (child.dataset.page == page_id) {
+				child.click();
+			}
+		}
 		this.html_elements[0].focus();
 	}
 
@@ -1121,14 +1135,14 @@ class AdapterClassPage {
 			this.pageIdPrefix = 'pback';
 			this.buttonFollower = 'tabbuttoncomp';
 			this.isTempl = false;
-		} else if (type == 'pcomp') {
+		} else if (['pcomptempl', 'AScomp'].includes(type)) {
 			this.page_ = 'pages/page_companion.html';
-			this.prefix_ = (prefix == null) ? 'P4.AScomp.': prefix;
+			this.prefix_ = (prefix == null) ? 'P#.AScomp.': prefix;
 			this.buttonPrefix_ = "Companion";
 			this.buttonIDPrefix_ = 'tabbuttoncomp';
-			this.pageIdPrefix = 'pcomp';
+			this.pageIdPrefix = 'pcomptempl';
 			this.buttonFollower = 'tabbuttonnote';
-			this.isTempl = false;
+			this.isTempl = (type == 'pcomptempl') ? false: true;
 		} else if (type.startsWith('pwildtempl')) {
 			this.page_ = 'pages/page_wildshape.html';
 			this.prefix_ = (prefix == null) ? 'P#.WSfront.': prefix;

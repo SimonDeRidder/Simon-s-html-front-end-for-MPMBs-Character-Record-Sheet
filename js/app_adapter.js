@@ -1622,6 +1622,10 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 						'nothing',
 						'AdvLog.Options',
 						'Attack.1.Description_Tooltip',
+						'Attack.2.Description_Tooltip',
+						'Attack.3.Description_Tooltip',
+						'Attack.4.Description_Tooltip',
+						'Attack.5.Description_Tooltip',
 						'AdvLogS.Background_Faction.Text',
 						'AdvLog.HeaderIcon'
 					].includes(field_id)

@@ -1764,8 +1764,8 @@ function adapter_helper_keystroke1(element /*HTMLElement*/, arg1 /*boolean*/, ar
 	}
 	event.change = event.data ? event.data : '';
 	let origLen = event.change.length;
-	event.selStart = event.target.selectionStart;
-	event.selEnd = event.target.selectionEnd;
+	event.selStart = current_selection[0];
+	event.selEnd = current_selection[1];
 	keystroke1(arg1, arg2);
 	if (!event.rc) {
 		element.value = element.value.substring(0,event.selStart-origLen)+element.value.substring(event.selEnd);

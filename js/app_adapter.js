@@ -1895,6 +1895,10 @@ function adapter_helper_serialise_field(element /*HTMLElement*/) /*Object*/ {
 		throw "adapter_helper_serialise_field not implemented for field type '" + String(typeof fieldVar) + "', constructor '" + fieldVar.constructor.name + "'";
 	}
 	let result = {name: fieldVar.name};
+	if (element.id == 'User_Script') {
+		result.value = btoa(escapeUnicode(element.getAttribute('value')));
+		return result;
+	}
 	let submit_name = fieldVar.submitName;
 	if (submit_name != "") {
 		result.submitName = submit_name;
@@ -1935,6 +1939,10 @@ function adapter_helper_deserialise_field(element_info /*Object*/) {
 	let fieldVar = this.getField(element_info.name);
 	if (fieldVar.constructor.name!= 'AdapterClassFieldReference') {
 		throw "adapter_helper_serialise_field not implemented for field type '" + String(typeof fieldVar) + "', constructor '" + fieldVar.constructor.name + "'";
+	}
+	if (element_info.name == 'User Script') {
+		fieldVar.html_elements[0].setAttribute('value', unescapeUnicode(atob(element_info.value)));
+		return;
 	}
 	fieldVar.submitName = element_info.submitName ? element_info.submitName : "";
 	if (element_info.value) {

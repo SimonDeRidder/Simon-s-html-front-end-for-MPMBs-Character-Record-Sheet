@@ -159,7 +159,7 @@ function setCurrentCompRace(prefix, type, found) {
 //add a creature to the companion page
 async function ApplyCompRace(newRace, prefix, sCompType) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
-	var bIsRaceFld = event.target && event.target.name && event.target.name.indexOf("Comp.Race") !== -1;
+	var bIsRaceFld = event && event.target && event.target.name && event.target.name.indexOf("Comp.Race") !== -1;
 	if (bIsRaceFld && newRace.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
 
 	// Start progress bar and stop calculations

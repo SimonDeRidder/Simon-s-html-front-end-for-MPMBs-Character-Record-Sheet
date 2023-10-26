@@ -1775,7 +1775,7 @@ function adapter_helper_convert_colour(color /*[char, ...]*/) /*String|null*/ {
 
 function adapter_helper_keystroke1(element /*HTMLElement*/, arg1 /*boolean*/, arg2 /*boolean*/) {
 	let current_selection;
-	if (arg1 != arg2) {
+	if (event.target.selectionStart != null) {
 		current_selection = [event.target.selectionStart, event.target.selectionEnd];
 	} else {
 		current_selection = adapter_helper_get_number_field_selection();

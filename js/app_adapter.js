@@ -1604,7 +1604,7 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 	if ((element == null ) || (!element.classList.contains('field'))) {
 		// No single element by this id, look for "child elements" that start with the id as prefix
 		[...document.getElementsByClassName('field')].forEach(element => {
-			if (element.id.match(new RegExp("^" + field_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ".*"))) {
+			if (element.id.match(new RegExp("^" + field_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "[\.#].*"))) {
 				elements.push(element);
 			}
 		});

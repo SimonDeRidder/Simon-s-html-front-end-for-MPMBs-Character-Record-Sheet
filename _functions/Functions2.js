@@ -166,7 +166,7 @@ async function ApplyCompRace(newRace, prefix, sCompType) {
 			return;
 		}
 	}
-	var bIsRaceFld = event.target && event.target.name && event.target.name === prefix + "Comp.Race";
+	var bIsRaceFld = event && event.target && event.target.name && event.target.name === prefix + "Comp.Race";
 	if (bIsRaceFld && newRace.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
 
 	// Start progress bar and stop calculations

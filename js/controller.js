@@ -47,7 +47,7 @@ function makeSaveLoadButtons() {
 function initialCalculationEvents() {
 	// First set CurrentWeapons (errors otherwise)
 	FindWeapons();
-	FindCompWeapons(undefined, 'P4.AScomp.');
+	FindCompWeapons();
 	// trigger AC calculation
 	document.getElementById('AC_Armor_Bonus').dispatchEvent(new Event('change'));
 	// trigger Adventuring_Gear_Location_Subtotal_* and Adventuring_Gear_Weight_Subtotal_* calculation

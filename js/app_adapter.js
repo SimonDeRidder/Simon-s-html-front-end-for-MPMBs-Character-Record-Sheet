@@ -1140,7 +1140,7 @@ class AdapterClassPage {
 			this.pageIdPrefix = 'pback';
 			this.buttonFollower = 'tabbuttoncomp';
 			this.isTempl = false;
-		} else if (['pcomptempl', 'AScomp'].includes(type)) {
+		} else if ((type == 'AScomp') || type.startsWith('pcomptempl')) {
 			this.page_ = 'pages/page_companion.html';
 			this.prefix_ = (prefix == null) ? 'P#.AScomp.': prefix;
 			this.buttonPrefix_ = "Companion";
@@ -1578,7 +1578,7 @@ function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
 			}
 		}
 	} if (typeof object === 'string' || object instanceof String) {
-		return "'" + object + "'";
+		return "'" + object.replace(/'/g, "'+\"'\"+'") + "'";
 	} else {
 		return String(object);
 	}
@@ -1925,7 +1925,6 @@ function adapter_helper_serialise_field(element /*HTMLElement*/) /*Object*/ {
 		result.boxChecked = fieldVar.isBoxChecked(0);
 	}
 	if (element.dataset.customUrl) {
-		console.log("file_content:", element.style.backgroundImage);
 		result.image_data = element.style.backgroundImage.replace(/^url\(\"/, '').replace(/\"\)$/, '');
 	}
 	if (is_movable_field(result.name)) {

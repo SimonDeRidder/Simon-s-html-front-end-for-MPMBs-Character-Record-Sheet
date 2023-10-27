@@ -1307,7 +1307,7 @@ class UserImportedFilesAdapter {
 	toSource() {
 		let scrString = "new UserImportedFilesAdapter({";
 		for (let file in this) {
-			scrString += "'" + file + "':`" + this[file] + "`,";
+			scrString += "\"" + adapter_helper_escape_string_for_toSource(file) + "\":\"" + adapter_helper_escape_string_for_toSource(this[file]) + "\",";
 		}
 		return scrString + "})";
 	}
@@ -1509,27 +1509,6 @@ class CurrentProfsAdapter {
 	}
 }
 
-// class CurrentVarsAdapter {
-// 	constructor(
-// 		manual, bluetxt, weight, AbilitySaveDcFound, AbilitySaveDcBonus, extraArmour
-// 	) {
-// 		this.manual = (manual === undefined) ? {} : manual;
-// 		this.bluetxt = (bluetxt === undefined) ? false : bluetxt;
-// 		this.weight = (weight === undefined) ? [] : weight;
-// 		this.AbilitySaveDcFound = (AbilitySaveDcFound === undefined) ? {} : AbilitySaveDcFound;
-// 		this.AbilitySaveDcBonus = (AbilitySaveDcBonus === undefined) ? {} : AbilitySaveDcBonus;
-// 		this.extraArmour = (extraArmour === undefined) ? {} : extraArmour;
-// 	}
-
-// 	toSource() {
-// 		return (
-// 			"new CurrentVarsAdapter("
-// 			// TODO
-// 			+ ")"
-// 		)
-// 	}
-// }
-
 
 // Helper functions
 function adapter_helper_convert_fieldname_to_id(field_name /*str*/) /*str*/ {
@@ -1566,11 +1545,13 @@ function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
 				// it is an object literal
 				let result = "Object({";
 				let first = true;
+				let key;
 				for (let var_ in object) {
 					if (!first) {
 						result += ",";
 					}
-					result += "'" + var_ + "':" + adapter_helper_recursive_toSource(object[var_]);
+					key = adapter_helper_escape_string_for_toSource(var_);
+					result += "\"" + key + "\":" + adapter_helper_recursive_toSource(object[var_]);
 					first = false;
 				}
 				result += "})";
@@ -1578,11 +1559,19 @@ function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
 			}
 		}
 	} if (typeof object === 'string' || object instanceof String) {
-		return "'" + object.replace(/'/g, "'+\"'\"+'") + "'";
+		return "\"" + adapter_helper_escape_string_for_toSource(object) + "\"";
 	} else {
 		return String(object);
 	}
 };
+
+function adapter_helper_escape_string_for_toSource(string /*String*/) /*String*/ {
+	return string
+		.replace(/\\/g, "\\\\")
+		.replace(/\n/g, "\\n")
+		.replace(/\r/g, "\\r")
+		.replace(/"/g, "\\\"");
+}
 
 function adapter_helper_get_number_field_selection() /*[int, int]*/ {
 	let sel = window.getSelection();
@@ -1895,7 +1884,7 @@ function adapter_helper_serialise_field(element /*HTMLElement*/) /*Object*/ {
 		throw "adapter_helper_serialise_field not implemented for field type '" + String(typeof fieldVar) + "', constructor '" + fieldVar.constructor.name + "'";
 	}
 	let result = {name: fieldVar.name};
-	if (element.id == 'User_Script') {
+	if (['User_Imported_Files', 'User_Script'].includes(element.id)) {
 		result.value = btoa(escapeUnicode(element.getAttribute('value')));
 		return result;
 	}

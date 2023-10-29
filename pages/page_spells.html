@@ -744,7 +744,7 @@
 				class="field inputfield"
 				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
 				type="text"
-				data-submit_name=""
+				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
 				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
@@ -863,7 +863,7 @@
 				class="field inputfield"
 				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
-				data-submit_name=""
+				data-submit_name="spellshead.dummy.remember.1"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
 				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
@@ -982,7 +982,7 @@
 				class="field inputfield"
 				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
-				data-submit_name=""
+				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
 				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
@@ -1101,7 +1101,7 @@
 				class="field inputfield"
 				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
-				data-submit_name=""
+				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
 				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
@@ -1474,35 +1474,37 @@
 				}
 
 				// spelshead.prepare
-				for (let i=0; i<4; i++) {
-					[
-						EventType.Str_Mod_change,
-						EventType.Dex_Mod_change,
-						EventType.Con_Mod_change,
-						EventType.Int_Mod_change,
-						EventType.Wis_Mod_change,
-						EventType.Cha_Mod_change,
-						EventType.HoS_Mod_change,
-						EventType['spellshead_class_' + String(i) + '_change'],
-						EventType['spellshead_ability_' + String(i) + '_change'],
-						EventType['BlueText_spellshead_dc_' + String(i) + '_change'],
-						EventType['BlueText_spellshead_attack_' + String(i) + '_change'],
-						EventType['BlueText_spellshead_prepare_' + String(i) + '_change'],
-						EventType.BlueText_Players_Make_All_Rolls_change,
-						EventType.Proficiency_Bonus_change,
-					].forEach(function (eventType) {
-						eventManager.add_listener(
-							eventType,
-							function () {
-								event.target.name = prefix + 'spellshead.prepare.' + String(i);
-								CalcSpellScores();
-								if (event.value !== undefined) {
-									let prepareElement = document.getElementById(prefix + 'spellshead.prepare.' + String(i));
-									prepareElement.value = event.value;
+				if (prefix != "") {
+					for (let i=0; i<4; i++) {
+						[
+							EventType.Str_Mod_change,
+							EventType.Dex_Mod_change,
+							EventType.Con_Mod_change,
+							EventType.Int_Mod_change,
+							EventType.Wis_Mod_change,
+							EventType.Cha_Mod_change,
+							EventType.HoS_Mod_change,
+							EventType['spellshead_class_' + String(i) + '_change'],
+							EventType['spellshead_ability_' + String(i) + '_change'],
+							EventType['BlueText_spellshead_dc_' + String(i) + '_change'],
+							EventType['BlueText_spellshead_attack_' + String(i) + '_change'],
+							EventType['BlueText_spellshead_prepare_' + String(i) + '_change'],
+							EventType.BlueText_Players_Make_All_Rolls_change,
+							EventType.Proficiency_Bonus_change,
+						].forEach(function (eventType) {
+							eventManager.add_listener(
+								eventType,
+								function () {
+									event.target.name = prefix + 'spellshead.prepare.' + String(i);
+									CalcSpellScores();
+									if (event.value !== undefined) {
+										let prepareElement = document.getElementById(prefix + 'spellshead.prepare.' + String(i));
+										prepareElement.value = event.value;
+									}
 								}
-							}
-						);
-					});
+							);
+						});
+					}
 				}
 			}
 		</script>
@@ -1534,5 +1536,9 @@
 		<div id="Image.SpellSlots.Checkboxes.8" class="field"></div>
 		<div id="Image.SpellSlots.Checkboxes.9" class="field"></div>
 		<div id="spellsdiv.dummy.remember.0" class="field"></div>
+		<div id="spellshead.dummy.remember.0" class="field"></div>
+		<div id="spellshead.dummy.remember.1" class="field"></div>
+		<div id="spellshead.dummy.remember.2" class="field"></div>
+		<div id="spellshead.dummy.remember.3" class="field"></div>
 	</div>
 </div>

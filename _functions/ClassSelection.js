@@ -1040,7 +1040,7 @@ async function SelectClass() {
 			Value("Class and Levels", txtFinal);
 		} else { // text stayed the same, so just update the class level
 			classes.totallevel = lvlFinal;
-			ApplyClassLevel();
+			await ApplyClassLevel();
 		}
 	};
 };
@@ -1320,7 +1320,7 @@ async function AskMulticlassing(lvlAlreadyAdded) {
 		Value("Class and Levels", newClassText);
 	} else { // text stayed the same, so just update the class level
 		classes.totallevel = CharLVL;
-		ApplyClassLevel();
+		await ApplyClassLevel();
 	}
 };
 

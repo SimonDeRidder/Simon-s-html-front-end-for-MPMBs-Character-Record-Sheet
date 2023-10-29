@@ -1831,7 +1831,7 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 		};
 	};
 	if (!isChange && NotAtStartup) {
-		ApplyClassLevel(true);
+		await ApplyClassLevel(true);
 		return true;
 	};
 
@@ -1873,7 +1873,7 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 				subclass : classes.old[oClass].subclass
 			}
 			// Remove all the features of the class (remember, new level is set to 0 above)
-			UpdateLevelFeatures("class");
+			await UpdateLevelFeatures("class");
 
 			// If changing subclass, set the class' old level to 0 so all features are added again in full
 			if (classesTemp[oClass]) classes.old[oClass].classlevel = 0;
@@ -2146,7 +2146,7 @@ async function ApplyClasses(inputclasstxt, isFieldVal) {
 
 	thermoM(thermoTxt, true); // Stop progress bar
 
-	ApplyClassLevel(); // Lastly, update the level and level-dependent features (or just the class features if level didn't change)
+	await ApplyClassLevel(); // Lastly, update the level and level-dependent features (or just the class features if level didn't change)
 
 	// Set some visibilities dependent on class-levels
 	SetTheAbilitySaveDCs();
@@ -2214,13 +2214,13 @@ function ClassMenuVisibility() {
 }
 
 // a function to apply the class level depending on how it was changed
-function ApplyClassLevel(noChange) {
+async function ApplyClassLevel(noChange) {
 	if (IsCharLvlVal !== false) { // called during a Level field change event
 		IsCharLvlVal = classes.totallevel;
 	} else if (Number(What("Character Level")) != classes.totallevel) {
 		Value("Character Level", classes.totallevel);
 	} else if (!noChange) { // the classes changed, but the total level didn't, so only call to update the class features
-		UpdateLevelFeatures("class");
+		await UpdateLevelFeatures("class");
 	}
 }
 
@@ -2243,7 +2243,7 @@ async function levelFieldVal() {
 		lvl = IsCharLvlVal;
 	}
 
-	UpdateLevelFeatures("all", Math.max(1,lvl)); // update all level features and use the set level
+	await UpdateLevelFeatures("all", Math.max(1,lvl)); // update all level features and use the set level
 
 	IsCharLvlVal = false; // reset global variable
 
@@ -2552,7 +2552,7 @@ async function ApplyRace(inputracetxt, novardialog) {
 			Value("Racial Traits", "", "");
 
 			// Remove the common attributes from the CurrentRace object and remove the CurrentRace features
-			UpdateLevelFeatures("race", 0);
+			await UpdateLevelFeatures("race", 0);
 
 			// Remove the remembered ability save, if any
 			if (CurrentVars.raceAbilitySave !== undefined) delete CurrentVars.raceAbilitySave;
@@ -2583,7 +2583,7 @@ async function ApplyRace(inputracetxt, novardialog) {
 		thermoM(2/6); //increment the progress dialog's progress
 
 		// Process the common attributes from the CurrentRace object and its features
-		UpdateLevelFeatures("race");
+		await UpdateLevelFeatures("race");
 
 		thermoM(3/4); //increment the progress dialog's progress
 	};
@@ -6646,7 +6646,7 @@ async function SetToManual_Button(noDialog) {
 			}
 			ignoreDuplicates = remIgnoreDuplicates;
 			// update the feat level to the current level
-			UpdateLevelFeatures("feat");
+			await UpdateLevelFeatures("feat");
 		}
 	}
 	//do something with the results of magic item checkbox
@@ -6690,7 +6690,7 @@ async function SetToManual_Button(noDialog) {
 			}
 			ignoreDuplicates = remIgnoreDuplicates;
 			// update the magic item level to the current level
-			UpdateLevelFeatures("item");
+			await UpdateLevelFeatures("item");
 		}
 	}
 

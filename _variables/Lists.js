@@ -5,7 +5,7 @@ var ignoreDuplicates = false; // whether or not to allow duplicates of feats and
 
 // A function to load all the variables not stored in the sheet, but generated dynamically
 async function getDynamicFindVariables() {
-	FindClasses();
+	await FindClasses();
 	await FindRace();
 	FindCompRace();
 	FindWeapons();

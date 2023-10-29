@@ -14,7 +14,7 @@ async function InitializeEverything(noButtons, noVars) {
 	if (!minVer) {
 		SetGearVariables();
 		setListsUnitSystem(false, true);
-		getDynamicFindVariables();
+		await getDynamicFindVariables();
 		UpdateTooSkill();
 		SetRichTextFields();
 		MakeAdventureLeagueMenu();

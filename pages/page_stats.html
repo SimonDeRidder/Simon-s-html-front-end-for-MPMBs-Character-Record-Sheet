@@ -86,7 +86,6 @@
 			aria-label="Background"
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="ApplyBackground(this.value);"
 		/>
 		<datalist id="background_options">
 			<option value="Acolyte">
@@ -177,6 +176,16 @@
 					label_element.dispatchEvent(new Event('change'));
 				}
 			);
+			// Background onchange
+			{
+				document.getElementById('Background').onchange = async function() {
+					calcStartSet = true;
+					calcStop();
+					await ApplyBackground(this.value);
+					calcStartSet = false;
+					calcCont();
+				}
+			}
 		</script>
 	</div>
 

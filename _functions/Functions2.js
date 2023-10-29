@@ -1128,10 +1128,10 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 	if (!isArray(aCreaAdds)) aCreaAdds = [aCreaAdds];
 	var aChangeMsg = [];
 	var fCallBackError = false;
-	var doCallBack = function(fCallBack, prefix) {
+	var doCallBack = async function(fCallBack, prefix) {
 		if (!fCallBackError && fCallBack && typeof fCallBack == 'function') {
 			try {
-				fCallBack(bAddRemove, prefix);
+				await fCallBack(bAddRemove, prefix);
 			} catch (error) {
 				var eText = 'The callback function of the creaturesAdd attribute from "' + srcNm + '" produced an error while ' + (bAddRemove ? 'adding' : 'removing') + ' the "' + sRace + '" creature! Please contact the author of the feature to correct this issue:\n '  + error;
 				for (var e in error) eText += "\n " + e + ": " + error[e];
@@ -1165,7 +1165,7 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 			if (!prefix) prefix = await DoTemplate('AScomp', 'Add');
 			if (!stopMatch) {
 				await ApplyCompRace(sRace, prefix, sCompanionType);
-				doCallBack(aCallBack, prefix);
+				await doCallBack(aCallBack, prefix);
 				var sChangeMsgName = '"' + What(prefix + 'Comp.Race') + '"'; // Get it from the page in case the callback changed it.
 				if (sCompanionType) sChangeMsgName = CompanionList[sCompanionType].nameMenu + " " + sChangeMsgName;
 				aChangeMsg.push('A ' + sChangeMsgName + ' has been added to the companion page at page number ' + (tDoc.getField(prefix + 'Comp.Race').page + 1) + '.');
@@ -1179,7 +1179,7 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 					} else {
 						Value(prefix + 'Comp.Race', ""); // reset the race field
 					}
-					doCallBack(aCallBack, prefix);
+					await doCallBack(aCallBack, prefix);
 					aChangeMsg.push('The companion page at page number ' + iPageNo + ' has ' + (bRemoveWholePage ? 'been removed' : 'had its race option reset') + ' as it contained the "' + sRace + '" race.');
 				}
 			}

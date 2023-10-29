@@ -248,6 +248,30 @@ const dialogManager = {
 				}
 			}
 
+			dialog.removeAllEntriesFromList = function(listName /*String*/) {
+				let theElement = document.getElementById(dialog.idPrefix + listName);
+				if (theElement == null) {
+					return;
+				}
+				let elementType = theElement.getAttribute('elementType');
+				if (
+					['popup', 'list_box', 'hier_list_box'].includes(elementType)
+					|| ((elementType == 'edit_text') && theElement.hasAttribute('list'))
+				) {
+					let currentParent, rootElement;
+					if (elementType == 'edit_text') {
+						rootElement = document.getElementById(theElement.getAttribute('list'));
+					} else {
+						rootElement = theElement;
+					}
+					while (rootElement.lastChild) {
+						rootElement.lastChild.remove()
+					}
+				} else {
+					throw "unknown element type for dialog.removeAllEntriesFromList: " + elementType;
+				}
+			}
+
 			addElementNode("p", dialog, title, dialog.idPrefix + "modalTitle", "modalTitle");
 			if (icon) {
 				console.log("Warning: icon in dialog not implemented yet");

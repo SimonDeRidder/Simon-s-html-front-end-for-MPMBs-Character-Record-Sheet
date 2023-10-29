@@ -38,7 +38,6 @@
 			style="top: 33px;left: 51px;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_2"
@@ -47,7 +46,6 @@
 			style="top: 150px;left: 51px;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_3"
@@ -56,7 +54,6 @@
 			style="top: 267px;left: 51px;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_4"
@@ -65,7 +62,6 @@
 			style="top: 384px;left: 51px;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_5"
@@ -74,7 +70,6 @@
 			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_6"
@@ -83,7 +78,6 @@
 			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_7"
@@ -92,7 +86,6 @@
 			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_8"
@@ -101,7 +94,6 @@
 			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<datalist id="feat_options">
 			<option value=""></option>
@@ -262,6 +254,22 @@
 			style="visibility: hidden;"
 			onclick="MakeFeatMenu_FeatOptions(null, 8)"
 		>&gt;</button>
+
+		<script type="text/javascript">
+			for (let i = 1; i <= 8; i++) {
+				let elm = document.getElementById('Feat_Name_' + String(i));
+				elm.onchange = async function() {
+					event.target.name=adapter_helper_convert_id_to_fieldname(this.id);
+					event.value=this.value;
+					event.name='Validate';
+					calcStartSet = true;
+					calcStop();
+					await doDropDownValCalcWithChoices();
+					calcStartSet = false;
+					calcCont();
+				}
+			}
+		</script>
 	</div>
 
 
@@ -345,7 +353,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_2"
@@ -355,7 +362,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_3"
@@ -365,7 +371,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_4"
@@ -375,7 +380,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_5"
@@ -385,7 +389,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_6"
@@ -395,7 +398,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_7"
@@ -405,7 +407,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_8"
@@ -415,7 +416,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_9"
@@ -425,7 +425,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_10"
@@ -435,7 +434,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_11"
@@ -445,7 +443,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_12"
@@ -455,7 +452,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<datalist id="magic_item_options">
 			<option value=""></option>
@@ -1155,6 +1151,22 @@
 			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_12_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
+
+		<script type="text/javascript">
+			for (let i = 1; i <= 12; i++) {
+				let elm = document.getElementById('Extra.Magic_Item_' + String(i));
+				elm.onchange = async function() {
+					event.target.name=adapter_helper_convert_id_to_fieldname(this.id);
+					event.value=this.value;
+					event.name='Validate';
+					calcStartSet = true;
+					calcStop();
+					await doDropDownValCalcWithChoices();
+					calcStartSet = false;
+					calcCont();
+				}
+			}
+		</script>
 	</div>
 
 

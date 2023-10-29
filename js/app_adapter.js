@@ -1905,9 +1905,10 @@ function adapter_helper_serialise_field(element /*HTMLElement*/) /*Object*/ {
 		result.display = display;
 	}
 	if (fieldVar.type == 'combobox') {
-		result.currentValueIndices = fieldVar.currentValueIndices;
 		if (element.tagName.toLowerCase() == 'input') {
 			result.items = fieldVar.getItems();
+		} else {
+			result.currentValueIndices = fieldVar.currentValueIndices;
 		}
 	}
 	if (['checkbox', 'radiobutton'].includes(fieldVar.type)) {
@@ -1941,8 +1942,9 @@ function adapter_helper_deserialise_field(element_info /*Object*/) {
 	if (fieldVar.type == 'combobox') {
 		if (fieldVar.html_elements[0].tagName.toLowerCase() == 'input') {
 			fieldVar.setItems(element_info.items);
+		} else {
+			fieldVar.currentValueIndices = element_info.currentValueIndices;
 		}
-		fieldVar.currentValueIndices = element_info.currentValueIndices;
 	}
 	if (['checkbox', 'radiobutton'].includes(fieldVar.type)) {
 		fieldVar.checkThisBox(0, element_info.boxChecked);

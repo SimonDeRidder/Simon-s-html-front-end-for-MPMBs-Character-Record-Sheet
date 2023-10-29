@@ -1838,11 +1838,22 @@ function adapter_helper_load() {
 		}
 		let pageAdapter;
 		let pageNum = 1;
-		for (page_info of pages.sort((a, b) => a.page_number - b.page_number)) {
+		let templPages = [];
+		for (page_info of pages) { // .sort((a, b) => a.page_number - b.page_number)) {
 			pageAdapter = new AdapterClassPage(page_info.page_id, page_info.page_prefix);
-			await pageAdapter.spawn(nPage=pageNum, bRename=true, bOverlay=false);
+			if (pageAdapter.isTempl) {
+				templPages.push([pageAdapter, pageNum]);
+			} else {
+				await pageAdapter.spawn(nPage=pageNum, bRename=true, bOverlay=false);
+			}
 			pageNum += 1;
 		}
+		// add template pages last so their buttons are in the "right" place
+		for (let pageAdapterInfo of templPages) {
+			await pageAdapterInfo[0].spawn(nPage=pageAdapterInfo[1], bRename=true, bOverlay=false);
+		}
+
+		// set stat page to open by default and open it
 		let statButton = document.getElementById('tabbuttonstat');
 		if (statButton) {
 			statButton.classList.add('defaultOpen');

@@ -1339,7 +1339,7 @@
 			class="field inputfield"
 			list="ability_save_dc_options"
 			style="top: 19px;font-size: 8px;height: 10px;left: 130px;text-align: center;width: 75px;font-family: 'scala-sans';font-weight: bold"
-			onchange="eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
+			onchange="document.getElementById('Spell_DC_1_Mod.1').value=this.value;eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
 		>
 			<option value=""></option>
 			<option value="Str Mod">  STRENGTH</option>
@@ -1354,7 +1354,7 @@
 			class="field inputfield"
 			list="ability_save_dc_options"
 			style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;font-family: 'scala-sans'"
-			onchange="eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
+			onchange="document.getElementById('Spell_DC_1_Mod.0').value=this.value;eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
 		>
 			<option value=""></option>
 			<option value="Str Mod">  STRENGTH</option>

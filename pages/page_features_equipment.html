@@ -94,11 +94,13 @@
 			spellcheck="true"
 			aria-label="Select or type in the background feature you want to use and its text will be filled out below automatically."
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="ApplyBackgroundFeature(self.value);"
+			onfocus="this.dataset.oldValue=(this.value == '' ? ' ' : this.value)"
+			onload="this.dataset.oldValue=(this.value == '' ? ' ' : this.value)"
+			onchange="ApplyBackgroundFeature(this.value, this.dataset.oldValue);this.dataset.oldValue=(this.value == '' ? ' ' : this.value)"
 		/>
 		<datalist id="background_feature_options">
-			<option value="">
-			<option value="Shelter of the Faithful">
+			<option value=""></option>
+			<option value="Shelter of the Faithful">Shelter of the Faithful</option>
 		</datalist>
 		<textarea
 			id="Background_Feature_Description"

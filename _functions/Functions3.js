@@ -1379,7 +1379,7 @@ function applyClassFeatureText(act, fldA, oldTxtA, newTxtA, prevTxt) {
 	var fReplaceLinebreaks = function(str) {
 		var sEscaped = str.replace(/\n/g, '\r').replace(/^\r+/, '').RegEscape();
 		var sJustLine = RegExp(sEscaped + ".*", "i");
-		var sFullSection = RegExp("\\r?" + sEscaped + "(.|\\r\\s\\s|\\r\\w)*", "i"); // everything until the first line that doesn't start with two spaces or a letter/number (e.g. an empty line or a new bullet point)
+		var sFullSection = RegExp("\\r?" + sEscaped + "(.|\\n\\s\\s|\\r\\w)*", "i"); // everything until the first line that doesn't start with two spaces or a letter/number (e.g. an empty line or a new bullet point)
 		return [sJustLine, sFullSection];
 	}
 	var oldFrstLnRx = fReplaceLinebreaks(oldTxtA[0]);

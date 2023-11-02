@@ -2018,7 +2018,17 @@ function is_movable_field(fieldName /*String*/) /*boolean*/ {
 			"spellsgloss.Image",
 			"spellsdiv.Image.",
 			"spellsdiv.Text.",
+			"spellshead.Image.Header.Left.",
+			"spellshead.Text.header.",
+			"spellshead.ability.",
+			"spellshead.attack.",
+			"spellshead.dc.",
 			"spellshead.Image.prepare.",
+			"spellshead.prepare.",
+			"spellshead.class.",
+			"BlueText.spellshead.attack.",
+			"BlueText.spellshead.dc.",
+			"BlueText.spellshead.prepare.",
 		]
 	) {
 		if (fieldName.indexOf(infix) != -1) {

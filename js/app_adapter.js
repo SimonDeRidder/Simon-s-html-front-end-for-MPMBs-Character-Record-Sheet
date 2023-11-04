@@ -1876,7 +1876,7 @@ function adapter_helper_load() {
 	// load file and apply contents
 	var input = document.createElement('input');
 	input.type = 'file';
-	input.setAttribute('accept', "application/json");
+	// input.setAttribute('accept', "application/json");
 	input.onchange = e => { 
 		let file = e.target.files[0]; 
 		let reader = new FileReader();

@@ -457,8 +457,8 @@ function KeystrokeDay() {
 };
 
 //a field "format" function to add a space at the start and end of the field, to make sure it looks better on the sheet
-function addWhitespace() {
-	event.value = " " + event.value + " ";
+function addWhitespace(value) {
+	return " " + value.trim() + " ";
 };
 
 function RoundTo(inputNmbr, roundNmbr, emptyAtZero, applyDec) {

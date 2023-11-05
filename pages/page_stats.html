@@ -170,9 +170,8 @@
 			eventManager.add_listener(
 				EventType.Character_Level_change,
 				function () {
-					CalcXPnextlvl()
 					let label_element = document.getElementById('Next_level');
-					label_element.innerText = event.value;
+					label_element.innerText = CalcXPnextlvl()
 					label_element.dispatchEvent(new Event('change'));
 				}
 			);

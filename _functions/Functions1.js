@@ -6714,7 +6714,7 @@ async function SetToManual_Button(noDialog) {
 //calculate how much experience points are needed for the next level (field calculation)
 function CalcXPnextlvl() {
 	var lvl = Number(What("Character Level"));
-	event.value = lvl && !isNaN(lvl) && lvl < (ExperiencePointsList.length - 1) ? ExperiencePointsList[lvl] : "";
+	return lvl && !isNaN(lvl) && lvl < (ExperiencePointsList.length - 1) ? ExperiencePointsList[lvl] : "";
 };
 
 //calculate the Ability Save DC (field calculation)

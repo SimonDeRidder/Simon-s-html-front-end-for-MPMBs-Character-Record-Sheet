@@ -67,7 +67,7 @@
 			aria-label="Classes"
 			spellcheck="true"
 			onclick="ClickClasses(this.value, event.ctrlKey || event.shiftKey).then((remVal) => {this.dataset.remVal=remVal})"
-			onchange="event.target.remVal=this.dataset.remVal == 'undefined' ? undefined : this.dataset.remVal;event.value=this.value;classesFieldVal();this.value=event.value;if (event.target.remVal === undefined) {delete this.dataset.remVal;}"
+			onchange="classesFieldVal(this.value, this.dataset.remVal == 'undefined' ? undefined : this.dataset.remVal).then((valueremVal) => {this.value=valueremVal[0];if (valueremVal[1] === undefined) {delete this.dataset.remVal;}});"
 		/>
 		<input
 			id="Player_Name"

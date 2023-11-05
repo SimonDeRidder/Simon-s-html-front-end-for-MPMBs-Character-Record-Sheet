@@ -437,10 +437,9 @@
 					eventManager.add_listener(
 						EventType['Comp_Use_Ability_' + ability + '_Score_change'],
 						function () {
-							event.target.name = prefix + 'Comp.Use.Ability.' + ability + '.Mod';
-							CalcMod();
-							let mod_element = document.getElementById(prefix + 'Comp.Use.Ability.' + ability + '.Mod');
-							mod_element.value = event.value;
+							let field_name = prefix + 'Comp.Use.Ability.' + ability + '.Mod';
+							let mod_element = document.getElementById(field_name);
+							mod_element.value = CalcMod(field_name);
 							mod_element.dispatchEvent(new Event('change'));
 						}
 					)

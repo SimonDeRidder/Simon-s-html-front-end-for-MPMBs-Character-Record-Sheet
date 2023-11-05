@@ -4624,11 +4624,11 @@ function CalcSave() {
 };
 
 //calculate the ability modifier (field calculation)
-function CalcMod() {
-	var Base = event.target.name.indexOf("Comp.") !== -1 || event.target.name.indexOf("Wildshape.") !== -1;
-	var AbiNm = Base ? event.target.name.replace(".Mod", ".Score") : event.target.name.replace(" Mod", "");
+function CalcMod(name) {
+	var Base = name.indexOf("Comp.") !== -1 || name.indexOf("Wildshape.") !== -1;
+	var AbiNm = Base ? name.replace(".Mod", ".Score") : name.replace(" Mod", "");
 	var theScore = What(AbiNm);
-	event.value = theScore ? (Math.round((theScore - 10.5) * 0.5)) : "";
+	return theScore ? (Math.round((theScore - 10.5) * 0.5)) : "";
 }
 
 function processRecovery(recovery, additionalRecovery) {

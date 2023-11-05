@@ -817,7 +817,8 @@
 				aria-label="Spell Attack Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_attack_0_change)"
 			/>
@@ -828,7 +829,8 @@
 				aria-label="Saving Throw DC Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_dc_0_change)"
 			/>
@@ -839,7 +841,8 @@
 				aria-label="Spells to Prepare Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_0_change)"
 			/>
@@ -936,7 +939,8 @@
 				aria-label="Spell Attack Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_attack_1_change)"
 			/>
@@ -947,7 +951,8 @@
 				aria-label="Saving Throw DC Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_1_change)"
 			/>
@@ -958,7 +963,8 @@
 				aria-label="Spells to Prepare Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_1_change)"
 			/>
@@ -1055,7 +1061,8 @@
 				aria-label="Spell Attack Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_attack_2_change)"
 			/>
@@ -1066,7 +1073,8 @@
 				aria-label="Saving Throw DC Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_2_change)"
 			/>
@@ -1077,7 +1085,8 @@
 				aria-label="Spells to Prepare Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_2_change)"
 			/>
@@ -1175,7 +1184,8 @@
 				aria-label="Spell Attack Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_attack_3_change)"
 			/>
@@ -1186,7 +1196,8 @@
 				aria-label="Saving Throw DC Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_3_change)"
 			/>
@@ -1197,7 +1208,8 @@
 				aria-label="Spells to Prepare Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_3_change)"
 			/>

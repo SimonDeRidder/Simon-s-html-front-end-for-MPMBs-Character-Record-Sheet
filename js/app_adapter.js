@@ -964,6 +964,10 @@ class AdapterClassFieldReference {
 		elm.click();
 	}
 
+	buttonGetCaption() /*String*/ {
+		return this.html_elements[0].innerText;
+	}
+
 	buttonSetCaption(cCaption /*String*/, nFace /*Number*/) {
 		for (let element of this.html_elements) {
 			element.innerText = cCaption;

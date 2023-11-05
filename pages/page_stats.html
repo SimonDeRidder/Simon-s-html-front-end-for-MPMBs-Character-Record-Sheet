@@ -614,7 +614,8 @@
 			aria-label="All Saving Throws Bonus Modifier"
 			style="top: -12px;left: 62.3px;width: 18px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.All_ST_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.All_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -624,7 +625,8 @@
 			style="top: 10.4px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Str_ST_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Str_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -634,7 +636,8 @@
 			style="top: 30px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dex_ST_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Dex_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -644,7 +647,8 @@
 			style="top: 49.6px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Con_ST_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Con_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -654,7 +658,8 @@
 			style="top: 10.4px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Wis_ST_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Wis_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -664,7 +669,8 @@
 			style="top: 10.4px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Int_ST_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Int_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -674,7 +680,8 @@
 			style="top: 49.6px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -684,7 +691,8 @@
 			style="top: 802px;left: -107px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<div
@@ -811,7 +819,8 @@
 			style="visibility: hidden;top: 112.8px;left: 238.3px;width: 16.7px;height: 14.7px;text-align: center;"
 			aria-label="Initiative Bonus Modifier"
 			value="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Init_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Init_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -1096,7 +1105,8 @@
 			style="top: 20px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="text"
 			aria-label="Base Armor Class"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Armor_Bonus_change);"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Armor_Bonus_change);"
 		>
 		<input
 			id="AC_Shield_Bonus"
@@ -1104,7 +1114,8 @@
 			style="top: 39.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="Shield Bonus"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Shield_Bonus_change);"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Shield_Bonus_change);"
 		>
 		<input
 			id="AC_Dexterity_Modifier"
@@ -1119,7 +1130,8 @@
 			style="top: 78.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="Magic AC Bonus Modifier"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Magic_change);"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Magic_change);"
 		>
 		<input
 			id="AC_Misc_Mod_1"
@@ -1127,7 +1139,8 @@
 			style="top: 98.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="1st Miscellaneous AC Bonus Modifier"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Misc_Mod_1_change);"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Misc_Mod_1_change);"
 		>
 		<input
 			id="AC_Misc_Mod_2"
@@ -1135,7 +1148,8 @@
 			style="top: 117.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="1st Miscellaneous AC Bonus Modifier"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Misc_Mod_2_change);"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Misc_Mod_2_change);"
 		>
 
 		<input
@@ -1393,7 +1407,8 @@
 			aria-label="1st Ability Save DC Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Spell_DC_1_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Spell_DC_1_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -1403,7 +1418,8 @@
 			aria-label="2nd Ability Save DC Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Spell_DC_2_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Spell_DC_2_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 
@@ -2022,7 +2038,8 @@
 			aria-label="All Skills Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus(true);this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.All_Skills_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.All_Skills_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2032,7 +2049,8 @@
 			aria-label="Acrobatics Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Acr_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Acr_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2042,7 +2060,8 @@
 			aria-label="Animal Handling Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ani_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ani_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2052,7 +2071,8 @@
 			aria-label="Arcana Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Arc_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Arc_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2062,7 +2082,8 @@
 			aria-label="Athletics Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ath_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ath_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2072,7 +2093,8 @@
 			aria-label="Deception Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dec_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Dec_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2082,7 +2104,8 @@
 			aria-label="History Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.His_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.His_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2092,7 +2115,8 @@
 			aria-label="Insight Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ins_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ins_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2102,7 +2126,8 @@
 			aria-label="Intimidation Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Inti_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Inti_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2112,7 +2137,8 @@
 			aria-label="Investigation Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Inv_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Inv_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2122,7 +2148,8 @@
 			aria-label="Medicine Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Med_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Med_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2132,7 +2159,8 @@
 			aria-label="Nature Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Nat_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Nat_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2142,7 +2170,8 @@
 			aria-label="Perception Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Perc_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Perc_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2152,7 +2181,8 @@
 			aria-label="Performance Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Perf_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Perf_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2162,7 +2192,8 @@
 			aria-label="Persuasion Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Pers_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Pers_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2172,7 +2203,8 @@
 			aria-label="Religion Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Rel_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Rel_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2182,7 +2214,8 @@
 			aria-label="Sleight of Hand Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Sle_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Sle_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2192,7 +2225,8 @@
 			aria-label="Stealth Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ste_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ste_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2202,7 +2236,8 @@
 			aria-label="Survival Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Sur_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Sur_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -2212,7 +2247,8 @@
 			aria-label="Tool Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Too_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Too_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 		<input
@@ -3771,7 +3807,8 @@
 			style="top: 34px;left: 253px;width: 16px;height: 12px;text-align: center;visibility: hidden"
 			data-default="0"
 			value="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Passive_Perception_Bonus_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Passive_Perception_Bonus_change)"
 			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
 		/>
 
@@ -3873,7 +3910,8 @@
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoLeftDisplay_Amount_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoLeftDisplay_Amount_change)"
 		/>
 		<input
 			id="AmmoRightDisplay.Amount"
@@ -3882,7 +3920,8 @@
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoRightDisplay_Amount_change)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoRightDisplay_Amount_change)"
 		/>
 
 		<button

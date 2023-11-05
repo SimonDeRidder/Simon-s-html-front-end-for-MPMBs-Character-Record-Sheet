@@ -3685,8 +3685,8 @@ function getBookmarkTemplate(bookmark) {
 
 //make menu for the button to (re)set the portrait/organization symbol
 //after that, do something with the menu and its results
-async function MakeIconMenu_IconOptions() {
-	var SymbPort = event.target.name;
+async function MakeIconMenu_IconOptions(targetField) {
+	var SymbPort = targetField.name;
 	var DoAdvLog = SymbPort.indexOf("AdvLog") !== -1;
 	var DisplayName = SymbPort.indexOf("Comp.") !== -1 ? "Companion's Icon" : (SymbPort.indexOf("HeaderIcon") !== -1 ? "Header Icon" : SymbPort);
 	if (DoAdvLog) DisplayName = "Adventure Logsheet " + DisplayName;
@@ -3831,12 +3831,12 @@ async function MakeIconMenu_IconOptions() {
 	//now loop through all the adventure logsheet pages, if this was to set the adv.logs
 	if (typePF && DoAdvLog && MenuSelection[0] !== "convertor") {
 		var ALlogA = What("Template.extras.ALlog").split(",");
-		var aIcon = event.target.buttonGetIcon();
+		var aIcon = targetField.buttonGetIcon();
 		for (var tA = 0; tA < ALlogA.length; tA++) {
 			var fldNm = ALlogA[tA] + "AdvLog.HeaderIcon";
-			if (fldNm !== event.target.name) {
+			if (fldNm !== targetField.name) {
 				tDoc.getField(fldNm).buttonSetIcon(aIcon);
-				tDoc.getField(fldNm).display = event.target.display;
+				tDoc.getField(fldNm).display = targetField.display;
 			}
 		}
 	}

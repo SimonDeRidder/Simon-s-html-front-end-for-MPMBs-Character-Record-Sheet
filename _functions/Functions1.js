@@ -2225,12 +2225,11 @@ async function ApplyClassLevel(noChange) {
 }
 
 // apply the Character Level field change (field validation)
-async function levelFieldVal() {
-	var lvlOld = Number(What(event.target.name));
-	var lvl = Number(event.value);
+async function levelFieldVal(name, value) {
+	var lvlOld = Number(What(name));
+	var lvl = Number(value);
 	if (lvlOld == lvl) { // no level change, but it could be an empty string changed to '0' or vice versa
-		event.value = lvl > 0 ? lvl : '';
-		return;
+		return lvl > 0 ? lvl : '';
 	}
 
 	IsCharLvlVal = lvl; // save level to global variable
@@ -2250,7 +2249,7 @@ async function levelFieldVal() {
 	// make sure to update the experience points (or similar system) and alert the user
 	CurrentUpdates.types.push("xp");
 
-	event.value = lvl > 0 ? lvl : '';
+	return lvl > 0 ? lvl : '';
 }
 
 function getCurrentLevelByXP(level, exp) {

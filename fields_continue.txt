@@ -1,6 +1,9 @@
 Bluetext*   -   skipped for now
 Wildshape*  -   skipped for now
 
+converting for firefox-safety:
+Resistance_Damage_Type_6
+
 // trigger events on change:
 "BlueText.Attack." + i + ".Damage Bonus": BlueText_Attack_<i:1-5>_Damage_Bonus_change
 "BlueText.Attack." + i + ".Damage Die": BlueText_Attack_<i:1-5>_Damage_Die_change

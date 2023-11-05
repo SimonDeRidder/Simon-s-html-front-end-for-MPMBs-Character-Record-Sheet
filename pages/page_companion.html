@@ -2407,7 +2407,7 @@
 			class="field"
 			style="position: absolute;top: 12.5px;left: 14px;width: 257.2px;height: 120px;cursor: pointer;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/page_stats/header_icons/blank.svg')"
 			aria-label="Click here to change the Companion's Appearance."
-			onclick="{let thisElement=this;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.buttonGetIcon=function() {return thisElement.style.backgroundImage.match(/\b(img\/.*\.svg)\b/)[1];};event.target.contextTransfers=['buttonGetIcon'];MakeIconMenu_IconOptions()}"
+			onclick="{MakeIconMenu_IconOptions(new AdapterClassFieldReference([this]))}"
 		>
 		</div>
 	</div>

@@ -1594,14 +1594,15 @@ async function ConditionSet(isReset) {
 };
 
 // apply the Class and Levels field change (field validation)
-async function classesFieldVal() {
+async function classesFieldVal(value, remVal) {
 	// if you ctrl/shift click into the field, any changes in it must be ignored as the class selection dialog is opened
-	if (event.target.remVal !== undefined) {
-		event.value = event.target.remVal;
-		delete event.target.remVal;
+	if (remVal !== undefined) {
+		value = remVal;
+		remVal = undefined;
 	} else {
-		await ApplyClasses(event.value, true);
+		await ApplyClasses(value, true);
 	};
+	return [value, remVal];
 }
 
 // search the string for possible class and subclass

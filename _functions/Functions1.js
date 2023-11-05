@@ -931,7 +931,7 @@ function ToggleBlueText(toggle) {
 
 	if (typePF) {
 		BlueTxt.push("Init Bonus");
-		BlueTxt.push("Comp.Use.Combat.Init.Bonus");
+		// BlueTxt.push("Comp.Use.Combat.Init.Bonus");
 		BlueTxt.push("AC Stealth Disadvantage");
 		BlueTxt.push("AC Stealth Disadvantage Title");
 	}
@@ -4451,23 +4451,25 @@ function AddSkillProf(SkillName, change, expertise, returnSkillName, bonus, comp
 };
 
 //make sure field is a number or the abbreviation of an ability score (field validation)
-function ValidateBonus(goEmpty, allowDC) {
+function ValidateBonus(name, value, oldValue, goEmpty, allowDC) {
 	var test = 0;
-	var input = Number(event.value.replace(/,/g,"."));
+	var input = Number(value.replace(/,/g,"."));
 	if (isNaN(input)) {
-		var notComp = getTemplPre(event.target.name, "AScomp");
-		test = event.value;
+		var notComp = getTemplPre(name, "AScomp");
+		test = value;
 		if (!allowDC) test = test.replace(/dc/ig, "");
 		["Str", "Dex", "Con", "Int", "Wis", "Cha", "HoS", "Prof"].forEach( function(AbiS) {
 			test = test.replace(RegExp("(\\b|\\d)" + AbiS[0] + AbiS[1] + "?" + AbiS[2] + "?" + "(\\b|\\d)", "ig"), "$1" + AbiS + "$2");
 		});
 		var calc = EvalBonus(test, notComp, "test");
-		event.value = calc === undefined ? event.target.value : test;
+		value = calc === undefined ? oldValue : test;
 	} else {
 		var calc = Math.round(input);
-		event.value = event.value === "" && goEmpty ? "" : calc;
+		value = value === "" && goEmpty ? "" : calc;
 	};
-	if (calc !== undefined) event.target.valueCalculated = calc;
+	let valueCalculated = undefined;
+	if (calc !== undefined) valueCalculated = calc;
+	return [value, valueCalculated];
 };
 
 // Display the EvalBonus for this field, if calculated (field format)

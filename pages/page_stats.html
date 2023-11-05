@@ -57,7 +57,7 @@
 			spellcheck="true"
 			onfocus="this.dataset.temp=this.value;"
 			oninput="adapter_helper_keystroke1(this, false, false)"
-			onchange="event.value=this.value;this.value=this.dataset.temp?this.dataset.temp:0;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);levelFieldVal();this.value=event.value;eventManager.handle_event(EventType.Character_Level_change)"
+			onchange="{let newVal=this.value;this.value=this.dataset.temp?this.dataset.temp:0;levelFieldVal(adapter_helper_convert_id_to_fieldname(this.id), newVal).then((finalValue) => {this.value=finalValue;eventManager.handle_event(EventType.Character_Level_change)});}"
 		/>
 		<input
 			id="Class_and_Levels"

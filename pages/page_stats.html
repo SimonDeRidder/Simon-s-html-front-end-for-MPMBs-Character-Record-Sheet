@@ -132,7 +132,7 @@
 			aria-label="The current total amount of experience points."
 			data-default=""
 			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1(0, 0);this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};CalcExperienceLevel(true)"
+			onchange="this.value=format1(String(this.value), 0, 0);{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};CalcExperienceLevel(true)"
 		/>
 		<input
 			id="Add_Experience"
@@ -141,7 +141,7 @@
 			type="number"
 			aria-label="Experience points that are to be added to the total to the left."
 			oninput="adapter_helper_keystroke1(this, true, true)"
-			onchange="event.value=this.value;format1(0, 0);this.value=event.value"
+			onchange="this.value=format1(String(this.value), 0, 0)"
 		/>
 		<span
 			id="Next_level"
@@ -1231,7 +1231,7 @@
 			value="0"
 			type="text"
 			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.AC_Armor_Weight_change)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.AC_Armor_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1242,7 +1242,7 @@
 			value="0"
 			type="text"
 			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.AC_Shield_Weight_change)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.AC_Shield_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -4991,7 +4991,7 @@
 			aria-label="Ammunition's weight"
 			value="0"
 			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.AmmoLeftDisplay_Weight_change)"
+			onchange="this.value=format1(this.value);eventManager.handle_event(EventType.AmmoLeftDisplay_Weight_change)"
 		/>
 		<input
 			id="AmmoRightDisplay.Weight"
@@ -5000,7 +5000,7 @@
 			aria-label="Ammunition's weight"
 			value="0"
 			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.AmmoRightDisplay_Weight_change)"
+			onchange="this.value=format1(this.value);eventManager.handle_event(EventType.AmmoRightDisplay_Weight_change)"
 		/>
 		<input
 			id="AmmoLeftDisplay.MaxAmount"

@@ -332,11 +332,11 @@ function sign(x) {
 	return x > 0 ? 1 : x < 0 ? -1 : x;
 };
 
-function format1(extraDec, fixedDec, unit) {
+function format1(value, extraDec, fixedDec, unit) {
 	var plusDec = extraDec && !isNaN(extraDec) ? Number(extraDec) : 0;
 	var decShow = 0;
 	AFNumber_Format(2 + plusDec, 1, 0, 0, "", false);
-	var decLoc = event.value.indexOf(".");
+	var decLoc = value.indexOf(".");
 	var decSep = What("Decimal Separator");
 
 	decShow = (3 + plusDec) - decLoc;
@@ -350,28 +350,29 @@ function format1(extraDec, fixedDec, unit) {
 		AFNumber_Format(decShow, 0, 0, 0, "", false);
 		if (decShow) {
 			// Replace any trailing zeroes with nothing
-			event.value = event.value.replace(/[0]+$/, "");
+			value = value.replace(/[0]+$/, "");
 			// Replace a trailing decimal with nothing
-			event.value = event.value.replace(/\.$/, "");
+			value = value.replace(/\.$/, "");
 		}
 	} else if (decSep === "comma") {
 		AFNumber_Format(decShow, 2, 0, 0, "", false);
 		if (decShow) {
 			// Replace any trailing zeroes with nothing
-			event.value = event.value.replace(/[0]+$/, "");
+			value = value.replace(/[0]+$/, "");
 			// Replace a trailing decimal with nothing
-			event.value = event.value.replace(/,$/, "");
+			value = value.replace(/,$/, "");
 		}
 	}
 
-	if (event.value !== "" && unit && unit === "mass") {
+	if (value !== "" && unit && unit === "mass") {
 		var UnitSystem = What("Unit System");
 		if (UnitSystem === "imperial") {
-			event.value += " lb";
+			value += " lb";
 		} else if (UnitSystem === "metric") {
-			event.value += " kg";
+			value += " kg";
 		}
 	}
+	return value;
 }
 
 //replace all commas and dots with the set decimal separator

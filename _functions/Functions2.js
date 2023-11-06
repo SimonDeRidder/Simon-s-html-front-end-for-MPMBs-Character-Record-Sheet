@@ -6297,20 +6297,20 @@ function EvalDmgDie(input, prefix, isSpecial, useProfB) {
 };
 
 // add a way to set the value of a field
-async function SetThisFldVal() {
+async function SetThisFldVal(targetField, modifier) {
 	var len = typePF ? 4 : 3;
-	if (event.target.submitName || event.target.value.length > len || event.modifier || event.shift) {
-		var QI = getTemplPre(event.target.name, "AScomp");
-		var dmgDie = event.target.name.indexOf("Damage Die") !== -1;
+	if (targetField.submitName || targetField.value.length > len || modifier) {
+		var QI = getTemplPre(targetField.name, "AScomp");
+		var dmgDie = targetField.name.indexOf("Damage Die") !== -1;
 		var isSkill = !dmgDie && QI === true && (RegExp("^(" + SkillsList.abbreviations.join("|") + ") Bonus$")).test(event.target.name);
-		var isAcFld = !isSkill && QI === true && (/^AC/).test(event.target.name);
-		var theName = event.target.userName;
+		var isAcFld = !isSkill && QI === true && (/^AC/).test(targetField.name);
+		var theName = targetField.userName;
 		if (theName && (/\n/).test(theName)) {
 			theName = theName.match(/.*\n/)[0].replace(/\n/, "");
 		};
-		var theVal = event.target.value;
+		var theVal = targetField.value;
 		if (!isNaN(theVal)) theVal = theVal.toString();
-		var theExpl = event.target.submitName.replace(/^\n*/, "");
+		var theExpl = targetField.submitName.replace(/^\n*/, "");
 		var theDialTxt = (dmgDie ? "If you want the Damage Die to be a calculated value, and not just a string, make sure the first character is a '='.\nRegardless of the first character, a 'C' will be replaced with the Cantrip die, a 'B' with the Cantrip die minus 1, and a 'Q' with the Cantrip die plus 1.\n\nIf a calculated value (=), you can use underscores to keep the strings separate. For the calculated parts, y" : "Y") + "ou can use numbers, logical operators (+, -, /, *), ability score abbreviations (Str, Dex, Con, Int, Wis, Cha" + (QI === true ? ", HoS" : "") + "), and 'Prof'.";
 		var theDialTxt1 = "If the above calculates to 'ERROR', the field will not be changed.\nNote that the field won't appear to change until you click/tab out of it."
 		var theDialTxt2 = "You can also determine the maximum or minimum of a group with 'min(1|2)' or 'max(1|2)', using pipe '|' as the separator.";
@@ -6484,7 +6484,7 @@ async function SetThisFldVal() {
 			}
 		};
 		if (await app.execDialog(theDialog) === "ok") {
-			event.target.value = theDialog.theTXT;
+			targetField.value = theDialog.theTXT;
 		};
 	};
 };

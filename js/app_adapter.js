@@ -1694,10 +1694,6 @@ function adapter_helper_UrlExists(url /*String*/) /*boolean*/ {
 	return http.status != 404;
 }
 
-function adapter_helper_storeSetThisFldValResult(fieldAdapter /*AdapterClassFieldReference*/) {
-	fieldAdapter.value = event.target.value
-}
-
 function adapter_helper_get_prefix_from_script(postPrefix /*String*/) /*String*/ {
 	let elementQueue = new Queue();
 	for (let childElement of document.currentScript.parentElement.childNodes) {

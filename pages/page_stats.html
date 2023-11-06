@@ -616,7 +616,7 @@
 			value="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.All_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Str_ST_Bonus"
@@ -627,7 +627,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Str_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Dex_ST_Bonus"
@@ -638,7 +638,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Dex_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Con_ST_Bonus"
@@ -649,7 +649,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Con_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Int_ST_Bonus"
@@ -660,7 +660,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Wis_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Wis_ST_Bonus"
@@ -671,7 +671,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Int_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Cha_ST_Bonus"
@@ -682,7 +682,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="HoS_ST_Bonus"
@@ -693,7 +693,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<div
 			id="Save_Modifiers_All_Text"
@@ -821,7 +821,7 @@
 			value="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Init_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Initiative_bonus"
@@ -1285,14 +1285,7 @@
 			// Bonus field setters
 			['AC_Armor_Bonus', 'AC_Shield_Bonus'].forEach(function(elementId /*String*/) {
 				document.getElementById(elementId).onclick = async function (clickEvent /*MouseEvent*/) {
-					let adapter=new AdapterClassFieldReference([this]);
-					event.target.name=adapter.name;
-					event.target.submitName=adapter.submitName;
-					event.target.userName=adapter.userName;
-					event.modifier=event.ctrlKey;
-					event.shift=event.shiftKey;
-					await SetThisFldVal();
-					adapter_helper_storeSetThisFldValResult(adapter);
+					await SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey);
 				}
 			});
 		</script>
@@ -1409,7 +1402,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Spell_DC_1_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Spell_DC_2_Bonus"
@@ -1420,7 +1413,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Spell_DC_2_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 
 		<script type="text/javascript">
@@ -2040,7 +2033,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.All_Skills_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Acr_Bonus"
@@ -2051,7 +2044,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Acr_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Ani_Bonus"
@@ -2062,7 +2055,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ani_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Arc_Bonus"
@@ -2073,7 +2066,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Arc_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Ath_Bonus"
@@ -2084,7 +2077,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ath_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Dec_Bonus"
@@ -2095,7 +2088,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Dec_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="His_Bonus"
@@ -2106,7 +2099,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.His_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Ins_Bonus"
@@ -2117,7 +2110,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ins_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Inti_Bonus"
@@ -2128,7 +2121,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Inti_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Inv_Bonus"
@@ -2139,7 +2132,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Inv_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Med_Bonus"
@@ -2150,7 +2143,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Med_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Nat_Bonus"
@@ -2161,7 +2154,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Nat_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Perc_Bonus"
@@ -2172,7 +2165,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Perc_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Perf_Bonus"
@@ -2183,7 +2176,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Perf_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Pers_Bonus"
@@ -2194,7 +2187,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Pers_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Rel_Bonus"
@@ -2205,7 +2198,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Rel_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Sle_Bonus"
@@ -2216,7 +2209,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Sle_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Ste_Bonus"
@@ -2227,7 +2220,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ste_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Sur_Bonus"
@@ -2238,7 +2231,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Sur_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Too_Bonus"
@@ -2249,7 +2242,7 @@
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Too_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Jack_of_All_Trades"
@@ -3809,7 +3802,7 @@
 			value="0"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Passive_Perception_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 
 		<script type="text/javascript">

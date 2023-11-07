@@ -3215,7 +3215,7 @@ async function MakePagesMenu() {
 		["Make the 7th ability score 'Sanity'", "sanity"]
 	]);
 	//1st page: add the menu for setting hp on the first page
-	await MakeHPMenu_HPOptions("justMenu");
+	await MakeHPMenu_HPOptions("", "justMenu");
 	pageone.oSubMenu.push({
 		cName : "Hit Points",
 		oSubMenu : Menus.hp
@@ -3325,7 +3325,7 @@ async function PagesOptions() {
 			await MakeSpellMenu_SpellOptions(MenuSelection);
 			break;
 		case "hp" :
-			await MakeHPMenu_HPOptions(MenuSelection);
+			await MakeHPMenu_HPOptions("", MenuSelection);
 			break;
 		case "skills" :
 			await MakeSkillsMenu_SkillsOptions(MenuSelection);
@@ -4263,9 +4263,9 @@ function SetHPTooltip(resetHP, onlyComp, aPrefix) {
 	}
 };
 
-async function MakeHPMenu_HPOptions(preSelect, prefix) {
+async function MakeHPMenu_HPOptions(name, preSelect, prefix) {
 	//define some variables
-	prefix = prefix === true ? getTemplPre(event.target.name, "AScomp", true) : prefix ? prefix : "";
+	prefix = prefix === true ? getTemplPre(name, "AScomp", true) : prefix ? prefix : "";
 	var theFld = prefix ? prefix + "Comp.Use.HP.Max" : "HP Max";
 	var theInputs = How(theFld).split(",");
 	if (!preSelect || preSelect == "justMenu") {

@@ -764,7 +764,7 @@
 			class="field button nonprintable"
 			style="left: 29px;top: 27.5px;font-size: 8px;line-height: 7px;"
 			aria-label="With this button you can set the value of the maximum hit points field to one of the calculated values:"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeHPMenu_HPOptions();"
+			onclick="MakeHPMenu_HPOptions(adapter_helper_convert_id_to_fieldname(this.id));"
 		>Set Max HP</button>
 		<input
 			id="HP_Max"

@@ -5433,10 +5433,10 @@ function resetLimFeaUsed(rxType) {
 	}
 }
 
-function HealItNow() {
+function HealItNow(name) {
 	calcStop();
-	var QI = !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
-	var prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var QI = name.indexOf("Comp.") === -1;
+	var prefix = QI ? "" : getTemplPre(name, "AScomp", true);
 
 	var fields = [
 		"HP Current",

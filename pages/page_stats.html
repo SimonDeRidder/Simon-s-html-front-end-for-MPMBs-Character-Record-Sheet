@@ -808,7 +808,7 @@
 			class="field button nonprintable"
 			style="top: 170px;left: 168px"
 			aria-label="Empty several fields (just like a Long Rest):"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);HealItNow()"
+			onclick="HealItNow(adapter_helper_convert_id_to_fieldname(this.id))"
 		>Heal</button>
 
 		<input
@@ -3144,7 +3144,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_2"
@@ -3153,7 +3153,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_3"
@@ -3162,7 +3162,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_4"
@@ -3171,7 +3171,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_5"
@@ -3180,7 +3180,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_6"
@@ -3189,7 +3189,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 	</div>
 

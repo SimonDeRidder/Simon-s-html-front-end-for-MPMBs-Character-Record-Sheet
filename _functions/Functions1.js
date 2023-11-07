@@ -9807,11 +9807,11 @@ function ProfBonus(useTarget, newLvlForce) {
 }
 
 //show the proficiency die (field format)
-function ProfBonusDisplay(input) {
-	var QI = getTemplPre(event.target.name, "AScomp");
-	var ProfB = QI === true ? event.target.submitName : input;
+function ProfBonusDisplay(name, submitName, value, input) {
+	var QI = getTemplPre(name, "AScomp");
+	var ProfB = QI === true ? submitName : input;
 	var useDice = tDoc.getField(QI === true ? "Proficiency Bonus Dice" : QI + "BlueText.Comp.Use.Proficiency Bonus Dice").isBoxChecked(0) === 1;
-	event.value = useDice ? GetProfDice(ProfB) : !isNaN(event.value) && event.value > 0 ? "+" + event.value : event.value;
+	return useDice ? GetProfDice(ProfB) : !isNaN(value) && value > 0 ? "+" + value : value;
 }
 
 function GetProfDice(ProfB) {

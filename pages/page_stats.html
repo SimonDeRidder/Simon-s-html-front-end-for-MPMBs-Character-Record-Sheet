@@ -781,7 +781,7 @@
 			style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0"
 			type="text"
 			data-default=""
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=this.value;ProfBonusDisplay();this.value=event.value;eventManager.handle_event(EventType.Proficiency_Bonus_change)"
+			onchange="this.value=ProfBonusDisplay(adapter_helper_convert_id_to_fieldname(this.id), this.dataset.submit_name, this.value);eventManager.handle_event(EventType.Proficiency_Bonus_change)"
 		/>
 
 		<input

@@ -424,13 +424,14 @@ function keystroke2() {
 };
 
 // a format function for the "Die" field of the Hit Dice section
-function FormatHD() {
-	var theResult = clean(event.value, " ");
+function FormatHD(name, value) {
+	var theResult = clean(value, " ");
 	if (theResult !== "") {
-		var QI = getTemplPre(event.target.name, "AScomp");
+		var QI = getTemplPre(name, "AScomp");
 		var theCon = Number(What(QI === true ? "Con Mod" : QI + "Comp.Use.Ability.Con.Mod"));
-		event.value = "d" + theResult + (theCon < 0 ? theCon : "+" + theCon);
+		value = "d" + theResult + (theCon < 0 ? theCon : "+" + theCon);
 	}
+	return value;
 };
 
 //format the date (format)

@@ -899,8 +899,8 @@
 			data-default=""
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
 			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.Comp_Use_HD_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;{let templEl=document.getElementById('Template.extras.AScomp');let origTemplVal=templEl.getAttribute('value');templEl.setAttribute('value', ','+origTemplVal.replace(/^,/, ''));SetHPTooltip(false, true);templEl.setAttribute('value', origTemplVal)}"
+			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Comp_Use_HD_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);{let templEl=document.getElementById('Template.extras.AScomp');let origTemplVal=templEl.getAttribute('value');templEl.setAttribute('value', ','+origTemplVal.replace(/^,/, ''));SetHPTooltip(false, true);templEl.setAttribute('value', origTemplVal)}"
 		/>
 
 		<input

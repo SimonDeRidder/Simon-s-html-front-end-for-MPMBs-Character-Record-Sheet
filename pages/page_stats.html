@@ -1017,9 +1017,8 @@
 				eventManager.add_listener(
 					event_type,
 					function () {
-						CalcAC();
 						let ACElement = document.getElementById('AC');
-						ACElement.value = event.value;
+						ACElement.value = CalcAC();
 						ACElement.dispatchEvent(new Event('change'));
 					}
 				)

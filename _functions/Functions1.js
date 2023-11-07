@@ -6547,12 +6547,12 @@ function CalcAC() {
 	}
 
 	if (!acVals.armour) {
-		event.value = "";
+		return "";
 	} else if (tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0)) {
 		AC -= 12;
-		event.value = AC < 0 ? AC : "+" + AC;
+		return AC < 0 ? AC : "+" + AC;
 	} else {
-		event.value = AC;
+		return AC;
 	}
 };
 

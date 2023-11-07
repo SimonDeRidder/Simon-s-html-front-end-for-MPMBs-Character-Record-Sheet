@@ -729,10 +729,8 @@
 					eventManager.add_listener(
 						event_type,
 						function () {
-							event.target.name = ability + ' ST Mod';
-							CalcSave();
 							let st_mod_element = document.getElementById(ability + '_ST_Mod');
-							st_mod_element.value = event.value;
+							st_mod_element.value = CalcSave(ability + ' ST Mod');
 							st_mod_element.dispatchEvent(new Event('change'));
 						}
 					)

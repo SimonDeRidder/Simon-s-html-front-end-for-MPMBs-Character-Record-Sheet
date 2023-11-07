@@ -675,10 +675,9 @@
 						eventManager.add_listener(
 							event_type,
 							function () {
-								event.target.name = prefix + 'Comp.Use.Ability.' + ability + '.ST.Mod';
-								CalcSave();
-								let mod_element = document.getElementById(prefix + 'Comp.Use.Ability.' + ability + '.ST.Mod');
-								mod_element.value = event.value;
+								let target_name = prefix + 'Comp.Use.Ability.' + ability + '.ST.Mod';
+								let mod_element = document.getElementById(target_name);
+								mod_element.value = CalcSave(target_name);
 								mod_element.dispatchEvent(new Event('change'));
 							}
 						);

@@ -719,7 +719,7 @@
 			type="text"
 			data-default=""
 			oninput="adapter_helper_keystroke1(this, false, true)"
-			onchange="ProfBonusDisplay(adapter_helper_convert_id_to_fieldname(this.id));eventManager.handle_event(EventType.Comp_Use_Proficiency_Bonus_change)"
+			onchange="{let name=adapter_helper_convert_id_to_fieldname(this.id);ProfBonusDisplay(name, this.dataset.submit_name, this.value, this.value)};eventManager.handle_event(EventType.Comp_Use_Proficiency_Bonus_change)"
 		/>
 
 		<input

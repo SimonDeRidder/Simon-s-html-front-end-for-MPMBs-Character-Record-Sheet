@@ -898,8 +898,8 @@
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
 			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD1_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
+			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD1_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
 		<input
 			id="HD2_Die"
@@ -908,8 +908,8 @@
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
 			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD2_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
+			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD2_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
 		<input
 			id="HD3_Die"
@@ -918,8 +918,8 @@
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
 			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD3_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
+			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD3_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
 
 		<input

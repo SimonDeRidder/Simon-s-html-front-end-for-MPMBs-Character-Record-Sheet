@@ -1055,10 +1055,8 @@
 				eventManager.add_listener(
 					event_type,
 					function () {
-						event.target.name = "Initiative bonus";
-						CalcAllSkills();  // also calls CalcSkill
 						let IBElement = document.getElementById("Initiative_bonus");
-						IBElement.value = event.value;
+						IBElement.value = CalcAllSkills("Initiative bonus");  // also calls CalcSkill
 						IBElement.dispatchEvent(new Event('change'));
 					}
 				);
@@ -2358,10 +2356,8 @@
 							'Acr', 'Ani', 'Arc', 'Ath', 'Dec', 'His', 'Ins', 'Inti', 'Inv', 'Med', 'Nat', 'Perc', 'Perf',
 						 	'Pers', 'Rel', 'Sle', 'Ste', 'Sur', 'Too'
 						].forEach(function (skill) {
-							event.target.name = skill;
-							CalcSkill();
 							let skillElement = document.getElementById(skill);
-							skillElement.value = event.value;
+							skillElement.value = CalcSkill(skill);
 							skillElement.dispatchEvent(new Event('change'));
 						})
 					}
@@ -3823,14 +3819,13 @@
 				eventManager.add_listener(
 					event_type,
 					function () {
-						event.target.name = "Passive Perception";
-						CalcAllSkills(); // also calls CalcSkill
-						if (event.value != null) {
+						let value = CalcAllSkills("Passive Perception"); // also calls CalcSkill
+						if (value != null) {
 							for (let passElID of ["Passive_Perception.0", "Passive_Perception.1"]) {
 								let element = document.getElementById(passElID);
 								let currentVal = element.value;
-								if (event.value != currentVal) {
-									element.value = event.value;
+								if (value != currentVal) {
+									element.value = value;
 									element.dispatchEvent(new Event('change'));
 								}
 							}

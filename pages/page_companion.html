@@ -942,10 +942,8 @@
 						event_type,
 						function () {
 							let fieldName = prefix + "Comp.Use.Combat.Init.Mod"
-							event.target.name = fieldName;
-							CalcAllSkills(true);  // also calls CalcSkill
 							let IBElement = document.getElementById(fieldName);
-							IBElement.value = event.value;
+							IBElement.value = CalcAllSkills(fieldName, true);  // also calls CalcSkill
 							IBElement.dispatchEvent(new Event('change'));
 						}
 					);
@@ -2286,11 +2284,8 @@
 							event_type,
 							function () {
 								let skillField = prefix + "Comp.Use.Skills." + skill + ".Mod";
-								event.target.name = skillField;
-								CalcAllSkills(true);
-								CalcSkill();
 								let skillElement = document.getElementById(skillField);
-								skillElement.value = event.value;
+								skillElement.value = CalcAllSkills(skillField, true);
 								skillElement.dispatchEvent(new Event('change'));
 							})
 						}
@@ -2401,11 +2396,8 @@
 						event_type,
 						function () {
 							let elementName = prefix + "Comp.Use.Skills.Perc.Pass.Mod";
-							event.target.name = elementName;
-							CalcAllSkills(true);
-							CalcSkill();
 							let skillElement = document.getElementById(elementName);
-							skillElement.value = event.value;
+							skillElement.value = CalcAllSkills(elementName, true);
 							skillElement.dispatchEvent(new Event('change'));
 						})
 					}

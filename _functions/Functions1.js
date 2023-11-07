@@ -4501,12 +4501,12 @@ function DisplayBonusCalculate() {
 }
 
 // Calculate the skill modifier (field calculation)
-function CalcSkill() {
-	event.value = SkillsList.values[event.target.name] === undefined ? '' : SkillsList.values[event.target.name];
+function CalcSkill(name) {
+	return SkillsList.values[name] === undefined ? '' : SkillsList.values[name];
 }
-function CalcAllSkills(isCompPage) {
+function CalcAllSkills(name, isCompPage) {
 	if (isCompPage) {
-		var pr = getTemplPre(event.target.name, "AScomp", true);
+		var pr = getTemplPre(name, "AScomp", true);
 		if (!pr) return;
 	} else {
 		var pr = false;
@@ -4594,7 +4594,7 @@ function CalcAllSkills(isCompPage) {
 			}
 		}
 	}
-	CalcSkill();
+	return CalcSkill(name);
 };
 
 //calculate the saving throw modifier (field calculation)

@@ -4483,8 +4483,9 @@ function ValidateBonus(name, value, oldValue, goEmpty, allowDC) {
 };
 
 // Display the EvalBonus for this field, if calculated (field format)
-function DisplayBonus() {
-	if (event.value && event.target.valueCalculated !== undefined) event.value = event.target.valueCalculated;
+function DisplayBonus(value, valueCalculated) {
+	if (value && valueCalculated !== undefined) value = valueCalculated;
+	return value;
 }
 
 // Calculate the EvalBonus for this field, if calculated (field calculation)
@@ -6558,7 +6559,7 @@ function CalcAC() {
 
 // Format the AC for when "Players Make All Rolls" is enabled (field format)
 function formatACforPMAR() {
-	DisplayBonus();
+	event.value = DisplayBonus(event.value, event.target.valueCalculated);
 	if (!tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) || !event.value) return;
 	var ACmod = event.value - 12;
 	event.value = ACmod < 0 ? ACmod : "+" + ACmod;

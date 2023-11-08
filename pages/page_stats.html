@@ -666,7 +666,7 @@
 			id="Wis_ST_Bonus"
 			class="field inputfield bluetext"
 			aria-label="Wisdom Saving Throw Bonus Modifier"
-			style="top: 10.4px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
+			style="top: 30px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
@@ -1100,17 +1100,21 @@
 			style="top: 20px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="text"
 			aria-label="Base Armor Class"
+			value="0"
+			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
-			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Armor_Bonus_change);"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.dataset.realVal, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Armor_Bonus_change);"
 		>
 		<input
 			id="AC_Shield_Bonus"
 			class="field inputfield-notched"
 			style="top: 39.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
-			type="number"
+			type="text"
 			aria-label="Shield Bonus"
+			value="0"
+			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
-			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Shield_Bonus_change);"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Shield_Bonus_change);"
 		>
 		<input
 			id="AC_Dexterity_Modifier"
@@ -1125,8 +1129,10 @@
 			style="top: 78.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="Magic AC Bonus Modifier"
+			value="0"
+			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
-			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Magic_change);"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Magic_change);"
 		>
 		<input
 			id="AC_Misc_Mod_1"
@@ -1134,8 +1140,10 @@
 			style="top: 98.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="1st Miscellaneous AC Bonus Modifier"
+			value="0"
+			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
-			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Misc_Mod_1_change);"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Misc_Mod_1_change);"
 		>
 		<input
 			id="AC_Misc_Mod_2"
@@ -1143,8 +1151,10 @@
 			style="top: 117.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="1st Miscellaneous AC Bonus Modifier"
+			value="0"
+			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
-			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.value=this.value;event.target.valueCalculated=this.dataset.valueCalculated;DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Misc_Mod_2_change);"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Misc_Mod_2_change);"
 		>
 
 		<input

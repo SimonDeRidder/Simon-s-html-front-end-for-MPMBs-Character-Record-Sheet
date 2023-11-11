@@ -6566,12 +6566,13 @@ function formatACforPMAR() {
 }
 
 // Make sure the magic/miscellaneous AC fields have a proper description (and don't overflow)
-function formatACdescr() {
+function formatACdescr(name, value) {
 	var testLen = typePF ? 41 : 36;
-	if (event.value.length > testLen) {
-		var isMagic = event.target.name.indexOf("Magic") !== -1;
-		event.value = "Various" + (isMagic ? " magic" : "") + " bonuses"
+	if (value.length > testLen) {
+		var isMagic = name.indexOf("Magic") !== -1;
+		value = "Various" + (isMagic ? " magic" : "") + " bonuses"
 	}
+	return value
 }
 
 async function SetToManual_Button(noDialog) {

@@ -3863,7 +3863,7 @@
 			list="ammunition_types"
 			spellcheck="true"
 			aria-label="Select or type in the ammunition you want to use and all its attributes will be filled out automatically."
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyAmmo(this.value);"
+			onchange="ApplyAmmo(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 		/>
 		<input
@@ -3874,7 +3874,7 @@
 			list="ammunition_types"
 			spellcheck="true"
 			aria-label="Select or type in the ammunition you want to use and all its attributes will be filled out automatically."
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyAmmo(this.value);"
+			onchange="ApplyAmmo(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 		/>
 		<datalist id="ammunition_types">
@@ -3904,7 +3904,7 @@
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="adapter_helper_keystroke1(this)"
 			onfocus="this.dataset.oldVal=this.value"
-			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoLeftDisplay_Amount_change)"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id));eventManager.handle_event(EventType.AmmoLeftDisplay_Amount_change)"
 		/>
 		<input
 			id="AmmoRightDisplay.Amount"
@@ -3914,7 +3914,7 @@
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
 			oninput="adapter_helper_keystroke1(this)"
 			onfocus="this.dataset.oldVal=this.value"
-			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoRightDisplay_Amount_change)"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id));eventManager.handle_event(EventType.AmmoRightDisplay_Amount_change)"
 		/>
 
 		<button
@@ -3922,14 +3922,14 @@
 			class="field button nonprintable"
 			style="top: 38px;left: 95.5px;font-size: 8px;line-height: 6px;"
 			aria-label="Press this to 'reload' your quiver. After pressing, the ammunition icons will be set as if replenished from the number in the 'Total' field. This will not change the amount of ammo you have."
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
+			onclick="LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id))"
 		>Reload</button>
 		<button
 			id="AmmoRightDisplay.Reset"
 			class="field button nonprintable"
 			style="top: 38px;left: 241px;font-size: 8px;line-height: 6px;"
 			aria-label="Press this to 'reload' your quiver. After pressing, the ammunition icons will be set as if replenished from the number in the 'Total' field. This will not change the amount of ammo you have."
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
+			onclick="LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id))"
 		>Reload</button>
 
 		<div id="AmmoLeft" style="position: absolute;top: 50px;left: 22px;width: 100px;height: 60px;">
@@ -5080,14 +5080,13 @@
 				theAmount.dispatchEvent(new Event('change'));
 				current.dispatchEvent(new Event('change'));
 				let maxAmount = document.getElementById(prefix + 'Display.MaxAmount')
-				event.target.name = adapter_helper_convert_id_to_fieldname(element.id);
 				if (
 					(theAmount.value < maxAmount.value)
 					&& (document.getElementById(prefix + 'Display.SaveAmount').value <= maxAmount.value)
 				) {
-					LoadAmmo();
+					LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(element.id));
 				} else if (current.value < maxAmount.value) {
-					LoadAmmo(current.value);
+					LoadAmmo(current.value, adapter_helper_convert_id_to_fieldname(element.id));
 				}
 			}
 

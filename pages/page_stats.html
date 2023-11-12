@@ -1632,7 +1632,7 @@
 			type="checkbox"
 			style="top: 367.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applyCompSkillClick();eventManager.handle_event(EventType.Too_Exp_change);}"
+			onclick="applyCompSkillClick(new AdapterClassFieldReference([this]));eventManager.handle_event(EventType.Too_Exp_change)"
 		/>
 
 		<input
@@ -1791,7 +1791,7 @@
 			type="checkbox"
 			style="top: 369.0px;left: 15.2px"
 			data-default="false"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applyCompSkillClick();eventManager.handle_event(EventType.Too_Prof_change);}"
+			onclick="applyCompSkillClick(new AdapterClassFieldReference([this]));eventManager.handle_event(EventType.Too_Prof_change)"
 		/>
 
 		<div

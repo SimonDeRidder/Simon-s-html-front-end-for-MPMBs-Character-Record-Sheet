@@ -1242,11 +1242,11 @@ function CompSkillRefer(Skill, SkillBonus, scores, profB) {
 }
 
 // manual trigger for clicking the skill proficiency/expertise (MouseUp) on the companion page
-function applyCompSkillClick() {
-	var isExp = (/Exp$/).test(event.target.name);
-	var isCheck = event.target.isBoxChecked(0) ? true : false;
+function applyCompSkillClick(target) {
+	var isExp = (/Exp$/).test(target.name);
+	var isCheck = target.isBoxChecked(0) ? true : false;
 	if (isCheck != isExp) return; // nothing to do
-	var otherFld = event.target.name.replace(/(Exp|Prof)$/, isExp ? "Prof" : "Exp");
+	var otherFld = target.name.replace(/(Exp|Prof)$/, isExp ? "Prof" : "Exp");
 	Checkbox(otherFld, isCheck);
 }
 

@@ -1103,7 +1103,7 @@
 			value="0"
 			data-default="0"
 			onfocus="this.dataset.oldVal=this.value"
-			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.dataset.realVal, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Armor_Bonus_change);"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Armor_Bonus_change);"
 		>
 		<input
 			id="AC_Shield_Bonus"
@@ -1267,7 +1267,7 @@
 			style="top: 53px;left: 231px;width: 10.7px;height: 10.7px;visibility: hidden"
 			type="checkbox"
 			aria-label="This enables the '[disadv.]' text next to the 'Stealth' skill."
-			onchange="event.target.name=this.id;ConditionSet();"
+			onchange="ConditionSet(adapter_helper_convert_id_to_fieldname(this.id), false);"
 		/>
 
 		<script type="text/javascript">

@@ -2571,9 +2571,9 @@ function ActionDelete(type, itemNmbr) {
 };
 
 //Make menu for the button on each Limited Feature line and parse it to Menus.limfea
-function MakeLimFeaMenu() {
+function MakeLimFeaMenu(fieldName) {
 	var limfeaMenu = [];
-	var itemNmbr = parseFloat(event.target.name.slice(-2));
+	var itemNmbr = parseFloat(fieldName.slice(-2));
 	var maxNmbr = FieldNumbers.limfea;
 	var theField = What("Limited Feature " + itemNmbr);
 	var SslotsVisible = !typePF && eval_ish(What("SpellSlotsRemember"))[0];

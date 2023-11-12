@@ -6740,8 +6740,8 @@ function CalcXPnextlvl() {
 };
 
 //calculate the Ability Save DC (field calculation)
-function CalcAbilityDC() {
-	var Nmbr = event.target.name.slice(-1);
+function CalcAbilityDC(fieldName) {
+	var Nmbr = fieldName.slice(-1);
 	var sFldMod = "Spell DC " + Nmbr + " Mod";
 	var Indx = tDoc.getField(sFldMod).currentValueIndices;
 	var useSSDC = false, useSSDCname = false, useSSDCothers = false;
@@ -6778,7 +6778,7 @@ function CalcAbilityDC() {
 			DCtot = (modIpvDC ? 0 : 8) + Number(How("Proficiency Bonus")) + Number(What(What(sFldMod))) + EvalBonus(sFldBonusVal, true);
 		}
 	}
-	event.value = DCtot && modIpvDC && DCtot >= 0 ? "+" + DCtot : DCtot;
+	let resultValue = DCtot && modIpvDC && DCtot >= 0 ? "+" + DCtot : DCtot;
 
 	// Empty the modifier field and set to read-only if using the ones on the spell sheet page
 	tDoc.getField(sFldBonus).readonly = useSSDC;
@@ -6791,6 +6791,7 @@ function CalcAbilityDC() {
 			DontPrint(sFldBonus);
 		}
 	}
+	return resultValue;
 }
 //find the ability score the tool (or custom skill) is keyed off on
 function UpdateTooSkill() {

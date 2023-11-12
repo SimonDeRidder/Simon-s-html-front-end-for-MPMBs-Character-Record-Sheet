@@ -6775,8 +6775,8 @@ function CalcAbilityDC(fieldName) {
 	return resultValue;
 }
 //find the ability score the tool (or custom skill) is keyed off on
-function UpdateTooSkill() {
-	var TooSkillTxt = event && event.target && event.target.name == "Too Text" ? event.value.toLowerCase() : What("Too Text").toLowerCase();
+function UpdateTooSkill(name, value) {
+	var TooSkillTxt = name == "Too Text" ? value.toLowerCase() : What("Too Text").toLowerCase();
 	var Ability = "Too";
 	for (var i = 0; i < AbilityScores.abbreviations.length; i++) {
 		if (TooSkillTxt.indexOf("(" + AbilityScores.abbreviations[i].toLowerCase() + ")") !== -1) {

@@ -2011,7 +2011,7 @@
 			data-default="Tool"
 			aria-label="Tool or custom skill"
 			spellcheck="True"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;UpdateTooSkill()"
+			onchange="UpdateTooSkill(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 		/>
 
 		<!-- BlueText -->

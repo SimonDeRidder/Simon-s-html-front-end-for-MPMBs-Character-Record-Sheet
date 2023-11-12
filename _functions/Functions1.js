@@ -512,7 +512,7 @@ async function ResetAll(GoOn, noTempl, deleteImports) {
 	thermoM(6/9); //increment the progress dialog's progress
 
 	// Call upon some functions to reset other stuff than field values
-	await ConditionSet(true);
+	await ConditionSet(null, true);
 	ShowCalcBoxesLines();
 	ToggleWhiteout(false);
 	ChangeFont();
@@ -1436,7 +1436,7 @@ function ApplyShield(input) {
 }
 
 //Change advantage or disadvantage of saves, skills, checks, attacks, etc. based on condition
-async function ConditionSet(isReset) {
+async function ConditionSet(fieldName, isReset) {
 	if (!isReset && !IsNotConditionSet) return;
 	if (typePF) { // only the stealth disadvantage is part of the printer friendly version
 		// Start progress bar and stop calculations
@@ -1477,7 +1477,7 @@ async function ConditionSet(isReset) {
 	for (var aFld in cFlds) {
 		if (!tDoc.getField(cFlds[aFld].name)) continue;
 		cFlds[aFld].checked = tDoc.getField(cFlds[aFld].name).isBoxChecked(0);
-		if (event.target && event.target.name && cFlds[aFld].name == event.target.name) thisFld = aFld;
+		if (fieldName && cFlds[aFld].name == fieldName) thisFld = aFld;
 		if ((/Exh\d/).test(aFld)) cFlds[aFld].origchecked = thisFld === aFld ? !cFlds[aFld].checked : cFlds[aFld].checked;
 	}
 	var thisChck = !isReset && thisFld && cFlds[thisFld].checked ? true : false;

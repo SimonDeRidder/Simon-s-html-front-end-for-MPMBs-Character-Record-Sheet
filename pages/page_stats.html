@@ -1446,12 +1446,10 @@
 					eventManager.add_listener(
 						event_type,
 						function () {
-							event.target.name = "Spell save DC " + String(i);
 							let element = document.getElementById("Spell_save_DC_" + String(i));
-							CalcAbilityDC();
-							let currentVal = element.value;
-							if (event.value != currentVal) {
-								element.value = event.value;
+							let newVal = CalcAbilityDC("Spell save DC " + String(i));
+							if (newVal != element.value) {
+								element.value = newVal;
 								element.dispatchEvent(new Event('change'));
 							}
 						}

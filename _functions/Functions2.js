@@ -6801,9 +6801,8 @@ function setSkillTooltips(noPopUp) {
 	AddTooltip("SkillsClick", "Click here to change the order of the skills. You can select either alphabetic order or ordered by ability score." + (tooltipTxt ? "\n\n" + tooltipTxt : ""));
 }
 // manual trigger for clicking the skill proficiency/expertise (MouseUp) on the 1st page
-async function applySkillClick(theSkill, isExp) {
+async function applySkillClick(target, theSkill, isExp) {
 	if (SkillsList.abbreviations.indexOf(theSkill) == -1) return;
-	let target = event.target;
 	var isCheck = target.isBoxChecked(0) ? true : false;
 	if (Who('Text.SkillsNames') !== 'alphabeta') {
 		theSkill = SkillsList.abbreviationsByAS[SkillsList.abbreviations.indexOf(theSkill)];

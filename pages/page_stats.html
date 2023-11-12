@@ -1482,7 +1482,7 @@
 			type="checkbox"
 			style="top: 16px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Acr', true).then(() => {eventManager.handle_event(EventType.Acr_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Acr', true).then(() => {eventManager.handle_event(EventType.Acr_Exp_change);});}"
 		/>
 		<input
 			id="Ani_Exp"
@@ -1490,7 +1490,7 @@
 			type="checkbox"
 			style="top: 35.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ani', true).then(() => {eventManager.handle_event(EventType.Ani_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ani', true).then(() => {eventManager.handle_event(EventType.Ani_Exp_change);});}"
 		/>
 		<input
 			id="Arc_Exp"
@@ -1498,7 +1498,7 @@
 			type="checkbox"
 			style="top: 55.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Arc', true).then(() => {eventManager.handle_event(EventType.Arc_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Arc', true).then(() => {eventManager.handle_event(EventType.Arc_Exp_change);});}"
 		/>
 		<input
 			id="Ath_Exp"
@@ -1506,7 +1506,7 @@
 			type="checkbox"
 			style="top: 74.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ath', true).then(() => {eventManager.handle_event(EventType.Ath_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ath', true).then(() => {eventManager.handle_event(EventType.Ath_Exp_change);});}"
 		/>
 		<input
 			id="Dec_Exp"
@@ -1514,7 +1514,7 @@
 			type="checkbox"
 			style="top: 94.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Dec', true).then(() => {eventManager.handle_event(EventType.Dec_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Dec', true).then(() => {eventManager.handle_event(EventType.Dec_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1523,7 +1523,7 @@
 			type="checkbox"
 			style="top: 113.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('His', true).then(() => {eventManager.handle_event(EventType.His_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'His', true).then(() => {eventManager.handle_event(EventType.His_Exp_change);});}"
 		/>
 		<input
 			id="Ins_Exp"
@@ -1531,7 +1531,7 @@
 			type="checkbox"
 			style="top: 133.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ins', true).then(() => {eventManager.handle_event(EventType.Ins_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ins', true).then(() => {eventManager.handle_event(EventType.Ins_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1540,7 +1540,7 @@
 			type="checkbox"
 			style="top: 152.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inti', true).then(() => {eventManager.handle_event(EventType.Inti_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Inti', true).then(() => {eventManager.handle_event(EventType.Inti_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1549,7 +1549,7 @@
 			type="checkbox"
 			style="top: 172.0px;left: 22.3px;width: 8px;height: 8px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inv', true).then(() => {eventManager.handle_event(EventType.Inv_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Inv', true).then(() => {eventManager.handle_event(EventType.Inv_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1558,7 +1558,7 @@
 			type="checkbox"
 			style="top: 191.5px;left: 22.3px;width: 8px;height: 8px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Med', true).then(() => {eventManager.handle_event(EventType.Med_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Med', true).then(() => {eventManager.handle_event(EventType.Med_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1567,7 +1567,7 @@
 			type="checkbox"
 			style="top: 211.0px;left: 22.3px;width: 8px;height: 8px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Nat', true).then(() => {eventManager.handle_event(EventType.Nat_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Nat', true).then(() => {eventManager.handle_event(EventType.Nat_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1576,7 +1576,7 @@
 			type="checkbox"
 			style="top: 230.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Perc', true).then(() => {eventManager.handle_event(EventType.Perc_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Perc', true).then(() => {eventManager.handle_event(EventType.Perc_Exp_change);});}"
 		/>
 		<input
 			id="Perf_Exp"
@@ -1584,7 +1584,7 @@
 			type="checkbox"
 			style="top: 250.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Perf', true).then(() => {eventManager.handle_event(EventType.Perf_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Perf', true).then(() => {eventManager.handle_event(EventType.Perf_Exp_change);});}"
 		/>
 		<input
 			id="Pers_Exp"
@@ -1592,7 +1592,7 @@
 			type="checkbox"
 			style="top: 269.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Pers', true).then(() => {eventManager.handle_event(EventType.Pers_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Pers', true).then(() => {eventManager.handle_event(EventType.Pers_Exp_change);});}"
 		/>
 		<input
 			id="Rel_Exp"
@@ -1600,7 +1600,7 @@
 			type="checkbox"
 			style="top: 289.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Rel', true).then(() => {eventManager.handle_event(EventType.Rel_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Rel', true).then(() => {eventManager.handle_event(EventType.Rel_Exp_change);});}"
 		/>
 		<input
 			id="Sle_Exp"
@@ -1608,7 +1608,7 @@
 			type="checkbox"
 			style="top: 308.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Sle', true).then(() => {eventManager.handle_event(EventType.Sle_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Sle', true).then(() => {eventManager.handle_event(EventType.Sle_Exp_change);});}"
 		/>
 		<input
 			id="Ste_Exp"
@@ -1616,7 +1616,7 @@
 			type="checkbox"
 			style="top: 328.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ste', true).then(() => {eventManager.handle_event(EventType.Ste_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ste', true).then(() => {eventManager.handle_event(EventType.Ste_Exp_change);});}"
 		/>
 		<input
 			id="Sur_Exp"
@@ -1624,7 +1624,7 @@
 			type="checkbox"
 			style="top: 347.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Sur', true).then(() => {eventManager.handle_event(EventType.Sur_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Sur', true).then(() => {eventManager.handle_event(EventType.Sur_Exp_change);});}"
 		/>
 		<input
 			id="Too_Exp"
@@ -1641,7 +1641,7 @@
 			type="checkbox"
 			style="top: 18px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Acr').then(() => {eventManager.handle_event(EventType.Acr_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Acr').then(() => {eventManager.handle_event(EventType.Acr_Prof_change);});}"
 		/>
 		<input
 			id="Ani_Prof"
@@ -1649,7 +1649,7 @@
 			type="checkbox"
 			style="top: 37.5px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ani').then(() => {eventManager.handle_event(EventType.Ani_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ani').then(() => {eventManager.handle_event(EventType.Ani_Prof_change);});}"
 		/>
 		<input
 			id="Arc_Prof"
@@ -1657,7 +1657,7 @@
 			type="checkbox"
 			style="top: 57.0px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Arc').then(() => {eventManager.handle_event(EventType.Arc_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Arc').then(() => {eventManager.handle_event(EventType.Arc_Prof_change);});}"
 		/>
 		<input
 			id="Ath_Prof"
@@ -1665,7 +1665,7 @@
 			type="checkbox"
 			style="top: 76.5px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ath').then(() => {eventManager.handle_event(EventType.Ath_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ath').then(() => {eventManager.handle_event(EventType.Ath_Prof_change);});}"
 		/>
 		<input
 			id="Dec_Prof"
@@ -1673,7 +1673,7 @@
 			type="checkbox"
 			style="top: 96.0px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Dec').then(() => {eventManager.handle_event(EventType.Dec_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Dec').then(() => {eventManager.handle_event(EventType.Dec_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1682,7 +1682,7 @@
 			type="checkbox"
 			style="top: 115.5px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('His').then(() => {eventManager.handle_event(EventType.His_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'His').then(() => {eventManager.handle_event(EventType.His_Prof_change);});}"
 		/>
 		<input
 			id="Ins_Prof"
@@ -1690,7 +1690,7 @@
 			type="checkbox"
 			style="top: 135.0px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ins').then(() => {eventManager.handle_event(EventType.Ins_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ins').then(() => {eventManager.handle_event(EventType.Ins_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1699,7 +1699,7 @@
 			type="checkbox"
 			style="top: 154.5px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inti').then(() => {eventManager.handle_event(EventType.Inti_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Inti').then(() => {eventManager.handle_event(EventType.Inti_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1708,7 +1708,7 @@
 			type="checkbox"
 			style="top: 174.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inv').then(() => {eventManager.handle_event(EventType.Inv_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Inv').then(() => {eventManager.handle_event(EventType.Inv_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1717,7 +1717,7 @@
 			type="checkbox"
 			style="top: 193.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Med').then(() => {eventManager.handle_event(EventType.Med_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Med').then(() => {eventManager.handle_event(EventType.Med_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1726,7 +1726,7 @@
 			type="checkbox"
 			style="top: 213.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Nat').then(() => {eventManager.handle_event(EventType.Nat_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Nat').then(() => {eventManager.handle_event(EventType.Nat_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1735,7 +1735,7 @@
 			type="checkbox"
 			style="top: 232.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Perc').then(() => {eventManager.handle_event(EventType.Perc_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Perc').then(() => {eventManager.handle_event(EventType.Perc_Prof_change);});}"
 		/>
 		<input
 			id="Perf_Prof"
@@ -1743,7 +1743,7 @@
 			type="checkbox"
 			style="top: 252.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Perf').then(() => {eventManager.handle_event(EventType.Perf_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Perf').then(() => {eventManager.handle_event(EventType.Perf_Prof_change);});}"
 		/>
 		<input
 			id="Pers_Prof"
@@ -1751,7 +1751,7 @@
 			type="checkbox"
 			style="top: 271.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Pers').then(() => {eventManager.handle_event(EventType.Pers_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Pers').then(() => {eventManager.handle_event(EventType.Pers_Prof_change);});}"
 		/>
 		<input
 			id="Rel_Prof"
@@ -1759,7 +1759,7 @@
 			type="checkbox"
 			style="top: 291.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Rel').then(() => {eventManager.handle_event(EventType.Rel_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Rel').then(() => {eventManager.handle_event(EventType.Rel_Prof_change);});}"
 		/>
 		<input
 			id="Sle_Prof"
@@ -1767,7 +1767,7 @@
 			type="checkbox"
 			style="top: 310.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Sle').then(() => {eventManager.handle_event(EventType.Sle_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Sle').then(() => {eventManager.handle_event(EventType.Sle_Prof_change);});}"
 		/>
 		<input
 			id="Ste_Prof"
@@ -1775,7 +1775,7 @@
 			type="checkbox"
 			style="top: 330.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ste').then(() => {eventManager.handle_event(EventType.Ste_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ste').then(() => {eventManager.handle_event(EventType.Ste_Prof_change);});}"
 		/>
 		<input
 			id="Sur_Prof"
@@ -1783,7 +1783,7 @@
 			type="checkbox"
 			style="top: 349.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Sur').then(() => {eventManager.handle_event(EventType.Sur_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Sur').then(() => {eventManager.handle_event(EventType.Sur_Prof_change);});}"
 		/>
 		<input
 			id="Too_Prof"

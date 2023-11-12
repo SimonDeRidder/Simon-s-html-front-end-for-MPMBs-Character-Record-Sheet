@@ -7471,11 +7471,11 @@ function ResetAmmo(AmmoLeftRight) {
 }
 
 //Set the Ammo fields upon filling out the Ammo name
-function ApplyAmmo(inputtxt, Fld) {
+function ApplyAmmo(inputtxt, fieldName) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
 
 	calcStop();
-	var LeftRight = !event.target || !event.target.name || event.target.name.substring(0, 8) === "AmmoLeft" ? "AmmoLeft" : event.target.name.substring(0, 9) === "AmmoRight" ? "AmmoRight" : "Ammo" + Fld;
+	var LeftRight = fieldName.substring(0, 9) === "AmmoRight" ? "AmmoRight" : "AmmoLeft";
 	var theAmmo = ParseAmmo(inputtxt);
 	var parseAsWeapon = theAmmo ? false : ParseWeapon(inputtxt);
 	if (parseAsWeapon && AmmoList[parseAsWeapon]) theAmmo = parseAsWeapon;
@@ -7501,7 +7501,7 @@ function ApplyAmmo(inputtxt, Fld) {
 		}
 	}
 
-	LoadAmmo();
+	LoadAmmo(undefined, fieldName);
 }
 
 //Add the ammunition to one of the ammo fields. Inputtxt must be a known AmmoList entry
@@ -7537,23 +7537,23 @@ function RemoveAmmo(inputtxt) {
 }
 
 //Set the 'quiver' to correspond with the amount of ammo
-function LoadAmmo(Amount, Fld) {
+function LoadAmmo(Amount, fieldName) {
 	calcStop();
 
-	var LeftRight = event.target.name.substring(0, 8) === "AmmoLeft" ? "AmmoLeft" : event.target.name.substring(0, 9) === "AmmoRight" ? "AmmoRight" : "Ammo" + Fld;
+	var LeftRight = fieldName.substring(0, 9) === "AmmoRight" ? "AmmoRight" : "AmmoLeft";
 	var Units = Amount !== undefined ? Amount : Number(What(LeftRight + "Display.Amount"));
 	var Counter = 0;
 	var NextFld = "";
 	var NextFldVis = 0;
 
-	if (event.target.name.slice(-6) === "Amount" || event.target.name.slice(-5) === "Reset" || event.target.name.slice(-4) === "Name") {
+	if (fieldName.slice(-6) === "Amount" || fieldName.slice(-5) === "Reset" || fieldName.slice(-4) === "Name") {
 		Value(LeftRight + "Display.SaveAmount", Units);
 		Value(LeftRight + "Display.CurrentAmount", Math.min(Units, What(LeftRight + "Display.MaxAmount")));
 	}
 
 	//stop the function if Units are 0
 	if (Number(Units) === 0) {
-		if (event.target.name.indexOf("Display") !== -1) {
+		if (fieldName.indexOf("Display") !== -1) {
 			tDoc.resetForm([LeftRight]);
 		}
 		return;

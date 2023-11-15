@@ -1130,7 +1130,6 @@ function RunCreatureCallback(sPrefix, sType, bAdd, fOverride, sOverrideNm) {
 
 // set a race on an empty companion page (or add a new page)
 // aCreaAdds is an array with arrays of 1-4 entries: [sRace (string), bRemoveWholePage (boolean), fCallBack (function), sCompanionType (string)]. The 2nd, 3rd, and 4th entries are optional
-// $$[note]$$ event.target.name -> fldName
 async function processAddCompanions(bAddRemove, srcNm, aCreaAdds, fldName) {
 	if (!isArray(aCreaAdds)) aCreaAdds = [aCreaAdds];
 	var aChangeMsg = [];

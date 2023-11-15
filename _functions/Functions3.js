@@ -3295,7 +3295,8 @@ async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr, field
 }
 
 // Add a magic item to the third page or overflow page
-async function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forceAttunedVisible) {
+// $$[note]$$ event.target.name -> fldName
+async function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forceAttunedVisible, fldName) {
 	// Check if the item is recognized and if that is already known to be present
 	var aParsedItem = ParseMagicItem(item);
 	if (aParsedItem[0] && !MagicItemsList[aParsedItem[0]].allowDuplicates && CurrentMagicItems.known.indexOf(MagicItemsList[0]) !== -1) {
@@ -3316,7 +3317,7 @@ async function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forc
 		for (var i = startFld; i <= FieldNumbers.magicitems; i++) {
 			var MIflds = ReturnMagicItemFieldsArray(i);
 			// first check if a selection made in this field wasn't the one initiating this function, because then it should be skipped
-			if (event.target && event.target.name === MIflds[0]) continue;
+			if (fldName && fldName === MIflds[0]) continue;
 			var curItem = What(MIflds[0]);
 			if (n === 1 && ((RegExItem.test(curItem) && !RegExItemNo.test(curItem)) || curItem.toLowerCase() === itemLower)) {
 				return; // the item already exists

@@ -159,6 +159,7 @@ function setCurrentCompRace(prefix, type, found) {
 //add a creature to the companion page
 async function ApplyCompRace(newRace, prefix, sCompType, bIsRaceFld, oldValue) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
+	if (!prefix) return;
 	if (bIsRaceFld && newRace.toLowerCase() === oldValue.toLowerCase()) return; //no changes were made
 
 	// Start progress bar and stop calculations
@@ -1128,8 +1129,9 @@ function RunCreatureCallback(sPrefix, sType, bAdd, fOverride, sOverrideNm) {
 }
 
 // set a race on an empty companion page (or add a new page)
-// aCreaAdds is an array with arrays of 3 entries: [sRace (string), bRemoveWholePage (boolean), fCallBack (function)], but the 2nd and 3rd entries are optional
-async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
+// aCreaAdds is an array with arrays of 1-4 entries: [sRace (string), bRemoveWholePage (boolean), fCallBack (function), sCompanionType (string)]. The 2nd, 3rd, and 4th entries are optional
+// $$[note]$$ event.target.name -> fldName
+async function processAddCompanions(bAddRemove, srcNm, aCreaAdds, fldName) {
 	if (!isArray(aCreaAdds)) aCreaAdds = [aCreaAdds];
 	var aChangeMsg = [];
 	var fCallBackError = false;
@@ -1159,7 +1161,7 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 			for (var a = 1; a < AScompA.length; a++) {
 				// first check if a selection made in this field wasn't the one initiating this function, because then it should be skipped
 				var sFldNm = AScompA[a] + 'Comp.Race';
-				if (event.target && event.target.name === sFldNm) continue;
+				if (fldName && fldName === sFldNm) continue;
 				var sFndRace = What(sFldNm);
 				if (!prefix && !sFndRace) prefix = AScompA[a];
 				if (sFndRace.toLowerCase() === sRaceLow && CurrentCompRace[AScompA[a]] && (!sCompanionType || CurrentCompRace[AScompA[a]].typeCompanion === sCompanionType)) {

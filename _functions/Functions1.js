@@ -5321,7 +5321,8 @@ function FeatDelete(itemNmbr) {
 }
 
 // Add a feat to the second/third page or overflow page
-async function AddFeat(sFeat) {
+// $$[note]$$ event.target.name -> fldName
+async function AddFeat(sFeat, fldName) {
 	if (!sFeat) return;
 	// Check if this feat is recognized and if so, quit if it already exists
 	var aParsedFeat = ParseFeat(sFeat);
@@ -5339,7 +5340,7 @@ async function AddFeat(sFeat) {
 		for (var i = 1; i <= FieldNumbers.feats; i++) {
 			// first check if a selection made in this field wasn't the one initiating this function, because then it should be skipped
 			var sFldNm = "Feat Name " + i;
-			if (event.target && event.target.name === sFldNm) continue;
+			if (fldName && fldName === sFldNm) continue;
 			var sCurFeat = What(sFldNm);
 			if (n === 1 && (RegExFeat.test(sCurFeat) || sCurFeat.toLowerCase() === sFeatLC)) {
 				return; // the feat already exists

@@ -5585,10 +5585,10 @@ function isProficientWithWeapon(WeaponName, theWea) {
 }
 
 // Keep the ".Weapon" and ".Weapon Selection" fields the same (validation event)
-function CopyWeaponToSelection() {
+function CopyWeaponToSelection(name, value) {
 	if (!CurrentVars.manual.attacks || !IsNotWeaponMenu || IsSetDropDowns) return; // when just changing the dropdowns or using the line menu, don't do anything
-	if (How(event.target.name + " Selection") !== event.value) {
-		Value(event.target.name + " Selection", event.value);
+	if (How(name + " Selection") !== value) {
+		Value(name + " Selection", value);
 	}
 }
 

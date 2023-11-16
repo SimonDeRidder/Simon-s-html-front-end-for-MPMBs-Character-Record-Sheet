@@ -5542,10 +5542,9 @@ function CopyWeaponToSelection() {
 //apply the effect of a weapon with inputText the literal string in the Weapon Selection field and fldName the name of the field (any one of them); If fldName is left blank, use the event.target.name
 function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 	if (!IsNotWeaponMenu || IsSetDropDowns) return; // when just changing the dropdowns or using the line menu, don't do anything
-	fldName = fldName ? fldName : event.target.name;
 	var QI = fldName.indexOf("Comp.") === -1;
 	var Q = QI ? "" : "Comp.Use.";
-	var prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var prefix = QI ? "" : getTemplPre(fldName, "AScomp", true);
 	var fldNmbr = fldName.replace(/.*Attack\.(\d+?)\..+/, "$1");
 	var ArrayNmbr = Number(fldNmbr) - 1;
 	var fldBase = prefix + Q + "Attack." + fldNmbr + ".";

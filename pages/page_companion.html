@@ -979,7 +979,7 @@
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				spellcheck="true"
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyWeapon(this.value);"
+				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
 				id="Comp.Use.Attack.1.Proficiency"
@@ -1076,7 +1076,7 @@
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				spellcheck="true"
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyWeapon(this.value);"
+				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
 				id="Comp.Use.Attack.2.Proficiency"
@@ -1173,7 +1173,7 @@
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				spellcheck="true"
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyWeapon(this.value);"
+				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
 				id="Comp.Use.Attack.3.Proficiency"

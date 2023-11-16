@@ -9020,12 +9020,12 @@ function ReturnAttackFieldsArray(fldNmbr, prefix) {
 }
 
 //Make menu for the button on each Attack line and parse it to Menus.attacks
-async function MakeAttackLineMenu_AttackLineOptions(MenuSelection, itemNmbr, prefix) {
+async function MakeAttackLineMenu_AttackLineOptions(fldName, MenuSelection, itemNmbr, prefix) {
 	var attackMenu = [];
-	if (!itemNmbr) itemNmbr = Number(event.target.name.slice(-1));
-	if (prefix === undefined && event.target && event.target.name) {
-		var QI = event.target.name.indexOf("Comp.") === -1;
-		prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	if (!itemNmbr) itemNmbr = Number(fldName.slice(-1));
+	if (prefix === undefined && fldName) {
+		var QI = fldName.indexOf("Comp.") === -1;
+		prefix = QI ? "" : getTemplPre(fldName, "AScomp", true);
 	} else {
 		if (prefix && !CurrentWeapons.compKnown[prefix]) return;
 		var QI = prefix ? false : true;

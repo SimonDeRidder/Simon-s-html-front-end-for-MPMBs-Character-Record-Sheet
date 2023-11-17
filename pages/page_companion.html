@@ -1540,13 +1540,13 @@
 						eventManager.add_listener(
 							event_type,
 							function () {
-								event.target.name = prefix + 'Comp.Use.Attack.' + String(i) + '.To Hit';
-								event.value = undefined;
-								CalcAttackDmgHit();
-								if (event.value !== undefined) {
+								let newVal = CalcAttackDmgHit(prefix + 'Comp.Use.Attack.' + String(i) + '.To Hit');
+								if (newVal !== undefined) {
 									let toHitElement = document.getElementById(prefix + 'Comp.Use.Attack.' + String(i) + '.To_Hit');
-									toHitElement.value = event.value;
-									toHitElement.dispatchEvent(new Event('change'));
+									if (toHitElement.value != newVal) {
+										toHitElement.value = newVal;
+										toHitElement.dispatchEvent(new Event('change'));
+									}
 								}
 							}
 						);

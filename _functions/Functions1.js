@@ -3686,11 +3686,11 @@ function AddInvWeaponsAmmo() {
 };
 
 //Make menu for the button on each equipment line and parse it to Menus.gearline
-function MakeInventoryLineMenu() {
-	var type = event.target.name.indexOf("Adventuring") !== -1 ? "Adventuring " :
-		event.target.name.indexOf("Extra.") !== -1 ? "Extra." :
-		event.target.name.substring(0, event.target.name.indexOf("Comp.") + 8) + ".";
-	var lineNmbr = Number(event.target.name.slice(-2));
+function MakeInventoryLineMenu(fldName) {
+	var type = fldName.indexOf("Adventuring") !== -1 ? "Adventuring " :
+		fldName.indexOf("Extra.") !== -1 ? "Extra." :
+		fldName.substring(0, fldName.indexOf("Comp.") + 8) + ".";
+	var lineNmbr = Number(fldName.slice(-2));
 	var theField = What(type + "Gear Row " + lineNmbr);
 	var hasMagic = type === "Adventuring " && What("Adventuring Gear Remember") === false;
 	var magic = hasMagic && lineNmbr > FieldNumbers.gearMIrow;

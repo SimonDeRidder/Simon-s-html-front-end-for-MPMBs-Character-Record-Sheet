@@ -5842,10 +5842,9 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 function CalcAttackDmgHit(fldName) {
 	if (CurrentVars.manual.attacks) return; //if the attack calculation is set to manual, don't do anything
 
-	fldName = fldName ? fldName : event.target.name;
 	var QI = fldName.indexOf("Comp.") === -1;
 	var Q = QI ? "" : "Comp.Use.";
-	var prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var prefix = QI ? "" : getTemplPre(fldName, "AScomp", true);
 	var fldNmbr = fldName.replace(/.*Attack\.(\d+?)\..+/, "$1");
 	var ArrayNmbr = Number(fldNmbr) - 1;
 	var fldBase = prefix + Q + "Attack." + fldNmbr + ".";
@@ -6084,8 +6083,8 @@ function CalcAttackDmgHit(fldName) {
 
 	// Set the values to the sheet
 	Value(fldBase + "Damage", dmgTot == 0 ? "" : dmgTot);
-	if (event.target && event.target.name && (/.*Attack.*To Hit/).test(event.target.name)) {
-		event.value = fields.Range === "With melee wea" ? "" : hitTot;
+	if (fldName && (/.*Attack.*To Hit/).test(fldName)) {
+		return fields.Range === "With melee wea" ? "" : hitTot;
 	} else {
 		Value(fldBase + "To Hit", fields.Range === "With melee wea" ? "" : hitTot);
 	};

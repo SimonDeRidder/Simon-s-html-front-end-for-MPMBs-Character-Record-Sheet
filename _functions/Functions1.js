@@ -3094,19 +3094,14 @@ async function getMenu(menuname) {
 
 /* ---- INVENTORY FUNCTIONS START ---- */
 
-// set the value of the gear field to be remembered (on focus)
-function RememberGearTempOnFocus() {
-	event.target.temp = event.target.value;
-};
-
 // set the weight of the gear field (on blur)
-function SetGearWeightOnBlur() {
-	var theValue = event.target.value;
-	var weightFld = event.target.name.replace("Row", "Weight");
+function SetGearWeightOnBlur(name, value, oldvalue) {
+	var theValue = value;
+	var weightFld = name.replace("Row", "Weight");
 
 	if (!theValue) {
-		tDoc.resetForm([weightFld, event.target.name.replace("Row", "Amount")])
-	} else if (event.target.temp && event.target.temp === theValue) {
+		tDoc.resetForm([weightFld, name.replace("Row", "Amount")])
+	} else if (oldvalue && oldvalue === theValue) {
 		//do nothing
 	} else {
 		var theGear = ParseGear(theValue);
@@ -3122,8 +3117,8 @@ function SetGearWeightOnBlur() {
 			theWeight = RoundTo(theWeight * massMod, 0.001, true);
 			var weightCurrent = What(weightFld);
 			var setWeight = false;
-			if (weightCurrent && event.target.temp) {
-				var theGearOld = event.target.temp ? ParseGear(event.target.temp) : "";
+			if (weightCurrent && oldvalue) {
+				var theGearOld = oldvalue ? ParseGear(oldvalue) : "";
 				if (theGearOld && (theGearOld[0] !== theGear[0] || theGearOld[1] !== theGear[1])) setWeight = true;
 			} else if (!weightCurrent || weightCurrent !== theWeight) {
 				setWeight = true;
@@ -3131,9 +3126,6 @@ function SetGearWeightOnBlur() {
 			if (setWeight) Value(weightFld, theWeight);
 		}
 	}
-
-	//now reset the temp
-	delete event.target.temp;
 };
 
 // find if the entry is an equipment

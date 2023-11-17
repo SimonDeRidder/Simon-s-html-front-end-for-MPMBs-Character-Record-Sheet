@@ -6113,7 +6113,7 @@ function MakeClassMenu() {
 };
 
 // Call the Class Features menu and do something with the results
-async function ClassFeatureOptions(Input, AddRemove, ForceExtraname) {
+async function ClassFeatureOptions(Input, AddRemove, ForceExtraname, triggerIsMenu) {
 	// first see if we have something to do
 	var MenuSelection = Input;
 	if (!Input) {
@@ -6123,7 +6123,6 @@ async function ClassFeatureOptions(Input, AddRemove, ForceExtraname) {
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[4] == "stop") return cleanTempClassesKnown();
 
 	// initialize some variables
-	var triggerIsMenu = event.target && event.target.name && event.target.name == "Class Features Menu";
 	var addIt = (AddRemove !== undefined ? AddRemove : MenuSelection[4] !== undefined ? MenuSelection[4] : "add").toString().toLowerCase() === "add"; // default add, remove if second variable or 5th array entry is defined and not "add"
 	var aClass = MenuSelection[0];
 	var prop = MenuSelection[1];

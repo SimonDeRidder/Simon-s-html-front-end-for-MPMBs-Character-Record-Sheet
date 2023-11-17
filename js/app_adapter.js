@@ -984,6 +984,12 @@ class AdapterClassFieldReference {
 		if (
 			[
 				"event.value = Math.max(1, What('Cha Mod'));",
+				"event.value = Math.max(1, What('Str Mod'));",
+				"event.value = Math.max(1, What('Dex Mod'));",
+				"event.value = Math.max(1, What('Con Mod'));",
+				"event.value = Math.max(1, What('Wis Mod'));",
+				"event.value = Math.max(1, What('Int Mod'));",
+				"event.value = Math.max(1, What('HoS Mod'));",
 				"event.value = 1 + What('Cha Mod');",
 				"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var DCmod = Number(usages) * 5; event.value = (isNaN(Number(usages)) || usages === '') ? 'DC  ' : 'DC ' + Number(10 + DCmod);",
 				'event.value = "As a reaction when a ranged weapon attack hits me while I\'m wearing these gloves, I can reduce the damage by 1d10 + " + Number(What("Dex Mod")) + " (my Dexterity modifier). This only works if I have a free hand. If I reduce the damage to 0, I can catch the missile if it is small enough for me to hold in that hand.";',

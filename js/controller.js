@@ -14,6 +14,7 @@
 // TODO: parse CurrentEvals stuff for proper event triggering
 // TODO: find a way to import from pdf (MPMBOpenFile in DirectImport)
 // TODO: better context menu (with scroll for long options)
+// TODO: create conversion script for additional content
 
 // Load functions
 

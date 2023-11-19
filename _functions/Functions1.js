@@ -7043,7 +7043,7 @@ function CalcWeightSubtotal(FldName) {
 }
 
 //Calculate the total weight carried, based on the value of the remember fields (field calculation)
-function CalcWeightCarried(manualTrigger) {
+function CalcWeightCarried() {
 	if (!CurrentVars.weight) {
 		CurrentVars.weight = ["cCoi", "cP2L", "cP2R"];
 		if (typePF) CurrentVars.weight.push("cP2M");
@@ -7090,11 +7090,7 @@ function CalcWeightCarried(manualTrigger) {
 		}
 		if (!isNaN(aWeight)) totalWeight += aWeight;
 	}
-	if (manualTrigger) {
-		Value("Weight Carried", totalWeight === 0 ? "" : totalWeight);
-	} else {
-		event.value = totalWeight === 0 ? "" : totalWeight;
-	}
+	Value("Weight Carried", totalWeight === 0 ? "" : totalWeight);
 }
 
 //call this to choose which weights to add to the "Total Carried", and which weights not to add
@@ -7369,7 +7365,7 @@ async function WeightToCalc_Button() {
 
 	if (WeightToCalc_Dialog.UseEnc !== isEnc) SetEncumbrance(WeightToCalc_Dialog.UseEnc);
 
-	CalcWeightCarried(true); // manual trigger the field calculation for the total field
+	CalcWeightCarried(); // manual trigger the field calculation for the total field
 };
 
 //set the type of encumbrance rules to use (if variant = true, use the variant rules)

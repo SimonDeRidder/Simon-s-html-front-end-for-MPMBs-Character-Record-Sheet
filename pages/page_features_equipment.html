@@ -2662,7 +2662,7 @@
 			value="1"
 			type="text"
 			oninput="adapter_helper_keystroke1(this, true, false)"
-			onchange="event.value=this.value;format2();this.value=event.value;eventManager.handle_event(EventType.Carrying_Capacity_Multiplier_change)"
+			onchange="this.value=format2(this.value);eventManager.handle_event(EventType.Carrying_Capacity_Multiplier_change)"
 		/>
 
 		<script type="text/javascript">

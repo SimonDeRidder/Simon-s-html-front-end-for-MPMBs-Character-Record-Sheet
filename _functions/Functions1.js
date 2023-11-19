@@ -5501,13 +5501,12 @@ function HealItNow(name) {
 };
 
 //calculate the encumbrance (field calculation)
-function CalcEncumbrance() {
+function CalcEncumbrance(FldName) {
 	var Str = What("Str"), result = "";
 	var Size = What("Size Category");
 	Size = Size ? Size : 1;
 	var CarMult = Math.max(What("Carrying Capacity Multiplier"), 0);
 	var decSep = What("Decimal Separator");
-	var FldName = event.target.name;
 	var Mult1 = FldName.indexOf("Push") !== -1 || FldName.indexOf("Carrying Capacity") !== -1 ? 15 : FldName.indexOf("Heavily") !== -1 ? 10 : 5;
 	var Mult2 = FldName.indexOf("Push") !== -1 ? 30 : FldName.indexOf("Heavily") !== -1 ? 15 : 10;
 	var UnitSystem = What("Unit System");
@@ -5539,7 +5538,7 @@ function CalcEncumbrance() {
 		result = result.replace(/\./g, ",");
 		result = result.substring(1);
 	}
-	event.value = result;
+	return result;
 }
 
 function ParseClassFeature(theClass, theFeature, FeaLvl, ForceOld, SubChoice, Fea, ForceFeaOld) {

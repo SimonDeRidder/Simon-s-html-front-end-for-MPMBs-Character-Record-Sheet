@@ -9637,11 +9637,11 @@ function SetSpellSlotsVisibility() {
 }
 
 //determine the types of locations there are, and add them to the corresponding fields to calculate their subtotals in weight carried [through field format]
-function SetCarriedLocations() {
-	var type = event.target.name.substring(0,10) === "Extra.Gear" ? "Extra.Gear " : "Adventuring Gear ";
-	var row = parseFloat(event.target.name.slice(-2));
+function SetCarriedLocations(fldName, value) {
+	var type = fldName.substring(0,10) === "Extra.Gear" ? "Extra.Gear " : "Adventuring Gear ";
+	var row = parseFloat(fldName.slice(-2));
 	var total = type === "Extra.Gear " ? FieldNumbers.extragear : FieldNumbers.gear;
-	var theEvent = clean(event.target.value, " ");
+	var theEvent = clean(value, " ");
 	var locationList = [];
 	var locationTestList = [];
 	//loop through all the fields and add any found locations to the array

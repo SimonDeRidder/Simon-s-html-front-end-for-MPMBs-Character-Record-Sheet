@@ -3137,12 +3137,10 @@
 						event_type,
 						function() {
 							let subTotalId = prefix + 'Comp.eqp.Gear_Weight_Subtotal';
-							event.target.name = adapter_helper_convert_id_to_fieldname(subTotalId);
-							CalcWeightSubtotal();
+							let newVal = CalcWeightSubtotal(adapter_helper_convert_id_to_fieldname(subTotalId));
 							let subTotalElement = document.getElementById(subTotalId);
-							let changed = subTotalElement.value != event.value;
-							subTotalElement.value = event.value;
-							if (changed) {
+							if (subTotalElement.value != newVal) {
+								subTotalElement.value = newVal;
 								subTotalElement.dispatchEvent(new Event('change'));
 							}
 						}

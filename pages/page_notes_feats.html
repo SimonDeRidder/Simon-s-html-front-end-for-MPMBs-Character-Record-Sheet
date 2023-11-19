@@ -2685,9 +2685,12 @@
 						event_type,
 						function() {
 							let subTotalId = 'Extra.Gear_Weight_Subtotal_' + loc;
-							event.target.name = adapter_helper_convert_id_to_fieldname(subTotalId);
-							CalcWeightSubtotal();
-							document.getElementById(subTotalId).value = event.value;
+							let newVal = CalcWeightSubtotal(adapter_helper_convert_id_to_fieldname(subTotalId));
+							let element = document.getElementById(subTotalId);
+							if (element.value != newVal) {
+								element.value = newVal;
+								element.dispatchEvent(new Event('change'));
+							}
 						}
 					)
 				});

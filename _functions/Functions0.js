@@ -376,9 +376,10 @@ function format1(value, extraDec, fixedDec, unit) {
 }
 
 //replace all commas and dots with the set decimal separator
-function format2() {
+function format2(value) {
 	var theDec = What("Decimal Separator") === "dot" ? "." : ",";
-	if (event.value) event.value = event.value.replace(/(\.|,)/, theDec);
+	if (value) value = value.replace(/(\.|,)/, theDec);
+	return value;
 }
 
 function keystroke1(allowDec, allowNegative) {

@@ -2679,11 +2679,12 @@
 						event_type,
 						function() {
 							let loc_subt_id = 'Adventuring_Gear_Location.Subtotal_' + String(subTotalInd);
-							event.target.name = adapter_helper_convert_id_to_fieldname(loc_subt_id);
-							CalcCarriedLocation();
+							let newVal = CalcCarriedLocation(adapter_helper_convert_id_to_fieldname(loc_subt_id));
 							let locSubtElement = document.getElementById(loc_subt_id);
-							locSubtElement.value = event.value;
-							locSubtElement.dispatchEvent(new Event('change'));
+							if (locSubtElement.value != newVal) {
+								locSubtElement.value = event.value;
+								locSubtElement.dispatchEvent(new Event('change'));
+							}
 						}
 					)
 				});

@@ -9684,9 +9684,9 @@ function SetCarriedLocations(fldName, value) {
 }
 
 //calculate the subtotal for a given gear location [field calculation]
-function CalcCarriedLocation() {
-	var type = event.target.name.substring(0,10) === "Extra.Gear" ? "Extra.Gear " : "Adventuring Gear ";
-	var number = parseFloat(event.target.name.slice(-1));
+function CalcCarriedLocation(fldName) {
+	var type = fldName.substring(0,10) === "Extra.Gear" ? "Extra.Gear " : "Adventuring Gear ";
+	var number = parseFloat(fldName.slice(-1));
 	var total = type === "Extra.Gear " ? FieldNumbers.extragear : FieldNumbers.gear;
 	var toSearch = clean(What(type + "Location.SubtotalName " + number));
 	if (toSearch !== "") {
@@ -9712,9 +9712,9 @@ function CalcCarriedLocation() {
 				}
 			}
 		}
-		event.value = totalweight;
+		return totalweight;
 	} else {
-		event.value = "";
+		return "";
 	}
 }
 

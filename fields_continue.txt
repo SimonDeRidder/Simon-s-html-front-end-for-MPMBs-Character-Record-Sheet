@@ -2,7 +2,7 @@ Bluetext*	-	skipped for now
 Wildshape*	-	skipped for now
 
 converting for firefox-safety:
-stats	// Adventuring_Gear_Weight_Subtotal_*	done
+stats	// Weight carried	done
 
 // trigger events on change:
 "BlueText.Attack." + i + ".Damage Bonus": BlueText_Attack_<i:1-5>_Damage_Bonus_change

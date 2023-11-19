@@ -2753,15 +2753,7 @@
 			].forEach(function(event_type) {
 				eventManager.add_listener(
 					event_type,
-					function() {
-						CalcWeightCarried();
-						let newValue = event.value;
-						let weightCarriedElement = document.getElementById('Weight_Carried');
-						if (newValue != weightCarriedElement.value) {
-							weightCarriedElement.value = newValue;
-							weightCarriedElement.dispatchEvent(new Event('change'));
-						}
-					}
+					function() {CalcWeightCarried();}
 				);
 			});
 			// Encumbrance

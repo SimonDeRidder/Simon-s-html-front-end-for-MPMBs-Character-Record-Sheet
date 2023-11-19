@@ -2773,11 +2773,10 @@
 					eventManager.add_listener(
 						event_type,
 						function() {
-							event.target.name = adapter_helper_convert_id_to_fieldname(field_id);
-							CalcEncumbrance();
+							let newVal = CalcEncumbrance(adapter_helper_convert_id_to_fieldname(field_id));
 							let capElement = document.getElementById(field_id);
-							if (event.value != capElement.value) {
-								capElement.value = event.value;
+							if (newVal != capElement.value) {
+								capElement.value = newVal;
 								capElement.dispatchEvent(new Event('change'));
 							}
 						}

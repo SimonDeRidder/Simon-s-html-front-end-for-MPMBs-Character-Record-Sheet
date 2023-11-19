@@ -7024,16 +7024,16 @@ function MakeMobileReady(toggle) {
 }
 
 //Calculate the weight of a column of items in the equipment section [field calculation]
-function CalcWeightSubtotal() {
-	var type = (/extra.*/i).test(event.target.name) ? "Extra.Gear " : ((/Adventuring.*/i).test(event.target.name) ? "Adventuring Gear " : event.target.name.substring(0, event.target.name.indexOf("Comp.") + 14));
-	var column = event.target.name.slice(-4) === "Left" ? "Left" : (event.target.name.slice(-5) === "Right" ? "Right" : "Middle");
+function CalcWeightSubtotal(FldName) {
+	var type = (/extra.*/i).test(FldName) ? "Extra.Gear " : ((/Adventuring.*/i).test(FldName) ? "Adventuring Gear " : FldName.substring(0, FldName.indexOf("Comp.") + 14));
+	var column = FldName.slice(-4) === "Left" ? "Left" : (FldName.slice(-5) === "Right" ? "Right" : "Middle");
 	var allGear = type === "Extra.Gear " ? FieldNumbers.extragear : (type === "Adventuring Gear " ? FieldNumbers.gear : FieldNumbers.compgear);
 	var division = typePF && type === "Adventuring Gear " ? 3 : 2;
 	var divisionHalf = typePF && type === "Adventuring Gear " ? 1.5 : 2;
 	var total = column === "Right" ? allGear : Math.round(column === "Left" ? allGear / division : allGear / divisionHalf);
 	var start = column === "Left" ? 1 : Math.round(column === "Right" ? allGear / divisionHalf : allGear / division) + 1;
 
-	if (column === "Middle" && event.target.name.indexOf("Middle") === -1) {
+	if (column === "Middle" && FldName.indexOf("Middle") === -1) {
 		column = "All";
 		start = 1;
 		total = allGear;
@@ -7058,7 +7058,7 @@ function CalcWeightSubtotal() {
 			}
 		}
 	}
-	event.value = totalweight === 0 ? "" : totalweight;
+	return totalweight === 0 ? "" : totalweight;
 }
 
 //Calculate the total weight carried, based on the value of the remember fields (field calculation)

@@ -2682,7 +2682,7 @@
 							let newVal = CalcCarriedLocation(adapter_helper_convert_id_to_fieldname(loc_subt_id));
 							let locSubtElement = document.getElementById(loc_subt_id);
 							if (locSubtElement.value != newVal) {
-								locSubtElement.value = event.value;
+								locSubtElement.value = newVal;
 								locSubtElement.dispatchEvent(new Event('change'));
 							}
 						}
@@ -2703,11 +2703,10 @@
 						event_type,
 						function() {
 							let subTotalId = 'Adventuring_Gear_Weight_Subtotal_' + loc;
-							event.target.name = adapter_helper_convert_id_to_fieldname(subTotalId);
-							CalcWeightSubtotal();
+							let newVal = CalcWeightSubtotal(adapter_helper_convert_id_to_fieldname(subTotalId));
 							let weightElement = document.getElementById(subTotalId);
-							if (weightElement.value != event.value) {
-								weightElement.value = event.value;
+							if (weightElement.value != newVal) {
+								weightElement.value = newVal;
 								weightElement.dispatchEvent(new Event('change'));
 							}
 						}

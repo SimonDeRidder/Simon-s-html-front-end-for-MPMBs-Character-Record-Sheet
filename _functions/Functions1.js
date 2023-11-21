@@ -4826,13 +4826,14 @@ function FindFeats() {
 }
 
 // Add the text and features of a Feat
-async function ApplyFeat(input, FldNmbr) {
-	if (IsSetDropDowns || CurrentVars.manual.feats || !IsNotFeatMenu) return; // When just changing the dropdowns or feats are set to manual or this is a menu action, don't do anything
+async function ApplyFeat(input, FldNmbr, field) {
+	let returnRC = true;
+	if (IsSetDropDowns || CurrentVars.manual.feats || !IsNotFeatMenu) return returnRC; // When just changing the dropdowns or feats are set to manual or this is a menu action, don't do anything
 	var Fflds = ReturnFeatFieldsArray(FldNmbr);
 	// Not called from a field? Then just set the field and let this function be called anew
-	if ((!event.target || event.target.name !== Fflds[0]) && What(Fflds[0]) !== input) {
+	if ((!field || field.name !== Fflds[0]) && What(Fflds[0]) !== input) {
 		Value(Fflds[0], input);
-		return;
+		return returnRC;
 	};
 
 	var parseResult = ParseFeat(input);
@@ -4848,9 +4849,9 @@ async function ApplyFeat(input, FldNmbr) {
 
 	var doNotCommit = function(toSetVal) {
 		if (thermoTxt) thermoM(thermoTxt, true); // Stop progress bar
-		if (!IsNotImport) return;
-		event.rc = false;
-		if (isArray(event.target.page)) OpeningStatementVar = app.setTimeOut("tDoc.getField('" + event.target.name + ".1').setFocus();", 10);
+		if (!IsNotImport) return returnRC;
+		returnRC = false;
+		if (isArray(field.page)) OpeningStatementVar = app.setTimeOut("tDoc.getField('" + field.name + ".1').setFocus();", 10);
 	}
 
 	// If no variant was found, but there is a choice, ask it now
@@ -4886,7 +4887,7 @@ async function ApplyFeat(input, FldNmbr) {
 				cMsg : "The feat that you have selected, '" + aFeat.name + "' offers a choice for the form it comes in. Unfortunately, the sheet has run into an issue where there are no forms to choose from because of resources being excluded. Use the \"Source Material\" bookmark to correct this.\n\nThis could also be an issue with the imported script containing the feat not being written correctly. If so, please contact the author of that import script."
 			});
 			doNotCommit();
-			return;
+			return returnRC;
 		}
 	}
 
@@ -4898,13 +4899,13 @@ async function ApplyFeat(input, FldNmbr) {
 			console.show();
 		}
 		if (thermoTxt) thermoM(thermoTxt, true); // Stop progress bar
-		event.target.setVal = "ERROR, please reapply: " + (aFeat.name.substr(0,2) + "\u200A" + aFeat.name.substr(2)).split(" ").join("\u200A ");
-		return;
+		field.setVal = "ERROR, please reapply: " + (aFeat.name.substr(0,2) + "\u200A" + aFeat.name.substr(2)).split(" ").join("\u200A ");
+		return returnRC;
 	}
 
 	if (oldFeat === newFeat && oldFeatVar === newFeatVar) {
-		if (setFieldValueTo) event.target.setVal = setFieldValueTo;
-		return; // No changes were made
+		if (setFieldValueTo) field.setVal = setFieldValueTo;
+		return returnRC; // No changes were made
 	}
 
 	// Start progress bar
@@ -4951,13 +4952,13 @@ async function ApplyFeat(input, FldNmbr) {
 			});
 			if (stopFunct === 1 || stopFunct === 3) {
 				doNotCommit();
-				return;
+				return returnRC;
 			}
 		}
 	}
 
 	// Before stopping the calculations, first test if the feat has a prerequisite and if it meets that
-	if (IsNotImport && IsNotReset && theFeat && theFeat.prereqeval && !ignorePrereqs && event.target && event.target.name == Fflds[0]) {
+	if (IsNotImport && IsNotReset && theFeat && theFeat.prereqeval && !ignorePrereqs && field && field.name == Fflds[0]) {
 		try {
 			if (typeof theFeat.prereqeval == 'string') {
 				var meetsPrereq = eval(theFeat.prereqeval);
@@ -4986,13 +4987,13 @@ async function ApplyFeat(input, FldNmbr) {
 
 			if (askUserFeat !== 4) { // If "NO" was pressed
 				doNotCommit();
-				return;
+				return returnRC;
 			}
 		};
 	};
 
 	// if a feat variant was chosen, make sure this field will show that selection, now that it can't be cancelled anymore due to not meeting a prerequisite
-	if (setFieldValueTo) event.target.setVal = setFieldValueTo;
+	if (setFieldValueTo) field.setVal = setFieldValueTo;
 
 	calcStop(); // Now stop the calculations
 
@@ -5063,6 +5064,7 @@ async function ApplyFeat(input, FldNmbr) {
 	}
 
 	thermoM(thermoTxt, true); // Stop progress bar
+	return returnRC;
 };
 
 function SetFeatsdropdown(forceTooltips) {

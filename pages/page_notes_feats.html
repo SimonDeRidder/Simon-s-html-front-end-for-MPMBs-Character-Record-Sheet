@@ -256,17 +256,35 @@
 		>&gt;</button>
 
 		<script type="text/javascript">
+			// Feat_Name_* change
 			for (let i = 1; i <= 8; i++) {
 				let elm = document.getElementById('Feat_Name_' + String(i));
+				elm.onfocus = function() {
+					this.dataset.oldVal = this.value;
+				}
+				elm.addEventListener(
+					"calculate",
+					(e) => {
+						if (e.target.dataset.setVal !== undefined) {
+							e.target.value = e.target.dataset.setVal;
+							e.target.dispatchEvent(new Event('change'));
+						}
+					},
+					false,
+				);
 				elm.onchange = async function() {
-					event.target.name=adapter_helper_convert_id_to_fieldname(this.id);
-					event.value=this.value;
-					event.name='Validate';
-					calcStartSet = true;
-					calcStop();
-					await doDropDownValCalcWithChoices();
-					calcStartSet = false;
-					calcCont();
+					if (this.dataset.setVal !== undefined) {
+						delete this.dataset.setVal;
+					} else {
+						calcStartSet = true;
+						calcStop();
+						let rc = await doDropDownValCalcWithChoices(new AdapterClassFieldReference([this]));
+						if (!rc) {
+							this.value = this.dataset.oldVal;
+						}
+						calcStartSet = false;
+						calcCont();
+					}
 				}
 			}
 		</script>
@@ -774,84 +792,84 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 28px;left: 284px"
-			onchange="ApplyAttunementMI(1)"
+			onchange="ApplyAttunementMI(1, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_2"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 145px;left: 284px"
-			onchange="ApplyAttunementMI(2)"
+			onchange="ApplyAttunementMI(2, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_3"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 262px;left: 284px"
-			onchange="ApplyAttunementMI(3)"
+			onchange="ApplyAttunementMI(3, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_4"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 379px;left: 284px"
-			onchange="ApplyAttunementMI(4)"
+			onchange="ApplyAttunementMI(4, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_5"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 496px;left: 284px"
-			onchange="ApplyAttunementMI(5)"
+			onchange="ApplyAttunementMI(5, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_6"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden"
-			onchange="ApplyAttunementMI(6)"
+			onchange="ApplyAttunementMI(6, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_7"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden"
-			onchange="ApplyAttunementMI(7)"
+			onchange="ApplyAttunementMI(7, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_8"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden"
-			onchange="ApplyAttunementMI(8)"
+			onchange="ApplyAttunementMI(8, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_9"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden"
-			onchange="ApplyAttunementMI(9)"
+			onchange="ApplyAttunementMI(9, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_10"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden" 
-			nchange="ApplyAttunementMI(10)"
+			onchange="ApplyAttunementMI(10, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_11"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden" 
-			nchange="ApplyAttunementMI(11)"
+			onchange="ApplyAttunementMI(11, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_12"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden" 
-			nchange="ApplyAttunementMI(12)"
+			onchange="ApplyAttunementMI(12, new AdapterClassFieldReference([this]))"
 		/>
 
 		<textarea
@@ -943,55 +961,55 @@
 			id="Extra.Magic_Item_Button_1"
 			class="field button nonprintable"
 			style="top: 30.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 1)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 1, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_2"
 			class="field button nonprintable"
 			style="top: 147.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 2)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 2, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_3"
 			class="field button nonprintable"
 			style="top: 264.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 3)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 3, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_4"
 			class="field button nonprintable"
 			style="top: 381.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 4)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 4, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_5"
 			class="field button nonprintable"
 			style="top: 498.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 5)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 5, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_6"
 			class="field button nonprintable"
 			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 6)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 6, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_7"
 			class="field button nonprintable"
 			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 7)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 7, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_8"
 			class="field button nonprintable"
 			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 8)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 8, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_9"
 			class="field button nonprintable"
 			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 9)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 9, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_10"
@@ -1155,15 +1173,32 @@
 		<script type="text/javascript">
 			for (let i = 1; i <= 12; i++) {
 				let elm = document.getElementById('Extra.Magic_Item_' + String(i));
+				elm.onfocus = function() {
+					this.dataset.oldVal = this.value;
+				}
+				elm.addEventListener(
+					"calculate",
+					(e) => {
+						if (e.target.dataset.setVal !== undefined) {
+							e.target.value = e.target.dataset.setVal;
+							e.target.dispatchEvent(new Event('change'));
+						}
+					},
+					false,
+				);
 				elm.onchange = async function() {
-					event.target.name=adapter_helper_convert_id_to_fieldname(this.id);
-					event.value=this.value;
-					event.name='Validate';
-					calcStartSet = true;
-					calcStop();
-					await doDropDownValCalcWithChoices();
-					calcStartSet = false;
-					calcCont();
+					if (this.dataset.setVal !== undefined) {
+						delete this.dataset.setVal;
+					} else {
+						calcStartSet = true;
+						calcStop();
+						let rc = await doDropDownValCalcWithChoices(new AdapterClassFieldReference([this]));
+						if (!rc) {
+							this.value = this.dataset.oldVal;
+						}
+						calcStartSet = false;
+						calcCont();
+					}
 				}
 			}
 		</script>

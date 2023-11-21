@@ -865,6 +865,18 @@ class AdapterClassFieldReference {
 
 	}
 
+	get setVal() /*String*/ {
+		let setVal_ = this.html_elements[0].dataset.setVal;
+		if (setVal_ == undefined) {
+			return "";
+		}
+		return setVal_;
+	}
+
+	set setVal(new_setVal /*String*/) {
+		this.html_elements[0].dataset.setVal = new_setVal;
+	}
+
 	toSource() /*str*/ {
 		return this.html_elements[0].toSource();
 	}

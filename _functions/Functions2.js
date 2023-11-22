@@ -632,7 +632,6 @@ async function ApplyCompRace(newRace, prefix, sCompType) {
 
 // Make menu for the button on the companion page and do something with the result
 async function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
-	if (!prefix) prefix = getTemplPre(event.target.name, "AScomp", true);
 	var aVisLayers = eval_ish(What(prefix + "Companion.Layers.Remember"));
 	var creaCalcStr = StringEvals("creaStr");
 	if (!MenuSelection || MenuSelection === "justMenu" || MenuSelection === "justCompanions") {

@@ -57,7 +57,7 @@ function initialCalculationEvents() {
 	document.getElementById('Str').dispatchEvent(new Event('change'));
 	document.getElementById('Wis').dispatchEvent(new Event('change'));
 	// trigger Proficiency_Bonus calculation
-	document.getElementById('Character_Level').dispatchEvent(new Event('change'));
+	document.getElementById('Proficiency_Bonus_Modifier').dispatchEvent(new Event('change'));
 	// trigger weight texts
 	document.getElementById('Unit_System').dispatchEvent(new Event('change'));
 	// trigger feat_name & magic items calculations
@@ -105,5 +105,3 @@ loadScript('_functions/AbilityScores_old.js')
 	.then(script => loadScript('_variables/ListsSpells.js'))
 	.then(script => makeSaveLoadButtons())
 	.then(script => loadScript('_functions/Startup.js'));
-	// .then(script => loadScript('import_utils/overwrite_Startup.js'))
-	// .then(script => initialCalculationEvents());

@@ -5,7 +5,7 @@
 		class="field button nonprintable"
 		style="left: 565.5px;top: 29.5px;font-size: 8.7px"
 		aria-label="Here you can find the options for this Companion page:"
-		onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeCompMenu_CompOptions();"
+		onclick="MakeCompMenu_CompOptions(this.id.slice(0, this.id.indexOf('Companion.Options')))"
 	>Companion Options</button>
 
 	<div id="companion_general" class="pane" style="left: 0px;width: var(--page-width);height: 190px;">

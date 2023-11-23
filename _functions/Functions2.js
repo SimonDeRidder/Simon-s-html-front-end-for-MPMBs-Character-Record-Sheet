@@ -157,16 +157,14 @@ function setCurrentCompRace(prefix, type, found) {
 }
 
 //add a creature to the companion page
-async function ApplyCompRace(newRace, prefix, sCompType) {
+async function ApplyCompRace(newRace, prefix, sCompType, bIsRaceFld, oldValue) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
-	var bIsRaceFld = event && event.target && event.target.name && event.target.name.indexOf("Comp.Race") !== -1;
-	if (bIsRaceFld && newRace.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
+	if (bIsRaceFld && newRace.toLowerCase() === oldValue.toLowerCase()) return; //no changes were made
 
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Applying companion race...");
 	calcStop();
 
-	if (!prefix) prefix = getTemplPre(event.target.name, "AScomp", true);
 	var hpCalcTxt = " hit points calculation";
 	var strRaceEntry = clean(newRace).toLowerCase();
 	var strRaceEntryCap = strRaceEntry.capitalize()

@@ -45,9 +45,9 @@
 			list="comp_race_options"
 			aria-label="Type (or select) the name of the race you want to have on this page. Not that first a list of player races is given, followed by an alphabetical list of creatures. You are not limited by the names in the list. Just typing 'Drow' will also be recognised, for example."
 			spellcheck="true"
-			onfocus="this.dataset.tempValue=this.value"
+			onfocus="this.dataset.oldVal=this.value"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="{event.target.name=adapter_helper_convert_id_to_fieldname(this.id);let newValue=this.value;event.target.value=this.dataset.tempValue;ApplyCompRace(newValue).then(() => {this.dataset.tempValue=newValue;this.value=newValue});}"
+			onchange="ApplyCompRace(this.value, this.id.slice(0, this.id.indexOf('Comp.Race')), '', true, this.dataset.oldVal).then(() => {this.dataset.oldVal=this.value})"
 		/>
 		<datalist id="comp_race_options">
 			<option value=""> </option>

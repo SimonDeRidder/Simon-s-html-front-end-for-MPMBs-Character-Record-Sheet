@@ -4481,16 +4481,16 @@ function DisplayBonus(value, valueCalculated) {
 }
 
 // Calculate the EvalBonus for this field, if calculated (field calculation)
-function DisplayBonusCalculate() {
-	if (event.value && isNaN(event.value)) {
-		var prefix = getTemplPre(event.target.name, "AScomp", true);
+function DisplayBonusCalculate(fldName, value, valueCalc) {
+	if (value && isNaN(value)) {
+		var prefix = getTemplPre(fldName, "AScomp", true);
 		if (prefix === "") prefix = true;
-		var evalVal = EvalBonus(event.value, prefix);
-		if (evalVal !== event.target.valueCalculated) {
-			event.target.valueCalculated = evalVal;
-			event.target.value = event.value; // so that the display is actually updated
+		var evalVal = EvalBonus(value, prefix);
+		if (evalVal !== valueCalc) {
+			valueCalc = evalVal;
 		}
 	}
+	return [value, valueCalc];
 }
 
 // Calculate the skill modifier (field calculation)

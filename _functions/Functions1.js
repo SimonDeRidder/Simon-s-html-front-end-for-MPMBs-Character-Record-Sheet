@@ -6550,11 +6550,12 @@ function CalcAC() {
 };
 
 // Format the AC for when "Players Make All Rolls" is enabled (field format)
-function formatACforPMAR() {
-	event.value = DisplayBonus(event.value, event.target.valueCalculated);
-	if (!tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) || !event.value) return;
-	var ACmod = event.value - 12;
-	event.value = ACmod < 0 ? ACmod : "+" + ACmod;
+function formatACforPMAR(value, valueCalc) {
+	value = DisplayBonus(value, valueCalc);
+	if (!tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) || !value) return;
+	var ACmod = value - 12;
+	value = ACmod < 0 ? ACmod : "+" + ACmod;
+	return [value, valueCalc];
 }
 
 // Make sure the magic/miscellaneous AC fields have a proper description (and don't overflow)

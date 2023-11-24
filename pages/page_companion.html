@@ -709,7 +709,7 @@
 			data-default=""
 			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 			onfocus="this.dataset.oldVal=this.value"
-			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);values = DisplayBonusCalculate(adapter_helper_convert_id_to_fieldname(this.id), values[0], values[1]);this.value=values[0];this.dataset.valueCalculated=values[1]};event.value=this.value;formatACforPMAR();this.value=event.value;this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);values = DisplayBonusCalculate(adapter_helper_convert_id_to_fieldname(this.id), values[0], values[1]);values=formatACforPMAR(values[0], values[1]);this.value=values[0];this.dataset.valueCalculated=values[1]};this.dataset.oldVal=this.value"
 		/>
 
 		<input

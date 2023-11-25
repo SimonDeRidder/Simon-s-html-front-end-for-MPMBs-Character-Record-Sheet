@@ -3847,15 +3847,15 @@ function CalcAdvLogInfo() {
 }
 
 //see if the value of the field has been changed and differs from the original. If so, push the value to the original
-function ValidateAdvLogInfo() {
-	if (tDoc.info.SpellsOnly || (SetFactionSymbolIgnore && event.target.name.indexOf("Background_Faction.Text") !== -1)) return;
-	var prefix = getTemplPre(event.target.name, "ALlog", true);
+function ValidateAdvLogInfo(fldName, value) {
+	if (tDoc.info.SpellsOnly || (SetFactionSymbolIgnore && fldName.indexOf("Background_Faction.Text") !== -1)) return;
+	var prefix = getTemplPre(fldName, "ALlog", true);
 	if (tDoc.info.AdvLogOnly && !prefix) {
 		return;
 	} else {
-		var theField = event.target.name.replace(/.*?AdvLog\./, tDoc.info.AdvLogOnly ? "AdvLog." : "");
+		var theField = fldName.replace(/.*?AdvLog\./, tDoc.info.AdvLogOnly ? "AdvLog." : "");
 		var theValue = What(theField);
-		if (event.value !== "" && event.value !== theValue) Value(theField, event.value);
+		if (value !== "" && value !== theValue) Value(theField, value);
 	}
 }
 
@@ -4650,7 +4650,7 @@ async function ChangeToCompleteAdvLogSheet(FAQpath) {
 	if (minVer) return;
 	await ResetAll(true, true, true); // also removes all custom scripts
 	tDoc.getField("AdvLog.Class and Levels").setAction("Calculate", "CalcAdvLogInfo();");
-	tDoc.getField("AdvLog.Class and Levels").setAction("Validate", "ValidateAdvLogInfo();");
+	tDoc.getField("AdvLog.Class and Levels").setAction("Validate", "ValidateAdvLogInfo('AdvLog.Class and Levels');");
 	tDoc.getField("AdvLog.Class and Levels").readonly = false;
 
 	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("OnBlur", "UpdateFactionSymbols();");

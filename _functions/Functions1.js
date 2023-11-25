@@ -6552,7 +6552,7 @@ function CalcAC() {
 // Format the AC for when "Players Make All Rolls" is enabled (field format)
 function formatACforPMAR(value, valueCalc) {
 	value = DisplayBonus(value, valueCalc);
-	if (!tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) || !value) return;
+	if (!tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) || !value) return [value, valueCalc];
 	var ACmod = value - 12;
 	value = ACmod < 0 ? ACmod : "+" + ACmod;
 	return [value, valueCalc];

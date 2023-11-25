@@ -5237,7 +5237,7 @@ function ToggleSpellPoints() {
 	//show/hide all visible spell slot checkboxes
 	for (var i = 1; i < 10; i++) {
 		var ssNR = SPactive ? 0 : What("SpellSlots.CheckboxesSet.lvl" + i);
-		SetSpellSlotsCheckboxes(i, ssNR, true);
+		SetSpellSlotsCheckboxes("SpellSlots.CheckboxesSet.lvl" + i, i, ssNR, true);
 	}
 
 	//show/hide the BlueText fields for setting the spell slots

@@ -4880,11 +4880,11 @@ function HideSpellSheetElement(base, fromChange, value) {
 
 // When changing the spellcasting ability of a manual header, save it to the remember field so that the element can be recreated when inserting/deleting rows (field blur)
 // If this is a header linked to a CurrentSpells object, change its spellcasting ability and offer to re-generate the sheet
-async function SaveSpellcastingAbility() {
-	if (!event.target) return;
-	var base = event.target.name;
+async function SaveSpellcastingAbility(field) {
+	if (!field) return;
+	var base = field.name;
 	var caster = What(base.replace("ability", "class"));
-	var selAbi = event.target.currentValueIndices;
+	var selAbi = field.currentValueIndices;
 	if (caster && CurrentSpells[caster] && !(CurrentSpells[caster].fixedDC && !CurrentSpells[caster].ability)) {
 		var spCast = CurrentSpells[caster];
 		if (!selAbi && spCast.abilityBackup) {

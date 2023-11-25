@@ -4562,7 +4562,7 @@ async function deleteSpellRow(prefix, lineNmbr) {
 				if (i === 0 && nextHasImage) {
 					var splitVal = nextLineVals[i].split("##");
 					var setType = nextHasImage == "header" ? "spellshead.Text.header." : nextHasImage == "divider" ? "spellsdiv.Text." : "spellsgloss.Image";
-					HideSpellSheetElement(nextRow[0] + setType + (nextHasImage == "glos" ? "" : splitVal[2]));
+					HideSpellSheetElement(nextRow[0] + setType + (nextHasImage == "glos" ? "" : splitVal[2]), false);
 					if (nextHasImage !== "glos" && nextRow[0] !== SSmoreA[SS]) {
 						splitVal[2] = findNextHeaderDivider(SSmoreA[SS], nextHasImage);
 						nextLineVals[i] = splitVal.join("##");
@@ -4676,7 +4676,7 @@ async function insertSpellRow(prefix, lineNmbr, toMove, ignoreEmptyTop) {
 			} else if (rememberRow[0] > 0) {
 				rememberRow[0] -= 1;
 				if (rememberRow[0] === 0) {//now that we passed the last row to skip, hide the header/divider
-					HideSpellSheetElement(rememberRow[1] + rememberRow[2] + rememberRow[3]);
+					HideSpellSheetElement(rememberRow[1] + rememberRow[2] + rememberRow[3], false);
 					rememberRow = [0];
 				}
 			}
@@ -4754,8 +4754,7 @@ async function insertSpellRow(prefix, lineNmbr, toMove, ignoreEmptyTop) {
 };
 
 // Hide the class header or spell level divider if their value is made completely empty before an On Blur action
-function HideSpellSheetElement(theTarget) {
-	var base = theTarget ? theTarget : event.target.name;
+function HideSpellSheetElement(base, fromChange, value) {
 	var prefix = base.substring(0, base.indexOf("spells"));
 	var SSfrontPrefix = What("Template.extras.SSfront").split(",")[1];
 	var suffix = Number(base.slice(-1));
@@ -4804,7 +4803,7 @@ function HideSpellSheetElement(theTarget) {
 	var glossaryArray = [
 		prefix + "spellsgloss.Image"
 	];
-	if ((theTarget || event.value === "") && !(prefix === SSfrontPrefix && suffix === 0)) {
+	if ((!fromChange || value === "") && !(prefix === SSfrontPrefix && suffix === 0)) {
 		calcStop();
 		var lineBase = How(base);
 		var startLine = parseFloat(lineBase.slice(-2)[0] === "." ? lineBase.slice(-1) : lineBase.slice(-2));
@@ -4854,7 +4853,7 @@ function HideSpellSheetElement(theTarget) {
 		}
 		if (!toTest) {
 			Value(SSfrontPrefix + "spellshead.class.0", "");
-			if (event.value === "") HideShow = "Show";
+			if (value === "") HideShow = "Show";
 		} else if (!toPrep) {
 			HideShow = "Hide";
 		}
@@ -4871,10 +4870,10 @@ function HideSpellSheetElement(theTarget) {
 		}
 	}
 	// If the text changed, make sure to also edit the remember field so that the element can be recreated when inserting/deleting rows
-	if (!theTarget && event.value && !(prefix === SSfrontPrefix && suffix === 0)) {
+	if (fromChange && value && !(prefix === SSfrontPrefix && suffix === 0)) {
 		var lineBase = How(base);
 		var lineBaseArr = What(lineBase).split("##");
-		lineBaseArr[3] = event.value;
+		lineBaseArr[3] = value;
 		Value(lineBase, lineBaseArr.join("##"));
 	}
 }
@@ -4932,7 +4931,7 @@ async function MakeGlossMenu_GlossOptions() {
 	}];
 	var MenuSelection = await getMenu("glossary");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] !== "removeglossary") return;
-	HideSpellSheetElement(event.target.name);
+	HideSpellSheetElement(event.target.name, false);
 }
 
 // make all lines on the newly generated empty sheet

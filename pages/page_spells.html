@@ -705,17 +705,17 @@
 
 		<script type="text/javascript">
 			{
-				let prefix = adapter_helper_get_prefix_from_script('spellshead.Text');
+				let prefix = adapter_helper_get_prefix_from_script('Image.DnDLogo.short');
 				// zAdvLog.PC_Name
 				eventManager.add_listener(
 					EventType.PC_Name_change,
 					function () {
-						event.target.name = prefix + 'zAdvLog.PC Name';
-						CalcAdvLogInfo();
-						if (event.value !== undefined) {
-							let nameElement = document.getElementById(prefix + 'zAdvLog.PC Name');
-							if (nameElement != null) {
-								nameElement.value = event.value;
+						let newValue = CalcAdvLogInfo(prefix + 'zAdvLog.PC Name');
+						if (newValue !== undefined) {
+							let nameElement = document.getElementById(prefix + 'zAdvLog.PC_Name');
+							if (nameElement.value != newValue) {
+								nameElement.value = newValue;
+								nameElement.dispatchEvent(new Event('change'));
 							}
 						}
 					}

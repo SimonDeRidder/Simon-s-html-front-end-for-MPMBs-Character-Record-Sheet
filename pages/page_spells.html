@@ -747,7 +747,7 @@
 				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
-				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+				onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 			/>
 			<select
 				id="spellshead.ability.0"
@@ -869,7 +869,7 @@
 				data-submit_name="spellshead.dummy.remember.1"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
-				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+				onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 			/>
 			<select
 				id="spellshead.ability.1"
@@ -991,7 +991,7 @@
 				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
-				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+				onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 			/>
 			<select
 				id="spellshead.ability.2"
@@ -1113,7 +1113,7 @@
 				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
-				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+				onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 			/>
 			<select
 				id="spellshead.ability.3"
@@ -1230,7 +1230,7 @@
 			type="text"
 			data-default=""
 			data-submit_name="spellsdiv.dummy.remember.0"
-			onchange="this.value=this.value.toUpperCase();event.value = this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);HideSpellSheetElement();"
+			onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 		/>
 
 		<div id="spellscontainer.0" style="position: absolute;top: 96px;left: 0px;width:825px;height: 15.6px;">

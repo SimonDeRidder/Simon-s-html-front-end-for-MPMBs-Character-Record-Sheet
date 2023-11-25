@@ -727,7 +727,7 @@
 
 	<div id="spell_sheet_table" class="pane" style="top: 180px;left: 34px;width: 825px;height: 972px">
 
-		<div id="spellshead.container.0" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px">
+		<div id="spellshead.container.0" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;z-index: 3">
 			<div
 				id="spellshead.Image.Header.Left.0"
 				class="field"
@@ -753,7 +753,7 @@
 				id="spellshead.ability.0"
 				class="field inputfield"
 				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
-				onchange="{let wrapper = new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_0_change)})}"
+				onchange="SaveSpellcastingAbility(new AdapterClassFieldReference([this])).then(() => {eventManager.handle_event(EventType.spellshead_ability_0_change)})"
 			>
 				<option value="nothing"></option>
 				<option value="Str Mod">  Strength</option>
@@ -848,7 +848,7 @@
 			/>
 		</div>
 
-		<div id="spellshead.container.1" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px">
+		<div id="spellshead.container.1" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;z-index: 2">
 			<div
 				id="spellshead.Image.Header.Left.1"
 				class="field"
@@ -875,7 +875,7 @@
 				id="spellshead.ability.1"
 				class="field inputfield"
 				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
-				onchange="{let wrapper = new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_1_change)})}"
+				onchange="SaveSpellcastingAbility(new AdapterClassFieldReference([this])).then(() => {eventManager.handle_event(EventType.spellshead_ability_1_change)})"
 			>
 				<option value="nothing"></option>
 				<option value="Str Mod">  Strength</option>
@@ -970,7 +970,7 @@
 			/>
 		</div>
 
-		<div id="spellshead.container.2" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px">
+		<div id="spellshead.container.2" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;z-index: 1">
 			<div
 				id="spellshead.Image.Header.Left.2"
 				class="field"
@@ -997,7 +997,7 @@
 				id="spellshead.ability.2"
 				class="field inputfield"
 				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
-				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_2_change)})}"
+				onchange="SaveSpellcastingAbility(new AdapterClassFieldReference([this])).then(() => {eventManager.handle_event(EventType.spellshead_ability_2_change)})"
 			>
 				<option value="nothing"></option>
 				<option value="Str Mod">  Strength</option>
@@ -1119,7 +1119,7 @@
 				id="spellshead.ability.3"
 				class="field inputfield"
 				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
-				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_3_change)})}"
+				onchange="SaveSpellcastingAbility(new AdapterClassFieldReference([this])).then(() => {eventManager.handle_event(EventType.spellshead_ability_3_change)})"
 			>
 				<option value="nothing"></option>
 				<option value="Str Mod">  Strength</option>

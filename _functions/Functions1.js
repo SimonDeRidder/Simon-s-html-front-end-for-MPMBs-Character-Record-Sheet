@@ -9483,14 +9483,14 @@ function SetHighlighting() {
 
 //set spell slots checkboxes, use the value of the field to set the picture and right checkbox form fields [through field validation]
 var ignoreSetSpellSlotsCheckboxes = false;
-function SetSpellSlotsCheckboxes(SpellLVL, theSlots, onlyDisplay) {
+function SetSpellSlotsCheckboxes(fldName, SpellLVL, theSlots, onlyDisplay) {
 	if (ignoreSetSpellSlotsCheckboxes) return;
 	calcStop();
 	var tempNr = What("Template.extras.SSfront").split(",").length;
 
 	//now set the fields of the prefix type, or non-prefix type, depending on which one was just set
 	if (!onlyDisplay && tempNr > 1) {
-		var otherPrefix = event.target && event.target.name.indexOf("SpellSlots") !== 0 ? "" : What("Template.extras.SSfront").split(",")[1];
+		var otherPrefix = fldName && fldName.indexOf("SpellSlots") !== 0 ? "" : What("Template.extras.SSfront").split(",")[1];
 		ignoreSetSpellSlotsCheckboxes = true;
 		Value(otherPrefix + "SpellSlots.CheckboxesSet.lvl" + SpellLVL, theSlots);
 		ignoreSetSpellSlotsCheckboxes = false;
@@ -9648,7 +9648,7 @@ function SetSpellSlotsVisibility() {
 	//update the checkbox fields of the spell slots if any changes have been made
 	if (display1 !== toShow[0] || display2 !== toShow[1]) {
 		for (var i = 1; i <= 9; i++) {
-			SetSpellSlotsCheckboxes(i, What("SpellSlots.CheckboxesSet.lvl" + i), true);
+			SetSpellSlotsCheckboxes("SpellSlots.CheckboxesSet.lvl" + i, i, What("SpellSlots.CheckboxesSet.lvl" + i), true);
 		}
 	}
 }

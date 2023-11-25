@@ -4548,12 +4548,12 @@ function CalcCompNotes() {
 }
 
 // add the content to all the other fields that should share the content (field validation)
-function ValidateCompNotes() {
-	var prefix = getTemplPre(event.target.name, "AScomp", true);
+function ValidateCompNotes(fldName, value) {
+	var prefix = getTemplPre(fldName, "AScomp", true);
 	var notesFld = prefix + (typePF ? "Cnote.Left" : "Cnote.Right");
 	var theValue = What(notesFld);
-	if (event.value !== theValue) {
-		Value(notesFld, event.value);
+	if (value !== theValue) {
+		Value(notesFld, value);
 	}
 }
 

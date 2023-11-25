@@ -769,7 +769,7 @@
 				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
 				type="text"
 				data-default=""
-				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
 			/>
 			<input
 				id="spellshead.dc.0"
@@ -785,7 +785,7 @@
 					id="spellshead.Image.prepare.0"
 					class="field"
 					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer"
-					onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.contextTransfers=['name'];MakePreparedMenu_PreparedOptions()"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id), false)"
 				>
 					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
@@ -907,7 +907,7 @@
 					id="spellshead.Image.prepare.1"
 					class="field"
 					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer;visibility: hidden"
-					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id), false)"
 				>
 					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
@@ -1029,7 +1029,7 @@
 					id="spellshead.Image.prepare.2"
 					class="field"
 					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer"
-					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id), false)"
 				>
 					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px">
 
@@ -1152,7 +1152,7 @@
 					id="spellshead.Image.prepare.3"
 					class="field"
 					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer;visibility: hidden"
-					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id), false)"
 				>
 					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 

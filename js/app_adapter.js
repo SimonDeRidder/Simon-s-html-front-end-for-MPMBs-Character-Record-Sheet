@@ -1542,7 +1542,9 @@ function adapter_helper_convert_id_to_fieldname(id /*str*/) /*str*/ {
 };
 
 function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
-	if (Object.prototype.toString.call(object) === "[object Array]") {
+	if (object === undefined) {
+		return "undefined";
+	} else if (Object.prototype.toString.call(object) === "[object Array]") {
 		let result = "[";
 		let first = true;
 		object.forEach(function (child, index, array) {

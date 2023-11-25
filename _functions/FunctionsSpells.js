@@ -5071,16 +5071,15 @@ async function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 	thermoM(thermoTxt, true); // Stop progress bar
 }
 
-//a way to hide the 'prepared' section on the first page of the spell sheet //if a "target" is given, assume it has to be hidden
-async function MakePreparedMenu_PreparedOptions(target) {
+//a way to hide the 'prepared' section on the first page of the spell sheet //if a "hide" is true, assume it has to be hidden
+async function MakePreparedMenu_PreparedOptions(theTarget, hide) {
 	Menus.spellsPrepared = [{
 		cName : "Hide this prepared spells section",
 		cReturn : "removepreps"
 	}];
 
 	//now call the menu
-	var MenuSelection = target ? ["removepreps"] : await getMenu("spellsPrepared");
-	var theTarget = target ? target : event.target.name;
+	var MenuSelection = hide ? ["removepreps"] : await getMenu("spellsPrepared");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] !== "removepreps") return;
 
 	Hide(theTarget);

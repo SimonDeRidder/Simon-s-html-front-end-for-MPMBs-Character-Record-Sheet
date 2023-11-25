@@ -1442,7 +1442,7 @@ async function DirectImport(consoleTrigger) {
 						var tPrepFldFrom = global.docFrom.getField(prefixFrom + "spellshead." + (fromSheetTypePF ? "Image" : "Text") + ".prepare.0");
 						var tPrepFldToNm = prefixTo + "spellshead." + (typePF ? "Image" : "Text") + ".prepare.0";
 						if (tPrepFldFrom && tPrepFldFrom.display === display.hidden) {
-							await MakePreparedMenu_PreparedOptions(tPrepFldToNm);
+							await MakePreparedMenu_PreparedOptions(tPrepFldToNm, true);
 						};
 					}
 					//set the spell remember fields

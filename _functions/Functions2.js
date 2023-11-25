@@ -1231,8 +1231,8 @@ function applyCompSkillClick(target) {
 }
 
 // call this to update the companion page's proficiency bonus field so it displays the die
-function setCompProfDie() {
-	var prefix = event.target.name.substring(0, event.target.name.indexOf("BlueText."));
+function setCompProfDie(fldName) {
+	var prefix = fldName.substring(0, fldName.indexOf("BlueText."));
 	var profFld = prefix + "Comp.Use.Proficiency Bonus";
 	Value(profFld, What(profFld));
 }

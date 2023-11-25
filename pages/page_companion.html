@@ -3152,12 +3152,10 @@
 					EventType.Cnote_Left_change,
 					function() {
 						let noteField = prefix + "Comp.eqp.Notes";
-						event.target.name = noteField;
-						CalcCompNotes();
+						let newValue = CalcCompNotes(noteField);
 						let noteElement = document.getElementById(noteField);
-						let changed = noteElement.value != event.value;
-						noteElement.value = event.value;
-						if (changed) {
+						if (noteElement.value != newValue) {
+							noteElement.value = newValue;
 							noteElement.dispatchEvent(new Event('change'));
 						}
 					}

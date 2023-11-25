@@ -3878,10 +3878,10 @@ async function MakeIconMenu_IconOptions(targetField) {
 };
 
 //return the value of the field that this adventurers log header field refers to
-function CalcAdvLogInfo() {
+function CalcAdvLogInfo(fldName) {
 	if (tDoc.info.SpellsOnly) return;
-	var theField = event.target.name.replace(/.*?AdvLog\./, tDoc.info.AdvLogOnly ? "AdvLog." : "");
-	event.value = What(theField);
+	var theField = fldName.replace(/.*?AdvLog\./, tDoc.info.AdvLogOnly ? "AdvLog." : "");
+	return What(theField);
 }
 
 //see if the value of the field has been changed and differs from the original. If so, push the value to the original
@@ -4696,7 +4696,7 @@ function UpdateDropdown(type, weapon) {
 async function ChangeToCompleteAdvLogSheet(FAQpath) {
 	if (minVer) return;
 	await ResetAll(true, true, true); // also removes all custom scripts
-	tDoc.getField("AdvLog.Class and Levels").setAction("Calculate", "CalcAdvLogInfo();");
+	tDoc.getField("AdvLog.Class and Levels").setAction("Calculate", "CalcAdvLogInfo('AdvLog.Class and Levels');");
 	tDoc.getField("AdvLog.Class and Levels").setAction("Validate", "ValidateAdvLogInfo('AdvLog.Class and Levels');");
 	tDoc.getField("AdvLog.Class and Levels").readonly = false;
 

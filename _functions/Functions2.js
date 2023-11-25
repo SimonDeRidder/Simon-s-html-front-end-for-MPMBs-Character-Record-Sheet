@@ -4503,10 +4503,10 @@ function UpdateALdateFormat(dateForm) {
 };
 
 //return the value of the field that this notes field (field calculation)
-function CalcCompNotes() {
-	var prefix = getTemplPre(event.target.name, "AScomp", true);
+function CalcCompNotes(fldName) {
+	var prefix = getTemplPre(fldName, "AScomp", true);
 	var notesFld = prefix + (typePF ? "Cnote.Left" : "Cnote.Right");
-	event.value = What(notesFld);
+	return What(notesFld);
 }
 
 // add the content to all the other fields that should share the content (field validation)

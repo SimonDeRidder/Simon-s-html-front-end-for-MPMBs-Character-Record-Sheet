@@ -2,7 +2,7 @@ Bluetext*	-	skipped for now
 Wildshape*	-	skipped for now
 
 converting for firefox-safety:
-stats	BlueText.spellshead.attack.0
+stats	spells.check.0	done
 
 // trigger events on change:
 "BlueText.Attack." + i + ".Damage Bonus": BlueText_Attack_<i:1-5>_Damage_Bonus_change

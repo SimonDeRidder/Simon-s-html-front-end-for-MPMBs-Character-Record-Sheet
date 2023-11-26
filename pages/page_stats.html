@@ -56,7 +56,7 @@
 			required
 			spellcheck="true"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, false, false)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="{let newVal=this.value;this.value=this.dataset.temp?this.dataset.temp:0;levelFieldVal(adapter_helper_convert_id_to_fieldname(this.id), newVal).then((finalValue) => {this.value=finalValue;eventManager.handle_event(EventType.Character_Level_change)});}"
 		/>
 		<input
@@ -131,7 +131,7 @@
 			type="number"
 			aria-label="The current total amount of experience points."
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value), 0, 0);{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};CalcExperienceLevel(true)"
 		/>
 		<input
@@ -140,7 +140,7 @@
 			style="top: 124px;left: 730px;font-size: 11pt;width: 32pt;height: 15pt;color: #0056D3;text-align: center;overflow-x: scroll"
 			type="number"
 			aria-label="Experience points that are to be added to the total to the left."
-			oninput="adapter_helper_keystroke1(this, true, true)"
+			oninput="adapter_helper_keystroke1(this, true, true, this.value, event.data)"
 			onchange="this.value=format1(String(this.value), 0, 0)"
 		/>
 		<span
@@ -221,7 +221,7 @@
 			step="1"
 			aria-label="Racial ability score improvements"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Str_change)"
 		/>
 		<input
@@ -233,7 +233,7 @@
 			step="1"
 			aria-label="Primary class abilities & Multiclassing prerequisites"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Dex_change)"
 		/>
 		<input
@@ -244,7 +244,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.Con_change)"
 		/>
 		<input
@@ -255,7 +255,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Int_change)"
 		/>
 		<input
@@ -266,7 +266,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Wis_change)"
 		/>
 		<input
@@ -277,7 +277,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Cha_change)"
 		/>
 		<input
@@ -288,7 +288,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.HoS_change)"
 		/>
 
@@ -773,7 +773,7 @@
 			type="number"
 			data-submit_name="0,0,0,fixed"
 			aria-label="The total hit points (with averages and max for 1st level)"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="Proficiency_Bonus"
@@ -796,7 +796,7 @@
 			class="field inputfield"
 			style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0"
 			type="number"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<textarea
 			id="HP_Current"
@@ -872,7 +872,7 @@
 			style="top: 211px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
 			type="number"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD1_Level_change)"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="HD2_Level"
@@ -880,7 +880,7 @@
 			style="top: 230px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
 			type="number"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD2_Level_change)"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="HD3_Level"
@@ -888,7 +888,7 @@
 			style="top: 249px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
 			type="number"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD3_Level_change)"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 
 		<input
@@ -897,7 +897,7 @@
 			style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD1_Die_change)"
 			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
@@ -907,7 +907,7 @@
 			style="top: 230px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD2_Die_change)"
 			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
@@ -917,7 +917,7 @@
 			style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD3_Die_change)"
 			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
@@ -927,21 +927,21 @@
 			class="field inputfield-notched"
 			style="top: 211px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
 			type="number"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="HD2_Used"
 			class="field inputfield-notched"
 			style="top: 230px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
 			type="number"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="HD3_Used"
 			class="field inputfield-notched"
 			style="top: 249px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
 			type="number"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 
 		<input
@@ -1246,7 +1246,7 @@
 			aria-label="Armor's weight"
 			value="0"
 			type="text"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.AC_Armor_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1257,7 +1257,7 @@
 			aria-label="Shield's weight"
 			value="0"
 			type="text"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.AC_Shield_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -3902,7 +3902,7 @@
 			style="top: 20px;left: 100px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center"
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id));eventManager.handle_event(EventType.AmmoLeftDisplay_Amount_change)"
 		/>
@@ -3912,7 +3912,7 @@
 			style="top: 20px;left: 245px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center"
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onfocus="this.dataset.oldVal=this.value"
 			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id));eventManager.handle_event(EventType.AmmoRightDisplay_Amount_change)"
 		/>
@@ -5019,7 +5019,7 @@
 			style="top: -8px;left: 90px;width: 35px;height: 14px;font-size: 10.6px;visibility: hidden;"
 			aria-label="Ammunition's weight"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value);eventManager.handle_event(EventType.AmmoLeftDisplay_Weight_change)"
 		/>
 		<input
@@ -5028,7 +5028,7 @@
 			style="top: -8px;left: 235.5px;width: 35px;height: 14px;font-size: 10.6px;visibility: hidden;"
 			aria-label="Ammunition's weight"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value);eventManager.handle_event(EventType.AmmoRightDisplay_Weight_change)"
 		/>
 		<input

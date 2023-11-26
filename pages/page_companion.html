@@ -371,7 +371,7 @@
 			style="top:  99px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Comp_Use_Ability_Str_Score_change)"
 		/>
 		<input
@@ -380,7 +380,7 @@
 			style="top: 207px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Comp_Use_Ability_Dex_Score_change)"
 		/>
 		<input
@@ -389,7 +389,7 @@
 			style="top: 315px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Comp_Use_Ability_Con_Score_change)"
 		/>
 		<input
@@ -398,7 +398,7 @@
 			style="top: 423px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Comp_Use_Ability_Int_Score_change)"
 		/>
 		<input
@@ -407,7 +407,7 @@
 			style="top: 531px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Comp_Use_Ability_Wis_Score_change)"
 		/>
 		<input
@@ -416,7 +416,7 @@
 			style="top: 639px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Comp_Use_Ability_Cha_Score_change)"
 		/>
 		<input
@@ -425,7 +425,7 @@
 			style="top: 747px;left: 36px;font-size: 14pt;width: 29.8px;height: 20.5px;text-align: center;visibility: hidden"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Comp_Use_Ability_HoS_Score_change)"
 		/>
 
@@ -718,7 +718,7 @@
 			style="top: 34px;left: 114.6px;font-size: 28px;width: 62.5px;height: 27px;padding: 0 0 0 0;text-align: center"
 			type="text"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, false, true)"
+			oninput="adapter_helper_keystroke1(this, false, true, this.value, event.data)"
 			onchange="{let name=adapter_helper_convert_id_to_fieldname(this.id);ProfBonusDisplay(name, this.dataset.submit_name, this.value, this.value)};eventManager.handle_event(EventType.Comp_Use_Proficiency_Bonus_change)"
 		/>
 
@@ -730,7 +730,7 @@
 			data-submit_name="0,0,0,fixed"
 			aria-label="The total hit points (with averages)"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 		/>
 		<button
 			id="Buttons.Comp.Use.HP.Max"
@@ -879,7 +879,7 @@
 			step="1"
 			data-default=""
 			onchange="{let templEl=document.getElementById('Template.extras.AScomp');let origTemplVal=templEl.getAttribute('value');templEl.setAttribute('value', ','+origTemplVal.replace(/^,/, ''));SetHPTooltip(false, true);templEl.setAttribute('value', origTemplVal)};eventManager.handle_event(EventType.Comp_Use_HD_Level_change)"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="Comp.Use.HD.Used"
@@ -889,7 +889,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="Comp.Use.HD.Die"
@@ -898,7 +898,7 @@
 			type="text"
 			data-default=""
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Comp_Use_HD_Die_change)"
 			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);{let templEl=document.getElementById('Template.extras.AScomp');let origTemplVal=templEl.getAttribute('value');templEl.setAttribute('value', ','+origTemplVal.replace(/^,/, ''));SetHPTooltip(false, true);templEl.setAttribute('value', origTemplVal)}"
 		/>
@@ -1477,7 +1477,7 @@
 			style="top:  58px;left: 490px;width: 34px;height: 15px;font-size: 7px;visibility: hidden"
 			value="0"
 			data-default="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass')"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1488,7 +1488,7 @@
 			style="top: 106px;left: 490px;width: 34px;height: 15px;font-size: 7px;visibility: hidden"
 			value="0"
 			data-default="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass')"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1499,7 +1499,7 @@
 			style="top: 155px;left: 490px;width: 34px;height: 15px;font-size: 7px;visibility: hidden"
 			value="0"
 			data-default="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass')"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -2805,7 +2805,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_1_change)"
 		/>
 		<input
@@ -2816,7 +2816,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_2_change)"
 		/>
 		<input
@@ -2827,7 +2827,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_3_change)"
 		/>
 		<input
@@ -2838,7 +2838,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_4_change)"
 		/>
 		<input
@@ -2849,7 +2849,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_5_change)"
 		/>
 		<input
@@ -2860,7 +2860,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_6_change)"
 		/>
 		<input
@@ -2871,7 +2871,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_7_change)"
 		/>
 		<input
@@ -2882,7 +2882,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_8_change)"
 		/>
 		<input
@@ -2893,7 +2893,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_9_change)"
 		/>
 		<input
@@ -2904,7 +2904,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_10_change)"
 		/>
 		<input
@@ -2915,7 +2915,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_11_change)"
 		/>
 		<input
@@ -2926,7 +2926,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_12_change)"
 		/>
 		<input
@@ -2937,7 +2937,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_13_change)"
 		/>
 		<input
@@ -2948,7 +2948,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_14_change)"
 		/>
 		<input
@@ -2959,7 +2959,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_15_change)"
 		/>
 		<input
@@ -2970,7 +2970,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_16_change)"
 		/>
 		<input
@@ -2981,7 +2981,7 @@
 			spellcheck="true"
 			data-default=""
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Comp_eqp_Gear_Weight_17_change)"
 		/>
 

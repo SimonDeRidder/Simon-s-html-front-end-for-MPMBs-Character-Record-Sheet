@@ -1044,7 +1044,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_1_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1055,7 +1055,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_2_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1066,7 +1066,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_3_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1077,7 +1077,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_4_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1088,7 +1088,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_5_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1099,7 +1099,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_6_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1110,7 +1110,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_7_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1121,7 +1121,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_8_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1132,7 +1132,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_9_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1143,7 +1143,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_10_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1154,7 +1154,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_11_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1165,7 +1165,7 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_12_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
@@ -1851,7 +1851,7 @@
 			style="top: 31.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_1_change);"
 		/>
 		<input
@@ -1860,7 +1860,7 @@
 			style="top: 48.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_2_change);"
 		/>
 		<input
@@ -1869,7 +1869,7 @@
 			style="top: 64.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_3_change);"
 		/>
 		<input
@@ -1878,7 +1878,7 @@
 			style="top: 81.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_4_change);"
 		/>
 		<input
@@ -1887,7 +1887,7 @@
 			style="top: 97.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_5_change);"
 		/>
 		<input
@@ -1896,7 +1896,7 @@
 			style="top: 114.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_6_change);"
 		/>
 		<input
@@ -1905,7 +1905,7 @@
 			style="top: 130.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_7_change);"
 		/>
 		<input
@@ -1914,7 +1914,7 @@
 			style="top: 147.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_8_change);"
 		/>
 		<input
@@ -1923,7 +1923,7 @@
 			style="top: 163.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_9_change);"
 		/>
 		<input
@@ -1932,7 +1932,7 @@
 			style="top: 180.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_10_change);"
 		/>
 		<input
@@ -1941,7 +1941,7 @@
 			style="top: 196.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_11_change);"
 		/>
 		<input
@@ -1950,7 +1950,7 @@
 			style="top: 213.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_12_change);"
 		/>
 		<input
@@ -1959,7 +1959,7 @@
 			style="top: 229.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_13_change);"
 		/>
 		<input
@@ -1968,7 +1968,7 @@
 			style="top: 246.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_14_change);"
 		/>
 		<input
@@ -1977,7 +1977,7 @@
 			style="top: 262.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_15_change);"
 		/>
 		<input
@@ -1986,7 +1986,7 @@
 			style="top: 279.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_16_change);"
 		/>
 		<input
@@ -1995,7 +1995,7 @@
 			style="top: 295.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_17_change);"
 		/>
 		<input
@@ -2004,7 +2004,7 @@
 			style="top: 312.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_18_change);"
 		/>
 
@@ -2014,7 +2014,7 @@
 			style="top: 31.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_19_change);"
 		/>
 		<input
@@ -2023,7 +2023,7 @@
 			style="top: 48.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_20_change);"
 		/>
 		<input
@@ -2032,7 +2032,7 @@
 			style="top: 64.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_21_change);"
 		/>
 		<input
@@ -2041,7 +2041,7 @@
 			style="top: 81.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_22_change);"
 		/>
 		<input
@@ -2050,7 +2050,7 @@
 			style="top: 97.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_23_change);"
 		/>
 		<input
@@ -2059,7 +2059,7 @@
 			style="top:114.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_24_change);"
 		/>
 		<input
@@ -2068,7 +2068,7 @@
 			style="top: 130.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_25_change);"
 		/>
 		<input
@@ -2077,7 +2077,7 @@
 			style="top: 147.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_26_change);"
 		/>
 		<input
@@ -2086,7 +2086,7 @@
 			style="top: 163.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_27_change);"
 		/>
 		<input
@@ -2095,7 +2095,7 @@
 			style="top: 180.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_28_change);"
 		/>
 		<input
@@ -2104,7 +2104,7 @@
 			style="top: 196.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_29_change);"
 		/>
 		<input
@@ -2113,7 +2113,7 @@
 			style="top: 213.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_30_change);"
 		/>
 		<input
@@ -2122,7 +2122,7 @@
 			style="top: 229.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_31_change);"
 		/>
 		<input
@@ -2131,7 +2131,7 @@
 			style="top: 246.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_32_change);"
 		/>
 		<input
@@ -2140,7 +2140,7 @@
 			style="top: 262.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_33_change);"
 		/>
 		<input
@@ -2149,7 +2149,7 @@
 			style="top: 279.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_34_change);"
 		/>
 		<input
@@ -2158,7 +2158,7 @@
 			style="top: 295.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_35_change);"
 		/>
 		<input
@@ -2167,7 +2167,7 @@
 			style="top: 312.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
 			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_36_change);"
 		/>
 

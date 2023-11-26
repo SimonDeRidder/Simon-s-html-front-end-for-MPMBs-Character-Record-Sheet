@@ -382,20 +382,20 @@ function format2(value) {
 	return value;
 }
 
-function keystroke1(allowDec, allowNegative) {
-	if (!event.willCommit) {
-		event.change = event.change.replace(/ /g, '');
+function keystroke1(allowDec, allowNegative, value, change, selStart, selEnd, willCommit) {
+	if (!willCommit) {
+		change = change.replace(/ /g, '');
 		if (allowDec) {
-			var tests = !isNaN(event.change) || ((/,|\./g).test(event.change) && (!(/,|\./g).test(event.value) || (/,|\./g).test(event.value.substring(event.selStart, event.selEnd))));
+			var tests = !isNaN(change) || ((/,|\./g).test(change) && (!(/,|\./g).test(value) || (/,|\./g).test(value.substring(selStart, selEnd))));
 		} else {
-			var tests = !isNaN(event.change);
+			var tests = !isNaN(change);
 		}
 		if (allowNegative) {
-			tests = tests || (event.change === "-" && event.selStart === 0 && (!(/-/g).test(event.value) || (/-/g).test(event.value.substring(event.selStart, event.selEnd))));
+			tests = tests || (change === "-" && selStart === 0 && (!(/-/g).test(value) || (/-/g).test(value.substring(selStart, selEnd))));
 		}
-		event.rc = tests;
+		return tests;
 	} else {
-		event.rc = !isNaN(event.value.replace(/,/, "."));
+		return !isNaN(value.replace(/,/, "."));
 	}
 }
 

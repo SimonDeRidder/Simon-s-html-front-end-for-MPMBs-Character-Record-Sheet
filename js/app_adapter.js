@@ -1787,22 +1787,29 @@ function adapter_helper_convert_colour(color /*[char, ...]*/) /*String|null*/ {
 }
 
 
-function adapter_helper_keystroke1(element /*HTMLElement*/, arg1 /*boolean*/, arg2 /*boolean*/) {
+function adapter_helper_keystroke1(
+	element /*HTMLElement*/,
+	allowDec /*boolean*/,
+	allowNegative /*boolean*/,
+	value /*String*/,
+	change /*String*/,
+	isFinal /*boolean*/
+) {
 	let current_selection;
-	if (event.target.selectionStart != null) {
+	if (event.target.selectionStart) {
 		current_selection = [event.target.selectionStart, event.target.selectionEnd];
 	} else {
 		current_selection = adapter_helper_get_number_field_selection();
 	}
-	event.change = event.data ? event.data : '';
-	let origLen = event.change.length;
-	event.selStart = current_selection[0];
-	event.selEnd = current_selection[1];
-	keystroke1(arg1, arg2);
-	if (!event.rc) {
-		element.value = element.value.substring(0,event.selStart-origLen)+element.value.substring(event.selEnd);
+	change = change ? change : '';
+	let origLen = change.length;
+	let selStart = current_selection[0];
+	let selEnd = current_selection[1];
+	let rc = keystroke1(allowDec, allowNegative, value, change, selStart, selEnd, isFinal);
+	if (!rc) {
+		element.value = element.value.substring(0,selStart-origLen)+element.value.substring(selEnd);
 	} else {
-		element.value = element.value.substring(0,event.selStart-origLen)+event.change+element.value.substring(event.selEnd);
+		element.value = element.value.substring(0,selStart-origLen)+change+element.value.substring(selEnd);
 	}
 }
 

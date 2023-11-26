@@ -1374,9 +1374,8 @@ function calcCompMaxDexToAC(prefix, armourKey, dexMod) {
 };
 
 // add the armour; only overwrites if force == true
-function AddArmor(armour, force, comp) {
+function AddArmor(armour, force, prefix) {
 	if (!armour) return;
-	var prefix = comp ? comp : !event.target || !event.target.name ? "" : getTemplPre(event.target.name, "AScomp", true);
 	var ACfld = prefix ? prefix + "Comp.Use.AC" : "AC Armor Description";
 	var curAC = What(ACfld);
 	if (curAC && !force) return;

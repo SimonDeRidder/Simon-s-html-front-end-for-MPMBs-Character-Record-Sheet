@@ -836,22 +836,20 @@ function CalcSpellScores() {
 }
 
 //set the blueText field bonus to the global CurrentSpells object for spells to memorize, attack modifier, and DC (field blur)
-function SetSpellBluetext(aClass, type, newValue) {
+function SetSpellBluetext(fldName, newValue) {
 	// get what type we are changing
-	type = type ? type : event.target.name.replace(/.*spellshead\.(\w+).*/, "$1");
+	let type = fldName.replace(/.*spellshead\.(\w+).*/, "$1");
 	type = type === "dc" ? "dc" : type === "attack" || type === "atk" ? "atk" : "prep";
 	var typeFull = type === "dc" ? "dc" : type === "atk" ? "attack" : "prepare";
 	// find the associated class
-	aClass = aClass ? aClass : What(event.target.name.replace("BlueText.spellshead." + typeFull, "spellshead.class"));
-	// get the value we are changing it to
-	newValue = newValue !== undefined ? newValue : event.value;
+	let aClass = What(fldName.replace("BlueText.spellshead." + typeFull, "spellshead.class"));
 
 	// set the associated bluetext variable
 	var cSpells = CurrentSpells[aClass];
 	if (!cSpells) {
 		// Not a recognized class, so save the change to the remember field
 		calcStop();
-		var remFld = How(event.target.name.replace("BlueText.spellshead." + typeFull, "spellshead.Text.header"));
+		var remFld = How(fldName.replace("BlueText.spellshead." + typeFull, "spellshead.Text.header"));
 		if (!tDoc.getField(remFld)) return;
 		var remFldValue = What(remFld).split("##");
 		remFldValue[type === "prep" ? 5 : type === "atk" ? 6 : 7] = newValue;
@@ -877,7 +875,7 @@ function SetSpellBluetext(aClass, type, newValue) {
 	var prefixArray = What("Template.extras.SSmore").split(",");
 	prefixArray[0] = What("Template.extras.SSfront").split(",")[1];
 	if (!prefixArray[0]) prefixArray.shift();
-	var currentField = event.target ? event.target.name : "";
+	var currentField = fldName ? fldName : "";
 	for (var i = 0; i < prefixArray.length; i++) {
 		var prefix = prefixArray[i];
 		for (var s = 0; s <= 3; s++) {

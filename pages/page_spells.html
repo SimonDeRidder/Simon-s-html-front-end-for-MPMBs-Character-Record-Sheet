@@ -820,7 +820,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_attack_0_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_attack_0_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.0"
@@ -832,7 +832,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_dc_0_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_dc_0_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.0"
@@ -844,7 +844,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_0_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_prepare_0_change)"
 			/>
 		</div>
 
@@ -942,7 +942,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_attack_1_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_attack_1_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.1"
@@ -954,7 +954,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_1_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_dc_1_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.1"
@@ -966,7 +966,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_1_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_prepare_1_change)"
 			/>
 		</div>
 
@@ -1064,7 +1064,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_attack_2_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_attack_2_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.2"
@@ -1076,7 +1076,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_2_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_dc_2_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.2"
@@ -1088,7 +1088,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_2_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_prepare_2_change)"
 			/>
 		</div>
 
@@ -1187,7 +1187,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_attack_3_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_attack_3_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.3"
@@ -1199,7 +1199,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_3_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_dc_3_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.3"
@@ -1211,7 +1211,7 @@
 				onfocus="this.dataset.oldVal=this.value"
 				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
 				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_3_change)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_prepare_3_change)"
 			/>
 		</div>
 

@@ -4921,14 +4921,14 @@ async function SaveSpellcastingAbility(field) {
 }
 
 //a one-item menu to hide the glossary
-async function MakeGlossMenu_GlossOptions() {
+async function MakeGlossMenu_GlossOptions(fldName) {
 	Menus.glossary = [{
 		cName : "Remove this glossary",
 		cReturn : "removeglossary"
 	}];
 	var MenuSelection = await getMenu("glossary");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] !== "removeglossary") return;
-	HideSpellSheetElement(event.target.name, false);
+	HideSpellSheetElement(fldName, false);
 }
 
 // make all lines on the newly generated empty sheet

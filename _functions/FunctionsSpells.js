@@ -731,10 +731,10 @@ function SetSpellSheetElement(target, type, suffix, caster, hidePrepared, forceT
 }
 
 //calculate the number of spells to memorize, attack modifier, and DC (field calculation)
-function CalcSpellScores() {
+function CalcSpellScores(fldName) {
 	if (tDoc.info.SpellsOnly) return;
-	var fldType = event.target.name.replace(/.*spellshead\.(\w+).*/, "$1");
-	var Fld = event.target.name.replace("spellshead." + fldType, "spellshead.DINGDONG");
+	var fldType = fldName.replace(/.*spellshead\.(\w+).*/, "$1");
+	var Fld = fldName.replace("spellshead." + fldType, "spellshead.DINGDONG");
 	var modFldName = Fld.replace("DINGDONG", "ability");
 	var modFld = What(modFldName);
 	var theMod = Number(What(modFld));
@@ -752,6 +752,7 @@ function CalcSpellScores() {
 
 	var setResults = function(showTheResult) {
 		if (cSpells) cSpells.calcSpellScores = {};
+		let value = undefined;
 		for (var aType in theResult) {
 			var theR = showTheResult ? theResult[aType] : "", numTot;
 			if (showTheResult && (aType !== "prepare" || isPrepareVis)) {
@@ -771,17 +772,17 @@ function CalcSpellScores() {
 				}
 			}
 			if (aType == fldType) {
-				event.value = theR;
+				value = theR;
 			} else {
 				Value(Fld.replace("DINGDONG", aType), theR);
 			}
 			if (cSpells) cSpells.calcSpellScores[aType] = numTot;
 		}
+		return value;
 	}
 
 	if (modFld == "nothing" && !fixedDC) {
-		setResults(false);
-		return;
+		return setResults(false);
 	}
 
 	var profBonus = Number(How("Proficiency Bonus"));
@@ -832,7 +833,7 @@ function CalcSpellScores() {
 	}
 
 	// finally set the results to the field
-	setResults(true);
+	return setResults(true);
 }
 
 //set the blueText field bonus to the global CurrentSpells object for spells to memorize, attack modifier, and DC (field blur)

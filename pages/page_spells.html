@@ -1506,11 +1506,14 @@
 							eventManager.add_listener(
 								eventType,
 								function () {
-									event.target.name = prefix + 'spellshead.prepare.' + String(i);
-									CalcSpellScores();
-									if (event.value !== undefined) {
-										let prepareElement = document.getElementById(prefix + 'spellshead.prepare.' + String(i));
-										prepareElement.value = event.value;
+									let element_id = prefix + 'spellshead.prepare.' + String(i);
+									let result = CalcSpellScores(element_id);
+									if (result !== undefined) {
+										let prepareElement = document.getElementById(element_id);
+										if (prepareElement.value != result) {
+											prepareElement.value = result;
+											prepareElement.dispatchEvent(new Event('change'));
+										}
 									}
 								}
 							);

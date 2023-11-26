@@ -28,7 +28,7 @@ const app = {
 		oIcon = null /*Icon Stream*/,
 		cExec /*str*/,
 		cEnable = "true" /*str*/,
-		cMarked = "false" /*str*/,
+		cMarked = undefined /*str*/,
 		cTooltext = "" /*str*/,
 		nPos = -1 /*number*/,
 		cLabel = "" /*str*/,
@@ -60,17 +60,7 @@ const app = {
 		if (cEnable != "true") {
 			throw "addToolButton with cEnable='", cEnable, "' for element ", cName;
 		}
-		if (cMarked != "false") {
-			let event = {};
-			eval(cMarked);
-			let markResult = event.rc;
-			if (!markResult) {
-				console.log("Warning: cMarked evaluates to false, not adding button:", cName);
-				newButton.remove();
-				buttonParent.remove();
-				return;
-			}
-		}
+		// cMarked is ignored
 		newButton.ariaLabel = cTooltext;
 		if (nPos != -1) {
 			console.log("Warning: addToolButton with nPos != -1 not implemented:", cName, ":", nPos);

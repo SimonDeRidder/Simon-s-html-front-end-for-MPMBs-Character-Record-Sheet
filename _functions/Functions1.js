@@ -93,7 +93,7 @@ function MakeButtons() {
 				cExec : "ToggleBlueText();",
 				oIcon : allIcons.modifiers,
 				cTooltext : toUni("Modifier Fields") + "\nHide\/show fields where you can manually add modifiers for:\n   \u2022  Ability save DC;\n   \u2022  Attacks to hit and damage bonusses;\n   \u2022  Attacks damage die;\n   \u2022  Proficiency bonus, or the use of proficiency dice;\n   \u2022  Saves;\n   \u2022  Skills, with Jack of All Trades and Remarkable Athlete;\n   \u2022  Number of spell slots;\n   \u2022  Initiative;\n   \u2022  Carrying capacity multiplier;\n   \u2022  Weights of armor, shield, weapons, and ammunition.\n\nThese are the so-called \"blue text fields\" and they won't print, even when they are visible.",
-				cMarked : "event.rc = CurrentVars.bluetxt;",
+				cMarked : "CurrentVars.bluetxt",
 				nPos : 9,
 				cLabel : "Mods"
 			});
@@ -116,7 +116,7 @@ function MakeButtons() {
 				cExec : "MakeAdventureLeagueMenu();AdventureLeagueOptions();",
 				oIcon : allIcons.league,
 				cTooltext : toUni("Adventurers League") + "\nHide\/show fields for Adventurers League play:\n   \u2022  'DCI' on the 1st page;\n   \u2022  'Faction Rank' and 'Renown' on the Background page;\n   \u2022  Sets HP value on the 1st page to 'always fixed';" + (typePF ? "" : "\n   \u2022  Removes the action options from the DMG on the 1st page;") + "\n   \u2022  Adds asterisks for action options taken from the DMG in the reference section.\n\nThis button can also make the \"Adventurers Logsheet\" visible if it isn't already.\n\nNote that this Character Generator\/Sheet offers some options that are not legal in Adventurer's League play regardless of enabling this button or not.",
-				cMarked : "event.rc = Number(tDoc.getField('League Remember').submitName);",
+				cMarked : "Number(tDoc.getField('League Remember').submitName)",
 				nPos : 11,
 				cLabel : "League"
 			});
@@ -134,7 +134,7 @@ function MakeButtons() {
 			cExec : "MakeMobileReady();",
 			oIcon : allIcons.tablet,
 			cTooltext : toUni("Flatten") + "\nSwitch to or from a version of the sheet that is compatible with Acrobat Reader for mobile devices.\nThis flattens all form fields and hides non-printable ones to make the sheet more usable on a phone or tablet.\n\nThe fields used during normal play will stay editable:\n   \u2022  1st page: health, attacks, actions, adv.\/disadv., etc.;\n   \u2022  2nd page: equipment and proficiencies;\n   \u2022  3rd-6th page: all except buttons and portrait\/symbol.",
-			cMarked : "event.rc = CurrentVars.mobileset ? CurrentVars.mobileset.active : false;",
+			cMarked : "CurrentVars.mobileset ? CurrentVars.mobileset.active : false",
 			nPos : 13,
 			cLabel : "Flatten"
 		});

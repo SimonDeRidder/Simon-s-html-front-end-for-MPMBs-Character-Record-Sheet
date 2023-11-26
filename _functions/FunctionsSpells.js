@@ -891,14 +891,14 @@ function SetSpellBluetext(fldName, newValue) {
 }
 
 //change the icon of the checkbox based on the value of this field (field validation)
-async function SetSpellCheckbox() {
-	var type = event.target.name.indexOf("checkbox") !== -1 ? "checkbox" : "check";
+async function SetSpellCheckbox(field, modifier) {
+	var type = field.name.indexOf("checkbox") !== -1 ? "checkbox" : "check";
 
 	if (type === "check") {
-		var theEV = event.value.toLowerCase();
-		if (event.target.submitName === theEV) return; //the newly added value is the same as the previous value, so there is nothing to do
+		var theEV = field.value.toLowerCase();
+		if (field.submitName === theEV) return; //the newly added value is the same as the previous value, so there is nothing to do
 		var theIcon = false;
-		var theCheckBox = event.target.name.replace("check", "checkbox");
+		var theCheckBox = field.name.replace("check", "checkbox");
 		var showThis = "Hide";
 		var showBox = "Show";
 		var insideColor = color.transparent;
@@ -938,10 +938,10 @@ async function SetSpellCheckbox() {
 		 default :
 			theIcon = tDoc.getField("SaveIMG.EmptyIcon").buttonGetIcon();
 			showBox = "DontPrint";
-			showThis = event.value !== "" ? "Show" : "Hide";
+			showThis = field.value !== "" ? "Show" : "Hide";
 		}
-		event.target.submitName = theEV;
-		tDoc[showThis](event.target.name); //show or hide the "check" field
+		field.submitName = theEV;
+		tDoc[showThis](field.name); //show or hide the "check" field
 		tDoc[showBox](theCheckBox); //show or hide the "checkbox" field
 		if (theIcon) tDoc.getField(theCheckBox).buttonSetIcon(theIcon);
 		tDoc.getField(theCheckBox).fillColor = insideColor;
@@ -954,10 +954,10 @@ async function SetSpellCheckbox() {
 			tDoc.getField(theCheckBox).borderStyle = borderType;
 		}
 	} else if (type === "checkbox") {
-		if (event.modifier || event.shift) { //if Shift/Ctrl/Cmd was pressed while clicking
-			await MakeSpellLineMenu_SpellLineOptions();
+		if (modifier) { //if Shift/Ctrl/Cmd was pressed while clicking
+			await MakeSpellLineMenu_SpellLineOptions(field.name);
 		} else {
-			var theCheck = event.target.name.replace("checkbox", "check");
+			var theCheck = field.name.replace("checkbox", "check");
 			switch(What(theCheck).toLowerCase()) {
 			 case "checkedbox" :
 				Value(theCheck, "checkbox");
@@ -966,7 +966,7 @@ async function SetSpellCheckbox() {
 				Value(theCheck, "checkedbox");
 				break;
 			 default :
-				await MakeSpellLineMenu_SpellLineOptions();
+				await MakeSpellLineMenu_SpellLineOptions(field.name);
 			}
 		}
 	}
@@ -4113,11 +4113,10 @@ function findNextHeaderDivider(prefix, type) {
 }
 
 //make a menu for each spell line and do something with the results
-async function MakeSpellLineMenu_SpellLineOptions() {
+async function MakeSpellLineMenu_SpellLineOptions(base) {
 	var SSmaxLine = function(inputPrefix) {
 		return inputPrefix.indexOf(".SSfront.") !== -1 ? FieldNumbers.spells[0] : FieldNumbers.spells[1];
 	}
-	var base = event.target.name;
 	var prefix = base.substring(0, base.indexOf("spells."));
 	var lineNmbr = parseFloat(base.slice(-2)[0] === "." ? base.slice(-1) : base.slice(-2));
 	var SSmoreA = What("Template.extras.SSmore").split(",");

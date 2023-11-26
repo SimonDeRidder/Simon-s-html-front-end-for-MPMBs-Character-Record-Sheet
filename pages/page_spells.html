@@ -891,7 +891,7 @@
 				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
-				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_1_change)"
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.spellshead_attack_1_change)"
 			/>
 			<input
 				id="spellshead.dc.1"
@@ -1013,7 +1013,7 @@
 				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
-				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
 			/>
 			<input
 				id="spellshead.dc.2"
@@ -1135,7 +1135,7 @@
 				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
-				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
 			/>
 			<input
 				id="spellshead.dc.3"
@@ -1240,16 +1240,15 @@
 				style="position: absolute;width: 14px;height: 14px;left: 2px;top: 2px;font-size: 10px;font-weight: bold;text-align: center;"
 				data-default=""
 				value=""
-				onclick=" event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;if(!['checkedbox', 'markedbox', 'checkbox', 'atwill', 'oncelr', 'oncesr'].includes(event.target.submitName)){document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName};document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;if(!['checkedbox', 'markedbox', 'checkbox', 'atwill', 'oncelr', 'oncesr'].includes(event.target.submitName)){document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName};document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
+				onchange="{let wrapper = new AdapterClassFieldReference([this]);let oldSubmitName = wrapper.submitName;SetSpellCheckbox(wrapper, event.ctrlKey || event.shiftKey).then(() => {let newSubmitName = wrapper.submitName;if (newSubmitName != oldSubmitName){if(!['checkedbox', 'markedbox', 'checkbox', 'atwill', 'oncelr', 'oncesr'].includes(newSubmitName)){document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=newSubmitName};document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}})}"
 			>&gt;</button>
 			<button
 				id="spells.checkbox.0"
 				class="field button nonprintable"
-				style="position: absolute;top: 2px;left: 2px;width: 14px;height: 14px;text-align: center;font-size: 10px;padding: 0;z-index: 1;;visibility: hidden;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;"
+				style="position: absolute;top: 2px;left: 2px;width: 14px;height: 14px;text-align: center;font-size: 10px;padding: 0;z-index: 2;visibility: visible;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;"
 				aria-label="Click here for the options for this row."
 				data-default="false"
-				onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox()"
+				onclick="this.value=((this.value != undefined) ? this.value : this.dataset.default);SetSpellCheckbox(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 			>&gt;</button>
 			<input
 				id="spells.name.0"

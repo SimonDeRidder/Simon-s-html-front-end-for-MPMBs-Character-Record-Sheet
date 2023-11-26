@@ -399,31 +399,6 @@ function keystroke1(allowDec, allowNegative, value, change, selStart, selEnd, wi
 	}
 }
 
-function keystroke2() {
-	var allowedA = [".", ",", "-", "+", "*", "/"];
-	var tests = event.value === "";
-	if (!event.willCommit) {
-		tests = !isNaN(event.change) || allowedA.indexOf(event.change) !== -1;
-	} else if (event.value !== "") {
-		tests = false;
-		var toUse = event.value.replace(/(\.)+(\,)+/g, ",").replace(/(\.|\,)+/g, "$1");
-		toUse = toUse.replace(/(\-)+(\+)+/g, "-").replace(/(\+|\-)+/g, "$1").replace(/(\*|\/|\+|\-)+/g, "$1").replace(/^(\*|\/)/, "");
-		var toTest = toUse.replace(/,/g, ".");
-		try {
-			var tests = !isNaN(eval_ish(toTest));
-			event.value = toUse;
-		} catch (err) {
-			try {
-				var tests = !isNaN(eval_ish(toTest.slice(0, -1)));
-				event.value = toUse.slice(0, -1);
-			} catch (err) {
-				var tests = false;
-			}
-		}
-	}
-	event.rc = tests;
-};
-
 // a format function for the "Die" field of the Hit Dice section
 function FormatHD(name, value) {
 	var theResult = clean(value, " ");
@@ -433,29 +408,6 @@ function FormatHD(name, value) {
 		value = "d" + theResult + (theCon < 0 ? theCon : "+" + theCon);
 	}
 	return value;
-};
-
-//format the date (format)
-function FormatDay() {
-	var isDate = util.scand('yy-mm-dd', event.value);
-	event.value = event.value && isDate ? util.printd(What("DateFormat_Remember"), isDate) : "";
-};
-
-//make sure the date is entered in the correct format (keystroke)
-function KeystrokeDay() {
-	if (event.willCommit && event.value) {
-		var isDate = util.scand('yy-mm-dd', event.value);
-		if (!isDate) {
-			event.value = "";
-			if (IsNotImport) {
-				app.alert({
-					cMsg : "Please enter a valid date using the date-picker (the little arrow in the field) or enter the date manually using of the form \"Year-Month-Day\".\n\nYou can change the way the date is displayed with the \"Logsheet Options\" at the top of each Adventurers Logsheet. Note that the format of the date in the field never changes, only the way it is displayed.",
-					cTitle : "Invalid date format",
-					nIcon : 1
-				});
-			};
-		};
-	};
 };
 
 //a field "format" function to add a space at the start and end of the field, to make sure it looks better on the sheet
@@ -1055,12 +1007,6 @@ function setDialogName(dialogElem, itemID, attrNm, setAttr) {
 //return a random number between 1 and the input 'die'
 function RollD(die) {
 	return Math.floor(Math.random() * die) + 1;
-};
-
-//set the other checkbox Dis/Adv off when clicking this field (on MouseUp)
-function SetDisAdv() {
-	var Adv = (/Adv$/).test(event.target.name);
-	this.getField(event.target.name.replace(Adv ? "Adv" : "Dis", Adv ? "Dis" : "Adv")).value = "Off";
 };
 
 //see if two strings don't differ too much in length

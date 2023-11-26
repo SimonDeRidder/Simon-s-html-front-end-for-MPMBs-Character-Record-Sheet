@@ -108,7 +108,7 @@ function GetFeatureType(type, bNoDefaultReturn, bSingularReturn) {
 		ApplyFeatureAttributes("class", ["warlock","eldritch invocations"], [0,4,true], ["","devil's sight","only"], false); // add Devil's Sight
 		ApplyFeatureAttributes("class", ["warlock","eldritch invocations"], [15,0,true], ["devil's sight","","only"], false); // remove Devil's Sight
 */
-async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) {
+async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent, prefix="") {
 	if (!IsNotReset) return; //stop this function on a reset
 
 	// validate input
@@ -264,7 +264,7 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		var aWeaponsAdd = uObj.weaponsAdd ? uObj.weaponsAdd : type == "race" && uObj.weapons ? uObj.weapons : false;
 		if (aWeaponsAdd) processAddWeapons(addIt, aWeaponsAdd);
 		var anArmorAdd = uObj.armorAdd ? uObj.armorAdd : uObj.addarmor ? uObj.addarmor : false;
-		if (anArmorAdd) await processAddArmour(addIt, anArmorAdd);
+		if (anArmorAdd) await processAddArmour(addIt, anArmorAdd, prefix);
 		if (uObj.shieldAdd) processAddShield(addIt, uObj.shieldAdd, uObj.weight);
 		if (uObj.ammoAdd) processAddAmmo(addIt, uObj.ammoAdd);
 
@@ -1130,10 +1130,10 @@ async function processSpellcastingBonusElsewhere(bAddRemove, sType, sSrcNm, sUni
 }
 
 // set the armour (if more AC than current armour) or remove the armour
-async function processAddArmour(AddRemove, armour) {
+async function processAddArmour(AddRemove, armour, prefix="") {
 	if (!armour || typeof armour != "string") return;
 	if (!AddRemove) { // remove
-		RemoveArmor(armour);
+		RemoveArmor(armour, prefix);
 	} else { // add
 		if (!ParseArmor(armour)) return;
 		var remCurArm = What("AC Armor Description");

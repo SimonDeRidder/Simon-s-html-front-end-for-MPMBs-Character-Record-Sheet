@@ -1389,9 +1389,8 @@ function AddArmor(armour, force, prefix) {
 	};
 };
 // remove the armour if it is the same
-function RemoveArmor(armour, comp) {
+function RemoveArmor(armour, comp, prefix="") {
 	if (!armour) return;
-	var prefix = comp ? comp : !event.target || !event.target.name ? "" : getTemplPre(event.target.name, "AScomp", true);
 	var ACfld = prefix ? prefix + "Comp.Use.AC" : "AC Armor Description";
 	var curAC = What(ACfld);
 	var armKey = ParseArmor(armour);

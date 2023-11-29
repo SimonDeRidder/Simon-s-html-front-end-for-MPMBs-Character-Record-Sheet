@@ -9699,11 +9699,9 @@ function CalcCarriedLocation(fldName) {
 //make the appropriate attack field a different color, depending on the menu entry
 function ApplyAttackColor(attackNmbr, aColour, type, prefix) {
 	if (typePF) return; //don't do this function in the Printer-Friendly version
-	var QI = type ? type.indexOf("Comp.") === -1 : !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
+	var QI = type.indexOf("Comp.") === -1;
 	var prefixA = [""];
-	if (!QI && event.target && event.target.name && !prefix) {
-		prefixA = [getTemplPre(event.target.name, "AScomp", true)];
-	} else if (!QI && prefix) {
+	if (!QI && prefix) {
 		prefixA = [prefix];
 	} else if (!QI && !prefix) {
 		prefixA = What("Template.extras.AScomp").split(",");

@@ -1376,17 +1376,18 @@ function addCompEvals(evalObj, prefix, NameEntity, Add) {
 }
 
 //add a wildshape based on the selection and calculation settings
-async function ApplyWildshape() {
+// $$[note]$$ event.target.name -> fldName; event.value -> value; event.target.value -> oldValue
+async function ApplyWildshape(fldName, value, oldValue) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
-	if (event.target && event.value.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
+	if (oldValue && value.toLowerCase() === oldValue.toLowerCase()) return; //no changes were made
 
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Applying wild shape...");
 	calcStop();
 
-	var prefix = getTemplPre(event.target.name, "WSfront", true);
-	var Fld = event.target.name.slice(-1);
-	var newForm = event.value.toLowerCase();
+	var prefix = getTemplPre(fldName, "WSfront", true);
+	var Fld = fldName.slice(-1);
+	var newForm = value.toLowerCase();
 	var resetFlds = [
 		prefix + "Wildshape." + Fld,
 		prefix + "Text.Wildshape." + Fld
@@ -1408,7 +1409,7 @@ async function ApplyWildshape() {
 
 	var newCrea = ParseCreature(newForm);
 
-	var oldCrea = ParseCreature(event.target.value);
+	var oldCrea = ParseCreature(oldValue);
 	if (newCrea === oldCrea || !newCrea || !What("Character Level") || !What("Int")|| !What("Wis")|| !What("Cha")) { //If this returns true, it means that no (new) race was found; or that the character has not been defined enough yet so the function can be stopped
 		thermoM(thermoTxt, true); // Stop progress bar
 		return; //don't do the rest of the function

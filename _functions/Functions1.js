@@ -4407,8 +4407,8 @@ function ReplaceString(field, inputstring, newline, theoldstring, alreadyRegExp)
 
 // add (change === true) or remove (change === false) a skill proficiency with or without expertise; If expertise === "only", only add/remove the expertise, considering the skill already has proficiency; If expertise === "increment", only add/remove the expertise, considering the skill already has proficiency, otherwise add proficiency
 function AddSkillProf(SkillName, change, expertise, returnSkillName, bonus, compPage) {
-	var QI = compPage ? !compPage : !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
-	var prefix = QI ? "" : compPage ? compPage : getTemplPre(event.target.name, "AScomp", true);
+	var QI = !compPage;
+	var prefix = QI ? "" : compPage;
 	var tempString = SkillName;
 	if (SkillName.length > 4) {
 		if (SkillsList.abbreviations.indexOf(SkillName.substring(0, 4)) !== -1) {

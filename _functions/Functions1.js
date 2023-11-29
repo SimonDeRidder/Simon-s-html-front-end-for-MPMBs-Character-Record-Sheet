@@ -5096,7 +5096,6 @@ function SetFeatsdropdown(forceTooltips) {
 //Make menu for the button on each Feat line and parse it to Menus.feats
 async function MakeFeatMenu_FeatOptions(MenuSelection, itemNmbr) {
 	var featMenu = [];
-	if (!itemNmbr) itemNmbr = parseFloat(event.target.name.slice(-2));
 	var ArrayNmbr = itemNmbr - 1;
 	var Fflds = ReturnFeatFieldsArray(itemNmbr);
 	var theField = What(Fflds[0]) != "";

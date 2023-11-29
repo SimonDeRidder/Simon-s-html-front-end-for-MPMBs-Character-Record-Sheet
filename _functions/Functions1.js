@@ -9750,26 +9750,6 @@ function ApplyAttackColor(attackNmbr, aColour, type, prefix) {
 	}
 }
 
-//toggle the appearance of the button when it is pushed, cycling between nothing (black), proficiency (colour), and expertise (*) [field action]
-function ToggleSkillProf() {
-	var isProf = tDoc.getField(event.target.name.replace("Name", "Prof"));
-	isProf.currentValueIndices = isProf.currentValueIndices < 2 ? isProf.currentValueIndices + 1 : 0;
-}
-
-//apply the change of the field to the colorscheme of the sheet [field format]
-function ApplySkillProf() {
-	var toChange = event.target.name.substring(0, event.target.name.length - 5);
-	switch(event.target.value) {
-		case "nothing":
-			tDoc.getField(toChange).textColor = color.black;
-			break;
-		case "proficient":
-		case "expertise":
-			var theColor = ColorList[What("Color.Theme")];
-			if (theColor) tDoc.getField(toChange).textColor = theColor.RGB;
-	}
-}
-
 //set all the color schemes as the fields dictate
 function setColorThemes(reset) {
 	if (typePF) return; //don't do this function in the Printer-Friendly version
@@ -9785,7 +9765,7 @@ function setColorThemes(reset) {
 
 //calculate the proficiency bonus (field calculation)
 function ProfBonus(useTarget, newLvlForce) {
-	var thisEvent = useTarget && tDoc.getField(useTarget) ? tDoc.getField(useTarget) : event.target;
+	var thisEvent = tDoc.getField(useTarget);
 	var QI = getTemplPre(thisEvent.name, "AScomp");
 	var lvl = newLvlForce !== undefined ? newLvlForce : Number(What(QI === true ? "Character Level" : QI + "Comp.Use.HD.Level"));
 	var ProfMod = QI === true ? What("Proficiency Bonus Modifier") : 0;

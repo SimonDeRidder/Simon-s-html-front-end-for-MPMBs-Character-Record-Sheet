@@ -1389,7 +1389,7 @@ function AddArmor(armour, force, prefix) {
 	};
 };
 // remove the armour if it is the same
-function RemoveArmor(armour, comp, prefix="") {
+function RemoveArmor(armour, prefix="") {
 	if (!armour) return;
 	var ACfld = prefix ? prefix + "Comp.Use.AC" : "AC Armor Description";
 	var curAC = What(ACfld);
@@ -1670,7 +1670,7 @@ function ParseClass(input) {
 };
 
 // detects classes entered and parses information to global classes variable
-async function FindClasses(NotAtStartup, isFieldVal) {
+async function FindClasses(NotAtStartup, isFieldVal, value) {
 	if (!NotAtStartup) classes.field = What("Class and Levels"); // called from startup
 
 	// Initialize some variables
@@ -1808,8 +1808,8 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 	if (NotAtStartup && !isFieldVal && What("Class and Levels") != classes.field) {
 		tDoc.getField("Class and Levels").remVal = classes.field;
 		Value("Class and Levels", classes.field);
-	} else if (NotAtStartup && isFieldVal && event.value != classes.field) {
-		event.value = classes.field;
+	} else if (NotAtStartup && isFieldVal && value != classes.field) {
+		value = classes.field;
 	}
 
 	// if the found classes are the exact same as the classes.known, don't do anything
@@ -1831,7 +1831,7 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 	};
 	if (!isChange && NotAtStartup) {
 		await ApplyClassLevel(true);
-		return true;
+		return [true, value];
 	};
 
 	// Check every class in classes old and if they are not in classesTemp, remove their features
@@ -2073,7 +2073,7 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 		SetStringifieds("spells");
 	}
 
-	return false;
+	return [false, value];
 };
 
 // apply the effect of the classes
@@ -2082,7 +2082,9 @@ async function ApplyClasses(inputclasstxt, isFieldVal) {
 	classes.field = inputclasstxt;
 
 	// Stop if class is set to manual or if the entered classes are the same as classes.known
-	if (CurrentVars.manual.classes || (await FindClasses(true, isFieldVal))) return;
+	let fcResult = await FindClasses(true, isFieldVal, classes.field);
+	classes.field = fcResult[1];
+	if (CurrentVars.manual.classes || fcResult[0]) return;
 
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Applying the class(es)...");

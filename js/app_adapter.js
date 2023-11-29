@@ -1000,6 +1000,8 @@ class AdapterClassFieldReference {
 				"event.value = 'As a reaction when I take damage from a creature that is within 10 ft of me, I can have it take 2d8 force damage and push it up to 10 ft away from me. If it succeeds a Strength save DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Int Mod'))) + ' (8 + Prof Bonus + Int mod), it halves the damage and isn't pushed. I can do this my Proficiency Bonus per long rest. [+1 Intelligence]';",
 				"event.value = 'As a reaction when I take damage from a creature that is within 10 ft of me, I can have it take 2d8 force damage and push it up to 10 ft away from me. If it succeeds a Strength save DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Wis Mod'))) + ' (8 + Prof Bonus + Wis mod), it halves the damage and isn't pushed. I can do this my Proficiency Bonus per long rest. [+1 Wisdom]';",
 				"event.value = 'As a reaction when I take damage from a creature that is within 10 ft of me, I can have it take 2d8 force damage and push it up to 10 ft away from me. If it succeeds a Strength save DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Cha Mod'))) + ' (8 + Prof Bonus + Cha mod), it halves the damage and isn't pushed. I can do this my Proficiency Bonus per long rest. [+1 Charisma]';",
+				"event.value = '0 m';",
+				"event.value = '0 ft';",
 			].includes(actionStr)
 		) {  // TODO: remove when we're confident enough in the change rule matching
 			let accessedFieldIds = getAccessedFieldIds(actionStr);

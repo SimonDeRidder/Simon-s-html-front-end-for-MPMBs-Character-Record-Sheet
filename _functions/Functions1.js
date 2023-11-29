@@ -4283,8 +4283,8 @@ function AddTool(tool, toolstooltip, replaceThis) { AddLangTool("tool", tool, to
 function RemoveTool(tool, toolstooltip) { RemoveLangTool("tool", tool) };
 
 function AddWeapon(weapon, partialReplace, prefix) {
-	if (!prefix) prefix = !prefix && event.target && event.target.name ? getTemplPre(event.target.name, "AScomp", true) : "";
-	var QI = prefix ? false : !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
+	if (!prefix) prefix = "";
+	var QI = prefix ? false : true;
 	var Q = QI ? "" : "Comp.Use.";
 	var maxItems = QI ? FieldNumbers.attacks : 3;
 

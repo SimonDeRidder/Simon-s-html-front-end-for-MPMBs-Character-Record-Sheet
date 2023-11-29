@@ -4296,11 +4296,11 @@ function AddWeapon(weapon, partialReplace, prefix) {
 	}
 };
 
-function RemoveWeapon(weapon) {
+function RemoveWeapon(weapon, fldName) {
 	if (!IsNotImport) return;
-	var QI = !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
+	var QI = !fldName || fldName.indexOf("Comp.") === -1;
 	var Q = QI ? "" : "Comp.Use.";
-	var prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var prefix = QI ? "" : getTemplPre(fldName, "AScomp", true);
 	var maxItems = QI ? FieldNumbers.attacks : 3;
 
 	var regexWea = RegExp(clean(weapon.toLowerCase(), " ").RegEscape().replace(/(^\W*)(.*?)(\W*$)/i, "$1\\b$2\\b$3"), "i");

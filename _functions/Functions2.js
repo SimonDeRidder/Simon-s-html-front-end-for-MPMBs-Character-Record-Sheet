@@ -4334,12 +4334,11 @@ function SetFactionSymbol(theFld, newValue, commitIt) {
 }
 
 //update the other faction symbol fields (only on AdvLogOnly) (field blur)
-function UpdateFactionSymbols() {
-	var prefix = getTemplPre(event.target.name, "ALlog", true);
+function UpdateFactionSymbols(prefix, value) {
 	var ALlogA = What("Template.extras.ALlog").split(",");
 	for (var Al = 0; Al < ALlogA.length; Al++) {
 		if (ALlogA[Al] === prefix) continue;
-		tDoc.getField(ALlogA[Al] + "AdvLogS.Background_Faction.Text").value = event.value;
+		tDoc.getField(ALlogA[Al] + "AdvLogS.Background_Faction.Text").value = value;
 	}
 }
 
@@ -4625,7 +4624,7 @@ async function ChangeToCompleteAdvLogSheet(FAQpath) {
 	tDoc.getField("AdvLog.Class and Levels").setAction("Validate", "ValidateAdvLogInfo('AdvLog.Class and Levels');");
 	tDoc.getField("AdvLog.Class and Levels").readonly = false;
 
-	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("OnBlur", "UpdateFactionSymbols();");
+	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("OnBlur", "UpdateFactionSymbols('AdvLogS.');");
 	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("Keystroke", "");
 
 	await tDoc.getTemplate("ALlog").spawn(0, true, false);

@@ -3455,10 +3455,10 @@ function CalcFullClassLvlName(fldName) {
 }
 
 //return the value of a logsheet's number (field calculation)
-function CalcLogsheetNumber() {
-	var prefix = getTemplPre(event.target.name, "ALlog", true);
+function CalcLogsheetNumber(fldName) {
+	var prefix = getTemplPre(fldName, "ALlog", true);
 	var ALlogA = What("Template.extras.ALlog").split(",");
-	event.value = (ALlogA.indexOf(prefix)) + " of " + (ALlogA.length - 1);
+	return (ALlogA.indexOf(prefix)) + " of " + (ALlogA.length - 1);
 }
 
 //return the previous logsheet's prefix (field calculation)

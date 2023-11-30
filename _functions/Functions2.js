@@ -2328,8 +2328,6 @@ function ApplyDCColorScheme(colour, DC) {
 // Make menu for the button on each Action line and parse it to Menus.actions
 async function MakeActionMenu_ActionOptions(MenuSelection, FldNm, itemNmbr) {
 	var actionMenu = [];
-	if (!itemNmbr) itemNmbr = parseFloat(event.target.name.slice(-2));
-	if (!FldNm) FldNm = event.target.name.match(/bonus action|reaction|action/i)[0];
 	var type = FldNm.toLowerCase();
 	FldNm = FldNm + " ";
 	var maxNmbr = type === "action" ? FieldNumbers.trueactions : FieldNumbers.actions;

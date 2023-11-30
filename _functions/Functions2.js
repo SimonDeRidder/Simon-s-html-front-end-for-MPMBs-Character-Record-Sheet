@@ -2778,9 +2778,7 @@ function LimFeaDelete(itemNmbr) {
 
 //a way of going to a specified field (for making bookmarks independent of templates)
 async function Bookmark_Goto(BookNm) {
-	// Find the field corresponding to the bookmark name
-	var theTemplate = event.type === "Bookmark" ? getBookmarkTemplate(event.target) : false;
-	var isVisible = theTemplate ? isTemplVis(theTemplate[0], true) : true;
+	var isVisible = true;
 	var prefix = "";
 	if (isArray(isVisible)) {
 		prefix = isVisible[1];
@@ -2792,24 +2790,6 @@ async function Bookmark_Goto(BookNm) {
 	if (isVisible && theFld && tDoc.getField(theFld)) {
 		tDoc.getField(theFld).setFocus();
 		return;
-	};
-
-	// If the selected section is on a hidden page, alert the user.
-	if (theTemplate) {
-		var theMessage = {
-			cMsg : "The bookmark \"" + BookNm + "\" you have selected is on a page which is currently hidden.\n\You can change your page visibility settings using the \"Layout\" button in the \"JavaScript Window\" or in the bookmarks.\n\nDo you want to make the page \"" + theTemplate[1] + "\" visible now?" + (theTemplate[0] !== "SSfront" ? "" : "\n\nClicking \"Yes\" will start the Spell Sheets Generation process."),
-			nIcon : 2, //question mark
-			cTitle : "Bookmark is currently unavailable",
-			nType : 2 //Yes-No
-		};
-		if (app.alert(theMessage) === 4) {
-			if (theTemplate[0] !== "SSfront") {
-				var newPrefix = await DoTemplate(theTemplate[0], "Add");
-				tDoc.getField(newPrefix + BookMarkList[BookNm]).setFocus();
-			} else {
-				await GenerateSpellSheet();
-			};
-		};
 	};
 };
 
@@ -3399,14 +3379,14 @@ function functionBookmarks(theParent) {
 
 	var doTheChildren = function (aParent, colour) {
 		for (var i = 0; i < aParent.length; i++) {
-			aParent[i].setAction("await Bookmark_Goto(event.target.name);");
+			aParent[i].setAction("await Bookmark_Goto(" + aParent[i].name + ");");
 			if (aParent[i].children) {
 				doTheChildren(aParent[i].children, colour);
 			}
 		}
 	}
 
-	theParent.setAction("await Bookmark_Goto(event.target.name);");
+	theParent.setAction("await Bookmark_Goto(" + theParent.name + ");");
 	doTheChildren(theParent.children);
 }
 

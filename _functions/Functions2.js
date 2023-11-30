@@ -3431,8 +3431,8 @@ async function MakeNotesMenu_NotesOptions(fldName) {
 }
 
 //make a string of all the classes and levels (field calculation)
-function CalcFullClassLvlName() {
-	var prefix = event.target && event.target.name ? getTemplPre(event.target.name, "ALlog", true) : "";
+function CalcFullClassLvlName(fldName) {
+	var prefix = fldName ? getTemplPre(fldName, "ALlog", true) : "";
 	if (!prefix) {
 		var ClLvls = What("Class and Levels");
 		var LVL = What("Character Level");

@@ -3353,10 +3353,10 @@ function functionBookmarks(theParent) {
 
 //make a menu to hide/show the lines of the notes on the page
 //after that, do something with the menu and its results
-async function MakeNotesMenu_NotesOptions() {
+async function MakeNotesMenu_NotesOptions(fldName) {
 	//define some variables
-	var toSearch = event.target.name.indexOf("Notes") !== -1 ? "Notes." : "Cnote.";
-	var prefix = event.target.name.substring(0, event.target.name.indexOf(toSearch));
+	var toSearch = fldName.indexOf("Notes") !== -1 ? "Notes." : "Cnote.";
+	var prefix = fldName.substring(0, fldName.indexOf(toSearch));
 	var NoteMenu = [];
 	var WhiteFld = prefix + "Whiteout." + toSearch;
 	var WhiteL = WhiteFld + "Left";

@@ -4261,7 +4261,6 @@ async function MakeHPMenu_HPOptions(name, preSelect, prefix) {
 
 // update the max HP value if set to do so whenever any field changes (triggered by field calculation)
 function calcHP(prefix) {
-	prefix = prefix === true ? getTemplPre(event.target.name, "AScomp", true) : prefix ? prefix : "";
 	var theFld = prefix ? prefix + "Comp.Use.HP.Max" : "HP Max";
 	var theInputs = How(theFld).split(",");
 	// Test if automatic update is enabled

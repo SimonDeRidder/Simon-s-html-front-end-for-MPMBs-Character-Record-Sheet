@@ -5191,7 +5191,6 @@ async function doAdvLogLine(action, lineNmbr, prefix) {
 						Value(extraPage + "AdvLog.1" + FieldNames[F], fieldVal);
 						Value(ALlogA[tA] + "AdvLog." + i + FieldNames[F], What(ALlogA[tA] + "AdvLog." + (i - 1) + FieldNames[F]));
 					}
-					if (extraPage) event.target.setFocus();
 				} else {
 					for (var F = 0; F < FieldNames.length; F++) {
 						if (i === 1) {
@@ -6108,9 +6107,9 @@ async function ShowDialog(hdr, strng) {
 };
 
 //calculate the mod for the Dex field in the initiative section (field calculation)
-function CalcInitDexMod() {
-	var QI = getTemplPre(event.target.name, "AScomp");
-	event.value = QI === true ? What(SkillsList.abilityScores[SkillsList.abbreviations.indexOf("Init")] + " Mod") : What(QI + "Comp.Use.Ability.Dex.Mod");
+function CalcInitDexMod(fldName) {
+	var QI = getTemplPre(fldName, "AScomp");
+	return QI === true ? What(SkillsList.abilityScores[SkillsList.abbreviations.indexOf("Init")] + " Mod") : What(QI + "Comp.Use.Ability.Dex.Mod");
 };
 
 function FunctionIsNotAvailable() {
@@ -6214,7 +6213,7 @@ async function SetThisFldVal(targetField, modifier) {
 	if (targetField.submitName || targetField.value.length > len || modifier) {
 		var QI = getTemplPre(targetField.name, "AScomp");
 		var dmgDie = targetField.name.indexOf("Damage Die") !== -1;
-		var isSkill = !dmgDie && QI === true && (RegExp("^(" + SkillsList.abbreviations.join("|") + ") Bonus$")).test(event.target.name);
+		var isSkill = !dmgDie && QI === true && (RegExp("^(" + SkillsList.abbreviations.join("|") + ") Bonus$")).test(targetField.name);
 		var isAcFld = !isSkill && QI === true && (/^AC/).test(targetField.name);
 		var theName = targetField.userName;
 		if (theName && (/\n/).test(theName)) {
@@ -6463,8 +6462,8 @@ function AddToModFld(Fld, Mod, Remove, NameEntity, Explanation) {
 // add a modifier to a skill
 // addMod : {type : "save", field : "all", mod : "Cha", text : "While I'm conscious I can add my Charisma modifier (min 1) to all my saving throws."} // this can be an array of objects, all of which will be processed
 function processMods(AddRemove, NameEntity, items, prefix) {
-	var QI = !prefix && (!event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1);
-	if (!prefix) prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var QI = !prefix;
+	if (!prefix) prefix = "";
 	var alphaB = Who("Text.SkillsNames") === "alphabeta";
 	if (!isArray(items)) items = [items];
 	var doSaveDcUpdate = false;

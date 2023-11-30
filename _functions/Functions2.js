@@ -1785,8 +1785,9 @@ function RemoveWildshape(input) {
 }
 
 //make a menu for wild shape options
-function MakeWildshapeMenu() {
-	var prefix = getTemplPre(event.target.name, "WSfront", true);
+// $$[note]$$ event.target.name -> fldName
+function MakeWildshapeMenu(fldName) {
+	var prefix = getTemplPre(fldName, "WSfront", true);
 
 	if (!What("Character Level") || !What("Int")|| !What("Wis")|| !What("Cha")) { //If the character has not been defined enough, the function can be stopped after making a warning-menu
 		Menus.wildshape = [{cName : "Please create a character on the 1st page before trying a Wild Shape", cReturn : "nothing#toreport", bEnabled : false}];
@@ -2049,10 +2050,10 @@ function MakeWildshapeMenu() {
 };
 
 //call the wildshape menu and do something with the results
-async function WildshapeOptions() {
+// $$[note]$$ getTemplPre(event.target.name, "WSfront", true) -> prefix
+async function WildshapeOptions(prefix) {
 	var MenuSelection = getMenu("wildshape");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
-	var prefix = getTemplPre(event.target.name, "WSfront", true);
 	switch (MenuSelection[0]) {
 	 case "recalculate" :
 		WildshapeRecalc();

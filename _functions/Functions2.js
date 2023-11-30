@@ -3506,25 +3506,25 @@ function CalcLogsheetPrevious(prefix) {
 }
 
 //calculate the total or starting value of an entry in the advanturers log sheet (field calculation)
-function CalcLogsheetValue() {
-	var fNm = event.target.name;
+function CalcLogsheetValue(field) {
+	var fNm = field.name;
 	var prefix = fNm.substring(0, fNm.indexOf("AdvLog."));
 	if (!prefix) return;
 	var StrTot = fNm.indexOf("start") !== -1 ? "start" : "total";
 	if (StrTot === "total") {
 		var theStart = fNm.replace("total", "start");
 		var theGain = What(fNm.replace("total", "gain")).replace(/,/g, ".");
-		event.target.display = theGain === "" ? display.hidden : tDoc.getField(theStart).display;
+		field.display = theGain === "" ? display.hidden : tDoc.getField(theStart).display;
 		var theStartNmr = Number(What(theStart).replace(/,/g, "."));
-		event.value = theGain === "" ? theStartNmr : theStartNmr + eval_ish(theGain);
+		field.value = theGain === "" ? theStartNmr : theStartNmr + eval_ish(theGain);
 	} else {
 		var FldNmbr = Number(fNm.replace(/.*AdvLog\.(\d+?)\..+/, "$1"));
 		if (prefix === What("Template.extras.ALlog").split(",")[1] && FldNmbr === 1) {
-			event.target.readonly = false;
-			event.target.display = display.visible;
+			field.readonly = false;
+			field.display = display.visible;
 			return;
 		} else {
-			event.target.readonly = true;
+			field.readonly = true;
 		};
 		if (FldNmbr !== 1) {
 			var preFld = fNm.replace("AdvLog." + FldNmbr, "AdvLog." + (FldNmbr - 1));
@@ -3532,8 +3532,8 @@ function CalcLogsheetValue() {
 			var prePrefix = What(prefix + "AdvLog.previous");
 			var preFld = fNm.replace(prefix, prePrefix).replace("AdvLog." + FldNmbr, "AdvLog." + FieldNumbers.logs);
 		};
-		event.target.display = What(fNm.replace("start", "gain")) !== "" || What(preFld.replace("start", "gain")) !== "" ? display.visible : display.hidden;
-		event.value = What(preFld.replace("start", "total"));
+		field.display = What(fNm.replace("start", "gain")) !== "" || What(preFld.replace("start", "gain")) !== "" ? display.visible : display.hidden;
+		field.value = What(preFld.replace("start", "total"));
 	}
 }
 
@@ -3551,9 +3551,8 @@ function UpdateLogsheetNumbering(prefix, prePrefix) {
 
 //Make menu for the button on the adventurers log page and parse it to Menus.advlog
 //after that, do something with the menu and its results
-async function MakeAdvLogMenu_AdvLogOptions(Button) {
-	var prefix = Button ? "P0.AdvLog." : getTemplPre(event.target.name, "ALlog", true);
-	var isFirstPrefix = prefix === What("Template.extras.ALlog").split(",")[1];
+async function MakeAdvLogMenu_AdvLogOptions() {
+	var prefix = "P0.AdvLog.";
 	var cLogoDisplay = minVer && typePF ? tDoc.getField("Image.DnDLogo.AL").display : false;
 
 	var menuLVL1 = function (item, array) {
@@ -3586,14 +3585,11 @@ async function MakeAdvLogMenu_AdvLogOptions(Button) {
 	var AdvLogMenu = [];
 
 	var alMenuItems = [
-		["Add extra " + (Button ? "page" : "'Adventurers Log' page"), "add page"]
+		["Add extra " + "page", "add page"]
 	].concat(
-		(Button || (tDoc.info.AdvLogOnly && isFirstPrefix)) ?
-		[["Remove all pages and reset the 1st", "remove all"]] :
-		[["Remove this 'Adventurers Log' page", "remove page"]]
+		[["Remove all pages and reset the 1st", "remove all"]]
 	).concat(
-		(Button) ? [["-", "-"], ["Reset all pages", "reset all"], ["-", "-"]] :
-		[["-", "-"], ["Reset this page", "reset"], ["-", "-"]]
+		[["-", "-"], ["Reset all pages", "reset all"], ["-", "-"]]
 	);
 
 	menuLVL1(AdvLogMenu, alMenuItems);
@@ -4764,7 +4760,7 @@ function CreateBkmrksCompleteAdvLogSheet() {
 			cExpr : "MakeButtons(); tDoc.bookmarkRoot.children[0].open = !tDoc.bookmarkRoot.children[0].open;",
 			children : {
 				"Set Pages Layout" : {
-					cExpr : "await MakeAdvLogMenu_AdvLogOptions(true);",
+					cExpr : "await MakeAdvLogMenu_AdvLogOptions();",
 					color : ["RGB", 0.9098052978515625, 0.196075439453125, 0.48626708984375]
 				},
 				"Text Options" : {

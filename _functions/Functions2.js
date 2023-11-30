@@ -5118,10 +5118,10 @@ async function addALlogEntry() {
 };
 
 //menu for logsheet entries to move up, move down, insert, delete, or clear
-async function MakeAdvLogLineMenu_AdvLogLineOptions() {
-	var prefix = getTemplPre(event.target.name, "ALlog", true);
+async function MakeAdvLogLineMenu_AdvLogLineOptions(fldName) {
+	var prefix = getTemplPre(fldName, "ALlog", true);
 	var firstPrefix = isTemplVis("ALlog", true)[1];
-	var lineNmbr = Number(event.target.name.slice(-1));
+	var lineNmbr = Number(fldName.slice(-1));
 	var theArray = [
 		["Move up", "up"],
 		["Move down", "down"],

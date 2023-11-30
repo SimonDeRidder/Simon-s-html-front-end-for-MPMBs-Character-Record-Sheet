@@ -8,7 +8,7 @@ function MakeButtons() {
 		if (!tDoc.info.SpellsOnly) {
 			app.addToolButton({
 				cName : "LayoutButton",
-				cExec : minVer ? "MakeAdvLogMenu_AdvLogOptions(true);" : "MakePagesMenu().then(() => {PagesOptions();});",
+				cExec : minVer ? "MakeAdvLogMenu_AdvLogOptions();" : "MakePagesMenu().then(() => {PagesOptions();});",
 				oIcon : allIcons.layout,
 				cTooltext : toUni("Set Pages Layout") + "\nSelect which pages are visible in the sheet and set the different lay-out options on those pages. Some pages might offer extra options on the page itself.\n\nNote that you can have multiple instances of the following pages:\n   \u2022  Companion page;\n   \u2022  Notes page;\n   \u2022  Wild Shapes page;\n   \u2022  Spell Sheet page.;\n   \u2022  Adventure Logsheet.\n\nIf you add more pages or you hide/show the pages many times, the file size might increase.",
 				nPos : 0,

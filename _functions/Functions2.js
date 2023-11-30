@@ -4347,10 +4347,9 @@ var SetFactionSymbolIgnore = false;
 function SetFactionSymbol(theFld, newValue, commitIt) {
 	if (minVer) return;
 	if (!SetFactionSymbolIgnore) {
-		theFld = theFld ? tDoc.getField(theFld) : event.target;
+		theFld = tDoc.getField(theFld);
 		SetFactionSymbolIgnore = true;
-		if (newValue !== undefined || (event.changeEx && event.changeEx !== event.target.value)) {
-			if (newValue === undefined) newValue = event.changeEx;
+		if (newValue !== undefined) {
 			var theSymbolFld = tDoc.getField("SaveIMG.Faction." + newValue + ".symbol");
 			if (theSymbolFld) {
 				var theIcon = theSymbolFld.buttonGetIcon();
@@ -4359,16 +4358,14 @@ function SetFactionSymbol(theFld, newValue, commitIt) {
 			}
 			if (factions[newValue]) tDoc.getField("Background_FactionRank.Text").setItems([""].concat(factions[newValue].ranks));
 			theFld.temp = newValue;
-		} else if (newValue === "" || (event && event.value !== undefined && event.value === "")) {
+		} else if (newValue === "") {
 			Clear("Background_FactionRank.Text");
 		}
-		// when committing, set all the faction symbol fields to match this one
-		if (commitIt || event.willCommit) {
-			var logTemps = What("Template.extras.ALlog").split(",");
-			for (var T = 0; T <= logTemps.length; T++) {
-				var BckgrFld = T === logTemps.length ? "Background_Faction.Text" : logTemps[T] + "AdvLogS.Background_Faction.Text";
-				if (theFld.name !== BckgrFld) Value(BckgrFld, theFld.temp ? theFld.temp : (newValue !== undefined ? newValue : event.value));
-			}
+		// set all the faction symbol fields to match this one
+		var logTemps = What("Template.extras.ALlog").split(",");
+		for (var T = 0; T <= logTemps.length; T++) {
+			var BckgrFld = T === logTemps.length ? "Background_Faction.Text" : logTemps[T] + "AdvLogS.Background_Faction.Text";
+			if (theFld.name !== BckgrFld) Value(BckgrFld, theFld.temp ? theFld.temp : newValue);
 		}
 		SetFactionSymbolIgnore = false;
 	}

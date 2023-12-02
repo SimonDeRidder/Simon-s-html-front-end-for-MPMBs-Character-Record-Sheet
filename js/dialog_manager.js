@@ -248,6 +248,30 @@ const dialogManager = {
 				}
 			}
 
+			dialog.removeAllEntriesFromList = function(listName /*String*/) {
+				let theElement = document.getElementById(dialog.idPrefix + listName);
+				if (theElement == null) {
+					return;
+				}
+				let elementType = theElement.getAttribute('elementType');
+				if (
+					['popup', 'list_box', 'hier_list_box'].includes(elementType)
+					|| ((elementType == 'edit_text') && theElement.hasAttribute('list'))
+				) {
+					let currentParent, rootElement;
+					if (elementType == 'edit_text') {
+						rootElement = document.getElementById(theElement.getAttribute('list'));
+					} else {
+						rootElement = theElement;
+					}
+					while (rootElement.lastChild) {
+						rootElement.lastChild.remove()
+					}
+				} else {
+					throw "unknown element type for dialog.removeAllEntriesFromList: " + elementType;
+				}
+			}
+
 			addElementNode("p", dialog, title, dialog.idPrefix + "modalTitle", "modalTitle");
 			if (icon) {
 				console.log("Warning: icon in dialog not implemented yet");
@@ -399,12 +423,22 @@ const dialogManager = {
 			element = addElementNode('div', parent, null, elID, '', this._parse_element_style(body));
 		} else if (body.type == 'image') {
 			element = addElementNode('img', parent, null, elID, '', this._parse_element_style(body));
-		} else if (['list_box', 'popup'].includes(body.type)) {
+		} else if (body.type == 'popup') {
 			let style = this._parse_element_style(body);
 			style.height = "27.5px";
 			element = addElementNode('select', parent, null, elID, '', style);
 			if (callbacksToInsert.has(body.item_id)) {
 				element.onchange = async function () {
+					await monitor[callbacksToInsert.get(body.item_id)](dialog);
+				};
+			}
+			inputList.push(body.item_id);
+		} else if (['list_box', 'hier_list_box'].includes(body.type)) {
+			let style = this._parse_element_style(body);
+			element = addElementNode('select', parent, null, elID, 'modalDialogListBox', style);
+			element.setAttribute('multiple',  true);
+			if (callbacksToInsert.has(body.item_id)) {
+				element.onclick = async function () {
 					await monitor[callbacksToInsert.get(body.item_id)](dialog);
 				};
 			}
@@ -422,16 +456,6 @@ const dialogManager = {
 				monitor = monitor,
 				resolve_cb = resolve_cb,
 			)
-		} else if (body.type == 'hier_list_box') {
-			let style = this._parse_element_style(body);
-			element = addElementNode('select', parent, null, elID, 'modalDialogListBox', style);
-			element.setAttribute('multiple',  true);
-			if (callbacksToInsert.has(body.item_id)) {
-				element.onclick = async function () {
-					await monitor[callbacksToInsert.get(body.item_id)](dialog);
-				};
-			}
-			inputList.push(body.item_id);
 		} else if (body.type == 'link_text') {
 			let style = this._parse_element_style(body);
 			element = addElementNode('a', parent, null, elID, null, style);

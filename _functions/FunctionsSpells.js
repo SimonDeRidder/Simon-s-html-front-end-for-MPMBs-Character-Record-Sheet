@@ -306,11 +306,10 @@ function applySpellcastingAbility(oSpell, oCast) {
 
 // call this on validation of the hidden spell remember field, to apply something to the spell line
 // "" = reset all the fields; "HideThisLine" = hide all the fields; recognized spell = apply that spell; not recognized spell = don't do anything (assume name change); "setcaptions" or  "setcaptions##Me" = make this a caption line; if followed by "##Me" or "##Kn", change the first line to be either "Me" or "Kn" as the first column, or show or hide the box for checkmark; "___" = put all lines in the fields, making it fillable by hand
-function ApplySpell(FldValue, rememberFldName) {
+function ApplySpell(FldValue, base) {
 	calcStop();
 
-	var input = FldValue !== undefined ? FldValue.split("##") : event.value.split("##");
-	var base = rememberFldName ? rememberFldName : event.target.name;
+	var input = FldValue.split("##");
 	var spFlds = ReturnSpellFieldsArray(undefined, undefined, base);
 
 	//make this a header line if the input is "setcaptions"
@@ -489,13 +488,7 @@ function ApplySpell(FldValue, rememberFldName) {
 }
 
 //on blur, put the value in the remember field, location one (on field blur)
-function SetSpell(FldValue, nameFldName) {
-	if (event.target && event.target.richText) {
-		tDoc.getField(event.target.name).richValue = "";
-		tDoc.getField(event.target.name).richText = false;
-	} //first disable any rich text value if it was set
-	var input = FldValue ? FldValue : What(event.target.name);
-	var base = nameFldName ? nameFldName : event.target.name;
+function SetSpell(input, base) {
 	var remFld = base.replace("name", "remember");
 	if (input.toLowerCase() === "" || (/setcaptions/).test(input) || input.indexOf("##") !== -1) { //if the name field has a ## in it, assume we need to replace everything in the remember field
 		var toUseValue = input;
@@ -731,10 +724,10 @@ function SetSpellSheetElement(target, type, suffix, caster, hidePrepared, forceT
 }
 
 //calculate the number of spells to memorize, attack modifier, and DC (field calculation)
-function CalcSpellScores() {
+function CalcSpellScores(fldName) {
 	if (tDoc.info.SpellsOnly) return;
-	var fldType = event.target.name.replace(/.*spellshead\.(\w+).*/, "$1");
-	var Fld = event.target.name.replace("spellshead." + fldType, "spellshead.DINGDONG");
+	var fldType = fldName.replace(/.*spellshead\.(\w+).*/, "$1");
+	var Fld = fldName.replace("spellshead." + fldType, "spellshead.DINGDONG");
 	var modFldName = Fld.replace("DINGDONG", "ability");
 	var modFld = What(modFldName);
 	var theMod = Number(What(modFld));
@@ -752,6 +745,7 @@ function CalcSpellScores() {
 
 	var setResults = function(showTheResult) {
 		if (cSpells) cSpells.calcSpellScores = {};
+		let value = undefined;
 		for (var aType in theResult) {
 			var theR = showTheResult ? theResult[aType] : "", numTot;
 			if (showTheResult && (aType !== "prepare" || isPrepareVis)) {
@@ -771,17 +765,17 @@ function CalcSpellScores() {
 				}
 			}
 			if (aType == fldType) {
-				event.value = theR;
+				value = theR;
 			} else {
 				Value(Fld.replace("DINGDONG", aType), theR);
 			}
 			if (cSpells) cSpells.calcSpellScores[aType] = numTot;
 		}
+		return value;
 	}
 
 	if (modFld == "nothing" && !fixedDC) {
-		setResults(false);
-		return;
+		return setResults(false);
 	}
 
 	var profBonus = Number(How("Proficiency Bonus"));
@@ -832,26 +826,24 @@ function CalcSpellScores() {
 	}
 
 	// finally set the results to the field
-	setResults(true);
+	return setResults(true);
 }
 
 //set the blueText field bonus to the global CurrentSpells object for spells to memorize, attack modifier, and DC (field blur)
-function SetSpellBluetext(aClass, type, newValue) {
+function SetSpellBluetext(fldName, newValue) {
 	// get what type we are changing
-	type = type ? type : event.target.name.replace(/.*spellshead\.(\w+).*/, "$1");
+	let type = fldName.replace(/.*spellshead\.(\w+).*/, "$1");
 	type = type === "dc" ? "dc" : type === "attack" || type === "atk" ? "atk" : "prep";
 	var typeFull = type === "dc" ? "dc" : type === "atk" ? "attack" : "prepare";
 	// find the associated class
-	aClass = aClass ? aClass : What(event.target.name.replace("BlueText.spellshead." + typeFull, "spellshead.class"));
-	// get the value we are changing it to
-	newValue = newValue !== undefined ? newValue : event.value;
+	let aClass = What(fldName.replace("BlueText.spellshead." + typeFull, "spellshead.class"));
 
 	// set the associated bluetext variable
 	var cSpells = CurrentSpells[aClass];
 	if (!cSpells) {
 		// Not a recognized class, so save the change to the remember field
 		calcStop();
-		var remFld = How(event.target.name.replace("BlueText.spellshead." + typeFull, "spellshead.Text.header"));
+		var remFld = How(fldName.replace("BlueText.spellshead." + typeFull, "spellshead.Text.header"));
 		if (!tDoc.getField(remFld)) return;
 		var remFldValue = What(remFld).split("##");
 		remFldValue[type === "prep" ? 5 : type === "atk" ? 6 : 7] = newValue;
@@ -877,7 +869,7 @@ function SetSpellBluetext(aClass, type, newValue) {
 	var prefixArray = What("Template.extras.SSmore").split(",");
 	prefixArray[0] = What("Template.extras.SSfront").split(",")[1];
 	if (!prefixArray[0]) prefixArray.shift();
-	var currentField = event.target ? event.target.name : "";
+	var currentField = fldName ? fldName : "";
 	for (var i = 0; i < prefixArray.length; i++) {
 		var prefix = prefixArray[i];
 		for (var s = 0; s <= 3; s++) {
@@ -893,14 +885,14 @@ function SetSpellBluetext(aClass, type, newValue) {
 }
 
 //change the icon of the checkbox based on the value of this field (field validation)
-async function SetSpellCheckbox() {
-	var type = event.target.name.indexOf("checkbox") !== -1 ? "checkbox" : "check";
+async function SetSpellCheckbox(field, modifier) {
+	var type = field.name.indexOf("checkbox") !== -1 ? "checkbox" : "check";
 
 	if (type === "check") {
-		var theEV = event.value.toLowerCase();
-		if (event.target.submitName === theEV) return; //the newly added value is the same as the previous value, so there is nothing to do
+		var theEV = field.value.toLowerCase();
+		if (field.submitName === theEV) return; //the newly added value is the same as the previous value, so there is nothing to do
 		var theIcon = false;
-		var theCheckBox = event.target.name.replace("check", "checkbox");
+		var theCheckBox = field.name.replace("check", "checkbox");
 		var showThis = "Hide";
 		var showBox = "Show";
 		var insideColor = color.transparent;
@@ -940,10 +932,10 @@ async function SetSpellCheckbox() {
 		 default :
 			theIcon = tDoc.getField("SaveIMG.EmptyIcon").buttonGetIcon();
 			showBox = "DontPrint";
-			showThis = event.value !== "" ? "Show" : "Hide";
+			showThis = field.value !== "" ? "Show" : "Hide";
 		}
-		event.target.submitName = theEV;
-		tDoc[showThis](event.target.name); //show or hide the "check" field
+		field.submitName = theEV;
+		tDoc[showThis](field.name); //show or hide the "check" field
 		tDoc[showBox](theCheckBox); //show or hide the "checkbox" field
 		if (theIcon) tDoc.getField(theCheckBox).buttonSetIcon(theIcon);
 		tDoc.getField(theCheckBox).fillColor = insideColor;
@@ -956,10 +948,10 @@ async function SetSpellCheckbox() {
 			tDoc.getField(theCheckBox).borderStyle = borderType;
 		}
 	} else if (type === "checkbox") {
-		if (event.modifier || event.shift) { //if Shift/Ctrl/Cmd was pressed while clicking
-			await MakeSpellLineMenu_SpellLineOptions();
+		if (modifier) { //if Shift/Ctrl/Cmd was pressed while clicking
+			await MakeSpellLineMenu_SpellLineOptions(field.name);
 		} else {
-			var theCheck = event.target.name.replace("checkbox", "check");
+			var theCheck = field.name.replace("checkbox", "check");
 			switch(What(theCheck).toLowerCase()) {
 			 case "checkedbox" :
 				Value(theCheck, "checkbox");
@@ -968,7 +960,7 @@ async function SetSpellCheckbox() {
 				Value(theCheck, "checkedbox");
 				break;
 			 default :
-				await MakeSpellLineMenu_SpellLineOptions();
+				await MakeSpellLineMenu_SpellLineOptions(field.name);
 			}
 		}
 	}
@@ -3890,8 +3882,9 @@ function OrderSpells(inputArray, outputFormat, sepPsionics, bonusSp, maxLvl) {
 };
 
 //return the value of a spellsheet's number (field calculation)
-function CalcSpellsheetNumber() {
-	var prefix = event.target.name.substring(0, event.target.name.indexOf("SpellSheet"));
+// $$[note]$$ event.target.name -> fldName
+function CalcSpellsheetNumber(fldName) {
+	var prefix = fldName.substring(0, fldName.indexOf("SpellSheet"));
 	var SSmoreA = What("Template.extras.SSmore").split(",");
 	SSmoreA[0] = What("Template.extras.SSfront").split(",")[1];
 	if (!SSmoreA[0]) SSmoreA.shift();
@@ -4115,11 +4108,10 @@ function findNextHeaderDivider(prefix, type) {
 }
 
 //make a menu for each spell line and do something with the results
-async function MakeSpellLineMenu_SpellLineOptions() {
+async function MakeSpellLineMenu_SpellLineOptions(base) {
 	var SSmaxLine = function(inputPrefix) {
 		return inputPrefix.indexOf(".SSfront.") !== -1 ? FieldNumbers.spells[0] : FieldNumbers.spells[1];
 	}
-	var base = event.target.name;
 	var prefix = base.substring(0, base.indexOf("spells."));
 	var lineNmbr = parseFloat(base.slice(-2)[0] === "." ? base.slice(-1) : base.slice(-2));
 	var SSmoreA = What("Template.extras.SSmore").split(",");
@@ -4562,7 +4554,7 @@ async function deleteSpellRow(prefix, lineNmbr) {
 				if (i === 0 && nextHasImage) {
 					var splitVal = nextLineVals[i].split("##");
 					var setType = nextHasImage == "header" ? "spellshead.Text.header." : nextHasImage == "divider" ? "spellsdiv.Text." : "spellsgloss.Image";
-					HideSpellSheetElement(nextRow[0] + setType + (nextHasImage == "glos" ? "" : splitVal[2]));
+					HideSpellSheetElement(nextRow[0] + setType + (nextHasImage == "glos" ? "" : splitVal[2]), false);
 					if (nextHasImage !== "glos" && nextRow[0] !== SSmoreA[SS]) {
 						splitVal[2] = findNextHeaderDivider(SSmoreA[SS], nextHasImage);
 						nextLineVals[i] = splitVal.join("##");
@@ -4676,7 +4668,7 @@ async function insertSpellRow(prefix, lineNmbr, toMove, ignoreEmptyTop) {
 			} else if (rememberRow[0] > 0) {
 				rememberRow[0] -= 1;
 				if (rememberRow[0] === 0) {//now that we passed the last row to skip, hide the header/divider
-					HideSpellSheetElement(rememberRow[1] + rememberRow[2] + rememberRow[3]);
+					HideSpellSheetElement(rememberRow[1] + rememberRow[2] + rememberRow[3], false);
 					rememberRow = [0];
 				}
 			}
@@ -4754,8 +4746,7 @@ async function insertSpellRow(prefix, lineNmbr, toMove, ignoreEmptyTop) {
 };
 
 // Hide the class header or spell level divider if their value is made completely empty before an On Blur action
-function HideSpellSheetElement(theTarget) {
-	var base = theTarget ? theTarget : event.target.name;
+function HideSpellSheetElement(base, fromChange, value) {
 	var prefix = base.substring(0, base.indexOf("spells"));
 	var SSfrontPrefix = What("Template.extras.SSfront").split(",")[1];
 	var suffix = Number(base.slice(-1));
@@ -4804,7 +4795,7 @@ function HideSpellSheetElement(theTarget) {
 	var glossaryArray = [
 		prefix + "spellsgloss.Image"
 	];
-	if ((theTarget || event.value === "") && !(prefix === SSfrontPrefix && suffix === 0)) {
+	if ((!fromChange || value === "") && !(prefix === SSfrontPrefix && suffix === 0)) {
 		calcStop();
 		var lineBase = How(base);
 		var startLine = parseFloat(lineBase.slice(-2)[0] === "." ? lineBase.slice(-1) : lineBase.slice(-2));
@@ -4854,7 +4845,7 @@ function HideSpellSheetElement(theTarget) {
 		}
 		if (!toTest) {
 			Value(SSfrontPrefix + "spellshead.class.0", "");
-			if (event.value === "") HideShow = "Show";
+			if (value === "") HideShow = "Show";
 		} else if (!toPrep) {
 			HideShow = "Hide";
 		}
@@ -4871,21 +4862,21 @@ function HideSpellSheetElement(theTarget) {
 		}
 	}
 	// If the text changed, make sure to also edit the remember field so that the element can be recreated when inserting/deleting rows
-	if (!theTarget && event.value && !(prefix === SSfrontPrefix && suffix === 0)) {
+	if (fromChange && value && !(prefix === SSfrontPrefix && suffix === 0)) {
 		var lineBase = How(base);
 		var lineBaseArr = What(lineBase).split("##");
-		lineBaseArr[3] = event.value;
+		lineBaseArr[3] = value;
 		Value(lineBase, lineBaseArr.join("##"));
 	}
 }
 
 // When changing the spellcasting ability of a manual header, save it to the remember field so that the element can be recreated when inserting/deleting rows (field blur)
 // If this is a header linked to a CurrentSpells object, change its spellcasting ability and offer to re-generate the sheet
-async function SaveSpellcastingAbility() {
-	if (!event.target) return;
-	var base = event.target.name;
+async function SaveSpellcastingAbility(field) {
+	if (!field) return;
+	var base = field.name;
 	var caster = What(base.replace("ability", "class"));
-	var selAbi = event.target.currentValueIndices;
+	var selAbi = field.currentValueIndices;
 	if (caster && CurrentSpells[caster] && !(CurrentSpells[caster].fixedDC && !CurrentSpells[caster].ability)) {
 		var spCast = CurrentSpells[caster];
 		if (!selAbi && spCast.abilityBackup) {
@@ -4925,14 +4916,14 @@ async function SaveSpellcastingAbility() {
 }
 
 //a one-item menu to hide the glossary
-async function MakeGlossMenu_GlossOptions() {
+async function MakeGlossMenu_GlossOptions(fldName) {
 	Menus.glossary = [{
 		cName : "Remove this glossary",
 		cReturn : "removeglossary"
 	}];
 	var MenuSelection = await getMenu("glossary");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] !== "removeglossary") return;
-	HideSpellSheetElement(event.target.name);
+	HideSpellSheetElement(fldName, false);
 }
 
 // make all lines on the newly generated empty sheet
@@ -5072,16 +5063,15 @@ async function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 	thermoM(thermoTxt, true); // Stop progress bar
 }
 
-//a way to hide the 'prepared' section on the first page of the spell sheet //if a "target" is given, assume it has to be hidden
-async function MakePreparedMenu_PreparedOptions(target) {
+//a way to hide the 'prepared' section on the first page of the spell sheet //if a "hide" is true, assume it has to be hidden
+async function MakePreparedMenu_PreparedOptions(theTarget, hide) {
 	Menus.spellsPrepared = [{
 		cName : "Hide this prepared spells section",
 		cReturn : "removepreps"
 	}];
 
 	//now call the menu
-	var MenuSelection = target ? ["removepreps"] : await getMenu("spellsPrepared");
-	var theTarget = target ? target : event.target.name;
+	var MenuSelection = hide ? ["removepreps"] : await getMenu("spellsPrepared");
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[0] !== "removepreps") return;
 
 	Hide(theTarget);
@@ -5237,7 +5227,7 @@ function ToggleSpellPoints() {
 	//show/hide all visible spell slot checkboxes
 	for (var i = 1; i < 10; i++) {
 		var ssNR = SPactive ? 0 : What("SpellSlots.CheckboxesSet.lvl" + i);
-		SetSpellSlotsCheckboxes(i, ssNR, true);
+		SetSpellSlotsCheckboxes("SpellSlots.CheckboxesSet.lvl" + i, i, ssNR, true);
 	}
 
 	//show/hide the BlueText fields for setting the spell slots

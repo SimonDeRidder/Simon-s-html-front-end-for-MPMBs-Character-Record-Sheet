@@ -28,7 +28,7 @@ const app = {
 		oIcon = null /*Icon Stream*/,
 		cExec /*str*/,
 		cEnable = "true" /*str*/,
-		cMarked = "false" /*str*/,
+		cMarked = undefined /*str*/,
 		cTooltext = "" /*str*/,
 		nPos = -1 /*number*/,
 		cLabel = "" /*str*/,
@@ -60,17 +60,7 @@ const app = {
 		if (cEnable != "true") {
 			throw "addToolButton with cEnable='", cEnable, "' for element ", cName;
 		}
-		if (cMarked != "false") {
-			let event = {};
-			eval(cMarked);
-			let markResult = event.rc;
-			if (!markResult) {
-				console.log("Warning: cMarked evaluates to false, not adding button:", cName);
-				newButton.remove();
-				buttonParent.remove();
-				return;
-			}
-		}
+		// cMarked is ignored
 		newButton.ariaLabel = cTooltext;
 		if (nPos != -1) {
 			console.log("Warning: addToolButton with nPos != -1 not implemented:", cName, ":", nPos);
@@ -559,6 +549,8 @@ Array.prototype.toSource = function () /*str*/ {
 			str += "'" + this[i] + "'";
 		} else if ((typeof this[i]) == 'boolean') {
 			str += this[i] ? "true" : "false";
+		} else if ((typeof this[i]) == "object") {
+			str += adapter_helper_recursive_toSource(this[i]);
 		} else {
 			throw "unsupported element type in array toSource: " + (typeof this[i]);
 		}
@@ -586,6 +578,12 @@ class AdapterClassFieldReference {
 		let submitName_ = this.html_elements[0].dataset.submit_name;
 		if (submitName_ == undefined) {
 			return "";
+		}
+		if (
+			!isNaN(submitName_)
+			&& this.html_elements[0].classList.contains('submitnumber')
+		) {
+			return Number(submitName_);
 		}
 		return submitName_;
 	}
@@ -863,6 +861,18 @@ class AdapterClassFieldReference {
 
 	}
 
+	get setVal() /*String*/ {
+		let setVal_ = this.html_elements[0].dataset.setVal;
+		if (setVal_ == undefined) {
+			return "";
+		}
+		return setVal_;
+	}
+
+	set setVal(new_setVal /*String*/) {
+		this.html_elements[0].dataset.setVal = new_setVal;
+	}
+
 	toSource() /*str*/ {
 		return this.html_elements[0].toSource();
 	}
@@ -962,6 +972,10 @@ class AdapterClassFieldReference {
 		elm.click();
 	}
 
+	buttonGetCaption() /*String*/ {
+		return this.html_elements[0].innerText;
+	}
+
 	buttonSetCaption(cCaption /*String*/, nFace /*Number*/) {
 		for (let element of this.html_elements) {
 			element.innerText = cCaption;
@@ -975,38 +989,100 @@ class AdapterClassFieldReference {
 		if (actionType != 'Calculate') {  // do nothing
 			throw "Unknown action type for setAction: " + actionType;
 		}
+		// TODO: remove is_known stuff when we're confident enough in the change rule matching
+		let is_known = false;
+		for (let abi of ['Cha', 'Str', 'Dex', 'Con', 'Wis', 'Int', 'HoS']) {
+			for (let pattern of [
+				"event.value = Math.max(1, What('$$ABI$$ Mod'));",
+				"event.value = What('$$ABI$$ Mod');",
+				"event.value = Math.max(1, tDoc.getField('$$ABI$$ Mod').value);",
+				"event.value = 1 + What('$$ABI$$ Mod');",
+				"event.value = Math.max(2, Number(What('$$ABI$$ Mod')) * 2);",
+				"event.value = What('$$ABI$$ Mod') + 5;",
+				"event.value = What('$$ABI$$ Mod') + 6;",
+				"event.value = Math.max(1 + 0, What('$$ABI$$ Mod') + 0);",
+				"event.value = Math.max(1 + 1, What('$$ABI$$ Mod') + 1);",
+				"event.value = Math.max(1 + 2, What('$$ABI$$ Mod') + 2);",
+				"event.value = Math.max(1 + 3, What('$$ABI$$ Mod') + 3);",
+				"event.value = Math.max(1 + 4, What('$$ABI$$ Mod') + 4);",
+			]) {
+				if (pattern.replace('$$ABI$$', abi) == actionStr) {
+					is_known = true;
+				}
+			}
+		}
 		if (
 			[
-				"event.value = Math.max(1, What('Cha Mod'));",
-				"event.value = 1 + What('Cha Mod');",
 				"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var DCmod = Number(usages) * 5; event.value = (isNaN(Number(usages)) || usages === '') ? 'DC  ' : 'DC ' + Number(10 + DCmod);",
 				'event.value = "As a reaction when a ranged weapon attack hits me while I\'m wearing these gloves, I can reduce the damage by 1d10 + " + Number(What("Dex Mod")) + " (my Dexterity modifier). This only works if I have a free hand. If I reduce the damage to 0, I can catch the missile if it is small enough for me to hold in that hand.";',
+				"event.value = How('Proficiency Bonus');",
+				"event.value = Number(How('Proficiency Bonus'))*2",
+				"event.value = Number(How('Proficiency Bonus'));",
+				"event.value = Math.max(1, tDoc.getField('Proficiency Bonus').submitName);",
+				"event.value = 'As a reaction when I take damage from a creature that is within 10 ft of me, I can have it take 2d8 force damage and push it up to 10 ft away from me. If it succeeds a Strength save DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Int Mod'))) + ' (8 + Prof Bonus + Int mod), it halves the damage and isn't pushed. I can do this my Proficiency Bonus per long rest. [+1 Intelligence]';",
+				"event.value = 'As a reaction when I take damage from a creature that is within 10 ft of me, I can have it take 2d8 force damage and push it up to 10 ft away from me. If it succeeds a Strength save DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Wis Mod'))) + ' (8 + Prof Bonus + Wis mod), it halves the damage and isn't pushed. I can do this my Proficiency Bonus per long rest. [+1 Wisdom]';",
+				"event.value = 'As a reaction when I take damage from a creature that is within 10 ft of me, I can have it take 2d8 force damage and push it up to 10 ft away from me. If it succeeds a Strength save DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Cha Mod'))) + ' (8 + Prof Bonus + Cha mod), it halves the damage and isn't pushed. I can do this my Proficiency Bonus per long rest. [+1 Charisma]';",
+				"event.value = '0 m';",
+				"event.value = '0 ft';",
+				"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var useMult = isNaN(Number(usages)) || !Number(usages) ? 1 : Math.pow(10, usages); var charLvl = What('Character Level'); var total = (Math.round(charLvl * useMult) * 10); total = total > 1000000 ? total / 1000000 + 'M' : total > 1000 ? total / 1000 + 'k' : total; event.value = total + ' gp';",
+				"event.value = Math.floor(classes.known['dawnforgedcast-alchemist'].level/2) + What('Int Mod');",
+				"event.value = Math.floor(classes.known['dawnforgedcast-alchemist'].level/2) + 3 + tDoc.getField('Int Mod').value;",
+				"event.value = ''; event.target.setAction('Calculate', ''); event.target.submitName = '';",
+				"event.value = !classes.known.warlock ? '' : (1 + classes.known.warlock.level) + 'd6';",
+				"event.value = !event.value || event.value == 'Resets to 1 after ' ? 1 : event.value;",
+				"event.value = event.value.toString().replace(/ ?per ?/i, '');",
+				"event.value = 'I learn two conducting techniques of my choice from those available to the College of the Maestro. The saving throw DC for this is ' + (8 + How('Proficiency Bonus') + What('Cha Mod')) + ' (8 + proficiency bonus + Cha mod). I gain one bardic inspiration die (d6), which I regain when I finish a short rest.';",
+				"event.value = 'I can spend 10 minutes inspiring up to 6 friendly creatures within 30 feet who can see or hear and can understand me. Each gains lvl (' + What('Character Level') + ') + Cha mod (' + What('Cha Mod') + \") temporary hit points. One can't gain temporary hit points from this feat again until after a short rest.\";",
+				"event.value = \"I can ably create written ciphers that others can't decipher unless I teach them, they succeed on an Intelligence check DC \" + (What('Int') + Number(How('Proficiency Bonus'))) + ' (Intelligence score + proficiency bonus), or they use magic to decipher it. I learn three languages of my choice. [+1 Intelligence]';",
+				"event.value = 'I learn two maneuvers of my choice from those available to the Battle Master (2nd page \"Choose Feature\" button). The saving throw DC for this is ' + (8 + Number(How('Proficiency Bonus')) + Math.max(Number(What('Str Mod')), Number(What('Dex Mod')))) + ' (8 + proficiency bonus + Str/Dex mod). I gain one superiority die (d6), which I regain when I finish a short rest.';",
+				"event.value = 'I can use my Breath Weapon to roar instead. Chosen creatures within 30 ft that see and hear me must make a DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Cha Mod'))) + ' Wis save (8 + Prof Bonus + Cha mod) or be frightened of me for 1 min. A target can repeat the save whenever it takes damage. [+1 Str, Con, or Cha]';",
+				'event.value = "As a bonus action, I can use Bolstering Rally on myself or an ally within 30 ft that I can see and can see or hear me. They gain 1d8 + " + (Number(How("Proficiency Bonus")) + Number(What("Con Mod"))) + " temporary hit points (1d8 + proficiency bonus + Constitution modifier). I can do this my proficiency bonus per long rest. [+1 Constitution]";',
+				'event.value = "As a bonus action, I can use Bolstering Rally on myself or an ally within 30 ft that I can see and can see or hear me. They gain 1d8 + " + (Number(How("Proficiency Bonus")) + Number(What("Wis Mod"))) + " temporary hit points (1d8 + proficiency bonus + Wisdom modifier). I can do this my proficiency bonus per long rest. [+1 Wisdom]";',
+				'event.value = "As a bonus action, I can use Bolstering Rally on myself or an ally within 30 ft that I can see and can see or hear me. They gain 1d8 + " + (Number(How("Proficiency Bonus")) + Number(What("Cha Mod"))) + " temporary hit points (1d8 + proficiency bonus + Charisma modifier). I can do this my proficiency bonus per long rest. [+1 Charisma]";',
+				'event.value = "Once per turn, when I hit a creature with a weapon attack, I can have it make a Wisdom save DC " + (8 + Number(How("Proficiency Bonus")) + Number(What("Int Mod"))) + " (8 + Prof Bonus + Int mod) or be frightened of me until my next turn ends. On a successful save, the target has disadv. on its next attack before its next turn ends. I can do this my proficiency bonus per long rest. [+1 Int]";',
+				'event.value = "Once per turn, when I hit a creature with a weapon attack, I can have it make a Wisdom save DC " + (8 + Number(How("Proficiency Bonus")) + Number(What("Wis Mod"))) + " (8 + Prof Bonus + Wis mod) or be frightened of me until my next turn ends. On a successful save, the target has disadv. on its next attack before its next turn ends. I can do this my proficiency bonus per long rest. [+1 Wis]";',
+				'event.value = "Once per turn, when I hit a creature with a weapon attack, I can have it make a Wisdom save DC " + (8 + Number(How("Proficiency Bonus")) + Number(What("Cha Mod"))) + " (8 + Prof Bonus + Cha mod) or be frightened of me until my next turn ends. On a successful save, the target has disadv. on its next attack before its next turn ends. I can do this my proficiency bonus per long rest. [+1 Cha]";',
 			].includes(actionStr)
-		) {  // TODO: remove when we're confident enough in the change rule matching
-			let accessedFieldIds = getAccessedFieldIds(actionStr);
-			let currentFieldId = this.html_elements[0].id;
-			let changeEventName;
-			for (let fieldID of accessedFieldIds) {
-				changeEventName = fieldID + '_change';
-				if (!(changeEventName in EventType)) {
-					throw "Could not find change event for field id " + fieldID;
-				}
-				eventManager.add_listener(EventType[changeEventName], function() {
-					let theElement = document.getElementById(currentFieldId);
-					event.target.name = adapter_helper_convert_id_to_fieldname(theElement.id);
-					eval(actionStr);
-					theElement.value = event.value;
-				})
-			}
-		} else {
+		) {
+			is_known = true;
+		}
+		if (!is_known) {
 			throw (
 				"setAction called for '" + actionType + "', with unknown non-empty value '" + actionStr + "'. "
 				+ "Make sure the code analyser above is functioning properly, then add it to whitelist."
 			);
 		}
+		let accessedFieldIds = getAccessedFieldIds(actionStr);
+		let currentFieldId = this.html_elements[0].id;
+		let changeEventName;
+		for (let fieldID of accessedFieldIds) {
+			changeEventName = fieldID + '_change';
+			if (!(changeEventName in EventType)) {
+				throw "Could not find change event for field id " + fieldID;
+			}
+			eventManager.add_listener(EventType[changeEventName], function() {
+				let theElement = document.getElementById(currentFieldId);
+				let theElementAdapter = new AdapterClassFieldReference([theElement]);
+				let theReturnValue = theElementAdapter.value;
+				eval(actionStr.replace("event.target", "theElementAdapter").replace("event.value", "theReturnValue").replace("isn't", "isn&apos;t"));
+				theElementAdapter.value = theReturnValue.replace("&apos;", "'");
+			})
+		}
 	}
 
 	setFocus() {
+		let parent = this.html_elements[0];
+		while (!parent.classList.contains('page')) {
+			parent = parent.parentElement;
+		}
+		let page_id = parent.id;
+
+		let buttonContainer = document.getElementById('button-container');
+		for (let child of buttonContainer.children) {
+			if (child.dataset.page == page_id) {
+				child.click();
+			}
+		}
 		this.html_elements[0].focus();
 	}
 
@@ -1121,14 +1197,14 @@ class AdapterClassPage {
 			this.pageIdPrefix = 'pback';
 			this.buttonFollower = 'tabbuttoncomp';
 			this.isTempl = false;
-		} else if (type == 'pcomp') {
+		} else if ((type == 'AScomp') || type.startsWith('pcomptempl')) {
 			this.page_ = 'pages/page_companion.html';
-			this.prefix_ = (prefix == null) ? 'P4.AScomp.': prefix;
+			this.prefix_ = (prefix == null) ? 'P#.AScomp.': prefix;
 			this.buttonPrefix_ = "Companion";
 			this.buttonIDPrefix_ = 'tabbuttoncomp';
-			this.pageIdPrefix = 'pcomp';
+			this.pageIdPrefix = 'pcomptempl';
 			this.buttonFollower = 'tabbuttonnote';
-			this.isTempl = false;
+			this.isTempl = (type == 'pcomptempl') ? false: true;
 		} else if (type.startsWith('pwildtempl')) {
 			this.page_ = 'pages/page_wildshape.html';
 			this.prefix_ = (prefix == null) ? 'P#.WSfront.': prefix;
@@ -1288,7 +1364,7 @@ class UserImportedFilesAdapter {
 	toSource() {
 		let scrString = "new UserImportedFilesAdapter({";
 		for (let file in this) {
-			scrString += "'" + file + "':`" + this[file] + "`,";
+			scrString += "\"" + adapter_helper_escape_string_for_toSource(file) + "\":\"" + adapter_helper_escape_string_for_toSource(this[file]) + "\",";
 		}
 		return scrString + "})";
 	}
@@ -1490,27 +1566,6 @@ class CurrentProfsAdapter {
 	}
 }
 
-// class CurrentVarsAdapter {
-// 	constructor(
-// 		manual, bluetxt, weight, AbilitySaveDcFound, AbilitySaveDcBonus, extraArmour
-// 	) {
-// 		this.manual = (manual === undefined) ? {} : manual;
-// 		this.bluetxt = (bluetxt === undefined) ? false : bluetxt;
-// 		this.weight = (weight === undefined) ? [] : weight;
-// 		this.AbilitySaveDcFound = (AbilitySaveDcFound === undefined) ? {} : AbilitySaveDcFound;
-// 		this.AbilitySaveDcBonus = (AbilitySaveDcBonus === undefined) ? {} : AbilitySaveDcBonus;
-// 		this.extraArmour = (extraArmour === undefined) ? {} : extraArmour;
-// 	}
-
-// 	toSource() {
-// 		return (
-// 			"new CurrentVarsAdapter("
-// 			// TODO
-// 			+ ")"
-// 		)
-// 	}
-// }
-
 
 // Helper functions
 function adapter_helper_convert_fieldname_to_id(field_name /*str*/) /*str*/ {
@@ -1522,7 +1577,9 @@ function adapter_helper_convert_id_to_fieldname(id /*str*/) /*str*/ {
 };
 
 function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
-	if (Object.prototype.toString.call(object) === "[object Array]") {
+	if (object === undefined) {
+		return "undefined";
+	} else if (Object.prototype.toString.call(object) === "[object Array]") {
 		let result = "[";
 		let first = true;
 		object.forEach(function (child, index, array) {
@@ -1547,11 +1604,13 @@ function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
 				// it is an object literal
 				let result = "Object({";
 				let first = true;
+				let key;
 				for (let var_ in object) {
 					if (!first) {
 						result += ",";
 					}
-					result += "'" + var_ + "':" + adapter_helper_recursive_toSource(object[var_]);
+					key = adapter_helper_escape_string_for_toSource(var_);
+					result += "\"" + key + "\":" + adapter_helper_recursive_toSource(object[var_]);
 					first = false;
 				}
 				result += "})";
@@ -1559,11 +1618,19 @@ function adapter_helper_recursive_toSource(object /*any*/) /*str*/ {
 			}
 		}
 	} if (typeof object === 'string' || object instanceof String) {
-		return "'" + object + "'";
+		return "\"" + adapter_helper_escape_string_for_toSource(object) + "\"";
 	} else {
 		return String(object);
 	}
 };
+
+function adapter_helper_escape_string_for_toSource(string /*String*/) /*String*/ {
+	return string
+		.replace(/\\/g, "\\\\")
+		.replace(/\n/g, "\\n")
+		.replace(/\r/g, "\\r")
+		.replace(/"/g, "\\\"");
+}
 
 function adapter_helper_get_number_field_selection() /*[int, int]*/ {
 	let sel = window.getSelection();
@@ -1590,7 +1657,7 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 	if ((element == null ) || (!element.classList.contains('field'))) {
 		// No single element by this id, look for "child elements" that start with the id as prefix
 		[...document.getElementsByClassName('field')].forEach(element => {
-			if (element.id.match(new RegExp("^" + field_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ".*"))) {
+			if (element.id.match(new RegExp("^" + field_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "(?:\.|#)?.*"))) {
 				elements.push(element);
 			}
 		});
@@ -1608,6 +1675,10 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 						'nothing',
 						'AdvLog.Options',
 						'Attack.1.Description_Tooltip',
+						'Attack.2.Description_Tooltip',
+						'Attack.3.Description_Tooltip',
+						'Attack.4.Description_Tooltip',
+						'Attack.5.Description_Tooltip',
 						'AdvLogS.Background_Faction.Text',
 						'AdvLog.HeaderIcon'
 					].includes(field_id)
@@ -1676,10 +1747,6 @@ function adapter_helper_UrlExists(url /*String*/) /*boolean*/ {
 	http.open('HEAD', url, false);
 	http.send();
 	return http.status != 404;
-}
-
-function adapter_helper_storeSetThisFldValResult(fieldAdapter /*AdapterClassFieldReference*/) {
-	fieldAdapter.value = event.target.value
 }
 
 function adapter_helper_get_prefix_from_script(postPrefix /*String*/) /*String*/ {
@@ -1755,22 +1822,29 @@ function adapter_helper_convert_colour(color /*[char, ...]*/) /*String|null*/ {
 }
 
 
-function adapter_helper_keystroke1(element /*HTMLElement*/, arg1 /*boolean*/, arg2 /*boolean*/) {
+function adapter_helper_keystroke1(
+	element /*HTMLElement*/,
+	allowDec /*boolean*/,
+	allowNegative /*boolean*/,
+	value /*String*/,
+	change /*String*/,
+	isFinal /*boolean*/
+) {
 	let current_selection;
-	if (arg1 != arg2) {
+	if (event.target.selectionStart) {
 		current_selection = [event.target.selectionStart, event.target.selectionEnd];
 	} else {
 		current_selection = adapter_helper_get_number_field_selection();
 	}
-	event.change = event.data ? event.data : '';
-	let origLen = event.change.length;
-	event.selStart = event.target.selectionStart;
-	event.selEnd = event.target.selectionEnd;
-	keystroke1(arg1, arg2);
-	if (!event.rc) {
-		element.value = element.value.substring(0,event.selStart-origLen)+element.value.substring(event.selEnd);
+	change = change ? change : '';
+	let origLen = change.length;
+	let selStart = current_selection[0];
+	let selEnd = current_selection[1];
+	let rc = keystroke1(allowDec, allowNegative, value, change, selStart, selEnd, isFinal);
+	if (!rc) {
+		element.value = element.value.substring(0,selStart-origLen)+element.value.substring(selEnd);
 	} else {
-		element.value = element.value.substring(0,event.selStart-origLen)+event.change+element.value.substring(event.selEnd);
+		element.value = element.value.substring(0,selStart-origLen)+change+element.value.substring(selEnd);
 	}
 }
 
@@ -1826,11 +1900,22 @@ function adapter_helper_load() {
 		}
 		let pageAdapter;
 		let pageNum = 1;
-		for (page_info of pages.sort((a, b) => a.page_number - b.page_number)) {
+		let templPages = [];
+		for (page_info of pages) { // .sort((a, b) => a.page_number - b.page_number)) {
 			pageAdapter = new AdapterClassPage(page_info.page_id, page_info.page_prefix);
-			await pageAdapter.spawn(nPage=pageNum, bRename=true, bOverlay=false);
+			if (pageAdapter.isTempl) {
+				templPages.push([pageAdapter, pageNum]);
+			} else {
+				await pageAdapter.spawn(nPage=pageNum, bRename=true, bOverlay=false);
+			}
 			pageNum += 1;
 		}
+		// add template pages last so their buttons are in the "right" place
+		for (let pageAdapterInfo of templPages) {
+			await pageAdapterInfo[0].spawn(nPage=pageAdapterInfo[1], bRename=true, bOverlay=false);
+		}
+
+		// set stat page to open by default and open it
 		let statButton = document.getElementById('tabbuttonstat');
 		if (statButton) {
 			statButton.classList.add('defaultOpen');
@@ -1853,7 +1938,7 @@ function adapter_helper_load() {
 	// load file and apply contents
 	var input = document.createElement('input');
 	input.type = 'file';
-	input.setAttribute('accept', "application/json");
+	// input.setAttribute('accept', "application/json");
 	input.onchange = e => { 
 		let file = e.target.files[0]; 
 		let reader = new FileReader();
@@ -1872,6 +1957,10 @@ function adapter_helper_serialise_field(element /*HTMLElement*/) /*Object*/ {
 		throw "adapter_helper_serialise_field not implemented for field type '" + String(typeof fieldVar) + "', constructor '" + fieldVar.constructor.name + "'";
 	}
 	let result = {name: fieldVar.name};
+	if (['User_Imported_Files', 'User_Script'].includes(element.id)) {
+		result.value = btoa(escapeUnicode(element.getAttribute('value')));
+		return result;
+	}
 	let submit_name = fieldVar.submitName;
 	if (submit_name != "") {
 		result.submitName = submit_name;
@@ -1889,16 +1978,16 @@ function adapter_helper_serialise_field(element /*HTMLElement*/) /*Object*/ {
 		result.display = display;
 	}
 	if (fieldVar.type == 'combobox') {
-		result.currentValueIndices = fieldVar.currentValueIndices;
 		if (element.tagName.toLowerCase() == 'input') {
 			result.items = fieldVar.getItems();
+		} else {
+			result.currentValueIndices = fieldVar.currentValueIndices;
 		}
 	}
 	if (['checkbox', 'radiobutton'].includes(fieldVar.type)) {
 		result.boxChecked = fieldVar.isBoxChecked(0);
 	}
 	if (element.dataset.customUrl) {
-		console.log("file_content:", element.style.backgroundImage);
 		result.image_data = element.style.backgroundImage.replace(/^url\(\"/, '').replace(/\"\)$/, '');
 	}
 	if (is_movable_field(result.name)) {
@@ -1913,6 +2002,10 @@ function adapter_helper_deserialise_field(element_info /*Object*/) {
 	if (fieldVar.constructor.name!= 'AdapterClassFieldReference') {
 		throw "adapter_helper_serialise_field not implemented for field type '" + String(typeof fieldVar) + "', constructor '" + fieldVar.constructor.name + "'";
 	}
+	if (element_info.name == 'User Script') {
+		fieldVar.html_elements[0].setAttribute('value', unescapeUnicode(atob(element_info.value)));
+		return;
+	}
 	fieldVar.submitName = element_info.submitName ? element_info.submitName : "";
 	if (element_info.value) {
 		set_value_no_dispatch(fieldVar, element_info.value);
@@ -1922,8 +2015,9 @@ function adapter_helper_deserialise_field(element_info /*Object*/) {
 	if (fieldVar.type == 'combobox') {
 		if (fieldVar.html_elements[0].tagName.toLowerCase() == 'input') {
 			fieldVar.setItems(element_info.items);
+		} else {
+			fieldVar.currentValueIndices = element_info.currentValueIndices;
 		}
-		fieldVar.currentValueIndices = element_info.currentValueIndices;
 	}
 	if (['checkbox', 'radiobutton'].includes(fieldVar.type)) {
 		fieldVar.checkThisBox(0, element_info.boxChecked);
@@ -1986,7 +2080,17 @@ function is_movable_field(fieldName /*String*/) /*boolean*/ {
 			"spellsgloss.Image",
 			"spellsdiv.Image.",
 			"spellsdiv.Text.",
+			"spellshead.Image.Header.Left.",
+			"spellshead.Text.header.",
+			"spellshead.ability.",
+			"spellshead.attack.",
+			"spellshead.dc.",
 			"spellshead.Image.prepare.",
+			"spellshead.prepare.",
+			"spellshead.class.",
+			"BlueText.spellshead.attack.",
+			"BlueText.spellshead.dc.",
+			"BlueText.spellshead.prepare.",
 		]
 	) {
 		if (fieldName.indexOf(infix) != -1) {

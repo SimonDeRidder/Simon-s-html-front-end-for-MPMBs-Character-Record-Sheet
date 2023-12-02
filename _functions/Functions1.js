@@ -8,7 +8,7 @@ function MakeButtons() {
 		if (!tDoc.info.SpellsOnly) {
 			app.addToolButton({
 				cName : "LayoutButton",
-				cExec : minVer ? "MakeAdvLogMenu_AdvLogOptions(true);" : "MakePagesMenu().then(() => {PagesOptions();});",
+				cExec : minVer ? "MakeAdvLogMenu_AdvLogOptions();" : "MakePagesMenu().then(() => {PagesOptions();});",
 				oIcon : allIcons.layout,
 				cTooltext : toUni("Set Pages Layout") + "\nSelect which pages are visible in the sheet and set the different lay-out options on those pages. Some pages might offer extra options on the page itself.\n\nNote that you can have multiple instances of the following pages:\n   \u2022  Companion page;\n   \u2022  Notes page;\n   \u2022  Wild Shapes page;\n   \u2022  Spell Sheet page.;\n   \u2022  Adventure Logsheet.\n\nIf you add more pages or you hide/show the pages many times, the file size might increase.",
 				nPos : 0,
@@ -93,7 +93,7 @@ function MakeButtons() {
 				cExec : "ToggleBlueText();",
 				oIcon : allIcons.modifiers,
 				cTooltext : toUni("Modifier Fields") + "\nHide\/show fields where you can manually add modifiers for:\n   \u2022  Ability save DC;\n   \u2022  Attacks to hit and damage bonusses;\n   \u2022  Attacks damage die;\n   \u2022  Proficiency bonus, or the use of proficiency dice;\n   \u2022  Saves;\n   \u2022  Skills, with Jack of All Trades and Remarkable Athlete;\n   \u2022  Number of spell slots;\n   \u2022  Initiative;\n   \u2022  Carrying capacity multiplier;\n   \u2022  Weights of armor, shield, weapons, and ammunition.\n\nThese are the so-called \"blue text fields\" and they won't print, even when they are visible.",
-				cMarked : "event.rc = CurrentVars.bluetxt;",
+				cMarked : "CurrentVars.bluetxt",
 				nPos : 9,
 				cLabel : "Mods"
 			});
@@ -116,7 +116,7 @@ function MakeButtons() {
 				cExec : "MakeAdventureLeagueMenu();AdventureLeagueOptions();",
 				oIcon : allIcons.league,
 				cTooltext : toUni("Adventurers League") + "\nHide\/show fields for Adventurers League play:\n   \u2022  'DCI' on the 1st page;\n   \u2022  'Faction Rank' and 'Renown' on the Background page;\n   \u2022  Sets HP value on the 1st page to 'always fixed';" + (typePF ? "" : "\n   \u2022  Removes the action options from the DMG on the 1st page;") + "\n   \u2022  Adds asterisks for action options taken from the DMG in the reference section.\n\nThis button can also make the \"Adventurers Logsheet\" visible if it isn't already.\n\nNote that this Character Generator\/Sheet offers some options that are not legal in Adventurer's League play regardless of enabling this button or not.",
-				cMarked : "event.rc = Number(tDoc.getField('League Remember').submitName);",
+				cMarked : "Number(tDoc.getField('League Remember').submitName)",
 				nPos : 11,
 				cLabel : "League"
 			});
@@ -134,7 +134,7 @@ function MakeButtons() {
 			cExec : "MakeMobileReady();",
 			oIcon : allIcons.tablet,
 			cTooltext : toUni("Flatten") + "\nSwitch to or from a version of the sheet that is compatible with Acrobat Reader for mobile devices.\nThis flattens all form fields and hides non-printable ones to make the sheet more usable on a phone or tablet.\n\nThe fields used during normal play will stay editable:\n   \u2022  1st page: health, attacks, actions, adv.\/disadv., etc.;\n   \u2022  2nd page: equipment and proficiencies;\n   \u2022  3rd-6th page: all except buttons and portrait\/symbol.",
-			cMarked : "event.rc = CurrentVars.mobileset ? CurrentVars.mobileset.active : false;",
+			cMarked : "CurrentVars.mobileset ? CurrentVars.mobileset.active : false",
 			nPos : 13,
 			cLabel : "Flatten"
 		});
@@ -512,7 +512,7 @@ async function ResetAll(GoOn, noTempl, deleteImports) {
 	thermoM(6/9); //increment the progress dialog's progress
 
 	// Call upon some functions to reset other stuff than field values
-	await ConditionSet(true);
+	await ConditionSet(null, true);
 	ShowCalcBoxesLines();
 	ToggleWhiteout(false);
 	ChangeFont();
@@ -931,7 +931,7 @@ function ToggleBlueText(toggle) {
 
 	if (typePF) {
 		BlueTxt.push("Init Bonus");
-		BlueTxt.push("Comp.Use.Combat.Init.Bonus");
+		// BlueTxt.push("Comp.Use.Combat.Init.Bonus");
 		BlueTxt.push("AC Stealth Disadvantage");
 		BlueTxt.push("AC Stealth Disadvantage Title");
 	}
@@ -1374,9 +1374,8 @@ function calcCompMaxDexToAC(prefix, armourKey, dexMod) {
 };
 
 // add the armour; only overwrites if force == true
-function AddArmor(armour, force, comp) {
+function AddArmor(armour, force, prefix) {
 	if (!armour) return;
-	var prefix = comp ? comp : !event.target || !event.target.name ? "" : getTemplPre(event.target.name, "AScomp", true);
 	var ACfld = prefix ? prefix + "Comp.Use.AC" : "AC Armor Description";
 	var curAC = What(ACfld);
 	if (curAC && !force) return;
@@ -1390,9 +1389,8 @@ function AddArmor(armour, force, comp) {
 	};
 };
 // remove the armour if it is the same
-function RemoveArmor(armour, comp) {
+function RemoveArmor(armour, prefix="") {
 	if (!armour) return;
-	var prefix = comp ? comp : !event.target || !event.target.name ? "" : getTemplPre(event.target.name, "AScomp", true);
 	var ACfld = prefix ? prefix + "Comp.Use.AC" : "AC Armor Description";
 	var curAC = What(ACfld);
 	var armKey = ParseArmor(armour);
@@ -1436,7 +1434,7 @@ function ApplyShield(input) {
 }
 
 //Change advantage or disadvantage of saves, skills, checks, attacks, etc. based on condition
-async function ConditionSet(isReset) {
+async function ConditionSet(fieldName, isReset) {
 	if (!isReset && !IsNotConditionSet) return;
 	if (typePF) { // only the stealth disadvantage is part of the printer friendly version
 		// Start progress bar and stop calculations
@@ -1477,7 +1475,7 @@ async function ConditionSet(isReset) {
 	for (var aFld in cFlds) {
 		if (!tDoc.getField(cFlds[aFld].name)) continue;
 		cFlds[aFld].checked = tDoc.getField(cFlds[aFld].name).isBoxChecked(0);
-		if (event.target && event.target.name && cFlds[aFld].name == event.target.name) thisFld = aFld;
+		if (fieldName && cFlds[aFld].name == fieldName) thisFld = aFld;
 		if ((/Exh\d/).test(aFld)) cFlds[aFld].origchecked = thisFld === aFld ? !cFlds[aFld].checked : cFlds[aFld].checked;
 	}
 	var thisChck = !isReset && thisFld && cFlds[thisFld].checked ? true : false;
@@ -1594,14 +1592,15 @@ async function ConditionSet(isReset) {
 };
 
 // apply the Class and Levels field change (field validation)
-async function classesFieldVal() {
+async function classesFieldVal(value, remVal) {
 	// if you ctrl/shift click into the field, any changes in it must be ignored as the class selection dialog is opened
-	if (event.target.remVal !== undefined) {
-		event.value = event.target.remVal;
-		delete event.target.remVal;
+	if (remVal !== undefined) {
+		value = remVal;
+		remVal = undefined;
 	} else {
-		await ApplyClasses(event.value, true);
+		await ApplyClasses(value, true);
 	};
+	return [value, remVal];
 }
 
 // search the string for possible class and subclass
@@ -1671,7 +1670,7 @@ function ParseClass(input) {
 };
 
 // detects classes entered and parses information to global classes variable
-async function FindClasses(NotAtStartup, isFieldVal) {
+async function FindClasses(NotAtStartup, isFieldVal, value) {
 	if (!NotAtStartup) classes.field = What("Class and Levels"); // called from startup
 
 	// Initialize some variables
@@ -1809,8 +1808,8 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 	if (NotAtStartup && !isFieldVal && What("Class and Levels") != classes.field) {
 		tDoc.getField("Class and Levels").remVal = classes.field;
 		Value("Class and Levels", classes.field);
-	} else if (NotAtStartup && isFieldVal && event.value != classes.field) {
-		event.value = classes.field;
+	} else if (NotAtStartup && isFieldVal && value != classes.field) {
+		value = classes.field;
 	}
 
 	// if the found classes are the exact same as the classes.known, don't do anything
@@ -1831,8 +1830,8 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 		};
 	};
 	if (!isChange && NotAtStartup) {
-		ApplyClassLevel(true);
-		return true;
+		await ApplyClassLevel(true);
+		return [true, value];
 	};
 
 	// Check every class in classes old and if they are not in classesTemp, remove their features
@@ -1873,7 +1872,7 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 				subclass : classes.old[oClass].subclass
 			}
 			// Remove all the features of the class (remember, new level is set to 0 above)
-			UpdateLevelFeatures("class");
+			await UpdateLevelFeatures("class");
 
 			// If changing subclass, set the class' old level to 0 so all features are added again in full
 			if (classesTemp[oClass]) classes.old[oClass].classlevel = 0;
@@ -2074,7 +2073,7 @@ async function FindClasses(NotAtStartup, isFieldVal) {
 		SetStringifieds("spells");
 	}
 
-	return false;
+	return [false, value];
 };
 
 // apply the effect of the classes
@@ -2083,7 +2082,9 @@ async function ApplyClasses(inputclasstxt, isFieldVal) {
 	classes.field = inputclasstxt;
 
 	// Stop if class is set to manual or if the entered classes are the same as classes.known
-	if (CurrentVars.manual.classes || (await FindClasses(true, isFieldVal))) return;
+	let fcResult = await FindClasses(true, isFieldVal, classes.field);
+	classes.field = fcResult[1];
+	if (CurrentVars.manual.classes || fcResult[0]) return;
 
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Applying the class(es)...");
@@ -2146,7 +2147,7 @@ async function ApplyClasses(inputclasstxt, isFieldVal) {
 
 	thermoM(thermoTxt, true); // Stop progress bar
 
-	ApplyClassLevel(); // Lastly, update the level and level-dependent features (or just the class features if level didn't change)
+	await ApplyClassLevel(); // Lastly, update the level and level-dependent features (or just the class features if level didn't change)
 
 	// Set some visibilities dependent on class-levels
 	SetTheAbilitySaveDCs();
@@ -2214,23 +2215,22 @@ function ClassMenuVisibility() {
 }
 
 // a function to apply the class level depending on how it was changed
-function ApplyClassLevel(noChange) {
+async function ApplyClassLevel(noChange) {
 	if (IsCharLvlVal !== false) { // called during a Level field change event
 		IsCharLvlVal = classes.totallevel;
 	} else if (Number(What("Character Level")) != classes.totallevel) {
 		Value("Character Level", classes.totallevel);
 	} else if (!noChange) { // the classes changed, but the total level didn't, so only call to update the class features
-		UpdateLevelFeatures("class");
+		await UpdateLevelFeatures("class");
 	}
 }
 
 // apply the Character Level field change (field validation)
-async function levelFieldVal() {
-	var lvlOld = Number(What(event.target.name));
-	var lvl = Number(event.value);
+async function levelFieldVal(name, value) {
+	var lvlOld = Number(What(name));
+	var lvl = Number(value);
 	if (lvlOld == lvl) { // no level change, but it could be an empty string changed to '0' or vice versa
-		event.value = lvl > 0 ? lvl : '';
-		return;
+		return lvl > 0 ? lvl : '';
 	}
 
 	IsCharLvlVal = lvl; // save level to global variable
@@ -2243,14 +2243,14 @@ async function levelFieldVal() {
 		lvl = IsCharLvlVal;
 	}
 
-	UpdateLevelFeatures("all", Math.max(1,lvl)); // update all level features and use the set level
+	await UpdateLevelFeatures("all", Math.max(1,lvl)); // update all level features and use the set level
 
 	IsCharLvlVal = false; // reset global variable
 
 	// make sure to update the experience points (or similar system) and alert the user
 	CurrentUpdates.types.push("xp");
 
-	event.value = lvl > 0 ? lvl : '';
+	return lvl > 0 ? lvl : '';
 }
 
 function getCurrentLevelByXP(level, exp) {
@@ -2552,7 +2552,7 @@ async function ApplyRace(inputracetxt, novardialog) {
 			Value("Racial Traits", "", "");
 
 			// Remove the common attributes from the CurrentRace object and remove the CurrentRace features
-			UpdateLevelFeatures("race", 0);
+			await UpdateLevelFeatures("race", 0);
 
 			// Remove the remembered ability save, if any
 			if (CurrentVars.raceAbilitySave !== undefined) delete CurrentVars.raceAbilitySave;
@@ -2583,7 +2583,7 @@ async function ApplyRace(inputracetxt, novardialog) {
 		thermoM(2/6); //increment the progress dialog's progress
 
 		// Process the common attributes from the CurrentRace object and its features
-		UpdateLevelFeatures("race");
+		await UpdateLevelFeatures("race");
 
 		thermoM(3/4); //increment the progress dialog's progress
 	};
@@ -3091,19 +3091,14 @@ async function getMenu(menuname) {
 
 /* ---- INVENTORY FUNCTIONS START ---- */
 
-// set the value of the gear field to be remembered (on focus)
-function RememberGearTempOnFocus() {
-	event.target.temp = event.target.value;
-};
-
 // set the weight of the gear field (on blur)
-function SetGearWeightOnBlur() {
-	var theValue = event.target.value;
-	var weightFld = event.target.name.replace("Row", "Weight");
+function SetGearWeightOnBlur(name, value, oldvalue) {
+	var theValue = value;
+	var weightFld = name.replace("Row", "Weight");
 
 	if (!theValue) {
-		tDoc.resetForm([weightFld, event.target.name.replace("Row", "Amount")])
-	} else if (event.target.temp && event.target.temp === theValue) {
+		tDoc.resetForm([weightFld, name.replace("Row", "Amount")])
+	} else if (oldvalue && oldvalue === theValue) {
 		//do nothing
 	} else {
 		var theGear = ParseGear(theValue);
@@ -3119,8 +3114,8 @@ function SetGearWeightOnBlur() {
 			theWeight = RoundTo(theWeight * massMod, 0.001, true);
 			var weightCurrent = What(weightFld);
 			var setWeight = false;
-			if (weightCurrent && event.target.temp) {
-				var theGearOld = event.target.temp ? ParseGear(event.target.temp) : "";
+			if (weightCurrent && oldvalue) {
+				var theGearOld = oldvalue ? ParseGear(oldvalue) : "";
 				if (theGearOld && (theGearOld[0] !== theGear[0] || theGearOld[1] !== theGear[1])) setWeight = true;
 			} else if (!weightCurrent || weightCurrent !== theWeight) {
 				setWeight = true;
@@ -3128,9 +3123,6 @@ function SetGearWeightOnBlur() {
 			if (setWeight) Value(weightFld, theWeight);
 		}
 	}
-
-	//now reset the temp
-	delete event.target.temp;
 };
 
 // find if the entry is an equipment
@@ -3691,11 +3683,11 @@ function AddInvWeaponsAmmo() {
 };
 
 //Make menu for the button on each equipment line and parse it to Menus.gearline
-function MakeInventoryLineMenu() {
-	var type = event.target.name.indexOf("Adventuring") !== -1 ? "Adventuring " :
-		event.target.name.indexOf("Extra.") !== -1 ? "Extra." :
-		event.target.name.substring(0, event.target.name.indexOf("Comp.") + 8) + ".";
-	var lineNmbr = Number(event.target.name.slice(-2));
+function MakeInventoryLineMenu(fldName) {
+	var type = fldName.indexOf("Adventuring") !== -1 ? "Adventuring " :
+		fldName.indexOf("Extra.") !== -1 ? "Extra." :
+		fldName.substring(0, fldName.indexOf("Comp.") + 8) + ".";
+	var lineNmbr = Number(fldName.slice(-2));
 	var theField = What(type + "Gear Row " + lineNmbr);
 	var hasMagic = type === "Adventuring " && What("Adventuring Gear Remember") === false;
 	var magic = hasMagic && lineNmbr > FieldNumbers.gearMIrow;
@@ -4281,8 +4273,8 @@ function AddTool(tool, toolstooltip, replaceThis) { AddLangTool("tool", tool, to
 function RemoveTool(tool, toolstooltip) { RemoveLangTool("tool", tool) };
 
 function AddWeapon(weapon, partialReplace, prefix) {
-	if (!prefix) prefix = !prefix && event.target && event.target.name ? getTemplPre(event.target.name, "AScomp", true) : "";
-	var QI = prefix ? false : !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
+	if (!prefix) prefix = "";
+	var QI = prefix ? false : true;
 	var Q = QI ? "" : "Comp.Use.";
 	var maxItems = QI ? FieldNumbers.attacks : 3;
 
@@ -4304,11 +4296,11 @@ function AddWeapon(weapon, partialReplace, prefix) {
 	}
 };
 
-function RemoveWeapon(weapon) {
+function RemoveWeapon(weapon, fldName) {
 	if (!IsNotImport) return;
-	var QI = !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
+	var QI = !fldName || fldName.indexOf("Comp.") === -1;
 	var Q = QI ? "" : "Comp.Use.";
-	var prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var prefix = QI ? "" : getTemplPre(fldName, "AScomp", true);
 	var maxItems = QI ? FieldNumbers.attacks : 3;
 
 	var regexWea = RegExp(clean(weapon.toLowerCase(), " ").RegEscape().replace(/(^\W*)(.*?)(\W*$)/i, "$1\\b$2\\b$3"), "i");
@@ -4405,8 +4397,8 @@ function ReplaceString(field, inputstring, newline, theoldstring, alreadyRegExp)
 
 // add (change === true) or remove (change === false) a skill proficiency with or without expertise; If expertise === "only", only add/remove the expertise, considering the skill already has proficiency; If expertise === "increment", only add/remove the expertise, considering the skill already has proficiency, otherwise add proficiency
 function AddSkillProf(SkillName, change, expertise, returnSkillName, bonus, compPage) {
-	var QI = compPage ? !compPage : !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
-	var prefix = QI ? "" : compPage ? compPage : getTemplPre(event.target.name, "AScomp", true);
+	var QI = !compPage;
+	var prefix = QI ? "" : compPage;
 	var tempString = SkillName;
 	if (SkillName.length > 4) {
 		if (SkillsList.abbreviations.indexOf(SkillName.substring(0, 4)) !== -1) {
@@ -4451,50 +4443,53 @@ function AddSkillProf(SkillName, change, expertise, returnSkillName, bonus, comp
 };
 
 //make sure field is a number or the abbreviation of an ability score (field validation)
-function ValidateBonus(goEmpty, allowDC) {
+function ValidateBonus(name, value, oldValue, goEmpty, allowDC) {
 	var test = 0;
-	var input = Number(event.value.replace(/,/g,"."));
+	var input = Number(value.replace(/,/g,"."));
 	if (isNaN(input)) {
-		var notComp = getTemplPre(event.target.name, "AScomp");
-		test = event.value;
+		var notComp = getTemplPre(name, "AScomp");
+		test = value;
 		if (!allowDC) test = test.replace(/dc/ig, "");
 		["Str", "Dex", "Con", "Int", "Wis", "Cha", "HoS", "Prof"].forEach( function(AbiS) {
 			test = test.replace(RegExp("(\\b|\\d)" + AbiS[0] + AbiS[1] + "?" + AbiS[2] + "?" + "(\\b|\\d)", "ig"), "$1" + AbiS + "$2");
 		});
 		var calc = EvalBonus(test, notComp, "test");
-		event.value = calc === undefined ? event.target.value : test;
+		value = calc === undefined ? oldValue : test;
 	} else {
 		var calc = Math.round(input);
-		event.value = event.value === "" && goEmpty ? "" : calc;
+		value = value === "" && goEmpty ? "" : calc;
 	};
-	if (calc !== undefined) event.target.valueCalculated = calc;
+	let valueCalculated = undefined;
+	if (calc !== undefined) valueCalculated = calc;
+	return [value, valueCalculated];
 };
 
 // Display the EvalBonus for this field, if calculated (field format)
-function DisplayBonus() {
-	if (event.value && event.target.valueCalculated !== undefined) event.value = event.target.valueCalculated;
+function DisplayBonus(value, valueCalculated) {
+	if (value && valueCalculated !== undefined) value = valueCalculated;
+	return value;
 }
 
 // Calculate the EvalBonus for this field, if calculated (field calculation)
-function DisplayBonusCalculate() {
-	if (event.value && isNaN(event.value)) {
-		var prefix = getTemplPre(event.target.name, "AScomp", true);
+function DisplayBonusCalculate(fldName, value, valueCalc) {
+	if (value && isNaN(value)) {
+		var prefix = getTemplPre(fldName, "AScomp", true);
 		if (prefix === "") prefix = true;
-		var evalVal = EvalBonus(event.value, prefix);
-		if (evalVal !== event.target.valueCalculated) {
-			event.target.valueCalculated = evalVal;
-			event.target.value = event.value; // so that the display is actually updated
+		var evalVal = EvalBonus(value, prefix);
+		if (evalVal !== valueCalc) {
+			valueCalc = evalVal;
 		}
 	}
+	return [value, valueCalc];
 }
 
 // Calculate the skill modifier (field calculation)
-function CalcSkill() {
-	event.value = SkillsList.values[event.target.name] === undefined ? '' : SkillsList.values[event.target.name];
+function CalcSkill(name) {
+	return SkillsList.values[name] === undefined ? '' : SkillsList.values[name];
 }
-function CalcAllSkills(isCompPage) {
+function CalcAllSkills(name, isCompPage) {
 	if (isCompPage) {
-		var pr = getTemplPre(event.target.name, "AScomp", true);
+		var pr = getTemplPre(name, "AScomp", true);
 		if (!pr) return;
 	} else {
 		var pr = false;
@@ -4582,22 +4577,21 @@ function CalcAllSkills(isCompPage) {
 			}
 		}
 	}
-	CalcSkill();
+	return CalcSkill(name);
 };
 
 //calculate the saving throw modifier (field calculation)
-function CalcSave() {
+function CalcSave(name) {
 	//get the ability modifier belonging to the save
-	var Save = event.target.name;
-	var QI = event.target.name.indexOf("Comp.") === -1;
+	var Save = name;
+	var QI = name.indexOf("Comp.") === -1;
 	var Q = QI ? "" : "Comp.Use.";
-	var prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var prefix = QI ? "" : getTemplPre(name, "AScomp", true);
 	var Sabi = QI ? 4 : 21 + prefix.length;
 	var Ability = Save.substring(0, Sabi - 1).slice(-3);
 	if (prefix && CurrentCompRace[prefix] && CurrentCompRace[prefix].savesLinked) {
 		// copy the total from the first page, ignoring any modifiers on this page
-		event.value = What(Ability + " ST Mod");
-		return;
+		return What(Ability + " ST Mod");
 	}
 	var Mod = What(Save.substring(0, Sabi) + "Mod");
 
@@ -4620,15 +4614,15 @@ function CalcSave() {
 		theResult = "fail";
 	}
 
-	event.value = theResult;
+	return theResult;
 };
 
 //calculate the ability modifier (field calculation)
-function CalcMod() {
-	var Base = event.target.name.indexOf("Comp.") !== -1 || event.target.name.indexOf("Wildshape.") !== -1;
-	var AbiNm = Base ? event.target.name.replace(".Mod", ".Score") : event.target.name.replace(" Mod", "");
+function CalcMod(name) {
+	var Base = name.indexOf("Comp.") !== -1 || name.indexOf("Wildshape.") !== -1;
+	var AbiNm = Base ? name.replace(".Mod", ".Score") : name.replace(" Mod", "");
 	var theScore = What(AbiNm);
-	event.value = theScore ? (Math.round((theScore - 10.5) * 0.5)) : "";
+	return theScore ? (Math.round((theScore - 10.5) * 0.5)) : "";
 }
 
 function processRecovery(recovery, additionalRecovery) {
@@ -4832,13 +4826,14 @@ function FindFeats() {
 }
 
 // Add the text and features of a Feat
-async function ApplyFeat(input, FldNmbr) {
-	if (IsSetDropDowns || CurrentVars.manual.feats || !IsNotFeatMenu) return; // When just changing the dropdowns or feats are set to manual or this is a menu action, don't do anything
+async function ApplyFeat(input, FldNmbr, field) {
+	let returnRC = true;
+	if (IsSetDropDowns || CurrentVars.manual.feats || !IsNotFeatMenu) return returnRC; // When just changing the dropdowns or feats are set to manual or this is a menu action, don't do anything
 	var Fflds = ReturnFeatFieldsArray(FldNmbr);
 	// Not called from a field? Then just set the field and let this function be called anew
-	if ((!event.target || event.target.name !== Fflds[0]) && What(Fflds[0]) !== input) {
+	if ((!field || field.name !== Fflds[0]) && What(Fflds[0]) !== input) {
 		Value(Fflds[0], input);
-		return;
+		return returnRC;
 	};
 
 	var parseResult = ParseFeat(input);
@@ -4854,9 +4849,9 @@ async function ApplyFeat(input, FldNmbr) {
 
 	var doNotCommit = function(toSetVal) {
 		if (thermoTxt) thermoM(thermoTxt, true); // Stop progress bar
-		if (!IsNotImport) return;
-		event.rc = false;
-		if (isArray(event.target.page)) OpeningStatementVar = app.setTimeOut("tDoc.getField('" + event.target.name + ".1').setFocus();", 10);
+		if (!IsNotImport) return returnRC;
+		returnRC = false;
+		if (isArray(field.page)) OpeningStatementVar = app.setTimeOut("tDoc.getField('" + field.name + ".1').setFocus();", 10);
 	}
 
 	// If no variant was found, but there is a choice, ask it now
@@ -4892,7 +4887,7 @@ async function ApplyFeat(input, FldNmbr) {
 				cMsg : "The feat that you have selected, '" + aFeat.name + "' offers a choice for the form it comes in. Unfortunately, the sheet has run into an issue where there are no forms to choose from because of resources being excluded. Use the \"Source Material\" bookmark to correct this.\n\nThis could also be an issue with the imported script containing the feat not being written correctly. If so, please contact the author of that import script."
 			});
 			doNotCommit();
-			return;
+			return returnRC;
 		}
 	}
 
@@ -4904,13 +4899,13 @@ async function ApplyFeat(input, FldNmbr) {
 			console.show();
 		}
 		if (thermoTxt) thermoM(thermoTxt, true); // Stop progress bar
-		event.target.setVal = "ERROR, please reapply: " + (aFeat.name.substr(0,2) + "\u200A" + aFeat.name.substr(2)).split(" ").join("\u200A ");
-		return;
+		field.setVal = "ERROR, please reapply: " + (aFeat.name.substr(0,2) + "\u200A" + aFeat.name.substr(2)).split(" ").join("\u200A ");
+		return returnRC;
 	}
 
 	if (oldFeat === newFeat && oldFeatVar === newFeatVar) {
-		if (setFieldValueTo) event.target.setVal = setFieldValueTo;
-		return; // No changes were made
+		if (setFieldValueTo) field.setVal = setFieldValueTo;
+		return returnRC; // No changes were made
 	}
 
 	// Start progress bar
@@ -4957,13 +4952,13 @@ async function ApplyFeat(input, FldNmbr) {
 			});
 			if (stopFunct === 1 || stopFunct === 3) {
 				doNotCommit();
-				return;
+				return returnRC;
 			}
 		}
 	}
 
 	// Before stopping the calculations, first test if the feat has a prerequisite and if it meets that
-	if (IsNotImport && IsNotReset && theFeat && theFeat.prereqeval && !ignorePrereqs && event.target && event.target.name == Fflds[0]) {
+	if (IsNotImport && IsNotReset && theFeat && theFeat.prereqeval && !ignorePrereqs && field && field.name == Fflds[0]) {
 		try {
 			if (typeof theFeat.prereqeval == 'string') {
 				var meetsPrereq = eval(theFeat.prereqeval);
@@ -4992,13 +4987,13 @@ async function ApplyFeat(input, FldNmbr) {
 
 			if (askUserFeat !== 4) { // If "NO" was pressed
 				doNotCommit();
-				return;
+				return returnRC;
 			}
 		};
 	};
 
 	// if a feat variant was chosen, make sure this field will show that selection, now that it can't be cancelled anymore due to not meeting a prerequisite
-	if (setFieldValueTo) event.target.setVal = setFieldValueTo;
+	if (setFieldValueTo) field.setVal = setFieldValueTo;
 
 	calcStop(); // Now stop the calculations
 
@@ -5069,6 +5064,7 @@ async function ApplyFeat(input, FldNmbr) {
 	}
 
 	thermoM(thermoTxt, true); // Stop progress bar
+	return returnRC;
 };
 
 function SetFeatsdropdown(forceTooltips) {
@@ -5100,7 +5096,6 @@ function SetFeatsdropdown(forceTooltips) {
 //Make menu for the button on each Feat line and parse it to Menus.feats
 async function MakeFeatMenu_FeatOptions(MenuSelection, itemNmbr) {
 	var featMenu = [];
-	if (!itemNmbr) itemNmbr = parseFloat(event.target.name.slice(-2));
 	var ArrayNmbr = itemNmbr - 1;
 	var Fflds = ReturnFeatFieldsArray(itemNmbr);
 	var theField = What(Fflds[0]) != "";
@@ -5432,10 +5427,10 @@ function resetLimFeaUsed(rxType) {
 	}
 }
 
-function HealItNow() {
+function HealItNow(name) {
 	calcStop();
-	var QI = !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
-	var prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var QI = name.indexOf("Comp.") === -1;
+	var prefix = QI ? "" : getTemplPre(name, "AScomp", true);
 
 	var fields = [
 		"HP Current",
@@ -5487,13 +5482,12 @@ function HealItNow() {
 };
 
 //calculate the encumbrance (field calculation)
-function CalcEncumbrance() {
+function CalcEncumbrance(FldName) {
 	var Str = What("Str"), result = "";
 	var Size = What("Size Category");
 	Size = Size ? Size : 1;
 	var CarMult = Math.max(What("Carrying Capacity Multiplier"), 0);
 	var decSep = What("Decimal Separator");
-	var FldName = event.target.name;
 	var Mult1 = FldName.indexOf("Push") !== -1 || FldName.indexOf("Carrying Capacity") !== -1 ? 15 : FldName.indexOf("Heavily") !== -1 ? 10 : 5;
 	var Mult2 = FldName.indexOf("Push") !== -1 ? 30 : FldName.indexOf("Heavily") !== -1 ? 15 : 10;
 	var UnitSystem = What("Unit System");
@@ -5525,7 +5519,7 @@ function CalcEncumbrance() {
 		result = result.replace(/\./g, ",");
 		result = result.substring(1);
 	}
-	event.value = result;
+	return result;
 }
 
 function ParseClassFeature(theClass, theFeature, FeaLvl, ForceOld, SubChoice, Fea, ForceFeaOld) {
@@ -6111,7 +6105,7 @@ function MakeClassMenu() {
 };
 
 // Call the Class Features menu and do something with the results
-async function ClassFeatureOptions(Input, AddRemove, ForceExtraname) {
+async function ClassFeatureOptions(Input, AddRemove, ForceExtraname, triggerIsMenu) {
 	// first see if we have something to do
 	var MenuSelection = Input;
 	if (!Input) {
@@ -6121,7 +6115,6 @@ async function ClassFeatureOptions(Input, AddRemove, ForceExtraname) {
 	if (!MenuSelection || MenuSelection[0] == "nothing" || MenuSelection[4] == "stop") return cleanTempClassesKnown();
 
 	// initialize some variables
-	var triggerIsMenu = event.target && event.target.name && event.target.name == "Class Features Menu";
 	var addIt = (AddRemove !== undefined ? AddRemove : MenuSelection[4] !== undefined ? MenuSelection[4] : "add").toString().toLowerCase() === "add"; // default add, remove if second variable or 5th array entry is defined and not "add"
 	var aClass = MenuSelection[0];
 	var prop = MenuSelection[1];
@@ -6527,30 +6520,32 @@ function CalcAC() {
 	}
 
 	if (!acVals.armour) {
-		event.value = "";
+		return "";
 	} else if (tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0)) {
 		AC -= 12;
-		event.value = AC < 0 ? AC : "+" + AC;
+		return AC < 0 ? AC : "+" + AC;
 	} else {
-		event.value = AC;
+		return AC;
 	}
 };
 
 // Format the AC for when "Players Make All Rolls" is enabled (field format)
-function formatACforPMAR() {
-	DisplayBonus();
-	if (!tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) || !event.value) return;
-	var ACmod = event.value - 12;
-	event.value = ACmod < 0 ? ACmod : "+" + ACmod;
+function formatACforPMAR(value, valueCalc) {
+	value = DisplayBonus(value, valueCalc);
+	if (!tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) || !value) return [value, valueCalc];
+	var ACmod = value - 12;
+	value = ACmod < 0 ? ACmod : "+" + ACmod;
+	return [value, valueCalc];
 }
 
 // Make sure the magic/miscellaneous AC fields have a proper description (and don't overflow)
-function formatACdescr() {
+function formatACdescr(name, value) {
 	var testLen = typePF ? 41 : 36;
-	if (event.value.length > testLen) {
-		var isMagic = event.target.name.indexOf("Magic") !== -1;
-		event.value = "Various" + (isMagic ? " magic" : "") + " bonuses"
+	if (value.length > testLen) {
+		var isMagic = name.indexOf("Magic") !== -1;
+		value = "Various" + (isMagic ? " magic" : "") + " bonuses"
 	}
+	return value
 }
 
 async function SetToManual_Button(noDialog) {
@@ -6646,7 +6641,7 @@ async function SetToManual_Button(noDialog) {
 			}
 			ignoreDuplicates = remIgnoreDuplicates;
 			// update the feat level to the current level
-			UpdateLevelFeatures("feat");
+			await UpdateLevelFeatures("feat");
 		}
 	}
 	//do something with the results of magic item checkbox
@@ -6690,7 +6685,7 @@ async function SetToManual_Button(noDialog) {
 			}
 			ignoreDuplicates = remIgnoreDuplicates;
 			// update the magic item level to the current level
-			UpdateLevelFeatures("item");
+			await UpdateLevelFeatures("item");
 		}
 	}
 
@@ -6714,12 +6709,12 @@ async function SetToManual_Button(noDialog) {
 //calculate how much experience points are needed for the next level (field calculation)
 function CalcXPnextlvl() {
 	var lvl = Number(What("Character Level"));
-	event.value = lvl && !isNaN(lvl) && lvl < (ExperiencePointsList.length - 1) ? ExperiencePointsList[lvl] : "";
+	return lvl && !isNaN(lvl) && lvl < (ExperiencePointsList.length - 1) ? ExperiencePointsList[lvl] : "";
 };
 
 //calculate the Ability Save DC (field calculation)
-function CalcAbilityDC() {
-	var Nmbr = event.target.name.slice(-1);
+function CalcAbilityDC(fieldName) {
+	var Nmbr = fieldName.slice(-1);
 	var sFldMod = "Spell DC " + Nmbr + " Mod";
 	var Indx = tDoc.getField(sFldMod).currentValueIndices;
 	var useSSDC = false, useSSDCname = false, useSSDCothers = false;
@@ -6756,7 +6751,7 @@ function CalcAbilityDC() {
 			DCtot = (modIpvDC ? 0 : 8) + Number(How("Proficiency Bonus")) + Number(What(What(sFldMod))) + EvalBonus(sFldBonusVal, true);
 		}
 	}
-	event.value = DCtot && modIpvDC && DCtot >= 0 ? "+" + DCtot : DCtot;
+	let resultValue = DCtot && modIpvDC && DCtot >= 0 ? "+" + DCtot : DCtot;
 
 	// Empty the modifier field and set to read-only if using the ones on the spell sheet page
 	tDoc.getField(sFldBonus).readonly = useSSDC;
@@ -6769,10 +6764,11 @@ function CalcAbilityDC() {
 			DontPrint(sFldBonus);
 		}
 	}
+	return resultValue;
 }
 //find the ability score the tool (or custom skill) is keyed off on
-function UpdateTooSkill() {
-	var TooSkillTxt = event && event.target && event.target.name == "Too Text" ? event.value.toLowerCase() : What("Too Text").toLowerCase();
+function UpdateTooSkill(name, value) {
+	var TooSkillTxt = name == "Too Text" ? value.toLowerCase() : What("Too Text").toLowerCase();
 	var Ability = "Too";
 	for (var i = 0; i < AbilityScores.abbreviations.length; i++) {
 		if (TooSkillTxt.indexOf("(" + AbilityScores.abbreviations[i].toLowerCase() + ")") !== -1) {
@@ -7010,16 +7006,16 @@ function MakeMobileReady(toggle) {
 }
 
 //Calculate the weight of a column of items in the equipment section [field calculation]
-function CalcWeightSubtotal() {
-	var type = (/extra.*/i).test(event.target.name) ? "Extra.Gear " : ((/Adventuring.*/i).test(event.target.name) ? "Adventuring Gear " : event.target.name.substring(0, event.target.name.indexOf("Comp.") + 14));
-	var column = event.target.name.slice(-4) === "Left" ? "Left" : (event.target.name.slice(-5) === "Right" ? "Right" : "Middle");
+function CalcWeightSubtotal(FldName) {
+	var type = (/extra.*/i).test(FldName) ? "Extra.Gear " : ((/Adventuring.*/i).test(FldName) ? "Adventuring Gear " : FldName.substring(0, FldName.indexOf("Comp.") + 14));
+	var column = FldName.slice(-4) === "Left" ? "Left" : (FldName.slice(-5) === "Right" ? "Right" : "Middle");
 	var allGear = type === "Extra.Gear " ? FieldNumbers.extragear : (type === "Adventuring Gear " ? FieldNumbers.gear : FieldNumbers.compgear);
 	var division = typePF && type === "Adventuring Gear " ? 3 : 2;
 	var divisionHalf = typePF && type === "Adventuring Gear " ? 1.5 : 2;
 	var total = column === "Right" ? allGear : Math.round(column === "Left" ? allGear / division : allGear / divisionHalf);
 	var start = column === "Left" ? 1 : Math.round(column === "Right" ? allGear / divisionHalf : allGear / division) + 1;
 
-	if (column === "Middle" && event.target.name.indexOf("Middle") === -1) {
+	if (column === "Middle" && FldName.indexOf("Middle") === -1) {
 		column = "All";
 		start = 1;
 		total = allGear;
@@ -7044,11 +7040,11 @@ function CalcWeightSubtotal() {
 			}
 		}
 	}
-	event.value = totalweight === 0 ? "" : totalweight;
+	return totalweight === 0 ? "" : totalweight;
 }
 
 //Calculate the total weight carried, based on the value of the remember fields (field calculation)
-function CalcWeightCarried(manualTrigger) {
+function CalcWeightCarried() {
 	if (!CurrentVars.weight) {
 		CurrentVars.weight = ["cCoi", "cP2L", "cP2R"];
 		if (typePF) CurrentVars.weight.push("cP2M");
@@ -7095,11 +7091,7 @@ function CalcWeightCarried(manualTrigger) {
 		}
 		if (!isNaN(aWeight)) totalWeight += aWeight;
 	}
-	if (manualTrigger) {
-		Value("Weight Carried", totalWeight === 0 ? "" : totalWeight);
-	} else {
-		event.value = totalWeight === 0 ? "" : totalWeight;
-	}
+	Value("Weight Carried", totalWeight === 0 ? "" : totalWeight);
 }
 
 //call this to choose which weights to add to the "Total Carried", and which weights not to add
@@ -7374,7 +7366,7 @@ async function WeightToCalc_Button() {
 
 	if (WeightToCalc_Dialog.UseEnc !== isEnc) SetEncumbrance(WeightToCalc_Dialog.UseEnc);
 
-	CalcWeightCarried(true); // manual trigger the field calculation for the total field
+	CalcWeightCarried(); // manual trigger the field calculation for the total field
 };
 
 //set the type of encumbrance rules to use (if variant = true, use the variant rules)
@@ -7448,11 +7440,11 @@ function ResetAmmo(AmmoLeftRight) {
 }
 
 //Set the Ammo fields upon filling out the Ammo name
-function ApplyAmmo(inputtxt, Fld) {
+function ApplyAmmo(inputtxt, fieldName) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
 
 	calcStop();
-	var LeftRight = !event.target || !event.target.name || event.target.name.substring(0, 8) === "AmmoLeft" ? "AmmoLeft" : event.target.name.substring(0, 9) === "AmmoRight" ? "AmmoRight" : "Ammo" + Fld;
+	var LeftRight = fieldName.substring(0, 9) === "AmmoRight" ? "AmmoRight" : "AmmoLeft";
 	var theAmmo = ParseAmmo(inputtxt);
 	var parseAsWeapon = theAmmo ? false : ParseWeapon(inputtxt);
 	if (parseAsWeapon && AmmoList[parseAsWeapon]) theAmmo = parseAsWeapon;
@@ -7478,7 +7470,7 @@ function ApplyAmmo(inputtxt, Fld) {
 		}
 	}
 
-	LoadAmmo();
+	LoadAmmo(undefined, fieldName);
 }
 
 //Add the ammunition to one of the ammo fields. Inputtxt must be a known AmmoList entry
@@ -7514,23 +7506,23 @@ function RemoveAmmo(inputtxt) {
 }
 
 //Set the 'quiver' to correspond with the amount of ammo
-function LoadAmmo(Amount, Fld) {
+function LoadAmmo(Amount, fieldName) {
 	calcStop();
 
-	var LeftRight = event.target.name.substring(0, 8) === "AmmoLeft" ? "AmmoLeft" : event.target.name.substring(0, 9) === "AmmoRight" ? "AmmoRight" : "Ammo" + Fld;
+	var LeftRight = fieldName.substring(0, 9) === "AmmoRight" ? "AmmoRight" : "AmmoLeft";
 	var Units = Amount !== undefined ? Amount : Number(What(LeftRight + "Display.Amount"));
 	var Counter = 0;
 	var NextFld = "";
 	var NextFldVis = 0;
 
-	if (event.target.name.slice(-6) === "Amount" || event.target.name.slice(-5) === "Reset" || event.target.name.slice(-4) === "Name") {
+	if (fieldName.slice(-6) === "Amount" || fieldName.slice(-5) === "Reset" || fieldName.slice(-4) === "Name") {
 		Value(LeftRight + "Display.SaveAmount", Units);
 		Value(LeftRight + "Display.CurrentAmount", Math.min(Units, What(LeftRight + "Display.MaxAmount")));
 	}
 
 	//stop the function if Units are 0
 	if (Number(Units) === 0) {
-		if (event.target.name.indexOf("Display") !== -1) {
+		if (fieldName.indexOf("Display") !== -1) {
 			tDoc.resetForm([LeftRight]);
 		}
 		return;
@@ -8997,12 +8989,12 @@ function ReturnAttackFieldsArray(fldNmbr, prefix) {
 }
 
 //Make menu for the button on each Attack line and parse it to Menus.attacks
-async function MakeAttackLineMenu_AttackLineOptions(MenuSelection, itemNmbr, prefix) {
+async function MakeAttackLineMenu_AttackLineOptions(fldName, MenuSelection, itemNmbr, prefix) {
 	var attackMenu = [];
-	if (!itemNmbr) itemNmbr = Number(event.target.name.slice(-1));
-	if (prefix === undefined && event.target && event.target.name) {
-		var QI = event.target.name.indexOf("Comp.") === -1;
-		prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	if (!itemNmbr) itemNmbr = Number(fldName.slice(-1));
+	if (prefix === undefined && fldName) {
+		var QI = fldName.indexOf("Comp.") === -1;
+		prefix = QI ? "" : getTemplPre(fldName, "AScomp", true);
 	} else {
 		if (prefix && !CurrentWeapons.compKnown[prefix]) return;
 		var QI = prefix ? false : true;
@@ -9471,14 +9463,14 @@ function SetHighlighting() {
 
 //set spell slots checkboxes, use the value of the field to set the picture and right checkbox form fields [through field validation]
 var ignoreSetSpellSlotsCheckboxes = false;
-function SetSpellSlotsCheckboxes(SpellLVL, theSlots, onlyDisplay) {
+function SetSpellSlotsCheckboxes(fldName, SpellLVL, theSlots, onlyDisplay) {
 	if (ignoreSetSpellSlotsCheckboxes) return;
 	calcStop();
 	var tempNr = What("Template.extras.SSfront").split(",").length;
 
 	//now set the fields of the prefix type, or non-prefix type, depending on which one was just set
 	if (!onlyDisplay && tempNr > 1) {
-		var otherPrefix = event.target && event.target.name.indexOf("SpellSlots") !== 0 ? "" : What("Template.extras.SSfront").split(",")[1];
+		var otherPrefix = fldName && fldName.indexOf("SpellSlots") !== 0 ? "" : What("Template.extras.SSfront").split(",")[1];
 		ignoreSetSpellSlotsCheckboxes = true;
 		Value(otherPrefix + "SpellSlots.CheckboxesSet.lvl" + SpellLVL, theSlots);
 		ignoreSetSpellSlotsCheckboxes = false;
@@ -9636,17 +9628,17 @@ function SetSpellSlotsVisibility() {
 	//update the checkbox fields of the spell slots if any changes have been made
 	if (display1 !== toShow[0] || display2 !== toShow[1]) {
 		for (var i = 1; i <= 9; i++) {
-			SetSpellSlotsCheckboxes(i, What("SpellSlots.CheckboxesSet.lvl" + i), true);
+			SetSpellSlotsCheckboxes("SpellSlots.CheckboxesSet.lvl" + i, i, What("SpellSlots.CheckboxesSet.lvl" + i), true);
 		}
 	}
 }
 
 //determine the types of locations there are, and add them to the corresponding fields to calculate their subtotals in weight carried [through field format]
-function SetCarriedLocations() {
-	var type = event.target.name.substring(0,10) === "Extra.Gear" ? "Extra.Gear " : "Adventuring Gear ";
-	var row = parseFloat(event.target.name.slice(-2));
+function SetCarriedLocations(fldName, value) {
+	var type = fldName.substring(0,10) === "Extra.Gear" ? "Extra.Gear " : "Adventuring Gear ";
+	var row = parseFloat(fldName.slice(-2));
 	var total = type === "Extra.Gear " ? FieldNumbers.extragear : FieldNumbers.gear;
-	var theEvent = clean(event.target.value, " ");
+	var theEvent = clean(value, " ");
 	var locationList = [];
 	var locationTestList = [];
 	//loop through all the fields and add any found locations to the array
@@ -9670,9 +9662,9 @@ function SetCarriedLocations() {
 }
 
 //calculate the subtotal for a given gear location [field calculation]
-function CalcCarriedLocation() {
-	var type = event.target.name.substring(0,10) === "Extra.Gear" ? "Extra.Gear " : "Adventuring Gear ";
-	var number = parseFloat(event.target.name.slice(-1));
+function CalcCarriedLocation(fldName) {
+	var type = fldName.substring(0,10) === "Extra.Gear" ? "Extra.Gear " : "Adventuring Gear ";
+	var number = parseFloat(fldName.slice(-1));
 	var total = type === "Extra.Gear " ? FieldNumbers.extragear : FieldNumbers.gear;
 	var toSearch = clean(What(type + "Location.SubtotalName " + number));
 	if (toSearch !== "") {
@@ -9698,20 +9690,18 @@ function CalcCarriedLocation() {
 				}
 			}
 		}
-		event.value = totalweight;
+		return totalweight;
 	} else {
-		event.value = "";
+		return "";
 	}
 }
 
 //make the appropriate attack field a different color, depending on the menu entry
 function ApplyAttackColor(attackNmbr, aColour, type, prefix) {
 	if (typePF) return; //don't do this function in the Printer-Friendly version
-	var QI = type ? type.indexOf("Comp.") === -1 : !event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1;
+	var QI = type.indexOf("Comp.") === -1;
 	var prefixA = [""];
-	if (!QI && event.target && event.target.name && !prefix) {
-		prefixA = [getTemplPre(event.target.name, "AScomp", true)];
-	} else if (!QI && prefix) {
+	if (!QI && prefix) {
 		prefixA = [prefix];
 	} else if (!QI && !prefix) {
 		prefixA = What("Template.extras.AScomp").split(",");
@@ -9741,26 +9731,6 @@ function ApplyAttackColor(attackNmbr, aColour, type, prefix) {
 	}
 }
 
-//toggle the appearance of the button when it is pushed, cycling between nothing (black), proficiency (colour), and expertise (*) [field action]
-function ToggleSkillProf() {
-	var isProf = tDoc.getField(event.target.name.replace("Name", "Prof"));
-	isProf.currentValueIndices = isProf.currentValueIndices < 2 ? isProf.currentValueIndices + 1 : 0;
-}
-
-//apply the change of the field to the colorscheme of the sheet [field format]
-function ApplySkillProf() {
-	var toChange = event.target.name.substring(0, event.target.name.length - 5);
-	switch(event.target.value) {
-		case "nothing":
-			tDoc.getField(toChange).textColor = color.black;
-			break;
-		case "proficient":
-		case "expertise":
-			var theColor = ColorList[What("Color.Theme")];
-			if (theColor) tDoc.getField(toChange).textColor = theColor.RGB;
-	}
-}
-
 //set all the color schemes as the fields dictate
 function setColorThemes(reset) {
 	if (typePF) return; //don't do this function in the Printer-Friendly version
@@ -9776,7 +9746,7 @@ function setColorThemes(reset) {
 
 //calculate the proficiency bonus (field calculation)
 function ProfBonus(useTarget, newLvlForce) {
-	var thisEvent = useTarget && tDoc.getField(useTarget) ? tDoc.getField(useTarget) : event.target;
+	var thisEvent = tDoc.getField(useTarget);
 	var QI = getTemplPre(thisEvent.name, "AScomp");
 	var lvl = newLvlForce !== undefined ? newLvlForce : Number(What(QI === true ? "Character Level" : QI + "Comp.Use.HD.Level"));
 	var ProfMod = QI === true ? What("Proficiency Bonus Modifier") : 0;
@@ -9787,11 +9757,11 @@ function ProfBonus(useTarget, newLvlForce) {
 }
 
 //show the proficiency die (field format)
-function ProfBonusDisplay(input) {
-	var QI = getTemplPre(event.target.name, "AScomp");
-	var ProfB = QI === true ? event.target.submitName : input;
+function ProfBonusDisplay(name, submitName, value, input) {
+	var QI = getTemplPre(name, "AScomp");
+	var ProfB = QI === true ? submitName : input;
 	var useDice = tDoc.getField(QI === true ? "Proficiency Bonus Dice" : QI + "BlueText.Comp.Use.Proficiency Bonus Dice").isBoxChecked(0) === 1;
-	event.value = useDice ? GetProfDice(ProfB) : !isNaN(event.value) && event.value > 0 ? "+" + event.value : event.value;
+	return useDice ? GetProfDice(ProfB) : !isNaN(value) && value > 0 ? "+" + value : value;
 }
 
 function GetProfDice(ProfB) {

@@ -157,16 +157,14 @@ function setCurrentCompRace(prefix, type, found) {
 }
 
 //add a creature to the companion page
-async function ApplyCompRace(newRace, prefix, sCompType) {
+async function ApplyCompRace(newRace, prefix, sCompType, bIsRaceFld, oldValue) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
-	var bIsRaceFld = event.target && event.target.name && event.target.name.indexOf("Comp.Race") !== -1;
-	if (bIsRaceFld && newRace.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
+	if (bIsRaceFld && newRace.toLowerCase() === oldValue.toLowerCase()) return; //no changes were made
 
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Applying companion race...");
 	calcStop();
 
-	if (!prefix) prefix = getTemplPre(event.target.name, "AScomp", true);
 	var hpCalcTxt = " hit points calculation";
 	var strRaceEntry = clean(newRace).toLowerCase();
 	var strRaceEntryCap = strRaceEntry.capitalize()
@@ -632,7 +630,6 @@ async function ApplyCompRace(newRace, prefix, sCompType) {
 
 // Make menu for the button on the companion page and do something with the result
 async function MakeCompMenu_CompOptions(prefix, MenuSelection, force) {
-	if (!prefix) prefix = getTemplPre(event.target.name, "AScomp", true);
 	var aVisLayers = eval_ish(What(prefix + "Companion.Layers.Remember"));
 	var creaCalcStr = StringEvals("creaStr");
 	if (!MenuSelection || MenuSelection === "justMenu" || MenuSelection === "justCompanions") {
@@ -1128,10 +1125,10 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 	if (!isArray(aCreaAdds)) aCreaAdds = [aCreaAdds];
 	var aChangeMsg = [];
 	var fCallBackError = false;
-	var doCallBack = function(fCallBack, prefix) {
+	var doCallBack = async function(fCallBack, prefix) {
 		if (!fCallBackError && fCallBack && typeof fCallBack == 'function') {
 			try {
-				fCallBack(bAddRemove, prefix);
+				await fCallBack(bAddRemove, prefix);
 			} catch (error) {
 				var eText = 'The callback function of the creaturesAdd attribute from "' + srcNm + '" produced an error while ' + (bAddRemove ? 'adding' : 'removing') + ' the "' + sRace + '" creature! Please contact the author of the feature to correct this issue:\n '  + error;
 				for (var e in error) eText += "\n " + e + ": " + error[e];
@@ -1165,7 +1162,7 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 			if (!prefix) prefix = await DoTemplate('AScomp', 'Add');
 			if (!stopMatch) {
 				await ApplyCompRace(sRace, prefix, sCompanionType);
-				doCallBack(aCallBack, prefix);
+				await doCallBack(aCallBack, prefix);
 				var sChangeMsgName = '"' + What(prefix + 'Comp.Race') + '"'; // Get it from the page in case the callback changed it.
 				if (sCompanionType) sChangeMsgName = CompanionList[sCompanionType].nameMenu + " " + sChangeMsgName;
 				aChangeMsg.push('A ' + sChangeMsgName + ' has been added to the companion page at page number ' + (tDoc.getField(prefix + 'Comp.Race').page + 1) + '.');
@@ -1179,7 +1176,7 @@ async function processAddCompanions(bAddRemove, srcNm, aCreaAdds) {
 					} else {
 						Value(prefix + 'Comp.Race', ""); // reset the race field
 					}
-					doCallBack(aCallBack, prefix);
+					await doCallBack(aCallBack, prefix);
 					aChangeMsg.push('The companion page at page number ' + iPageNo + ' has ' + (bRemoveWholePage ? 'been removed' : 'had its race option reset') + ' as it contained the "' + sRace + '" race.');
 				}
 			}
@@ -1225,17 +1222,17 @@ function CompSkillRefer(Skill, SkillBonus, scores, profB) {
 }
 
 // manual trigger for clicking the skill proficiency/expertise (MouseUp) on the companion page
-function applyCompSkillClick() {
-	var isExp = (/Exp$/).test(event.target.name);
-	var isCheck = event.target.isBoxChecked(0) ? true : false;
+function applyCompSkillClick(target) {
+	var isExp = (/Exp$/).test(target.name);
+	var isCheck = target.isBoxChecked(0) ? true : false;
 	if (isCheck != isExp) return; // nothing to do
-	var otherFld = event.target.name.replace(/(Exp|Prof)$/, isExp ? "Prof" : "Exp");
+	var otherFld = target.name.replace(/(Exp|Prof)$/, isExp ? "Prof" : "Exp");
 	Checkbox(otherFld, isCheck);
 }
 
 // call this to update the companion page's proficiency bonus field so it displays the die
-function setCompProfDie() {
-	var prefix = event.target.name.substring(0, event.target.name.indexOf("BlueText."));
+function setCompProfDie(fldName) {
+	var prefix = fldName.substring(0, fldName.indexOf("BlueText."));
 	var profFld = prefix + "Comp.Use.Proficiency Bonus";
 	Value(profFld, What(profFld));
 }
@@ -1368,17 +1365,18 @@ function addCompEvals(evalObj, prefix, NameEntity, Add) {
 }
 
 //add a wildshape based on the selection and calculation settings
-async function ApplyWildshape() {
+// $$[note]$$ event.target.name -> fldName; event.value -> value; event.target.value -> oldValue
+async function ApplyWildshape(fldName, value, oldValue) {
 	if (IsSetDropDowns) return; // when just changing the dropdowns, don't do anything
-	if (event.target && event.value.toLowerCase() === event.target.value.toLowerCase()) return; //no changes were made
+	if (oldValue && value.toLowerCase() === oldValue.toLowerCase()) return; //no changes were made
 
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Applying wild shape...");
 	calcStop();
 
-	var prefix = getTemplPre(event.target.name, "WSfront", true);
-	var Fld = event.target.name.slice(-1);
-	var newForm = event.value.toLowerCase();
+	var prefix = getTemplPre(fldName, "WSfront", true);
+	var Fld = fldName.slice(-1);
+	var newForm = value.toLowerCase();
 	var resetFlds = [
 		prefix + "Wildshape." + Fld,
 		prefix + "Text.Wildshape." + Fld
@@ -1400,7 +1398,7 @@ async function ApplyWildshape() {
 
 	var newCrea = ParseCreature(newForm);
 
-	var oldCrea = ParseCreature(event.target.value);
+	var oldCrea = ParseCreature(oldValue);
 	if (newCrea === oldCrea || !newCrea || !What("Character Level") || !What("Int")|| !What("Wis")|| !What("Cha")) { //If this returns true, it means that no (new) race was found; or that the character has not been defined enough yet so the function can be stopped
 		thermoM(thermoTxt, true); // Stop progress bar
 		return; //don't do the rest of the function
@@ -1787,8 +1785,9 @@ function RemoveWildshape(input) {
 }
 
 //make a menu for wild shape options
-function MakeWildshapeMenu() {
-	var prefix = getTemplPre(event.target.name, "WSfront", true);
+// $$[note]$$ event.target.name -> fldName
+function MakeWildshapeMenu(fldName) {
+	var prefix = getTemplPre(fldName, "WSfront", true);
 
 	if (!What("Character Level") || !What("Int")|| !What("Wis")|| !What("Cha")) { //If the character has not been defined enough, the function can be stopped after making a warning-menu
 		Menus.wildshape = [{cName : "Please create a character on the 1st page before trying a Wild Shape", cReturn : "nothing#toreport", bEnabled : false}];
@@ -2051,10 +2050,10 @@ function MakeWildshapeMenu() {
 };
 
 //call the wildshape menu and do something with the results
-async function WildshapeOptions() {
+// $$[note]$$ getTemplPre(event.target.name, "WSfront", true) -> prefix
+async function WildshapeOptions(prefix) {
 	var MenuSelection = getMenu("wildshape");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
-	var prefix = getTemplPre(event.target.name, "WSfront", true);
 	switch (MenuSelection[0]) {
 	 case "recalculate" :
 		WildshapeRecalc();
@@ -2329,8 +2328,6 @@ function ApplyDCColorScheme(colour, DC) {
 // Make menu for the button on each Action line and parse it to Menus.actions
 async function MakeActionMenu_ActionOptions(MenuSelection, FldNm, itemNmbr) {
 	var actionMenu = [];
-	if (!itemNmbr) itemNmbr = parseFloat(event.target.name.slice(-2));
-	if (!FldNm) FldNm = event.target.name.match(/bonus action|reaction|action/i)[0];
 	var type = FldNm.toLowerCase();
 	FldNm = FldNm + " ";
 	var maxNmbr = type === "action" ? FieldNumbers.trueactions : FieldNumbers.actions;
@@ -2526,9 +2523,9 @@ function ActionDelete(type, itemNmbr) {
 };
 
 //Make menu for the button on each Limited Feature line and parse it to Menus.limfea
-function MakeLimFeaMenu() {
+function MakeLimFeaMenu(fieldName) {
 	var limfeaMenu = [];
-	var itemNmbr = parseFloat(event.target.name.slice(-2));
+	var itemNmbr = parseFloat(fieldName.slice(-2));
 	var maxNmbr = FieldNumbers.limfea;
 	var theField = What("Limited Feature " + itemNmbr);
 	var SslotsVisible = !typePF && eval_ish(What("SpellSlotsRemember"))[0];
@@ -2742,9 +2739,7 @@ function LimFeaDelete(itemNmbr) {
 
 //a way of going to a specified field (for making bookmarks independent of templates)
 async function Bookmark_Goto(BookNm) {
-	// Find the field corresponding to the bookmark name
-	var theTemplate = event.type === "Bookmark" ? getBookmarkTemplate(event.target) : false;
-	var isVisible = theTemplate ? isTemplVis(theTemplate[0], true) : true;
+	var isVisible = true;
 	var prefix = "";
 	if (isArray(isVisible)) {
 		prefix = isVisible[1];
@@ -2756,24 +2751,6 @@ async function Bookmark_Goto(BookNm) {
 	if (isVisible && theFld && tDoc.getField(theFld)) {
 		tDoc.getField(theFld).setFocus();
 		return;
-	};
-
-	// If the selected section is on a hidden page, alert the user.
-	if (theTemplate) {
-		var theMessage = {
-			cMsg : "The bookmark \"" + BookNm + "\" you have selected is on a page which is currently hidden.\n\You can change your page visibility settings using the \"Layout\" button in the \"JavaScript Window\" or in the bookmarks.\n\nDo you want to make the page \"" + theTemplate[1] + "\" visible now?" + (theTemplate[0] !== "SSfront" ? "" : "\n\nClicking \"Yes\" will start the Spell Sheets Generation process."),
-			nIcon : 2, //question mark
-			cTitle : "Bookmark is currently unavailable",
-			nType : 2 //Yes-No
-		};
-		if (app.alert(theMessage) === 4) {
-			if (theTemplate[0] !== "SSfront") {
-				var newPrefix = await DoTemplate(theTemplate[0], "Add");
-				tDoc.getField(newPrefix + BookMarkList[BookNm]).setFocus();
-			} else {
-				await GenerateSpellSheet();
-			};
-		};
 	};
 };
 
@@ -3170,7 +3147,7 @@ async function MakePagesMenu() {
 		["Make the 7th ability score 'Sanity'", "sanity"]
 	]);
 	//1st page: add the menu for setting hp on the first page
-	await MakeHPMenu_HPOptions("justMenu");
+	await MakeHPMenu_HPOptions("", "justMenu");
 	pageone.oSubMenu.push({
 		cName : "Hit Points",
 		oSubMenu : Menus.hp
@@ -3280,7 +3257,7 @@ async function PagesOptions() {
 			await MakeSpellMenu_SpellOptions(MenuSelection);
 			break;
 		case "hp" :
-			await MakeHPMenu_HPOptions(MenuSelection);
+			await MakeHPMenu_HPOptions("", MenuSelection);
 			break;
 		case "skills" :
 			await MakeSkillsMenu_SkillsOptions(MenuSelection);
@@ -3363,23 +3340,23 @@ function functionBookmarks(theParent) {
 
 	var doTheChildren = function (aParent, colour) {
 		for (var i = 0; i < aParent.length; i++) {
-			aParent[i].setAction("await Bookmark_Goto(event.target.name);");
+			aParent[i].setAction("await Bookmark_Goto(" + aParent[i].name + ");");
 			if (aParent[i].children) {
 				doTheChildren(aParent[i].children, colour);
 			}
 		}
 	}
 
-	theParent.setAction("await Bookmark_Goto(event.target.name);");
+	theParent.setAction("await Bookmark_Goto(" + theParent.name + ");");
 	doTheChildren(theParent.children);
 }
 
 //make a menu to hide/show the lines of the notes on the page
 //after that, do something with the menu and its results
-async function MakeNotesMenu_NotesOptions() {
+async function MakeNotesMenu_NotesOptions(fldName) {
 	//define some variables
-	var toSearch = event.target.name.indexOf("Notes") !== -1 ? "Notes." : "Cnote.";
-	var prefix = event.target.name.substring(0, event.target.name.indexOf(toSearch));
+	var toSearch = fldName.indexOf("Notes") !== -1 ? "Notes." : "Cnote.";
+	var prefix = fldName.substring(0, fldName.indexOf(toSearch));
 	var NoteMenu = [];
 	var WhiteFld = prefix + "Whiteout." + toSearch;
 	var WhiteL = WhiteFld + "Left";
@@ -3454,8 +3431,8 @@ async function MakeNotesMenu_NotesOptions() {
 }
 
 //make a string of all the classes and levels (field calculation)
-function CalcFullClassLvlName() {
-	var prefix = event.target && event.target.name ? getTemplPre(event.target.name, "ALlog", true) : "";
+function CalcFullClassLvlName(fldName) {
+	var prefix = fldName ? getTemplPre(fldName, "ALlog", true) : "";
 	if (!prefix) {
 		var ClLvls = What("Class and Levels");
 		var LVL = What("Character Level");
@@ -3478,10 +3455,10 @@ function CalcFullClassLvlName() {
 }
 
 //return the value of a logsheet's number (field calculation)
-function CalcLogsheetNumber() {
-	var prefix = getTemplPre(event.target.name, "ALlog", true);
+function CalcLogsheetNumber(fldName) {
+	var prefix = getTemplPre(fldName, "ALlog", true);
 	var ALlogA = What("Template.extras.ALlog").split(",");
-	event.value = (ALlogA.indexOf(prefix)) + " of " + (ALlogA.length - 1);
+	return (ALlogA.indexOf(prefix)) + " of " + (ALlogA.length - 1);
 }
 
 //return the previous logsheet's prefix (field calculation)
@@ -3491,25 +3468,25 @@ function CalcLogsheetPrevious(prefix) {
 }
 
 //calculate the total or starting value of an entry in the advanturers log sheet (field calculation)
-function CalcLogsheetValue() {
-	var fNm = event.target.name;
+function CalcLogsheetValue(field) {
+	var fNm = field.name;
 	var prefix = fNm.substring(0, fNm.indexOf("AdvLog."));
 	if (!prefix) return;
 	var StrTot = fNm.indexOf("start") !== -1 ? "start" : "total";
 	if (StrTot === "total") {
 		var theStart = fNm.replace("total", "start");
 		var theGain = What(fNm.replace("total", "gain")).replace(/,/g, ".");
-		event.target.display = theGain === "" ? display.hidden : tDoc.getField(theStart).display;
+		field.display = theGain === "" ? display.hidden : tDoc.getField(theStart).display;
 		var theStartNmr = Number(What(theStart).replace(/,/g, "."));
-		event.value = theGain === "" ? theStartNmr : theStartNmr + eval_ish(theGain);
+		field.value = theGain === "" ? theStartNmr : theStartNmr + eval_ish(theGain);
 	} else {
 		var FldNmbr = Number(fNm.replace(/.*AdvLog\.(\d+?)\..+/, "$1"));
 		if (prefix === What("Template.extras.ALlog").split(",")[1] && FldNmbr === 1) {
-			event.target.readonly = false;
-			event.target.display = display.visible;
+			field.readonly = false;
+			field.display = display.visible;
 			return;
 		} else {
-			event.target.readonly = true;
+			field.readonly = true;
 		};
 		if (FldNmbr !== 1) {
 			var preFld = fNm.replace("AdvLog." + FldNmbr, "AdvLog." + (FldNmbr - 1));
@@ -3517,8 +3494,8 @@ function CalcLogsheetValue() {
 			var prePrefix = What(prefix + "AdvLog.previous");
 			var preFld = fNm.replace(prefix, prePrefix).replace("AdvLog." + FldNmbr, "AdvLog." + FieldNumbers.logs);
 		};
-		event.target.display = What(fNm.replace("start", "gain")) !== "" || What(preFld.replace("start", "gain")) !== "" ? display.visible : display.hidden;
-		event.value = What(preFld.replace("start", "total"));
+		field.display = What(fNm.replace("start", "gain")) !== "" || What(preFld.replace("start", "gain")) !== "" ? display.visible : display.hidden;
+		field.value = What(preFld.replace("start", "total"));
 	}
 }
 
@@ -3536,9 +3513,8 @@ function UpdateLogsheetNumbering(prefix, prePrefix) {
 
 //Make menu for the button on the adventurers log page and parse it to Menus.advlog
 //after that, do something with the menu and its results
-async function MakeAdvLogMenu_AdvLogOptions(Button) {
-	var prefix = Button ? "P0.AdvLog." : getTemplPre(event.target.name, "ALlog", true);
-	var isFirstPrefix = prefix === What("Template.extras.ALlog").split(",")[1];
+async function MakeAdvLogMenu_AdvLogOptions() {
+	var prefix = "P0.AdvLog.";
 	var cLogoDisplay = minVer && typePF ? tDoc.getField("Image.DnDLogo.AL").display : false;
 
 	var menuLVL1 = function (item, array) {
@@ -3571,14 +3547,11 @@ async function MakeAdvLogMenu_AdvLogOptions(Button) {
 	var AdvLogMenu = [];
 
 	var alMenuItems = [
-		["Add extra " + (Button ? "page" : "'Adventurers Log' page"), "add page"]
+		["Add extra " + "page", "add page"]
 	].concat(
-		(Button || (tDoc.info.AdvLogOnly && isFirstPrefix)) ?
-		[["Remove all pages and reset the 1st", "remove all"]] :
-		[["Remove this 'Adventurers Log' page", "remove page"]]
+		[["Remove all pages and reset the 1st", "remove all"]]
 	).concat(
-		(Button) ? [["-", "-"], ["Reset all pages", "reset all"], ["-", "-"]] :
-		[["-", "-"], ["Reset this page", "reset"], ["-", "-"]]
+		[["-", "-"], ["Reset all pages", "reset all"], ["-", "-"]]
 	);
 
 	menuLVL1(AdvLogMenu, alMenuItems);
@@ -3685,8 +3658,8 @@ function getBookmarkTemplate(bookmark) {
 
 //make menu for the button to (re)set the portrait/organization symbol
 //after that, do something with the menu and its results
-async function MakeIconMenu_IconOptions() {
-	var SymbPort = event.target.name;
+async function MakeIconMenu_IconOptions(targetField) {
+	var SymbPort = targetField.name;
 	var DoAdvLog = SymbPort.indexOf("AdvLog") !== -1;
 	var DisplayName = SymbPort.indexOf("Comp.") !== -1 ? "Companion's Icon" : (SymbPort.indexOf("HeaderIcon") !== -1 ? "Header Icon" : SymbPort);
 	if (DoAdvLog) DisplayName = "Adventure Logsheet " + DisplayName;
@@ -3831,34 +3804,34 @@ async function MakeIconMenu_IconOptions() {
 	//now loop through all the adventure logsheet pages, if this was to set the adv.logs
 	if (typePF && DoAdvLog && MenuSelection[0] !== "convertor") {
 		var ALlogA = What("Template.extras.ALlog").split(",");
-		var aIcon = event.target.buttonGetIcon();
+		var aIcon = targetField.buttonGetIcon();
 		for (var tA = 0; tA < ALlogA.length; tA++) {
 			var fldNm = ALlogA[tA] + "AdvLog.HeaderIcon";
-			if (fldNm !== event.target.name) {
+			if (fldNm !== targetField.name) {
 				tDoc.getField(fldNm).buttonSetIcon(aIcon);
-				tDoc.getField(fldNm).display = event.target.display;
+				tDoc.getField(fldNm).display = targetField.display;
 			}
 		}
 	}
 };
 
 //return the value of the field that this adventurers log header field refers to
-function CalcAdvLogInfo() {
+function CalcAdvLogInfo(fldName) {
 	if (tDoc.info.SpellsOnly) return;
-	var theField = event.target.name.replace(/.*?AdvLog\./, tDoc.info.AdvLogOnly ? "AdvLog." : "");
-	event.value = What(theField);
+	var theField = fldName.replace(/.*?AdvLog\./, tDoc.info.AdvLogOnly ? "AdvLog." : "");
+	return What(theField);
 }
 
 //see if the value of the field has been changed and differs from the original. If so, push the value to the original
-function ValidateAdvLogInfo() {
-	if (tDoc.info.SpellsOnly || (SetFactionSymbolIgnore && event.target.name.indexOf("Background_Faction.Text") !== -1)) return;
-	var prefix = getTemplPre(event.target.name, "ALlog", true);
+function ValidateAdvLogInfo(fldName, value) {
+	if (tDoc.info.SpellsOnly || (SetFactionSymbolIgnore && fldName.indexOf("Background_Faction.Text") !== -1)) return;
+	var prefix = getTemplPre(fldName, "ALlog", true);
 	if (tDoc.info.AdvLogOnly && !prefix) {
 		return;
 	} else {
-		var theField = event.target.name.replace(/.*?AdvLog\./, tDoc.info.AdvLogOnly ? "AdvLog." : "");
+		var theField = fldName.replace(/.*?AdvLog\./, tDoc.info.AdvLogOnly ? "AdvLog." : "");
 		var theValue = What(theField);
-		if (event.value !== "" && event.value !== theValue) Value(theField, event.value);
+		if (value !== "" && value !== theValue) Value(theField, value);
 	}
 }
 
@@ -4219,9 +4192,9 @@ function SetHPTooltip(resetHP, onlyComp, aPrefix) {
 	}
 };
 
-async function MakeHPMenu_HPOptions(preSelect, prefix) {
+async function MakeHPMenu_HPOptions(name, preSelect, prefix) {
 	//define some variables
-	prefix = prefix === true ? getTemplPre(event.target.name, "AScomp", true) : prefix ? prefix : "";
+	prefix = prefix === true ? getTemplPre(name, "AScomp", true) : prefix ? prefix : "";
 	var theFld = prefix ? prefix + "Comp.Use.HP.Max" : "HP Max";
 	var theInputs = How(theFld).split(",");
 	if (!preSelect || preSelect == "justMenu") {
@@ -4288,7 +4261,6 @@ async function MakeHPMenu_HPOptions(preSelect, prefix) {
 
 // update the max HP value if set to do so whenever any field changes (triggered by field calculation)
 function calcHP(prefix) {
-	prefix = prefix === true ? getTemplPre(event.target.name, "AScomp", true) : prefix ? prefix : "";
 	var theFld = prefix ? prefix + "Comp.Use.HP.Max" : "HP Max";
 	var theInputs = How(theFld).split(",");
 	// Test if automatic update is enabled
@@ -4337,10 +4309,9 @@ var SetFactionSymbolIgnore = false;
 function SetFactionSymbol(theFld, newValue, commitIt) {
 	if (minVer) return;
 	if (!SetFactionSymbolIgnore) {
-		theFld = theFld ? tDoc.getField(theFld) : event.target;
+		theFld = tDoc.getField(theFld);
 		SetFactionSymbolIgnore = true;
-		if (newValue !== undefined || (event.changeEx && event.changeEx !== event.target.value)) {
-			if (newValue === undefined) newValue = event.changeEx;
+		if (newValue !== undefined) {
 			var theSymbolFld = tDoc.getField("SaveIMG.Faction." + newValue + ".symbol");
 			if (theSymbolFld) {
 				var theIcon = theSymbolFld.buttonGetIcon();
@@ -4349,28 +4320,25 @@ function SetFactionSymbol(theFld, newValue, commitIt) {
 			}
 			if (factions[newValue]) tDoc.getField("Background_FactionRank.Text").setItems([""].concat(factions[newValue].ranks));
 			theFld.temp = newValue;
-		} else if (newValue === "" || (event && event.value !== undefined && event.value === "")) {
+		} else if (newValue === "") {
 			Clear("Background_FactionRank.Text");
 		}
-		// when committing, set all the faction symbol fields to match this one
-		if (commitIt || event.willCommit) {
-			var logTemps = What("Template.extras.ALlog").split(",");
-			for (var T = 0; T <= logTemps.length; T++) {
-				var BckgrFld = T === logTemps.length ? "Background_Faction.Text" : logTemps[T] + "AdvLogS.Background_Faction.Text";
-				if (theFld.name !== BckgrFld) Value(BckgrFld, theFld.temp ? theFld.temp : (newValue !== undefined ? newValue : event.value));
-			}
+		// set all the faction symbol fields to match this one
+		var logTemps = What("Template.extras.ALlog").split(",");
+		for (var T = 0; T <= logTemps.length; T++) {
+			var BckgrFld = T === logTemps.length ? "Background_Faction.Text" : logTemps[T] + "AdvLogS.Background_Faction.Text";
+			if (theFld.name !== BckgrFld) Value(BckgrFld, theFld.temp ? theFld.temp : newValue);
 		}
 		SetFactionSymbolIgnore = false;
 	}
 }
 
 //update the other faction symbol fields (only on AdvLogOnly) (field blur)
-function UpdateFactionSymbols() {
-	var prefix = getTemplPre(event.target.name, "ALlog", true);
+function UpdateFactionSymbols(prefix, value) {
 	var ALlogA = What("Template.extras.ALlog").split(",");
 	for (var Al = 0; Al < ALlogA.length; Al++) {
 		if (ALlogA[Al] === prefix) continue;
-		tDoc.getField(ALlogA[Al] + "AdvLogS.Background_Faction.Text").value = event.value;
+		tDoc.getField(ALlogA[Al] + "AdvLogS.Background_Faction.Text").value = value;
 	}
 }
 
@@ -4506,19 +4474,19 @@ function UpdateALdateFormat(dateForm) {
 };
 
 //return the value of the field that this notes field (field calculation)
-function CalcCompNotes() {
-	var prefix = getTemplPre(event.target.name, "AScomp", true);
+function CalcCompNotes(fldName) {
+	var prefix = getTemplPre(fldName, "AScomp", true);
 	var notesFld = prefix + (typePF ? "Cnote.Left" : "Cnote.Right");
-	event.value = What(notesFld);
+	return What(notesFld);
 }
 
 // add the content to all the other fields that should share the content (field validation)
-function ValidateCompNotes() {
-	var prefix = getTemplPre(event.target.name, "AScomp", true);
+function ValidateCompNotes(fldName, value) {
+	var prefix = getTemplPre(fldName, "AScomp", true);
 	var notesFld = prefix + (typePF ? "Cnote.Left" : "Cnote.Right");
 	var theValue = What(notesFld);
-	if (event.value !== theValue) {
-		Value(notesFld, event.value);
+	if (value !== theValue) {
+		Value(notesFld, value);
 	}
 }
 
@@ -4652,11 +4620,11 @@ function UpdateDropdown(type, weapon) {
 async function ChangeToCompleteAdvLogSheet(FAQpath) {
 	if (minVer) return;
 	await ResetAll(true, true, true); // also removes all custom scripts
-	tDoc.getField("AdvLog.Class and Levels").setAction("Calculate", "CalcAdvLogInfo();");
-	tDoc.getField("AdvLog.Class and Levels").setAction("Validate", "ValidateAdvLogInfo();");
+	tDoc.getField("AdvLog.Class and Levels").setAction("Calculate", "CalcAdvLogInfo('AdvLog.Class and Levels');");
+	tDoc.getField("AdvLog.Class and Levels").setAction("Validate", "ValidateAdvLogInfo('AdvLog.Class and Levels');");
 	tDoc.getField("AdvLog.Class and Levels").readonly = false;
 
-	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("OnBlur", "UpdateFactionSymbols();");
+	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("OnBlur", "UpdateFactionSymbols('AdvLogS.');");
 	tDoc.getField("AdvLogS.Background_Faction.Text").setAction("Keystroke", "");
 
 	await tDoc.getTemplate("ALlog").spawn(0, true, false);
@@ -4740,7 +4708,7 @@ function CreateBkmrksCompleteAdvLogSheet() {
 			cExpr : "MakeButtons(); tDoc.bookmarkRoot.children[0].open = !tDoc.bookmarkRoot.children[0].open;",
 			children : {
 				"Set Pages Layout" : {
-					cExpr : "await MakeAdvLogMenu_AdvLogOptions(true);",
+					cExpr : "await MakeAdvLogMenu_AdvLogOptions();",
 					color : ["RGB", 0.9098052978515625, 0.196075439453125, 0.48626708984375]
 				},
 				"Text Options" : {
@@ -5103,10 +5071,10 @@ async function addALlogEntry() {
 };
 
 //menu for logsheet entries to move up, move down, insert, delete, or clear
-async function MakeAdvLogLineMenu_AdvLogLineOptions() {
-	var prefix = getTemplPre(event.target.name, "ALlog", true);
+async function MakeAdvLogLineMenu_AdvLogLineOptions(fldName) {
+	var prefix = getTemplPre(fldName, "ALlog", true);
 	var firstPrefix = isTemplVis("ALlog", true)[1];
-	var lineNmbr = Number(event.target.name.slice(-1));
+	var lineNmbr = Number(fldName.slice(-1));
 	var theArray = [
 		["Move up", "up"],
 		["Move down", "down"],
@@ -5223,7 +5191,6 @@ async function doAdvLogLine(action, lineNmbr, prefix) {
 						Value(extraPage + "AdvLog.1" + FieldNames[F], fieldVal);
 						Value(ALlogA[tA] + "AdvLog." + i + FieldNames[F], What(ALlogA[tA] + "AdvLog." + (i - 1) + FieldNames[F]));
 					}
-					if (extraPage) event.target.setFocus();
 				} else {
 					for (var F = 0; F < FieldNames.length; F++) {
 						if (i === 1) {
@@ -5532,20 +5499,19 @@ function isProficientWithWeapon(WeaponName, theWea) {
 }
 
 // Keep the ".Weapon" and ".Weapon Selection" fields the same (validation event)
-function CopyWeaponToSelection() {
+function CopyWeaponToSelection(name, value) {
 	if (!CurrentVars.manual.attacks || !IsNotWeaponMenu || IsSetDropDowns) return; // when just changing the dropdowns or using the line menu, don't do anything
-	if (How(event.target.name + " Selection") !== event.value) {
-		Value(event.target.name + " Selection", event.value);
+	if (How(name + " Selection") !== value) {
+		Value(name + " Selection", value);
 	}
 }
 
 //apply the effect of a weapon with inputText the literal string in the Weapon Selection field and fldName the name of the field (any one of them); If fldName is left blank, use the event.target.name
 function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 	if (!IsNotWeaponMenu || IsSetDropDowns) return; // when just changing the dropdowns or using the line menu, don't do anything
-	fldName = fldName ? fldName : event.target.name;
 	var QI = fldName.indexOf("Comp.") === -1;
 	var Q = QI ? "" : "Comp.Use.";
-	var prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var prefix = QI ? "" : getTemplPre(fldName, "AScomp", true);
 	var fldNmbr = fldName.replace(/.*Attack\.(\d+?)\..+/, "$1");
 	var ArrayNmbr = Number(fldNmbr) - 1;
 	var fldBase = prefix + Q + "Attack." + fldNmbr + ".";
@@ -5790,10 +5756,9 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 function CalcAttackDmgHit(fldName) {
 	if (CurrentVars.manual.attacks) return; //if the attack calculation is set to manual, don't do anything
 
-	fldName = fldName ? fldName : event.target.name;
 	var QI = fldName.indexOf("Comp.") === -1;
 	var Q = QI ? "" : "Comp.Use.";
-	var prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var prefix = QI ? "" : getTemplPre(fldName, "AScomp", true);
 	var fldNmbr = fldName.replace(/.*Attack\.(\d+?)\..+/, "$1");
 	var ArrayNmbr = Number(fldNmbr) - 1;
 	var fldBase = prefix + Q + "Attack." + fldNmbr + ".";
@@ -6032,8 +5997,8 @@ function CalcAttackDmgHit(fldName) {
 
 	// Set the values to the sheet
 	Value(fldBase + "Damage", dmgTot == 0 ? "" : dmgTot);
-	if (event.target && event.target.name && (/.*Attack.*To Hit/).test(event.target.name)) {
-		event.value = fields.Range === "With melee wea" ? "" : hitTot;
+	if (fldName && (/.*Attack.*To Hit/).test(fldName)) {
+		return fields.Range === "With melee wea" ? "" : hitTot;
 	} else {
 		Value(fldBase + "To Hit", fields.Range === "With melee wea" ? "" : hitTot);
 	};
@@ -6142,9 +6107,9 @@ async function ShowDialog(hdr, strng) {
 };
 
 //calculate the mod for the Dex field in the initiative section (field calculation)
-function CalcInitDexMod() {
-	var QI = getTemplPre(event.target.name, "AScomp");
-	event.value = QI === true ? What(SkillsList.abilityScores[SkillsList.abbreviations.indexOf("Init")] + " Mod") : What(QI + "Comp.Use.Ability.Dex.Mod");
+function CalcInitDexMod(fldName) {
+	var QI = getTemplPre(fldName, "AScomp");
+	return QI === true ? What(SkillsList.abilityScores[SkillsList.abbreviations.indexOf("Init")] + " Mod") : What(QI + "Comp.Use.Ability.Dex.Mod");
 };
 
 function FunctionIsNotAvailable() {
@@ -6243,20 +6208,20 @@ function EvalDmgDie(input, notComp, isSpecial) {
 };
 
 // add a way to set the value of a field
-async function SetThisFldVal() {
+async function SetThisFldVal(targetField, modifier) {
 	var len = typePF ? 4 : 3;
-	if (event.target.submitName || event.target.value.length > len || event.modifier || event.shift) {
-		var QI = getTemplPre(event.target.name, "AScomp");
-		var dmgDie = event.target.name.indexOf("Damage Die") !== -1;
-		var isSkill = !dmgDie && QI === true && (RegExp("^(" + SkillsList.abbreviations.join("|") + ") Bonus$")).test(event.target.name);
-		var isAcFld = !isSkill && QI === true && (/^AC/).test(event.target.name);
-		var theName = event.target.userName;
+	if (targetField.submitName || targetField.value.length > len || modifier) {
+		var QI = getTemplPre(targetField.name, "AScomp");
+		var dmgDie = targetField.name.indexOf("Damage Die") !== -1;
+		var isSkill = !dmgDie && QI === true && (RegExp("^(" + SkillsList.abbreviations.join("|") + ") Bonus$")).test(targetField.name);
+		var isAcFld = !isSkill && QI === true && (/^AC/).test(targetField.name);
+		var theName = targetField.userName;
 		if (theName && (/\n/).test(theName)) {
 			theName = theName.match(/.*\n/)[0].replace(/\n/, "");
 		};
-		var theVal = event.target.value;
+		var theVal = targetField.value;
 		if (!isNaN(theVal)) theVal = theVal.toString();
-		var theExpl = event.target.submitName.replace(/^\n*/, "");
+		var theExpl = targetField.submitName.replace(/^\n*/, "");
 		var theDialTxt = (dmgDie ? "If you want the Damage Die to be a calculated value, and not just a string, make sure the first character is a '='.\nRegardless of the first character, a 'C' will be replaced with the Cantrip die, a 'B' with the Cantrip die minus 1, and a 'Q' with the Cantrip die plus 1.\n\nIf a calculated value (=), you can use underscores to keep the strings separate. For the calculated parts, y" : "Y") + "ou can use numbers, logical operators (+, -, /, *), ability score abbreviations (Str, Dex, Con, Int, Wis, Cha" + (QI === true ? ", HoS" : "") + "), and 'Prof'.";
 		var theDialTxt1 = "If the above calculates to 'ERROR', the field will not be changed.\nNote that the field won't appear to change until you click/tab out of it."
 		var theDialTxt2 = "You can also determine the maximum or minimum of a group with 'min(1|2)' or 'max(1|2)', using pipe '|' as the separator.";
@@ -6430,7 +6395,7 @@ async function SetThisFldVal() {
 			}
 		};
 		if (await app.execDialog(theDialog) === "ok") {
-			event.target.value = theDialog.theTXT;
+			targetField.value = theDialog.theTXT;
 		};
 	};
 };
@@ -6497,8 +6462,8 @@ function AddToModFld(Fld, Mod, Remove, NameEntity, Explanation) {
 // add a modifier to a skill
 // addMod : {type : "save", field : "all", mod : "Cha", text : "While I'm conscious I can add my Charisma modifier (min 1) to all my saving throws."} // this can be an array of objects, all of which will be processed
 function processMods(AddRemove, NameEntity, items, prefix) {
-	var QI = !prefix && (!event.target || !event.target.name || event.target.name.indexOf("Comp.") === -1);
-	if (!prefix) prefix = QI ? "" : getTemplPre(event.target.name, "AScomp", true);
+	var QI = !prefix;
+	if (!prefix) prefix = "";
 	var alphaB = Who("Text.SkillsNames") === "alphabeta";
 	if (!isArray(items)) items = [items];
 	var doSaveDcUpdate = false;
@@ -6747,9 +6712,8 @@ function setSkillTooltips(noPopUp) {
 	AddTooltip("SkillsClick", "Click here to change the order of the skills. You can select either alphabetic order or ordered by ability score." + (tooltipTxt ? "\n\n" + tooltipTxt : ""));
 }
 // manual trigger for clicking the skill proficiency/expertise (MouseUp) on the 1st page
-async function applySkillClick(theSkill, isExp) {
+async function applySkillClick(target, theSkill, isExp) {
 	if (SkillsList.abbreviations.indexOf(theSkill) == -1) return;
-	let target = event.target;
 	var isCheck = target.isBoxChecked(0) ? true : false;
 	if (Who('Text.SkillsNames') !== 'alphabeta') {
 		theSkill = SkillsList.abbreviationsByAS[SkillsList.abbreviations.indexOf(theSkill)];
@@ -6792,7 +6756,7 @@ async function processArmourProfs(AddRemove, srcNm, itemArr) {
 // set the armour/weapon proficiency manually (field action)
 async function setCheckboxProfsManual(theField) {
 	calcStop();
-	var fld = theField ? tDoc.getField(theField) : event.target;
+	var fld = tDoc.getField(theField);
 	var isActive = fld.isBoxChecked(0) === 1;
 	var sort = (/simple|martial/i).test(fld.name) ? "weapon" : "armour";
 	var type = fld.name.replace(/proficiency |armor |weapon /ig, '').toLowerCase();

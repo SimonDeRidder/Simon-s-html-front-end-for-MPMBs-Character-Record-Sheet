@@ -34,7 +34,7 @@
 		<input
 			id="PC_Name"
 			class="field inputfield"
-			style="top: 108px;left: 85px;font-size: 21.4px;width: 200px;height: 24px;text-align: center;"
+			style="top: 108px;left: 85px;font-size: 19px;width: 200px;height: 24px;text-align: center;"
 			data-default=""
 			type="text"
 			spellcheck="true"
@@ -56,8 +56,8 @@
 			required
 			spellcheck="true"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, false, false)"
-			onchange="event.value=this.value;this.value=this.dataset.temp?this.dataset.temp:0;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);levelFieldVal();this.value=event.value;eventManager.handle_event(EventType.Character_Level_change)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
+			onchange="{let newVal=this.value;this.value=this.dataset.temp?this.dataset.temp:0;levelFieldVal(adapter_helper_convert_id_to_fieldname(this.id), newVal).then((finalValue) => {this.value=finalValue;eventManager.handle_event(EventType.Character_Level_change)});}"
 		/>
 		<input
 			id="Class_and_Levels"
@@ -66,8 +66,8 @@
 			type="text"
 			aria-label="Classes"
 			spellcheck="true"
-			onclick="event.target.value=this.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;ClickClasses();this.dataset.remVal=event.target.remVal"
-			onchange="event.target.remVal=this.dataset.remVal == 'undefined' ? undefined : this.dataset.remVal;event.value=this.value;classesFieldVal();this.value=event.value;if (event.target.remVal === undefined) {delete this.dataset.remVal;}"
+			onclick="ClickClasses(this.value, event.ctrlKey || event.shiftKey).then((remVal) => {this.dataset.remVal=remVal})"
+			onchange="classesFieldVal(this.value, this.dataset.remVal == 'undefined' ? undefined : this.dataset.remVal).then((valueremVal) => {this.value=valueremVal[0];if (valueremVal[1] === undefined) {delete this.dataset.remVal;}});"
 		/>
 		<input
 			id="Player_Name"
@@ -86,7 +86,6 @@
 			aria-label="Background"
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="ApplyBackground(this.value);"
 		/>
 		<datalist id="background_options">
 			<option value="Acolyte">
@@ -132,8 +131,8 @@
 			type="number"
 			aria-label="The current total amount of experience points."
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1(0, 0);this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};CalcExperienceLevel(true)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value), 0, 0);{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};CalcExperienceLevel(true)"
 		/>
 		<input
 			id="Add_Experience"
@@ -141,8 +140,8 @@
 			style="top: 124px;left: 730px;font-size: 11pt;width: 32pt;height: 15pt;color: #0056D3;text-align: center;overflow-x: scroll"
 			type="number"
 			aria-label="Experience points that are to be added to the total to the left."
-			oninput="adapter_helper_keystroke1(this, true, true)"
-			onchange="event.value=this.value;format1(0, 0);this.value=event.value"
+			oninput="adapter_helper_keystroke1(this, true, true, this.value, event.data)"
+			onchange="this.value=format1(String(this.value), 0, 0)"
 		/>
 		<span
 			id="Next_level"
@@ -155,7 +154,7 @@
 			class="field textlabel"
 			style="top: 104px;left: 58px;overflow-wrap: normal;font-size: 3px;width: 24px;height:34px;padding: 1px;line-height: 1.3;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/page_stats/header_icons/blank.svg');cursor: pointer;"
 			aria-label="Click here to change the Header Icon."
-			onclick="{let thisElement=this;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.buttonGetIcon=function() {return thisElement.style.backgroundImage.match(/\b(img\/.*\.svg)\b/)[1];};event.target.contextTransfers=['buttonGetIcon'];MakeIconMenu_IconOptions()}"
+			onclick="{MakeIconMenu_IconOptions(new AdapterClassFieldReference([this]))}"
 		>
 		</button>
 		<button
@@ -171,12 +170,21 @@
 			eventManager.add_listener(
 				EventType.Character_Level_change,
 				function () {
-					CalcXPnextlvl()
 					let label_element = document.getElementById('Next_level');
-					label_element.innerText = event.value;
+					label_element.innerText = CalcXPnextlvl()
 					label_element.dispatchEvent(new Event('change'));
 				}
 			);
+			// Background onchange
+			{
+				document.getElementById('Background').onchange = async function() {
+					calcStartSet = true;
+					calcStop();
+					await ApplyBackground(this.value);
+					calcStartSet = false;
+					calcCont();
+				}
+			}
 		</script>
 	</div>
 
@@ -213,7 +221,7 @@
 			step="1"
 			aria-label="Racial ability score improvements"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Str_change)"
 		/>
 		<input
@@ -225,7 +233,7 @@
 			step="1"
 			aria-label="Primary class abilities & Multiclassing prerequisites"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Dex_change)"
 		/>
 		<input
@@ -236,7 +244,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.Con_change)"
 		/>
 		<input
@@ -247,7 +255,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Int_change)"
 		/>
 		<input
@@ -258,7 +266,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Wis_change)"
 		/>
 		<input
@@ -269,7 +277,7 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.Cha_change)"
 		/>
 		<input
@@ -280,14 +288,14 @@
 			min="0"
 			step="1"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 			onchange="eventManager.handle_event(EventType.HoS_change)"
 		/>
 
 		<input
 			id="Str_Mod"
 			class="field isNumber inputfield-noneditable"
-			style="top: 48px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0"
+			style="top: 40px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0"
 			type="text"
 			value="0"
 			data-default=""
@@ -296,7 +304,7 @@
 		<input
 			id="Dex_Mod"
 			class="field isNumber inputfield-noneditable"
-			style="top: 156px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
+			style="top: 148px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
 			type="text"
 			value="0"
 			data-default=""
@@ -305,7 +313,7 @@
 		<input
 			id="Con_Mod"
 			class="field isNumber inputfield-noneditable"
-			style="top: 264px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
+			style="top: 256px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
 			type="text"
 			value="0"
 			data-default=""
@@ -314,7 +322,7 @@
 		<input
 			id="Int_Mod"
 			class="field isNumber inputfield-noneditable"
-			style="top: 372px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
+			style="top: 364px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
 			type="text"
 			value="0"
 			data-default=""
@@ -323,7 +331,7 @@
 		<input
 			id="Wis_Mod"
 			class="field isNumber inputfield-noneditable"
-			style="top: 480px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0"
+			style="top: 472px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0"
 			type="text"
 			value="0"
 			data-default=""
@@ -376,10 +384,8 @@
 				eventManager.add_listener(
 					EventType[ability + '_change'],
 					function () {
-						event.target.name = ability + ' Mod';
-						CalcMod();
 						let mod_element = document.getElementById(ability + '_Mod');
-						mod_element.value = event.value;
+						mod_element.value = CalcMod(ability + ' Mod');
 						mod_element.dispatchEvent(new Event('change'));
 					}
 				)
@@ -528,7 +534,7 @@
 			style="top: 84.8px;left: 16px;font-size: 12px;width: 73.6px;height: 14px"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Resistance_Damage_Type_2"
@@ -537,7 +543,7 @@
 			style="top: 104.4px;left: 16px;font-size: 12px;width: 73.6px;height: 14px"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Resistance_Damage_Type_3"
@@ -546,7 +552,7 @@
 			style="top: 123.9px;left: 16px;font-size: 12px;width: 73.6px;height: 14px"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Resistance_Damage_Type_4"
@@ -555,7 +561,7 @@
 			style="top: 84.8px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Resistance_Damage_Type_5"
@@ -564,7 +570,7 @@
 			style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Resistance_Damage_Type_6"
@@ -573,7 +579,7 @@
 			style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<datalist id="resistances_options">
 			<option value=""></option>
@@ -608,8 +614,9 @@
 			aria-label="All Saving Throws Bonus Modifier"
 			style="top: -12px;left: 62.3px;width: 18px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.All_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.All_ST_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Str_ST_Bonus"
@@ -618,8 +625,9 @@
 			style="top: 10.4px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Str_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Str_ST_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Dex_ST_Bonus"
@@ -628,8 +636,9 @@
 			style="top: 30px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dex_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Dex_ST_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Con_ST_Bonus"
@@ -638,8 +647,9 @@
 			style="top: 49.6px;left: -10px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Con_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Con_ST_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Int_ST_Bonus"
@@ -648,18 +658,20 @@
 			style="top: 10.4px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Wis_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Wis_ST_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Wis_ST_Bonus"
 			class="field inputfield bluetext"
 			aria-label="Wisdom Saving Throw Bonus Modifier"
-			style="top: 10.4px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
+			style="top: 30px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Int_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Int_ST_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Cha_ST_Bonus"
@@ -668,8 +680,9 @@
 			style="top: 49.6px;left: 181px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Cha_ST_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="HoS_ST_Bonus"
@@ -678,8 +691,9 @@
 			style="top: 802px;left: -107px;width: 14px;height: 13.3px;text-align: center;visibility: hidden;z-index:1"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<div
 			id="Save_Modifiers_All_Text"
@@ -715,10 +729,8 @@
 					eventManager.add_listener(
 						event_type,
 						function () {
-							event.target.name = ability + ' ST Mod';
-							CalcSave();
 							let st_mod_element = document.getElementById(ability + '_ST_Mod');
-							st_mod_element.value = event.value;
+							st_mod_element.value = CalcSave(ability + ' ST Mod');
 							st_mod_element.dispatchEvent(new Event('change'));
 						}
 					)
@@ -752,7 +764,7 @@
 			class="field button nonprintable"
 			style="left: 29px;top: 27.5px;font-size: 8px;line-height: 7px;"
 			aria-label="With this button you can set the value of the maximum hit points field to one of the calculated values:"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeHPMenu_HPOptions();"
+			onclick="MakeHPMenu_HPOptions(adapter_helper_convert_id_to_fieldname(this.id));"
 		>Set Max HP</button>
 		<input
 			id="HP_Max"
@@ -761,15 +773,15 @@
 			type="number"
 			data-submit_name="0,0,0,fixed"
 			aria-label="The total hit points (with averages and max for 1st level)"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="Proficiency_Bonus"
-			class="field inputfield-noneditable"
+			class="field inputfield-noneditable submitnumber"
 			style="top: 35px;left: 113.5px;font-size: 28px;width: 81.3px;height: 27px;padding: 0 0 0 0"
 			type="text"
 			data-default=""
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=this.value;ProfBonusDisplay();this.value=event.value;eventManager.handle_event(EventType.Proficiency_Bonus_change)"
+			onchange="this.value=ProfBonusDisplay(adapter_helper_convert_id_to_fieldname(this.id), this.dataset.submit_name, this.value);eventManager.handle_event(EventType.Proficiency_Bonus_change)"
 		/>
 
 		<input
@@ -784,7 +796,7 @@
 			class="field inputfield"
 			style="top: 112px;left: 123px;font-size: 12px;width: 67px;height: 18px;text-align: center;padding: 0 0 0 0"
 			type="number"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<textarea
 			id="HP_Current"
@@ -796,7 +808,7 @@
 			class="field button nonprintable"
 			style="top: 170px;left: 168px"
 			aria-label="Empty several fields (just like a Long Rest):"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);HealItNow()"
+			onclick="HealItNow(adapter_helper_convert_id_to_fieldname(this.id))"
 		>Heal</button>
 
 		<input
@@ -805,8 +817,9 @@
 			style="visibility: hidden;top: 112.8px;left: 238.3px;width: 16.7px;height: 14.7px;text-align: center;"
 			aria-label="Initiative Bonus Modifier"
 			value="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Init_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Init_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Initiative_bonus"
@@ -859,7 +872,7 @@
 			style="top: 211px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
 			type="number"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD1_Level_change)"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="HD2_Level"
@@ -867,7 +880,7 @@
 			style="top: 230px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
 			type="number"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD2_Level_change)"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="HD3_Level"
@@ -875,7 +888,7 @@
 			style="top: 249px;left: 110px;font-size: 10px;width: 18px;height: 13.3px;"
 			type="number"
 			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.HD3_Level_change)"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 
 		<input
@@ -884,9 +897,9 @@
 			style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD1_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
+			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD1_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
 		<input
 			id="HD2_Die"
@@ -894,9 +907,9 @@
 			style="top: 230px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD2_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
+			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD2_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
 		<input
 			id="HD3_Die"
@@ -904,9 +917,9 @@
 			style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
 			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
-			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;eventManager.handle_event(EventType.HD3_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);FormatHD();this.value=event.value;SetHPTooltip(false, false)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
+			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD3_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
 
 		<input
@@ -914,21 +927,21 @@
 			class="field inputfield-notched"
 			style="top: 211px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
 			type="number"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="HD2_Used"
 			class="field inputfield-notched"
 			style="top: 230px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
 			type="number"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 		<input
 			id="HD3_Used"
 			class="field inputfield-notched"
 			style="top: 249px;left: 170px;font-size: 10px;width: 17px;height: 13.3px;"
 			type="number"
-			oninput="adapter_helper_keystroke1(this)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
 		/>
 
 		<input
@@ -1004,9 +1017,8 @@
 				eventManager.add_listener(
 					event_type,
 					function () {
-						CalcAC();
 						let ACElement = document.getElementById('AC');
-						ACElement.value = event.value;
+						ACElement.value = CalcAC();
 						ACElement.dispatchEvent(new Event('change'));
 					}
 				)
@@ -1043,10 +1055,8 @@
 				eventManager.add_listener(
 					event_type,
 					function () {
-						event.target.name = "Initiative bonus";
-						CalcAllSkills();  // also calls CalcSkill
 						let IBElement = document.getElementById("Initiative_bonus");
-						IBElement.value = event.value;
+						IBElement.value = CalcAllSkills("Initiative bonus");  // also calls CalcSkill
 						IBElement.dispatchEvent(new Event('change'));
 					}
 				);
@@ -1090,15 +1100,21 @@
 			style="top: 20px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="text"
 			aria-label="Base Armor Class"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Armor_Bonus_change);"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Armor_Bonus_change);"
 		>
 		<input
 			id="AC_Shield_Bonus"
 			class="field inputfield-notched"
 			style="top: 39.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
-			type="number"
+			type="text"
 			aria-label="Shield Bonus"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Shield_Bonus_change);"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Shield_Bonus_change);"
 		>
 		<input
 			id="AC_Dexterity_Modifier"
@@ -1113,7 +1129,10 @@
 			style="top: 78.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="Magic AC Bonus Modifier"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Magic_change);"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Magic_change);"
 		>
 		<input
 			id="AC_Misc_Mod_1"
@@ -1121,7 +1140,10 @@
 			style="top: 98.0px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="1st Miscellaneous AC Bonus Modifier"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Misc_Mod_1_change);"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Misc_Mod_1_change);"
 		>
 		<input
 			id="AC_Misc_Mod_2"
@@ -1129,7 +1151,10 @@
 			style="top: 117.5px;left: 19px;font-size: 14px;width: 21.3px;height: 13.3px;font-family: SegoeUI;"
 			type="number"
 			aria-label="1st Miscellaneous AC Bonus Modifier"
-			onchange="event.value=this.value;ValidateBonus(true);DisplayBonus();this.value=event.value;eventManager.handle_event(EventType.AC_Misc_Mod_2_change);"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};this.value=DisplayBonus(this.value, this.dataset.valueCalculated);eventManager.handle_event(EventType.AC_Misc_Mod_2_change);"
 		>
 
 		<input
@@ -1193,21 +1218,21 @@
 			class="field inputfield"
 			style="top: 78.5px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;overflow-x: scroll"
 			spellcheck="true"
-			onchange="event.value=this.value;event.target.name=this.id;formatACdescr();this.value=event.value"
+			onchange="this.value=formatACdescr(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 		>
 		<input
 			id="AC_Misc_Mod_1_Description"
 			class="field inputfield"
 			style="top: 98.0px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;overflow-x: scroll"
 			spellcheck="true"
-			onchange="event.value=this.value;event.target.name=this.id;formatACdescr();this.value=event.value"
+			onchange="this.value=formatACdescr(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 		>
 		<input
 			id="AC_Misc_Mod_2_Description"
 			class="field inputfield"
 			style="top: 117.5px;left: 82px;font-size: 10.5px;width: 135px;height: 13.3px;overflow-x: scroll"
 			spellcheck="true"
-			onchange="event.value=this.value;event.target.name=this.id;formatACdescr();this.value=event.value"
+			onchange="this.value=formatACdescr(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 		>
 
 		<!-- BlueText -->
@@ -1221,8 +1246,8 @@
 			aria-label="Armor's weight"
 			value="0"
 			type="text"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.AC_Armor_Weight_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.AC_Armor_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1232,8 +1257,8 @@
 			aria-label="Shield's weight"
 			value="0"
 			type="text"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.AC_Shield_Weight_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.AC_Shield_Weight_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1242,7 +1267,7 @@
 			style="top: 53px;left: 231px;width: 10.7px;height: 10.7px;visibility: hidden"
 			type="checkbox"
 			aria-label="This enables the '[disadv.]' text next to the 'Stealth' skill."
-			onchange="event.target.name=this.id;ConditionSet();"
+			onchange="ConditionSet(adapter_helper_convert_id_to_fieldname(this.id), false);"
 		/>
 
 		<script type="text/javascript">
@@ -1265,14 +1290,7 @@
 			// Bonus field setters
 			['AC_Armor_Bonus', 'AC_Shield_Bonus'].forEach(function(elementId /*String*/) {
 				document.getElementById(elementId).onclick = async function (clickEvent /*MouseEvent*/) {
-					let adapter=new AdapterClassFieldReference([this]);
-					event.target.name=adapter.name;
-					event.target.submitName=adapter.submitName;
-					event.target.userName=adapter.userName;
-					event.modifier=event.ctrlKey;
-					event.shift=event.shiftKey;
-					await SetThisFldVal();
-					adapter_helper_storeSetThisFldValResult(adapter);
+					await SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey);
 				}
 			});
 		</script>
@@ -1287,7 +1305,7 @@
 		<input
 			id="Inspiration"
 			class="field inputfield"
-			style="top: 10.4px;left: 15px;font-size: 14px;width: 28px;height: 28px"
+			style="top: 10.4px;left: 15px;font-size: 22px;width: 28px;height: 28px;text-align: center"
 			type="number"
 		/><!--Is a check-box in pdf TODO: revert to checkbox for publication-->
 	</div>
@@ -1330,7 +1348,7 @@
 			class="field inputfield"
 			list="ability_save_dc_options"
 			style="top: 19px;font-size: 8px;height: 10px;left: 130px;text-align: center;width: 75px;font-family: 'scala-sans';font-weight: bold"
-			onchange="eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
+			onchange="document.getElementById('Spell_DC_1_Mod.1').value=this.value;eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
 		>
 			<option value=""></option>
 			<option value="Str Mod">  STRENGTH</option>
@@ -1345,7 +1363,7 @@
 			class="field inputfield"
 			list="ability_save_dc_options"
 			style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;font-family: 'scala-sans'"
-			onchange="eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
+			onchange="document.getElementById('Spell_DC_1_Mod.0').value=this.value;eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
 		>
 			<option value=""></option>
 			<option value="Str Mod">  STRENGTH</option>
@@ -1387,8 +1405,9 @@
 			aria-label="1st Ability Save DC Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Spell_DC_1_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Spell_DC_1_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Spell_DC_2_Bonus"
@@ -1397,8 +1416,9 @@
 			aria-label="2nd Ability Save DC Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Spell_DC_2_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Spell_DC_2_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 
 		<script type="text/javascript">
@@ -1426,12 +1446,10 @@
 					eventManager.add_listener(
 						event_type,
 						function () {
-							event.target.name = "Spell save DC " + String(i);
 							let element = document.getElementById("Spell_save_DC_" + String(i));
-							CalcAbilityDC();
-							let currentVal = element.value;
-							if (event.value != currentVal) {
-								element.value = event.value;
+							let newVal = CalcAbilityDC("Spell save DC " + String(i));
+							if (newVal != element.value) {
+								element.value = newVal;
 								element.dispatchEvent(new Event('change'));
 							}
 						}
@@ -1464,7 +1482,7 @@
 			type="checkbox"
 			style="top: 16px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Acr', true).then(() => {eventManager.handle_event(EventType.Acr_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Acr', true).then(() => {eventManager.handle_event(EventType.Acr_Exp_change);});}"
 		/>
 		<input
 			id="Ani_Exp"
@@ -1472,7 +1490,7 @@
 			type="checkbox"
 			style="top: 35.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ani', true).then(() => {eventManager.handle_event(EventType.Ani_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ani', true).then(() => {eventManager.handle_event(EventType.Ani_Exp_change);});}"
 		/>
 		<input
 			id="Arc_Exp"
@@ -1480,7 +1498,7 @@
 			type="checkbox"
 			style="top: 55.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Arc', true).then(() => {eventManager.handle_event(EventType.Arc_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Arc', true).then(() => {eventManager.handle_event(EventType.Arc_Exp_change);});}"
 		/>
 		<input
 			id="Ath_Exp"
@@ -1488,7 +1506,7 @@
 			type="checkbox"
 			style="top: 74.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ath', true).then(() => {eventManager.handle_event(EventType.Ath_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ath', true).then(() => {eventManager.handle_event(EventType.Ath_Exp_change);});}"
 		/>
 		<input
 			id="Dec_Exp"
@@ -1496,7 +1514,7 @@
 			type="checkbox"
 			style="top: 94.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Dec', true).then(() => {eventManager.handle_event(EventType.Dec_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Dec', true).then(() => {eventManager.handle_event(EventType.Dec_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1505,7 +1523,7 @@
 			type="checkbox"
 			style="top: 113.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('His', true).then(() => {eventManager.handle_event(EventType.His_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'His', true).then(() => {eventManager.handle_event(EventType.His_Exp_change);});}"
 		/>
 		<input
 			id="Ins_Exp"
@@ -1513,7 +1531,7 @@
 			type="checkbox"
 			style="top: 133.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ins', true).then(() => {eventManager.handle_event(EventType.Ins_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ins', true).then(() => {eventManager.handle_event(EventType.Ins_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1522,7 +1540,7 @@
 			type="checkbox"
 			style="top: 152.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inti', true).then(() => {eventManager.handle_event(EventType.Inti_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Inti', true).then(() => {eventManager.handle_event(EventType.Inti_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1531,7 +1549,7 @@
 			type="checkbox"
 			style="top: 172.0px;left: 22.3px;width: 8px;height: 8px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inv', true).then(() => {eventManager.handle_event(EventType.Inv_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Inv', true).then(() => {eventManager.handle_event(EventType.Inv_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1540,7 +1558,7 @@
 			type="checkbox"
 			style="top: 191.5px;left: 22.3px;width: 8px;height: 8px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Med', true).then(() => {eventManager.handle_event(EventType.Med_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Med', true).then(() => {eventManager.handle_event(EventType.Med_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1549,7 +1567,7 @@
 			type="checkbox"
 			style="top: 211.0px;left: 22.3px;width: 8px;height: 8px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Nat', true).then(() => {eventManager.handle_event(EventType.Nat_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Nat', true).then(() => {eventManager.handle_event(EventType.Nat_Exp_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1558,7 +1576,7 @@
 			type="checkbox"
 			style="top: 230.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Perc', true).then(() => {eventManager.handle_event(EventType.Perc_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Perc', true).then(() => {eventManager.handle_event(EventType.Perc_Exp_change);});}"
 		/>
 		<input
 			id="Perf_Exp"
@@ -1566,7 +1584,7 @@
 			type="checkbox"
 			style="top: 250.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Perf', true).then(() => {eventManager.handle_event(EventType.Perf_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Perf', true).then(() => {eventManager.handle_event(EventType.Perf_Exp_change);});}"
 		/>
 		<input
 			id="Pers_Exp"
@@ -1574,7 +1592,7 @@
 			type="checkbox"
 			style="top: 269.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Pers', true).then(() => {eventManager.handle_event(EventType.Pers_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Pers', true).then(() => {eventManager.handle_event(EventType.Pers_Exp_change);});}"
 		/>
 		<input
 			id="Rel_Exp"
@@ -1582,7 +1600,7 @@
 			type="checkbox"
 			style="top: 289.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Rel', true).then(() => {eventManager.handle_event(EventType.Rel_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Rel', true).then(() => {eventManager.handle_event(EventType.Rel_Exp_change);});}"
 		/>
 		<input
 			id="Sle_Exp"
@@ -1590,7 +1608,7 @@
 			type="checkbox"
 			style="top: 308.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Sle', true).then(() => {eventManager.handle_event(EventType.Sle_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Sle', true).then(() => {eventManager.handle_event(EventType.Sle_Exp_change);});}"
 		/>
 		<input
 			id="Ste_Exp"
@@ -1598,7 +1616,7 @@
 			type="checkbox"
 			style="top: 328.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ste', true).then(() => {eventManager.handle_event(EventType.Ste_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ste', true).then(() => {eventManager.handle_event(EventType.Ste_Exp_change);});}"
 		/>
 		<input
 			id="Sur_Exp"
@@ -1606,7 +1624,7 @@
 			type="checkbox"
 			style="top: 347.5px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Sur', true).then(() => {eventManager.handle_event(EventType.Sur_Exp_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Sur', true).then(() => {eventManager.handle_event(EventType.Sur_Exp_change);});}"
 		/>
 		<input
 			id="Too_Exp"
@@ -1614,7 +1632,7 @@
 			type="checkbox"
 			style="top: 367.0px;left: 22.3px;width: 8px;height: 8px"
 			data-default="false"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applyCompSkillClick();eventManager.handle_event(EventType.Too_Exp_change);}"
+			onclick="applyCompSkillClick(new AdapterClassFieldReference([this]));eventManager.handle_event(EventType.Too_Exp_change)"
 		/>
 
 		<input
@@ -1623,7 +1641,7 @@
 			type="checkbox"
 			style="top: 18px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Acr').then(() => {eventManager.handle_event(EventType.Acr_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Acr').then(() => {eventManager.handle_event(EventType.Acr_Prof_change);});}"
 		/>
 		<input
 			id="Ani_Prof"
@@ -1631,7 +1649,7 @@
 			type="checkbox"
 			style="top: 37.5px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ani').then(() => {eventManager.handle_event(EventType.Ani_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ani').then(() => {eventManager.handle_event(EventType.Ani_Prof_change);});}"
 		/>
 		<input
 			id="Arc_Prof"
@@ -1639,7 +1657,7 @@
 			type="checkbox"
 			style="top: 57.0px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Arc').then(() => {eventManager.handle_event(EventType.Arc_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Arc').then(() => {eventManager.handle_event(EventType.Arc_Prof_change);});}"
 		/>
 		<input
 			id="Ath_Prof"
@@ -1647,7 +1665,7 @@
 			type="checkbox"
 			style="top: 76.5px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ath').then(() => {eventManager.handle_event(EventType.Ath_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ath').then(() => {eventManager.handle_event(EventType.Ath_Prof_change);});}"
 		/>
 		<input
 			id="Dec_Prof"
@@ -1655,7 +1673,7 @@
 			type="checkbox"
 			style="top: 96.0px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Dec').then(() => {eventManager.handle_event(EventType.Dec_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Dec').then(() => {eventManager.handle_event(EventType.Dec_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1664,7 +1682,7 @@
 			type="checkbox"
 			style="top: 115.5px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('His').then(() => {eventManager.handle_event(EventType.His_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'His').then(() => {eventManager.handle_event(EventType.His_Prof_change);});}"
 		/>
 		<input
 			id="Ins_Prof"
@@ -1672,7 +1690,7 @@
 			type="checkbox"
 			style="top: 135.0px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Ins').then(() => {eventManager.handle_event(EventType.Ins_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ins').then(() => {eventManager.handle_event(EventType.Ins_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1681,7 +1699,7 @@
 			type="checkbox"
 			style="top: 154.5px;left: 15.2px;"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inti').then(() => {eventManager.handle_event(EventType.Inti_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Inti').then(() => {eventManager.handle_event(EventType.Inti_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1690,7 +1708,7 @@
 			type="checkbox"
 			style="top: 174.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Inv').then(() => {eventManager.handle_event(EventType.Inv_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Inv').then(() => {eventManager.handle_event(EventType.Inv_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1699,7 +1717,7 @@
 			type="checkbox"
 			style="top: 193.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Med').then(() => {eventManager.handle_event(EventType.Med_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Med').then(() => {eventManager.handle_event(EventType.Med_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1708,7 +1726,7 @@
 			type="checkbox"
 			style="top: 213.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Nat').then(() => {eventManager.handle_event(EventType.Nat_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Nat').then(() => {eventManager.handle_event(EventType.Nat_Prof_change);});}"
 			aria-label="Skill proficiencies gained from:"
 		/>
 		<input
@@ -1717,7 +1735,7 @@
 			type="checkbox"
 			style="top: 232.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applySkillClick('Perc').then(() => {eventManager.handle_event(EventType.Perc_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Perc').then(() => {eventManager.handle_event(EventType.Perc_Prof_change);});}"
 		/>
 		<input
 			id="Perf_Prof"
@@ -1725,7 +1743,7 @@
 			type="checkbox"
 			style="top: 252.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Perf').then(() => {eventManager.handle_event(EventType.Perf_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Perf').then(() => {eventManager.handle_event(EventType.Perf_Prof_change);});}"
 		/>
 		<input
 			id="Pers_Prof"
@@ -1733,7 +1751,7 @@
 			type="checkbox"
 			style="top: 271.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Pers').then(() => {eventManager.handle_event(EventType.Pers_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Pers').then(() => {eventManager.handle_event(EventType.Pers_Prof_change);});}"
 		/>
 		<input
 			id="Rel_Prof"
@@ -1741,7 +1759,7 @@
 			type="checkbox"
 			style="top: 291.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Rel').then(() => {eventManager.handle_event(EventType.Rel_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Rel').then(() => {eventManager.handle_event(EventType.Rel_Prof_change);});}"
 		/>
 		<input
 			id="Sle_Prof"
@@ -1749,7 +1767,7 @@
 			type="checkbox"
 			style="top: 310.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Sle').then(() => {eventManager.handle_event(EventType.Sle_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Sle').then(() => {eventManager.handle_event(EventType.Sle_Prof_change);});}"
 		/>
 		<input
 			id="Ste_Prof"
@@ -1757,7 +1775,7 @@
 			type="checkbox"
 			style="top: 330.0px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Ste').then(() => {eventManager.handle_event(EventType.Ste_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Ste').then(() => {eventManager.handle_event(EventType.Ste_Prof_change);});}"
 		/>
 		<input
 			id="Sur_Prof"
@@ -1765,7 +1783,7 @@
 			type="checkbox"
 			style="top: 349.5px;left: 15.2px"
 			data-default="false"
-			onclick="{calcStop();let wrapper=new AdapterClassFieldReference([this]);event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};applySkillClick('Sur').then(() => {eventManager.handle_event(EventType.Sur_Prof_change);});}"
+			onclick="{calcStop();applySkillClick(new AdapterClassFieldReference([this]), 'Sur').then(() => {eventManager.handle_event(EventType.Sur_Prof_change);});}"
 		/>
 		<input
 			id="Too_Prof"
@@ -1773,7 +1791,7 @@
 			type="checkbox"
 			style="top: 369.0px;left: 15.2px"
 			data-default="false"
-			onclick="{let wrapper=new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.isBoxChecked=function(nWidget) {return wrapper.isBoxChecked(nWidget);};event.target.checkThisBox=function(Widget, bCheckIt=true) {return wrapper.checkThisBox(Widget, bCheckIt);};event.target.contextTransfers=['isBoxChecked', 'checkThisBox'];applyCompSkillClick();eventManager.handle_event(EventType.Too_Prof_change);}"
+			onclick="applyCompSkillClick(new AdapterClassFieldReference([this]));eventManager.handle_event(EventType.Too_Prof_change)"
 		/>
 
 		<div
@@ -1993,7 +2011,7 @@
 			data-default="Tool"
 			aria-label="Tool or custom skill"
 			spellcheck="True"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;UpdateTooSkill()"
+			onchange="UpdateTooSkill(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 		/>
 
 		<!-- BlueText -->
@@ -2016,8 +2034,9 @@
 			aria-label="All Skills Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus(true);this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.All_Skills_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.All_Skills_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Acr_Bonus"
@@ -2026,8 +2045,9 @@
 			aria-label="Acrobatics Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Acr_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Acr_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Ani_Bonus"
@@ -2036,8 +2056,9 @@
 			aria-label="Animal Handling Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ani_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ani_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Arc_Bonus"
@@ -2046,8 +2067,9 @@
 			aria-label="Arcana Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Arc_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Arc_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Ath_Bonus"
@@ -2056,8 +2078,9 @@
 			aria-label="Athletics Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ath_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ath_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Dec_Bonus"
@@ -2066,8 +2089,9 @@
 			aria-label="Deception Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Dec_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Dec_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="His_Bonus"
@@ -2076,8 +2100,9 @@
 			aria-label="History Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.His_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.His_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Ins_Bonus"
@@ -2086,8 +2111,9 @@
 			aria-label="Insight Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ins_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ins_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Inti_Bonus"
@@ -2096,8 +2122,9 @@
 			aria-label="Intimidation Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Inti_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Inti_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Inv_Bonus"
@@ -2106,8 +2133,9 @@
 			aria-label="Investigation Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Inv_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Inv_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Med_Bonus"
@@ -2116,8 +2144,9 @@
 			aria-label="Medicine Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Med_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Med_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Nat_Bonus"
@@ -2126,8 +2155,9 @@
 			aria-label="Nature Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Nat_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Nat_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Perc_Bonus"
@@ -2136,8 +2166,9 @@
 			aria-label="Perception Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Perc_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Perc_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Perf_Bonus"
@@ -2146,8 +2177,9 @@
 			aria-label="Performance Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Perf_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Perf_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Pers_Bonus"
@@ -2156,8 +2188,9 @@
 			aria-label="Persuasion Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Pers_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Pers_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Rel_Bonus"
@@ -2166,8 +2199,9 @@
 			aria-label="Religion Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Rel_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Rel_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Sle_Bonus"
@@ -2176,8 +2210,9 @@
 			aria-label="Sleight of Hand Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Sle_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Sle_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Ste_Bonus"
@@ -2186,8 +2221,9 @@
 			aria-label="Stealth Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Ste_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Ste_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Sur_Bonus"
@@ -2196,8 +2232,9 @@
 			aria-label="Survival Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Sur_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Sur_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Too_Bonus"
@@ -2206,8 +2243,9 @@
 			aria-label="Tool Bonus Modifier"
 			value="0"
 			data-default="0"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Too_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Too_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 		<input
 			id="Jack_of_All_Trades"
@@ -2326,10 +2364,8 @@
 							'Acr', 'Ani', 'Arc', 'Ath', 'Dec', 'His', 'Ins', 'Inti', 'Inv', 'Med', 'Nat', 'Perc', 'Perf',
 						 	'Pers', 'Rel', 'Sle', 'Ste', 'Sur', 'Too'
 						].forEach(function (skill) {
-							event.target.name = skill;
-							CalcSkill();
 							let skillElement = document.getElementById(skill);
-							skillElement.value = event.value;
+							skillElement.value = CalcSkill(skill);
 							skillElement.dispatchEvent(new Event('change'));
 						})
 					}
@@ -2351,112 +2387,112 @@
 		<input
 			id="Limited_Feature_1"
 			class="field inputfield"
-			style="top: 25.6px;left: 19px;font-size: 10.6px;height: 15.3px;width: 125px"
+			style="top: 25.6px;left: 19px;font-size: 9px;height: 15.3px;width: 125px"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_2"
 			class="field inputfield"
-			style="top: 45.9px;left: 19px;font-size: 10.6px;height: 15.3px;width: 125px"
+			style="top: 45.9px;left: 19px;font-size: 9px;height: 15.3px;width: 125px"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_3"
 			class="field inputfield"
-			style="top: 66.2px;left: 19px;font-size: 10.6px;height: 15.3px;width: 125px"
+			style="top: 66.2px;left: 19px;font-size: 9px;height: 15.3px;width: 125px"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_4"
 			class="field inputfield"
-			style="top: 86.5px;left: 19px;font-size: 10.6px;height: 15.3px;width: 125px"
+			style="top: 86.5px;left: 19px;font-size: 9px;height: 15.3px;width: 125px"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_5"
 			class="field inputfield"
-			style="top: 106.8px;left: 19px;font-size: 10.6px;height: 15.3px;width: 125px"
+			style="top: 106.8px;left: 19px;font-size: 9px;height: 15.3px;width: 125px"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_6"
 			class="field inputfield"
-			style="top: 127.1px;left: 19px;font-size: 10.6px;height: 15.3px;width: 125px"
+			style="top: 127.1px;left: 19px;font-size: 9px;height: 15.3px;width: 125px"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_7"
 			class="field inputfield"
-			style="top: 147.4px;left: 19px;font-size: 10.6px;height: 15.3px;width: 125px"
+			style="top: 147.4px;left: 19px;font-size: 9px;height: 15.3px;width: 125px"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_8"
 			class="field inputfield"
-			style="top: 167.7px;left: 19px;font-size: 10.6px;height: 15.3px;width: 125px"
+			style="top: 167.7px;left: 19px;font-size: 9px;height: 15.3px;width: 125px"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_9"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 125px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 125px;visibility: hidden;"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_10"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 125px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 125px;visibility: hidden;"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_11"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 125px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 125px;visibility: hidden;"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_12"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 125px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 125px;visibility: hidden;"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_13"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 125px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 125px;visibility: hidden;"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_14"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 125px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 125px;visibility: hidden;"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_15"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 125px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 125px;visibility: hidden;"
 			type="text"
 			spellcheck="true"
 		/>
 		<input
 			id="Limited_Feature_16"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 125px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 125px;visibility: hidden;"
 			type="text"
 			spellcheck="true"
 		/>
@@ -2464,104 +2500,104 @@
 		<input
 			id="Limited_Feature_Max_Usages_1"
 			class="field inputfield"
-			style="top: 25.6px;left: 151px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center"
+			style="top: 25.6px;left: 151px;font-size: 9px;height: 15.3px;width: 33px;text-align: center"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_2"
 			class="field inputfield"
-			style="top: 45.9px;left: 151px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center"
+			style="top: 45.9px;left: 151px;font-size: 9px;height: 15.3px;width: 33px;text-align: center"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_3"
 			class="field inputfield"
-			style="top: 66.2px;left: 151px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center"
+			style="top: 66.2px;left: 151px;font-size: 9px;height: 15.3px;width: 33px;text-align: center"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_4"
 			class="field inputfield"
-			style="top: 86.5px;left: 151px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center"
+			style="top: 86.5px;left: 151px;font-size: 9px;height: 15.3px;width: 33px;text-align: center"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_5"
 			class="field inputfield"
-			style="top: 106.8px;left: 151px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center"
+			style="top: 106.8px;left: 151px;font-size: 9px;height: 15.3px;width: 33px;text-align: center"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_6"
 			class="field inputfield"
-			style="top: 127.1px;left: 151px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center"
+			style="top: 127.1px;left: 151px;font-size: 9px;height: 15.3px;width: 33px;text-align: center"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_7"
 			class="field inputfield"
-			style="top: 147.4px;left: 151px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center"
+			style="top: 147.4px;left: 151px;font-size: 9px;height: 15.3px;width: 33px;text-align: center"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_8"
 			class="field inputfield"
-			style="top: 167.7px;left: 151px;font-size: 10.6px;height: 15.3px;width: 33px;text-align: center"
+			style="top: 167.7px;left: 151px;font-size: 9px;height: 15.3px;width: 33px;text-align: center"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_9"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_10"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_11"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_12"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_13"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_14"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_15"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
 			type="text"
 		/>
 		<input
 			id="Limited_Feature_Max_Usages_16"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 33px;text-align: center;visibility: hidden;"
 			type="text"
 		/>
 
 		<input
 			id="Limited_Feature_Recovery_1"
 			class="field inputfield"
-			style="top: 25.6px;left: 191px;font-size: 9.3px;height: 15.3px;width: 51px"
+			style="top: 25.6px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2569,7 +2605,7 @@
 		<input
 			id="Limited_Feature_Recovery_2"
 			class="field inputfield"
-			style="top: 45.9px;left: 191px;font-size: 9.3px;height: 15.3px;width: 51px"
+			style="top: 45.9px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2577,7 +2613,7 @@
 		<input
 			id="Limited_Feature_Recovery_3"
 			class="field inputfield"
-			style="top: 66.2px;left: 191px;font-size: 9.3px;height: 15.3px;width: 51px"
+			style="top: 66.2px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2585,7 +2621,7 @@
 		<input
 			id="Limited_Feature_Recovery_4"
 			class="field inputfield"
-			style="top: 86.5px;left: 191px;font-size: 9.3px;height: 15.3px;width: 51px"
+			style="top: 86.5px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2593,7 +2629,7 @@
 		<input
 			id="Limited_Feature_Recovery_5"
 			class="field inputfield"
-			style="top: 106.8px;left: 191px;font-size: 9.3px;height: 15.3px;width: 51px"
+			style="top: 106.8px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2601,7 +2637,7 @@
 		<input
 			id="Limited_Feature_Recovery_6"
 			class="field inputfield"
-			style="top: 127.1px;left: 191px;font-size: 9.3px;height: 15.3px;width: 51px"
+			style="top: 127.1px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2609,7 +2645,7 @@
 		<input
 			id="Limited_Feature_Recovery_7"
 			class="field inputfield"
-			style="top: 147.4px;left: 191px;font-size: 9.3px;height: 15.3px;width: 51px"
+			style="top: 147.4px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2617,7 +2653,7 @@
 		<input
 			id="Limited_Feature_Recovery_8"
 			class="field inputfield"
-			style="top: 167.7px;left: 191px;font-size: 9.3px;height: 15.3px;width: 51px"
+			style="top: 167.7px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2625,7 +2661,7 @@
 		<input
 			id="Limited_Feature_Recovery_9"
 			class="field inputfield"
-			style="font-size: 9.3px;height: 15.3px;width: 51px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2633,7 +2669,7 @@
 		<input
 			id="Limited_Feature_Recovery_10"
 			class="field inputfield"
-			style="font-size: 9.3px;height: 15.3px;width: 51px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2641,7 +2677,7 @@
 		<input
 			id="Limited_Feature_Recovery_11"
 			class="field inputfield"
-			style="font-size: 9.3px;height: 15.3px;width: 51px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2649,7 +2685,7 @@
 		<input
 			id="Limited_Feature_Recovery_12"
 			class="field inputfield"
-			style="font-size: 9.3px;height: 15.3px;width: 51px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2657,7 +2693,7 @@
 		<input
 			id="Limited_Feature_Recovery_13"
 			class="field inputfield"
-			style="font-size: 9.3px;height: 15.3px;width: 51px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2665,7 +2701,7 @@
 		<input
 			id="Limited_Feature_Recovery_14"
 			class="field inputfield"
-			style="font-size: 9.3px;height: 15.3px;width: 51px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2673,7 +2709,7 @@
 		<input
 			id="Limited_Feature_Recovery_15"
 			class="field inputfield"
-			style="font-size: 9.3px;height: 15.3px;width: 51px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2681,7 +2717,7 @@
 		<input
 			id="Limited_Feature_Recovery_16"
 			class="field inputfield"
-			style="font-size: 9.3px;height: 15.3px;width: 51px;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
@@ -2695,7 +2731,7 @@
 		<input
 			id="Limited_Feature_Used_1"
 			class="field inputfield"
-			style="top: 25.6px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center"
+			style="top: 25.6px;left: 249px;font-size: 9px;height: 15.3px;width: 32px;text-align: center"
 			type="number"
 			min="0"
 			step="1"
@@ -2704,7 +2740,7 @@
 		<input
 			id="Limited_Feature_Used_2"
 			class="field inputfield"
-			style="top: 45.9px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center"
+			style="top: 45.9px;left: 249px;font-size: 9px;height: 15.3px;width: 32px;text-align: center"
 			type="number"
 			min="0"
 			step="1"
@@ -2713,7 +2749,7 @@
 		<input
 			id="Limited_Feature_Used_3"
 			class="field inputfield"
-			style="top: 66.2px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center"
+			style="top: 66.2px;left: 249px;font-size: 9px;height: 15.3px;width: 32px;text-align: center"
 			type="number"
 			min="0"
 			step="1"
@@ -2722,7 +2758,7 @@
 		<input
 			id="Limited_Feature_Used_4"
 			class="field inputfield"
-			style="top: 86.5px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center"
+			style="top: 86.5px;left: 249px;font-size: 9px;height: 15.3px;width: 32px;text-align: center"
 			type="number"
 			min="0"
 			step="1"
@@ -2731,7 +2767,7 @@
 		<input
 			id="Limited_Feature_Used_5"
 			class="field inputfield"
-			style="top: 106.8px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center"
+			style="top: 106.8px;left: 249px;font-size: 9px;height: 15.3px;width: 32px;text-align: center"
 			type="number"
 			min="0"
 			step="1"
@@ -2740,7 +2776,7 @@
 		<input
 			id="Limited_Feature_Used_6"
 			class="field inputfield"
-			style="top: 127.1px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center"
+			style="top: 127.1px;left: 249px;font-size: 9px;height: 15.3px;width: 32px;text-align: center"
 			type="number"
 			min="0"
 			step="1"
@@ -2749,7 +2785,7 @@
 		<input
 			id="Limited_Feature_Used_7"
 			class="field inputfield"
-			style="top: 147.4px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center"
+			style="top: 147.4px;left: 249px;font-size: 9px;height: 15.3px;width: 32px;text-align: center"
 			type="number"
 			min="0"
 			step="1"
@@ -2758,7 +2794,7 @@
 		<input
 			id="Limited_Feature_Used_8"
 			class="field inputfield"
-			style="top: 167.7px;left: 249px;font-size: 10.6px;height: 15.3px;width: 32px;text-align: center"
+			style="top: 167.7px;left: 249px;font-size: 9px;height: 15.3px;width: 32px;text-align: center"
 			type="number"
 			min="0"
 			step="1"
@@ -2767,7 +2803,7 @@
 		<input
 			id="Limited_Feature_Used_9"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
 			type="number"
 			min="0"
 			step="1"
@@ -2776,7 +2812,7 @@
 		<input
 			id="Limited_Feature_Used_10"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
 			type="number"
 			min="0"
 			step="1"
@@ -2785,7 +2821,7 @@
 		<input
 			id="Limited_Feature_Used_11"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
 			type="number"
 			min="0"
 			step="1"
@@ -2794,7 +2830,7 @@
 		<input
 			id="Limited_Feature_Used_12"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
 			type="number"
 			min="0"
 			step="1"
@@ -2803,7 +2839,7 @@
 		<input
 			id="Limited_Feature_Used_13"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
 			type="number"
 			min="0"
 			step="1"
@@ -2812,7 +2848,7 @@
 		<input
 			id="Limited_Feature_Used_14"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
 			type="number"
 			min="0"
 			step="1"
@@ -2821,7 +2857,7 @@
 		<input
 			id="Limited_Feature_Used_15"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
 			type="number"
 			min="0"
 			step="1"
@@ -2830,7 +2866,7 @@
 		<input
 			id="Limited_Feature_Used_16"
 			class="field inputfield"
-			style="font-size: 10.6px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
+			style="font-size: 9px;height: 15.3px;width: 32px;text-align: center;visibility: hidden;"
 			type="number"
 			min="0"
 			step="1"
@@ -2842,118 +2878,118 @@
 			class="field button nonprintable"
 			style="top: 186px;left: 210.9px"
 			aria-label="Click here to reset the 'Used' fields of limited features that recover on a short rest ('SR')."
-			onclick="ResetFeaSR();"
+			onclick="resetLimFeaUsed('short rest');"
 		>SR</button>
 		<button
 			id="LR"
 			class="field button nonprintable"
 			style="top: 186px;left: 232px"
 			aria-label="Click here to reset the 'Used' fields of limited features that recover on a long rest ('LR'), as well as all Spell Slot checkboxes."
-			onclick="ResetFeaLR();"
+			onclick="resetLimFeaUsed('long rest');"
 		>LR</button>
 		<button
 			id="Dawn"
 			class="field button nonprintable"
 			style="top: 186px;left: 252.2px"
 			aria-label="Click here to reset the 'Used' fields of limited features that recover at dawn."
-			onclick="ResetFeaDawn();"
+			onclick="resetLimFeaUsed('dawn');"
 		>Dawn</button>
 
 		<button
 			id="Button.Limited_Feature_1"
 			class="field button nonprintable"
 			style="top:  29.25px;left: -3.4px;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(1);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(1);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_2"
 			class="field button nonprintable"
 			style="top:  49.55px;left: -3.4px;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(2);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(2);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_3"
 			class="field button nonprintable"
 			style="top:  69.85px;left: -3.4px;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(3);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(3);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_4"
 			class="field button nonprintable"
 			style="top:  90.15px;left: -3.4px;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(4);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(4);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_5"
 			class="field button nonprintable"
 			style="top: 110.45px;left: -3.4px;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(5);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(5);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_6"
 			class="field button nonprintable"
 			style="top: 130.75px;left: -3.4px;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(6);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(6);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_7"
 			class="field button nonprintable"
 			style="top: 151.05px;left: -3.4px;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(7);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(7);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_8"
 			class="field button nonprintable"
 			style="top: 171.35px;left: -3.4px;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(8);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(8);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_9"
 			class="field button nonprintable"
 			style="visibility: hidden;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(1);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(1);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_10"
 			class="field button nonprintable"
 			style="visibility: hidden;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(2);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(2);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_11"
 			class="field button nonprintable"
 			style="visibility: hidden;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(3);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(3);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_12"
 			class="field button nonprintable"
 			style="visibility: hidden;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(4);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(4);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_13"
 			class="field button nonprintable"
 			style="visibility: hidden;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(5);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(5);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_14"
 			class="field button nonprintable"
 			style="visibility: hidden;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(6);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(6);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_15"
 			class="field button nonprintable"
 			style="visibility: hidden;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(7);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(7);"
 		>&gt;</button>
 		<button
 			id="Button.Limited_Feature_16"
 			class="field button nonprintable"
 			style="visibility: hidden;line-height: 4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeLimFeaMenu();LimFeaOptions(8);"
+			onclick="MakeLimFeaMenu(adapter_helper_convert_id_to_fieldname(this.id));LimFeaOptions(8);"
 		>&gt;</button>
 	</div>
 
@@ -3055,7 +3091,7 @@
 			type="text"
 			spellcheck="true"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 			value=" Common "
 		/>
 		<input
@@ -3065,7 +3101,7 @@
 			type="text"
 			spellcheck="true"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Language_3"
@@ -3074,7 +3110,7 @@
 			type="text"
 			spellcheck="true"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Language_4"
@@ -3083,7 +3119,7 @@
 			type="text"
 			spellcheck="true"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Language_5"
@@ -3092,7 +3128,7 @@
 			type="text"
 			spellcheck="true"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Language_6"
@@ -3101,7 +3137,7 @@
 			type="text"
 			spellcheck="true"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 
 		<input
@@ -3111,7 +3147,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_2"
@@ -3120,7 +3156,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_3"
@@ -3129,7 +3165,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_4"
@@ -3138,7 +3174,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_5"
@@ -3147,7 +3183,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Tool_6"
@@ -3156,7 +3192,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 	</div>
 
@@ -3176,7 +3212,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_2"
@@ -3185,7 +3221,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_3"
@@ -3194,7 +3230,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_4"
@@ -3203,7 +3239,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_5"
@@ -3212,7 +3248,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_6"
@@ -3221,7 +3257,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_7"
@@ -3230,7 +3266,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_8"
@@ -3239,7 +3275,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_9"
@@ -3248,7 +3284,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_10"
@@ -3257,7 +3293,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_11"
@@ -3266,7 +3302,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Action_12"
@@ -3275,7 +3311,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 
 		<input
@@ -3285,7 +3321,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_2"
@@ -3294,7 +3330,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_3"
@@ -3303,7 +3339,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_4"
@@ -3312,7 +3348,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_5"
@@ -3321,7 +3357,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_6"
@@ -3330,7 +3366,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_7"
@@ -3339,7 +3375,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_8"
@@ -3348,7 +3384,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_9"
@@ -3357,7 +3393,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_10"
@@ -3366,7 +3402,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_11"
@@ -3375,7 +3411,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Bonus_Action_12"
@@ -3384,7 +3420,7 @@
 			spellcheck="true"
 			type="text"
 			onfocus="if (this.value.trim() == '') {this.value = '';}"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 
 		<input
@@ -3394,7 +3430,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_2"
@@ -3403,7 +3439,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_3"
@@ -3412,7 +3448,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_4"
@@ -3421,7 +3457,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_5"
@@ -3430,7 +3466,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_6"
@@ -3439,7 +3475,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_7"
@@ -3448,7 +3484,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_8"
@@ -3457,7 +3493,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_9"
@@ -3466,7 +3502,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_10"
@@ -3475,7 +3511,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_11"
@@ -3484,7 +3520,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 		<input
 			id="Reaction_12"
@@ -3493,7 +3529,7 @@
 			type="text"
 			data-default=""
 			spellcheck="true"
-			onchange="event.value=this.value.trim();addWhitespace();this.value=event.value;"
+			onchange="this.value=addWhitespace(this.value)"
 		/>
 
 		<button
@@ -3765,8 +3801,9 @@
 			style="top: 34px;left: 253px;width: 16px;height: 12px;text-align: center;visibility: hidden"
 			data-default="0"
 			value="0"
-			onchange="event.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;eventManager.handle_event(EventType.Passive_Perception_Bonus_change)"
-			onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.Passive_Perception_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 
 		<script type="text/javascript">
@@ -3790,14 +3827,13 @@
 				eventManager.add_listener(
 					event_type,
 					function () {
-						event.target.name = "Passive Perception";
-						CalcAllSkills(); // also calls CalcSkill
-						if (event.value != null) {
+						let value = CalcAllSkills("Passive Perception"); // also calls CalcSkill
+						if (value != null) {
 							for (let passElID of ["Passive_Perception.0", "Passive_Perception.1"]) {
 								let element = document.getElementById(passElID);
 								let currentVal = element.value;
-								if (event.value != currentVal) {
-									element.value = event.value;
+								if (value != currentVal) {
+									element.value = value;
 									element.dispatchEvent(new Event('change'));
 								}
 							}
@@ -3827,7 +3863,7 @@
 			list="ammunition_types"
 			spellcheck="true"
 			aria-label="Select or type in the ammunition you want to use and all its attributes will be filled out automatically."
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyAmmo(this.value);"
+			onchange="ApplyAmmo(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 		/>
 		<input
@@ -3838,7 +3874,7 @@
 			list="ammunition_types"
 			spellcheck="true"
 			aria-label="Select or type in the ammunition you want to use and all its attributes will be filled out automatically."
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyAmmo(this.value);"
+			onchange="ApplyAmmo(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 		/>
 		<datalist id="ammunition_types">
@@ -3866,8 +3902,9 @@
 			style="top: 20px;left: 100px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center"
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
-			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoLeftDisplay_Amount_change)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id));eventManager.handle_event(EventType.AmmoLeftDisplay_Amount_change)"
 		/>
 		<input
 			id="AmmoRightDisplay.Amount"
@@ -3875,8 +3912,9 @@
 			style="top: 20px;left: 245px;font-size: 10.6px;height: 15.3px;width: 23px;text-align: center"
 			type="number"
 			aria-label="The total amount you fill in here reflects the total amount of a certain type of 'ammunition' you have, not only the amount in one quiver."
-			oninput="adapter_helper_keystroke1(this)"
-			onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();eventManager.handle_event(EventType.AmmoRightDisplay_Amount_change)"
+			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id));eventManager.handle_event(EventType.AmmoRightDisplay_Amount_change)"
 		/>
 
 		<button
@@ -3884,14 +3922,14 @@
 			class="field button nonprintable"
 			style="top: 38px;left: 95.5px;font-size: 8px;line-height: 6px;"
 			aria-label="Press this to 'reload' your quiver. After pressing, the ammunition icons will be set as if replenished from the number in the 'Total' field. This will not change the amount of ammo you have."
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
+			onclick="LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id))"
 		>Reload</button>
 		<button
 			id="AmmoRightDisplay.Reset"
 			class="field button nonprintable"
 			style="top: 38px;left: 241px;font-size: 8px;line-height: 6px;"
 			aria-label="Press this to 'reload' your quiver. After pressing, the ammunition icons will be set as if replenished from the number in the 'Total' field. This will not change the amount of ammo you have."
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);LoadAmmo();"
+			onclick="LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(this.id))"
 		>Reload</button>
 
 		<div id="AmmoLeft" style="position: absolute;top: 50px;left: 22px;width: 100px;height: 60px;">
@@ -4981,8 +5019,8 @@
 			style="top: -8px;left: 90px;width: 35px;height: 14px;font-size: 10.6px;visibility: hidden;"
 			aria-label="Ammunition's weight"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.AmmoLeftDisplay_Weight_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value);eventManager.handle_event(EventType.AmmoLeftDisplay_Weight_change)"
 		/>
 		<input
 			id="AmmoRightDisplay.Weight"
@@ -4990,8 +5028,8 @@
 			style="top: -8px;left: 235.5px;width: 35px;height: 14px;font-size: 10.6px;visibility: hidden;"
 			aria-label="Ammunition's weight"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.AmmoRightDisplay_Weight_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value);eventManager.handle_event(EventType.AmmoRightDisplay_Weight_change)"
 		/>
 		<input
 			id="AmmoLeftDisplay.MaxAmount"
@@ -5042,14 +5080,13 @@
 				theAmount.dispatchEvent(new Event('change'));
 				current.dispatchEvent(new Event('change'));
 				let maxAmount = document.getElementById(prefix + 'Display.MaxAmount')
-				event.target.name = adapter_helper_convert_id_to_fieldname(element.id);
 				if (
 					(theAmount.value < maxAmount.value)
 					&& (document.getElementById(prefix + 'Display.SaveAmount').value <= maxAmount.value)
 				) {
-					LoadAmmo();
+					LoadAmmo(undefined, adapter_helper_convert_id_to_fieldname(element.id));
 				} else if (current.value < maxAmount.value) {
-					LoadAmmo(current.value);
+					LoadAmmo(current.value, adapter_helper_convert_id_to_fieldname(element.id));
 				}
 			}
 
@@ -5149,7 +5186,7 @@
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 				spellcheck="true"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyWeapon(this.value);"
+				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
 				id="Attack.1.Proficiency"
@@ -5217,7 +5254,7 @@
 				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"
+				onchange="CopyWeaponToSelection(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 			/>
 		</div>
 
@@ -5231,7 +5268,7 @@
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 				spellcheck="true"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyWeapon(this.value);"
+				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
 				id="Attack.2.Proficiency"
@@ -5299,7 +5336,7 @@
 				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"
+				onchange="CopyWeaponToSelection(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 			/>
 		</div>
 
@@ -5313,7 +5350,7 @@
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 				spellcheck="true"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyWeapon(this.value);"
+				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
 				id="Attack.3.Proficiency"
@@ -5381,7 +5418,7 @@
 				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"
+				onchange="CopyWeaponToSelection(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 			/>
 		</div>
 
@@ -5395,7 +5432,7 @@
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 				spellcheck="true"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyWeapon(this.value);"
+				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
 				id="Attack.4.Proficiency"
@@ -5463,7 +5500,7 @@
 				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"
+				onchange="CopyWeaponToSelection(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 			/>
 		</div>
 
@@ -5477,7 +5514,7 @@
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
 				spellcheck="true"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ApplyWeapon(this.value);"
+				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
 				id="Attack.5.Proficiency"
@@ -5545,7 +5582,7 @@
 				style="overflow-x: scroll;visibility: hidden;"
 				spellcheck="true"
 				type="text"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;CopyWeaponToSelection();"
+				onchange="CopyWeaponToSelection(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 			/>
 		</div>
 
@@ -5645,31 +5682,31 @@
 			id="Attack.Button.1"
 			class="field button nonprintable"
 			style="top:  35px;left: -3px;line-height: 6px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+			onclick="MakeAttackLineMenu_AttackLineOptions(adapter_helper_convert_id_to_fieldname(this.id))"
 		>&gt;</button>
 		<button
 			id="Attack.Button.2"
 			class="field button nonprintable"
 			style="top:  83px;left: -3px;line-height: 6px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+			onclick="MakeAttackLineMenu_AttackLineOptions(adapter_helper_convert_id_to_fieldname(this.id))"
 		>&gt;</button>
 		<button
 			id="Attack.Button.3"
 			class="field button nonprintable"
 			style="top: 131px;left: -3px;line-height: 6px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+			onclick="MakeAttackLineMenu_AttackLineOptions(adapter_helper_convert_id_to_fieldname(this.id))"
 		>&gt;</button>
 		<button
 			id="Attack.Button.4"
 			class="field button nonprintable"
 			style="top: 179px;left: -3px;line-height: 6px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+			onclick="MakeAttackLineMenu_AttackLineOptions(adapter_helper_convert_id_to_fieldname(this.id))"
 		>&gt;</button>
 		<button
 			id="Attack.Button.5"
 			class="field button nonprintable"
 			style="top: 227px;left: -3px;line-height: 6px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeAttackLineMenu_AttackLineOptions();"
+			onclick="MakeAttackLineMenu_AttackLineOptions(adapter_helper_convert_id_to_fieldname(this.id))"
 		>&gt;</button>
 
 		<script type="text/javascript">
@@ -5697,12 +5734,13 @@
 					eventManager.add_listener(
 						event_type,
 						function () {
-							event.target.name = 'Attack.' + String(i) + '.To Hit';
-							CalcAttackDmgHit();
-							if (event.value !== undefined) {
+							let newVal = CalcAttackDmgHit('Attack.' + String(i) + '.To Hit');
+							if (newVal !== undefined) {
 								let toHitElement = document.getElementById('Attack.' + String(i) + '.To_Hit');
-								toHitElement.value = event.value;
-								toHitElement.dispatchEvent(new Event('change'));
+								if (toHitElement.value != newVal) {
+									toHitElement.value = newVal;
+									toHitElement.dispatchEvent(new Event('change'));
+								}
 							}
 						}
 					);

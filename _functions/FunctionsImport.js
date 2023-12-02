@@ -31,7 +31,7 @@ async function ImportExport_Button() {
 };
 
 //a function to open the sheet and call a timeout
-async function StartDirectImport() {
+async function StartDirectImport(target) {
 	//test if the version of Acrobat being used is good (DC or later)
 	if (app.viewerVersion < 15) {
 		app.alert({
@@ -41,9 +41,9 @@ async function StartDirectImport() {
 		return;
 	} else if (MPMBImportFunctionsInstalled) {
 		await DirectImport();
-	} else if (event.target === undefined && !MPMBImportFunctionsInstalled) {
+	} else if (target === undefined && !MPMBImportFunctionsInstalled) {
 		await DirectImport(true);
-	} else if (event.target !== undefined && !MPMBImportFunctionsInstalled) {
+	} else if (target !== undefined && !MPMBImportFunctionsInstalled) {
 		await AddFolderJavaScript(false);
 	}
 }
@@ -1442,7 +1442,7 @@ async function DirectImport(consoleTrigger) {
 						var tPrepFldFrom = global.docFrom.getField(prefixFrom + "spellshead." + (fromSheetTypePF ? "Image" : "Text") + ".prepare.0");
 						var tPrepFldToNm = prefixTo + "spellshead." + (typePF ? "Image" : "Text") + ".prepare.0";
 						if (tPrepFldFrom && tPrepFldFrom.display === display.hidden) {
-							await MakePreparedMenu_PreparedOptions(tPrepFldToNm);
+							await MakePreparedMenu_PreparedOptions(tPrepFldToNm, true);
 						};
 					}
 					//set the spell remember fields
@@ -2845,7 +2845,7 @@ function CreateClassFeatureVariant(clName, clFea, varName, varObj) {
 	if (!aFea[clFea].choices) {
 		// Create a new choice system, with the 'normal' feature as a choice that is selected by default
 		var origFea = newObj(aFea[clFea]);
-		var choiceNm = "\x1B[original] " + origFea.name;
+		var choiceNm = "[original] " + origFea.name;
 		var choiceNmLC = choiceNm.toLowerCase();
 		aFea[clFea] = {
 			name : origFea.name + " or a Variant",

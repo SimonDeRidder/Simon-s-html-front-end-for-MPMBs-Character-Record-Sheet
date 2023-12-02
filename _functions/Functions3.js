@@ -108,7 +108,7 @@ function GetFeatureType(type, bNoDefaultReturn, bSingularReturn) {
 		ApplyFeatureAttributes("class", ["warlock","eldritch invocations"], [0,4,true], ["","devil's sight","only"], false); // add Devil's Sight
 		ApplyFeatureAttributes("class", ["warlock","eldritch invocations"], [15,0,true], ["devil's sight","","only"], false); // remove Devil's Sight
 */
-async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent) {
+async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCurrent, prefix="") {
 	if (!IsNotReset) return; //stop this function on a reset
 
 	// validate input
@@ -264,7 +264,7 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		var aWeaponsAdd = uObj.weaponsAdd ? uObj.weaponsAdd : type == "race" && uObj.weapons ? uObj.weapons : false;
 		if (aWeaponsAdd) processAddWeapons(addIt, aWeaponsAdd);
 		var anArmorAdd = uObj.armorAdd ? uObj.armorAdd : uObj.addarmor ? uObj.addarmor : false;
-		if (anArmorAdd) await processAddArmour(addIt, anArmorAdd);
+		if (anArmorAdd) await processAddArmour(addIt, anArmorAdd, prefix);
 		if (uObj.shieldAdd) processAddShield(addIt, uObj.shieldAdd, uObj.weight);
 		if (uObj.ammoAdd) processAddAmmo(addIt, uObj.ammoAdd);
 
@@ -1130,10 +1130,10 @@ async function processSpellcastingBonusElsewhere(bAddRemove, sType, sSrcNm, sUni
 }
 
 // set the armour (if more AC than current armour) or remove the armour
-async function processAddArmour(AddRemove, armour) {
+async function processAddArmour(AddRemove, armour, prefix="") {
 	if (!armour || typeof armour != "string") return;
 	if (!AddRemove) { // remove
-		RemoveArmor(armour);
+		RemoveArmor(armour, prefix);
 	} else { // add
 		if (!ParseArmor(armour)) return;
 		var remCurArm = What("AC Armor Description");
@@ -1379,7 +1379,7 @@ function applyClassFeatureText(act, fldA, oldTxtA, newTxtA, prevTxt) {
 	var fReplaceLinebreaks = function(str) {
 		var sEscaped = str.replace(/\n/g, '\r').replace(/^\r+/, '').RegEscape();
 		var sJustLine = RegExp(sEscaped + ".*", "i");
-		var sFullSection = RegExp("\\r?" + sEscaped + "(.|\\r\\s\\s|\\r\\w)*", "i"); // everything until the first line that doesn't start with two spaces or a letter/number (e.g. an empty line or a new bullet point)
+		var sFullSection = RegExp("\\r?" + sEscaped + "(.|\\n\\s\\s|\\r\\w)*", "i"); // everything until the first line that doesn't start with two spaces or a letter/number (e.g. an empty line or a new bullet point)
 		return [sJustLine, sFullSection];
 	}
 	var oldFrstLnRx = fReplaceLinebreaks(oldTxtA[0]);
@@ -2261,29 +2261,14 @@ async function ShowCompareDialog(txtA, arr, canBeLong) {
 
 // >>>> Magic Items functions <<<< \\
 
-async function doDropDownValCalcWithChoices() {
-	switch (event.name) {
-		case "Calculate":
-			if (event.target.setVal !== undefined) {
-				event.value = event.target.setVal;
-			}
-			break;
-		case "Validate":
-			if (event.target.setVal !== undefined) {
-				delete event.target.setVal;
-				return;
-			}
-			// only in case of a validation event and not changing the value
-			var fldName = event.target.name;
-			var fldNmbr = parseFloat(fldName.slice(-2));
-			if (fldName.toLowerCase().indexOf("magic item") !== -1) {
-				await ApplyMagicItem(event.value, fldNmbr);
-			} else if (fldName.toLowerCase().indexOf("feat") !== -1) {
-				await ApplyFeat(event.value, fldNmbr);
-			}
-			break;
-		default:
-			break;
+async function doDropDownValCalcWithChoices(field) {
+	// only in case of a validation event and not changing the value
+	var fldName = field.name;
+	var fldNmbr = parseFloat(fldName.slice(-2));
+	if (fldName.toLowerCase().indexOf("magic item") !== -1) {
+		return await ApplyMagicItem(field.value, fldNmbr, field);
+	} else if (fldName.toLowerCase().indexOf("feat") !== -1) {
+		return await ApplyFeat(field.value, fldNmbr, field);
 	}
 }
 
@@ -2414,13 +2399,14 @@ function FindMagicItems() {
 }
 
 // Add the text and features of a Magic Items
-async function ApplyMagicItem(input, FldNmbr) {
-	if (IsSetDropDowns || CurrentVars.manual.items || !IsNotMagicItemMenu) return; // When just changing the dropdowns or magic items are set to manual or this is a menu action, don't do anything
+async function ApplyMagicItem(input, FldNmbr, field) {
+	let returnRC = true;
+	if (IsSetDropDowns || CurrentVars.manual.items || !IsNotMagicItemMenu) return returnRC; // When just changing the dropdowns or magic items are set to manual or this is a menu action, don't do anything
 	var MIflds = ReturnMagicItemFieldsArray(FldNmbr);
 	// Not called from a field? Then just set the field and let this function be called anew
-	if ((!event.target || event.target.name !== MIflds[0]) && What(MIflds[0]) !== input) {
+	if ((!field || field.name !== MIflds[0]) && What(MIflds[0]) !== input) {
 		Value(MIflds[0], input);
-		return;
+		return returnRC;
 	};
 
 	var parseResult = ParseMagicItem(input);
@@ -2436,9 +2422,9 @@ async function ApplyMagicItem(input, FldNmbr) {
 
 	var doNotCommit = function(toSetVal) {
 		if (thermoTxt) thermoM(thermoTxt, true); // Stop progress bar
-		if (!IsNotImport) return;
-		event.rc = false;
-		if (isArray(event.target.page)) OpeningStatementVar = app.setTimeOut("tDoc.getField('" + event.target.name + ".1').setFocus();", 10);
+		if (!IsNotImport) return returnRC;
+		returnRC = false;
+		if (isArray(field.page)) OpeningStatementVar = app.setTimeOut("tDoc.getField('" + field.name + ".1').setFocus();", 10);
 	}
 
 	// If no variant was found, but there is a choice, ask it now
@@ -2475,7 +2461,7 @@ async function ApplyMagicItem(input, FldNmbr) {
 				cMsg : "The magic item that you have selected, '" + aMI.name + "' offers a choice for the form it comes in. Unfortunately, the sheet has run into an issue where there are no forms to choose from because of resources being excluded. Use the \"Source Material\" bookmark to correct this.\n\nThis could also be an issue with the imported script containing the item not being written correctly. If so, please contact the author of that import script."
 			});
 			doNotCommit();
-			return;
+			return returnRC;
 		}
 	}
 
@@ -2487,13 +2473,13 @@ async function ApplyMagicItem(input, FldNmbr) {
 			console.show();
 		}
 		if (thermoTxt) thermoM(thermoTxt, true); // Stop progress bar
-		event.target.setVal = "ERROR, please reapply: " + (aMI.name.substr(0,2) + "\u200A" + aMI.name.substr(2)).split(" ").join("\u200A ");
-		return;
+		field.setVal = "ERROR, please reapply: " + (aMI.name.substr(0,2) + "\u200A" + aMI.name.substr(2)).split(" ").join("\u200A ");
+		return returnRC;
 	}
 
 	if (oldMI === newMI && oldMIvar === newMIvar && (!aMI || !aMI.chooseGear) && (!aMIvar || !aMIvar.chooseGear)) {
-		if (setFieldValueTo) event.target.setVal = setFieldValueTo;
-		return; // No changes were made
+		if (setFieldValueTo) field.setVal = setFieldValueTo;
+		return returnRC; // No changes were made
 	}
 
 	// Start progress bar
@@ -2540,13 +2526,13 @@ async function ApplyMagicItem(input, FldNmbr) {
 			});
 			if (stopFunct === 1 || stopFunct === 3) {
 				doNotCommit();
-				return;
+				return returnRC;
 			}
 		}
 	}
 
 	// Before stopping the calculations, first test if the magic item has a prerequisite and if it meets that
-	if (IsNotImport && IsNotReset && theMI && theMI.prereqeval && !ignorePrereqs && event.target && event.target.name == MIflds[0]) {
+	if (IsNotImport && IsNotReset && theMI && theMI.prereqeval && !ignorePrereqs && field && field.name == MIflds[0]) {
 		try {
 			if (typeof theMI.prereqeval == 'string') {
 				var meetsPrereq = eval(theMI.prereqeval);
@@ -2575,13 +2561,13 @@ async function ApplyMagicItem(input, FldNmbr) {
 
 			if (askUserMI !== 4) { // If "NO" was pressed
 				doNotCommit();
-				return;
+				return returnRC;
 			}
 		};
 	};
 
 	// if a magic item variant was chosen, make sure this field will show that selection, now that it can't be cancelled anymore due to not meeting a prerequisite
-	if (setFieldValueTo) event.target.setVal = setFieldValueTo;
+	if (setFieldValueTo) field.setVal = setFieldValueTo;
 
 	calcStop(); // Now stop the calculations
 
@@ -2596,7 +2582,7 @@ async function ApplyMagicItem(input, FldNmbr) {
 			if (oldMI !== newMI && !skipNoAttunement) {
 				// Undo the selection of a weapon, ammo, or armor if defined
 				if (anOldMI.chooseGear || (oldMIvar && anOldMI[oldMIvar].chooseGear)) {
-					await selectMagicItemGearType(false, FldNmbr, oldMIvar && anOldMI[oldMIvar].chooseGear ? anOldMI[oldMIvar].chooseGear : anOldMI.chooseGear);
+					await selectMagicItemGearType(false, FldNmbr, oldMIvar && anOldMI[oldMIvar].chooseGear ? anOldMI[oldMIvar].chooseGear : anOldMI.chooseGear, undefined, undefined, field);
 				}
 
 				// Remove its attributes
@@ -2710,18 +2696,19 @@ async function ApplyMagicItem(input, FldNmbr) {
 		var skipNoAttunement = isDisplay(MIflds[4]) == display.visible && !tDoc.getField(MIflds[4]).isBoxChecked(0);
 		if (!skipNoAttunement && oldMI == newMI && (aMI.chooseGear || (oldMIvar && aMI[oldMIvar].chooseGear))) {
 			// undo the previous
-			await selectMagicItemGearType(false, FldNmbr, oldMIvar && aMI[oldMIvar].chooseGear ? aMI[oldMIvar].chooseGear : aMI.chooseGear, oldMIvar);
+			await selectMagicItemGearType(false, FldNmbr, oldMIvar && aMI[oldMIvar].chooseGear ? aMI[oldMIvar].chooseGear : aMI.chooseGear, oldMIvar, undefined, field);
 		}
-		if (theMI.chooseGear) await selectMagicItemGearType(true, FldNmbr, theMI.chooseGear);
+		if (theMI.chooseGear) await selectMagicItemGearType(true, FldNmbr, theMI.chooseGear, undefined, undefined, field);
 	}
 
 	// Set the visibility of the attuned checkbox
-	setMIattunedVisibility(FldNmbr);
+	setMIattunedVisibility(FldNmbr, undefined, field.name);
 
 	thermoM(thermoTxt, true); // Stop progress bar
+	return returnRC;
 };
 
-async function correctMIdescriptionLong(FldNmbr) {
+async function correctMIdescriptionLong(FldNmbr, field) {
 	if (CurrentVars.manual.items) return;
 	var ArrayNmbr = FldNmbr - 1;
 	var aMI = MagicItemsList[CurrentMagicItems.known[ArrayNmbr]];
@@ -2752,17 +2739,17 @@ async function correctMIdescriptionLong(FldNmbr) {
 	Value("Extra.Magic Item Description " + FldNmbr, theDesc);
 	// Apply the chooseGear item again to the description
 	var hasChooseGear = aMIvar && aMIvar.chooseGear ? aMIvar.chooseGear : aMI.chooseGear;
-	if (hasChooseGear) await selectMagicItemGearType(true, FldNmbr, hasChooseGear, false, true);
+	if (hasChooseGear) await selectMagicItemGearType(true, FldNmbr, hasChooseGear, false, true, field);
 }
 
-async function ApplyAttunementMI(FldNmbr) {
+async function ApplyAttunementMI(FldNmbr, field) {
 	if (CurrentVars.manual.items) return;
 	var ArrayNmbr = FldNmbr - 1;
 	var aMI = CurrentMagicItems.known[ArrayNmbr];
 	if (!aMI) return; // no magic item recognized, so do nothing
 	var aMIvar = CurrentMagicItems.choices[ArrayNmbr];
 
-	var theFld = event.target && event.target.name && event.target.name.indexOf("Extra.Magic Item Attuned ") !== -1 ? event.target : tDoc.getField("Extra.Magic Item Attuned " + FldNmbr);
+	var theFld = field && field.name && field.name.indexOf("Extra.Magic Item Attuned ") !== -1 ? field : tDoc.getField("Extra.Magic Item Attuned " + FldNmbr);
 	var isChecked = theFld.isBoxChecked(0);
 
 	// Start progress bar and stop calculation
@@ -2781,11 +2768,11 @@ async function ApplyAttunementMI(FldNmbr) {
 
 	// Do the selection of a weapon, ammo, armor if defined
 	var useChooseGear = aMIvar && MagicItemsList[aMI][aMIvar].chooseGear ? MagicItemsList[aMI][aMIvar].chooseGear : MagicItemsList[aMI].chooseGear ? MagicItemsList[aMI].chooseGear : false;
-	if (useChooseGear) await selectMagicItemGearType(isChecked, FldNmbr, useChooseGear);
+	if (useChooseGear) await selectMagicItemGearType(isChecked, FldNmbr, useChooseGear, undefined, undefined, field);
 }
 
 // Hide/show the attuned checkbox for a magic item entry
-function setMIattunedVisibility(FldNmbr, force) {
+function setMIattunedVisibility(FldNmbr, force, fldName) {
 	var MIflds = ReturnMagicItemFieldsArray(FldNmbr);
 	var hideIt = How(MIflds[4]) != "";
 	if (!force && hideIt == isDisplay(MIflds[4])) return; // already the right display
@@ -2818,7 +2805,7 @@ function setMIattunedVisibility(FldNmbr, force) {
 	noteRect[2] = noteRect[0] + noteWidth;
 	tDoc.getField(MIflds[1] + ".1").rect = noteRect;
 	tDoc.getField(MIflds[0] + ".1").rect = nameRect;
-	if (!event.target || event.target.name !== MIflds[0]) {
+	if (!fldName || fldName !== MIflds[0]) {
 		// Re-input the value as to counteract the changing of font rendering
 		tDoc.getField(MIflds[0]).value = tDoc.getField(MIflds[0]).value;
 	}
@@ -3106,9 +3093,9 @@ function ParseMagicItemMenu() {
 };
 
 //Make menu for the button on each Magic Item line and parse it to Menus.magicitems
-async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
+async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr, field) {
 	var magicMenu = [];
-	if (!itemNmbr) itemNmbr = parseFloat(event.target.name.slice(-2));
+	if (!itemNmbr) itemNmbr = parseFloat(field.slice(-2));
 	var ArrayNmbr = itemNmbr - 1;
 	var MIflds = ReturnMagicItemFieldsArray(itemNmbr);
 	var theField = What(MIflds[0]) != "";
@@ -3243,8 +3230,8 @@ async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 				thermoM(i/(MIflds.length - 1)); //increment the progress dialog's progress
 			}
 			// Correct the visibility of the attuned fields
-			setMIattunedVisibility(itemNmbr);
-			setMIattunedVisibility(otherNmbr);
+			setMIattunedVisibility(itemNmbr, undefined, field.name);
+			setMIattunedVisibility(otherNmbr, undefined, field.name);
 			// Correct the entry in the CurrentMagicItems.known array
 			if (!CurrentVars.manual.items) {
 				var thisKnown = CurrentMagicItems.known[itemNmbr - 1];
@@ -3256,16 +3243,16 @@ async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 			}
 			// Correct the description if moving between 3rd and overflow page
 			if ((upToOtherPage && MenuSelection[1] == "up") || (downToOtherPage && MenuSelection[1] == "down")) {
-				await correctMIdescriptionLong(itemNmbr);
-				await correctMIdescriptionLong(otherNmbr);
+				await correctMIdescriptionLong(itemNmbr, field);
+				await correctMIdescriptionLong(otherNmbr, field);
 			}
 			IsNotMagicItemMenu = true;
 			break;
 		case "insert" :
-			await MagicItemInsert(itemNmbr);
+			await MagicItemInsert(itemNmbr, field);
 			break;
 		case "delete" :
-			await MagicItemDelete(itemNmbr);
+			await MagicItemDelete(itemNmbr, field);
 			break;
 		case "clear" :
 			thermoTxt = thermoM("Clearing magic item...", false);
@@ -3283,7 +3270,7 @@ async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr) {
 			thermoTxt = thermoM((visibleAttunement ? "Hiding" : "Showing") + " the attuned checkbox...", false);
 			var currentlyChecked = tDoc.getField(MIflds[4]).isBoxChecked(0);
 			Checkbox(MIflds[4], !visibleAttunement && What(MIflds[0]), undefined, visibleAttunement ? "hide" : "");
-			setMIattunedVisibility(itemNmbr);
+			setMIattunedVisibility(itemNmbr, undefined, field.name);
 			// Now if attunement was visible and it was unchecked, we have to reapply the magic item's properties
 			if (!CurrentVars.manual.items) {
 				if (theMI && visibleAttunement && !currentlyChecked) {
@@ -3390,7 +3377,7 @@ function RemoveMagicItem(item) {
 }
 
 // Insert a magic item at the position wanted
-async function MagicItemInsert(itemNmbr) {
+async function MagicItemInsert(itemNmbr, field) {
 	// Stop the function if the selected slot is already empty
 	if (!What("Extra.Magic Item " + itemNmbr)) return;
 
@@ -3425,9 +3412,9 @@ async function MagicItemInsert(itemNmbr) {
 				CurrentMagicItems.choices[it - 1] = CurrentMagicItems.choices[it - 2];
 			}
 			// Correct the attuned checkbox visibility
-			setMIattunedVisibility(it);
+			setMIattunedVisibility(it, field.name);
 			// Correct the description (normal/long)
-			if (it == FieldNumbers.magicitemsD + 1) await correctMIdescriptionLong(it);
+			if (it == FieldNumbers.magicitemsD + 1) await correctMIdescriptionLong(it, field);
 		}
 
 		// Clear the selected slot
@@ -3439,7 +3426,7 @@ async function MagicItemInsert(itemNmbr) {
 }
 
 // Delete a magic item at the position wanted and move the rest up
-async function MagicItemDelete(itemNmbr) {
+async function MagicItemDelete(itemNmbr, field) {
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM("Deleting magic item...");
 	calcStop();
@@ -3467,9 +3454,9 @@ async function MagicItemDelete(itemNmbr) {
 			CurrentMagicItems.choices[it - 1] = CurrentMagicItems.choices[it];
 		}
 		// Correct the attuned checkbox visibility
-		setMIattunedVisibility(it);
+		setMIattunedVisibility(it, field.name);
 		// Correct the description (normal/long)
-		if (it == FieldNumbers.magicitemsD) await correctMIdescriptionLong(it);
+		if (it == FieldNumbers.magicitemsD) await correctMIdescriptionLong(it, field);
 	}
 
 	// Clear the final line
@@ -3502,8 +3489,8 @@ function MagicItemGetShortestName(nameObj) {
 }
 
 // Change the magic item to include a selected weapon, armor, or ammunition
-async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, correctingDescrLong) {
-	if (!event.target || !event.target.name || event.target.name.indexOf("Extra.Magic Item ") == -1 || !typeObj.type) return;
+async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, correctingDescrLong, field) {
+	if (!field || !field.name || field.name.indexOf("Extra.Magic Item ") == -1 || !typeObj.type) return;
 	if (typeObj.excludeCheck && typeof typeObj.excludeCheck != "function") delete typeObj.excludeCheck;
 	// see what type of thing we are dealing with or return if none is recognized
 	switch (typeObj.type.toLowerCase()) {
@@ -3556,7 +3543,7 @@ async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, c
 		}
 	}
 	var MIflds = ReturnMagicItemFieldsArray(FldNmbr);
-	var isApplyFld = event.target.name == MIflds[0];
+	var isApplyFld = field.name == MIflds[0];
 	var ArrayNmbr = FldNmbr - 1;
 	var curItem = CurrentMagicItems.known[ArrayNmbr];
 	var curChoice = oldChoice ? oldChoice : CurrentMagicItems.choices[ArrayNmbr];
@@ -3571,7 +3558,7 @@ async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, c
 	var useName = MagicItemGetShortestName(nameObj);
 
 	// get the value of the magic item name field
-	var useVal = isApplyFld && AddRemove ? event.value : isApplyFld ? event.target.value : What(MIflds[0]);
+	var useVal = isApplyFld && AddRemove ? field.value : isApplyFld ? field.value : What(MIflds[0]);
 	// see if the item is not already present in the string
 	var isItem = tDoc[parseFnct](useVal, true);
 	// if this is recognized as a weapon, make sure we are not just triggering on the default words (axe, sword, hammer, bow, crossbow)
@@ -3626,7 +3613,7 @@ async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, c
 		isItem = itemRefs[userSelected];
 		selectedItem = baseList[isItem].name;
 	} else {
-		if (isApplyFld && event.target.setVal) selectedItem = baseList[isItem].name;
+		if (isApplyFld && field.setVal) selectedItem = baseList[isItem].name;
 		var theItemName = baseList[isItem].name.toLowerCase();
 	}
 	// ammunitions are often written as plural, but we don't want that here
@@ -3676,7 +3663,7 @@ async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, c
 			Value(MIflds[3], RoundTo(baseList[isItem].weight * massMod, 0.001, true));
 		}
 		// set the changed name of the magic item (always do this last!)
-		if (newMIname !== event.value) event.target.setVal = newMIname;
+		if (newMIname !== field.value) field.setVal = newMIname;
 	}
 }
 
@@ -3729,9 +3716,10 @@ function gatherPrereqevalVars() {
 }
 
 // set the checkbox for "Players Make All Rolls" (also field MouseUp)
-async function setPlayersMakeAllRolls(enable) {
+// $$[note]$$ event.target.name -> fldName
+async function setPlayersMakeAllRolls(enable, fldName) {
 	// See if anything is about to be changed, otherwise just stop
-	var isEvent = event.target && event.target.name == "BlueText.Players Make All Rolls";
+	var isEvent = fldName == "BlueText.Players Make All Rolls";
 	var changedState = isEvent ? true : tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) != (enable || enable === undefined ? 1 : 0);
 	if (!changedState) return;
 	// If not called by the MouseUp event, set the checkbox first

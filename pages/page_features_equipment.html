@@ -18,9 +18,9 @@
 			class="field button"
 			style="top: -8px;left: 20px"
 			aria-label="If a class feature offers you a choice, you can click this button to pick one of the options (this button does not print)."
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);ClassFeatureOptions();"
+			onclick="ClassFeatureOptions(undefined, undefined, undefined, true);"
 		>Class Features Menu</button>
-	</div><!--;visibility: hidden"-->
+	</div>
 
 
 	<div id="features_background_traits" class="pane" style="left: 505px;top: 25px;width: 366px;height: 393px;">
@@ -94,11 +94,13 @@
 			spellcheck="true"
 			aria-label="Select or type in the background feature you want to use and its text will be filled out below automatically."
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="ApplyBackgroundFeature(self.value);"
+			onfocus="this.dataset.oldValue=(this.value == '' ? ' ' : this.value)"
+			onload="this.dataset.oldValue=(this.value == '' ? ' ' : this.value)"
+			onchange="ApplyBackgroundFeature(this.value, this.dataset.oldValue);this.dataset.oldValue=(this.value == '' ? ' ' : this.value)"
 		/>
 		<datalist id="background_feature_options">
-			<option value="">
-			<option value="Shelter of the Faithful">
+			<option value=""></option>
+			<option value="Shelter of the Faithful">Shelter of the Faithful</option>
 		</datalist>
 		<textarea
 			id="Background_Feature_Description"
@@ -192,8 +194,8 @@
 			style="top:  30.60px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_2"
@@ -201,8 +203,8 @@
 			style="top:  47.11px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_3"
@@ -210,8 +212,8 @@
 			style="top:  63.62px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_4"
@@ -219,8 +221,8 @@
 			style="top:  80.13px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_5"
@@ -228,8 +230,8 @@
 			style="top:  96.64px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_6"
@@ -237,8 +239,8 @@
 			style="top: 113.15px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_7"
@@ -246,8 +248,8 @@
 			style="top: 129.66px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_8"
@@ -255,8 +257,8 @@
 			style="top: 146.17px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_9"
@@ -264,8 +266,8 @@
 			style="top: 162.68px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_10"
@@ -273,8 +275,8 @@
 			style="top: 179.19px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_11"
@@ -282,8 +284,8 @@
 			style="top: 195.70px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_12"
@@ -291,8 +293,8 @@
 			style="top: 212.21px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_13"
@@ -300,8 +302,8 @@
 			style="top: 228.72px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_14"
@@ -309,8 +311,8 @@
 			style="top: 245.23px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_15"
@@ -318,8 +320,8 @@
 			style="top: 261.74px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_16"
@@ -327,8 +329,8 @@
 			style="top: 278.25px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_17"
@@ -336,8 +338,8 @@
 			style="top: 294.76px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_18"
@@ -345,8 +347,8 @@
 			style="top: 311.27px;left:  19.8px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 
 		<input
@@ -355,8 +357,8 @@
 			style="top:  30.60px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_20"
@@ -364,8 +366,8 @@
 			style="top:  47.11px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_21"
@@ -373,8 +375,8 @@
 			style="top:  63.62px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_22"
@@ -382,8 +384,8 @@
 			style="top:  80.13px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_23"
@@ -391,8 +393,8 @@
 			style="top:  96.64px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_24"
@@ -400,8 +402,8 @@
 			style="top: 113.15px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_25"
@@ -409,8 +411,8 @@
 			style="top: 129.66px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_26"
@@ -418,8 +420,8 @@
 			style="top: 146.17px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_27"
@@ -427,8 +429,8 @@
 			style="top: 162.68px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_28"
@@ -436,8 +438,8 @@
 			style="top: 179.19px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_29"
@@ -445,8 +447,8 @@
 			style="top: 195.70px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_30"
@@ -454,8 +456,8 @@
 			style="top: 212.21px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_31"
@@ -463,8 +465,8 @@
 			style="top: 228.72px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_32"
@@ -472,8 +474,8 @@
 			style="top: 245.23px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_33"
@@ -481,8 +483,8 @@
 			style="top: 261.74px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_34"
@@ -490,8 +492,8 @@
 			style="top: 278.25px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_35"
@@ -499,8 +501,8 @@
 			style="top: 294.76px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_36"
@@ -508,8 +510,8 @@
 			style="top: 311.27px;left: 258.5px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 
 		<input
@@ -518,8 +520,8 @@
 			style="top:  30.60px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_38"
@@ -527,8 +529,8 @@
 			style="top:  47.11px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_39"
@@ -536,8 +538,8 @@
 			style="top:  63.62px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_40"
@@ -545,8 +547,8 @@
 			style="top:  80.13px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_41"
@@ -554,8 +556,8 @@
 			style="top:  96.64px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_42"
@@ -563,8 +565,8 @@
 			style="top: 113.15px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_43"
@@ -572,8 +574,8 @@
 			style="top: 129.66px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_44"
@@ -581,8 +583,8 @@
 			style="top: 146.17px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_45"
@@ -590,8 +592,8 @@
 			style="top: 162.68px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_46"
@@ -599,8 +601,8 @@
 			style="top: 179.19px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_47"
@@ -608,8 +610,8 @@
 			style="top: 195.70px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_48"
@@ -617,8 +619,8 @@
 			style="top: 212.21px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_49"
@@ -626,8 +628,8 @@
 			style="top: 228.72px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_50"
@@ -635,8 +637,8 @@
 			style="top: 245.23px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_51"
@@ -644,8 +646,8 @@
 			style="top: 261.74px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_52"
@@ -653,8 +655,8 @@
 			style="top: 278.25px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_53"
@@ -662,8 +664,8 @@
 			style="top: 294.76px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Adventuring_Gear_Row_54"
@@ -671,8 +673,8 @@
 			style="top: 311.27px;left: 497.2px;font-size: 12px;height: 13.7px;width: 171.5px;overflow-x: scroll"
 			spellcheck="true"
 			type="text"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 
 
@@ -1065,8 +1067,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_1_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_1_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_2"
@@ -1075,8 +1077,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_2_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_2_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_3"
@@ -1085,8 +1087,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_3_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_3_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_4"
@@ -1095,8 +1097,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_4_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_4_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_5"
@@ -1105,8 +1107,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_5_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_5_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_6"
@@ -1115,8 +1117,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_6_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_6_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_7"
@@ -1125,8 +1127,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_7_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_7_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_8"
@@ -1135,8 +1137,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_8_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_8_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_9"
@@ -1145,8 +1147,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_9_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_9_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_10"
@@ -1155,8 +1157,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_10_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_10_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_11"
@@ -1165,8 +1167,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_11_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_11_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_12"
@@ -1175,8 +1177,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_12_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_12_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_13"
@@ -1185,8 +1187,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_13_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_13_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_14"
@@ -1195,8 +1197,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_14_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_14_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_15"
@@ -1205,8 +1207,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_15_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_15_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_16"
@@ -1215,8 +1217,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_16_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_16_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_17"
@@ -1225,8 +1227,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_17_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_17_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_18"
@@ -1235,8 +1237,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_18_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_18_change);"
 		/>
 
 		<input
@@ -1246,8 +1248,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_19_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_19_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_20"
@@ -1256,8 +1258,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_20_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_20_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_21"
@@ -1266,8 +1268,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_21_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_21_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_22"
@@ -1276,8 +1278,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_22_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_22_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_23"
@@ -1286,8 +1288,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_23_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_23_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_24"
@@ -1296,8 +1298,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_24_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_24_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_25"
@@ -1306,8 +1308,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_25_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_25_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_26"
@@ -1316,8 +1318,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_26_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_26_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_27"
@@ -1326,8 +1328,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_27_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_27_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_28"
@@ -1336,8 +1338,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_28_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_28_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_29"
@@ -1346,8 +1348,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_29_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_29_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_30"
@@ -1356,8 +1358,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_30_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_30_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_31"
@@ -1366,8 +1368,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_31_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_31_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_32"
@@ -1376,8 +1378,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_32_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_32_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_33"
@@ -1386,8 +1388,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_33_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_33_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_34"
@@ -1396,8 +1398,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_34_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_34_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_35"
@@ -1406,8 +1408,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_35_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_35_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_36"
@@ -1416,8 +1418,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_36_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_36_change);"
 		/>
 
 		<input
@@ -1427,8 +1429,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_37_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_37_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_38"
@@ -1437,8 +1439,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_38_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_38_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_39"
@@ -1447,8 +1449,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_39_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_39_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_40"
@@ -1457,8 +1459,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_40_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_40_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_41"
@@ -1467,8 +1469,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_41_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_41_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_42"
@@ -1477,8 +1479,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_42_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_42_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_43"
@@ -1487,8 +1489,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_43_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_43_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_44"
@@ -1497,8 +1499,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_44_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_44_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_45"
@@ -1507,8 +1509,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_45_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_45_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_46"
@@ -1517,8 +1519,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_46_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_46_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_47"
@@ -1527,8 +1529,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_47_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_47_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_48"
@@ -1537,8 +1539,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_48_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_48_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_49"
@@ -1547,8 +1549,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_49_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_49_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_50"
@@ -1557,8 +1559,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_50_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_50_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_51"
@@ -1567,8 +1569,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_51_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_51_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_52"
@@ -1577,8 +1579,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_52_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_52_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_53"
@@ -1587,8 +1589,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_53_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_53_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_54"
@@ -1597,8 +1599,8 @@
 			spellcheck="true"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_54_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Adventuring_Gear_Weight_54_change);"
 		/>
 
 		<input
@@ -1606,21 +1608,21 @@
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 214.5px;font-size: 11px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed)"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Adventuring_Gear_Weight_Subtotal_Left_change)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Adventuring_Gear_Weight_Subtotal_Left_change)"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_Subtotal_Middle"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 453.2px;font-size: 11px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed)"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Adventuring_Gear_Weight_Subtotal_Middle_change)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Adventuring_Gear_Weight_Subtotal_Middle_change)"
 		/>
 		<input
 			id="Adventuring_Gear_Weight_Subtotal_Right"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 691.9px;font-size: 11px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed)"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Adventuring_Gear_Weight_Subtotal_Right_change)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Adventuring_Gear_Weight_Subtotal_Right_change)"
 		/>
 
 		<input
@@ -1629,8 +1631,8 @@
 			style="top: 22.5px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true, false)"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Copper_Pieces_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Copper_Pieces_change)"
 		/>
 		<input
 			id="Silver_Pieces"
@@ -1638,8 +1640,8 @@
 			style="top: 63.7px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true, false)"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Silver_Pieces_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Silver_Pieces_change)"
 		/>
 		<input
 			id="Electrum_Pieces"
@@ -1647,8 +1649,8 @@
 			style="top: 104.9px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true, false)"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Electrum_Pieces_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Electrum_Pieces_change)"
 		/>
 		<input
 			id="Gold_Pieces"
@@ -1656,8 +1658,8 @@
 			style="top: 146.1px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true, false)"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Gold_Pieces_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Gold_Pieces_change)"
 		/>
 		<input
 			id="Platinum_Pieces"
@@ -1665,8 +1667,8 @@
 			style="top: 187.3px;left: 747px;font-size: 25px;height: 24px;width: 56px;text-align: center"
 			type="number"
 			data-default=""
-			oninput="adapter_helper_keystroke1(this, true, false)"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Platinum_Pieces_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Platinum_Pieces_change)"
 		/>
 
 		<div
@@ -1681,7 +1683,7 @@
 				style="top: 15px;left: 0px;font-size: 12px;width: 83px;height: 15px;pointer-events: none"
 				type="text"
 				data-default=""
-				onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value"
+				onchange="this.value=format1(this.value, '', '', 'mass')"
 			/>
 
 			<input
@@ -1735,327 +1737,327 @@
 			id="Adventuring_Gear_Button_1"
 			class="field button nonprintable"
 			style="top:  32.00px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_2"
 			class="field button nonprintable"
 			style="top:  48.61px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_3"
 			class="field button nonprintable"
 			style="top:  65.22px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_4"
 			class="field button nonprintable"
 			style="top:  81.83px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_5"
 			class="field button nonprintable"
 			style="top:  98.44px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_6"
 			class="field button nonprintable"
 			style="top: 115.05px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_7"
 			class="field button nonprintable"
 			style="top: 131.66px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_8"
 			class="field button nonprintable"
 			style="top: 148.27px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_9"
 			class="field button nonprintable"
 			style="top: 164.88px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_10"
 			class="field button nonprintable"
 			style="top: 181.49px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_11"
 			class="field button nonprintable"
 			style="top: 198.10px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_12"
 			class="field button nonprintable"
 			style="top: 214.71px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_13"
 			class="field button nonprintable"
 			style="top: 231.32px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_14"
 			class="field button nonprintable"
 			style="top: 247.93px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_15"
 			class="field button nonprintable"
 			style="top: 264.54px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_16"
 			class="field button nonprintable"
 			style="top: 281.15px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_17"
 			class="field button nonprintable"
 			style="top: 297.76px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_18"
 			class="field button nonprintable"
 			style="top: 314.37px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 
 		<button
 			id="Adventuring_Gear_Button_19"
 			class="field button nonprintable"
 			style="top:  31.99px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_20"
 			class="field button nonprintable"
 			style="top:  48.52px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_21"
 			class="field button nonprintable"
 			style="top:  65.05px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_22"
 			class="field button nonprintable"
 			style="top:  81.58px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_23"
 			class="field button nonprintable"
 			style="top:  98.11px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_24"
 			class="field button nonprintable"
 			style="top: 114.64px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_25"
 			class="field button nonprintable"
 			style="top: 131.17px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_26"
 			class="field button nonprintable"
 			style="top: 147.70px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_27"
 			class="field button nonprintable"
 			style="top: 164.23px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_28"
 			class="field button nonprintable"
 			style="top: 180.76px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_29"
 			class="field button nonprintable"
 			style="top: 197.29px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_30"
 			class="field button nonprintable"
 			style="top: 213.82px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_31"
 			class="field button nonprintable"
 			style="top: 230.35px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_32"
 			class="field button nonprintable"
 			style="top: 246.88px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_33"
 			class="field button nonprintable"
 			style="top: 263.41px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_34"
 			class="field button nonprintable"
 			style="top: 279.94px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_35"
 			class="field button nonprintable"
 			style="top: 296.47px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_36"
 			class="field button nonprintable"
 			style="top: 313.00px;left: 247px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 
 		<button
 			id="Adventuring_Gear_Button_37"
 			class="field button nonprintable"
 			style="top:  31.99px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_38"
 			class="field button nonprintable"
 			style="top:  48.52px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_39"
 			class="field button nonprintable"
 			style="top:  65.05px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_40"
 			class="field button nonprintable"
 			style="top:  81.58px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_41"
 			class="field button nonprintable"
 			style="top:  98.11px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_42"
 			class="field button nonprintable"
 			style="top: 114.64px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_43"
 			class="field button nonprintable"
 			style="top: 131.17px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_44"
 			class="field button nonprintable"
 			style="top: 147.70px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_45"
 			class="field button nonprintable"
 			style="top: 164.23px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_46"
 			class="field button nonprintable"
 			style="top: 180.76px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_47"
 			class="field button nonprintable"
 			style="top: 197.29px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_48"
 			class="field button nonprintable"
 			style="top: 213.82px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_49"
 			class="field button nonprintable"
 			style="top: 230.35px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_50"
 			class="field button nonprintable"
 			style="top: 246.88px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_51"
 			class="field button nonprintable"
 			style="top: 263.41px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_52"
 			class="field button nonprintable"
 			style="top: 279.94px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_53"
 			class="field button nonprintable"
 			style="top: 296.47px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Adventuring_Gear_Button_54"
 			class="field button nonprintable"
 			style="top: 313.00px;left: 485.7px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 
 		<!-- BlueText -->
@@ -2169,7 +2171,7 @@
 			style="top:  30.60px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_1_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_1_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_2"
@@ -2177,7 +2179,7 @@
 			style="top:  47.11px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_2_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_2_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_3"
@@ -2185,7 +2187,7 @@
 			style="top:  63.62px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_3_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_3_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_4"
@@ -2193,7 +2195,7 @@
 			style="top:  80.13px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_4_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_4_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_5"
@@ -2201,7 +2203,7 @@
 			style="top:  96.64px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_5_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_5_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_6"
@@ -2209,7 +2211,7 @@
 			style="top: 113.15px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_6_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_6_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_7"
@@ -2217,7 +2219,7 @@
 			style="top: 129.66px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_7_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_7_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_8"
@@ -2225,7 +2227,7 @@
 			style="top: 146.17px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_8_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_8_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_9"
@@ -2233,7 +2235,7 @@
 			style="top: 162.68px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_9_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_9_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_10"
@@ -2241,7 +2243,7 @@
 			style="top: 179.19px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_10_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_10_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_11"
@@ -2249,7 +2251,7 @@
 			style="top: 195.70px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_11_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_11_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_12"
@@ -2257,7 +2259,7 @@
 			style="top: 212.21px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_12_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_12_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_13"
@@ -2265,7 +2267,7 @@
 			style="top: 228.72px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_13_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_13_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_14"
@@ -2273,7 +2275,7 @@
 			style="top: 245.23px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_14_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_14_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_15"
@@ -2281,7 +2283,7 @@
 			style="top: 261.74px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_15_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_15_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_16"
@@ -2289,7 +2291,7 @@
 			style="top: 278.25px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_16_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_16_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_17"
@@ -2297,7 +2299,7 @@
 			style="top: 294.76px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_17_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_17_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_18"
@@ -2305,7 +2307,7 @@
 			style="top: 311.27px;left: 172.1px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_18_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_18_change);"
 		/>
 
 		<input id="Adventuring_Gear_Location.Row_19"
@@ -2313,126 +2315,126 @@
 			style="top:  30.60px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_19_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_19_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_20"
 			class="field inputfield"
 			style="top:  47.11px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_20_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_20_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_21"
 			class="field inputfield"
 			style="top:  63.62px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_21_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_21_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_22"
 			class="field inputfield"
 			style="top:  80.13px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_22_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_22_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_23"
 			class="field inputfield"
 			style="top:  96.64px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_23_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_23_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_24"
 			class="field inputfield"
 			style="top: 113.15px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_24_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_24_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_25"
 			class="field inputfield"
 			style="top: 129.66px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_25_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_25_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_26"
 			class="field inputfield"
 			style="top: 146.17px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_26_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_26_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_27"
 			class="field inputfield"
 			style="top: 162.68px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_27_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_27_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_28"
 			class="field inputfield"
 			style="top: 179.19px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_28_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_28_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_29"
 			class="field inputfield"
 			style="top: 195.70px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_29_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_29_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_30"
 			class="field inputfield"
 			style="top: 212.21px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_30_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_30_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_31"
 			class="field inputfield"
 			style="top: 228.72px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_31_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_31_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_32"
 			class="field inputfield"
 			style="top: 245.23px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_32_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_32_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_33"
 			class="field inputfield"
 			style="top: 261.74px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_33_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_33_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_34"
 			class="field inputfield"
 			style="top: 278.25px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_34_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_34_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_35"
 			class="field inputfield"
 			style="top: 294.76px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_35_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_35_change);"
 		/>
 		<input id="Adventuring_Gear_Location.Row_36"
 			class="field inputfield"
 			style="top: 311.27px;left: 410.8px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_36_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_36_change);"
 		/>
 
 		<input
@@ -2441,7 +2443,7 @@
 			style="top:  30.60px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_37_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_37_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_38"
@@ -2449,7 +2451,7 @@
 			style="top:  47.11px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_38_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_38_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_39"
@@ -2457,7 +2459,7 @@
 			style="top:  63.62px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_39_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_39_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_40"
@@ -2465,7 +2467,7 @@
 			style="top:  80.13px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_40_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_40_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_41"
@@ -2473,7 +2475,7 @@
 			style="top:  96.64px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_41_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_41_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_42"
@@ -2481,7 +2483,7 @@
 			style="top: 113.15px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_42_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_42_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_43"
@@ -2489,7 +2491,7 @@
 			style="top: 129.66px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_43_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_43_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_44"
@@ -2497,7 +2499,7 @@
 			style="top: 146.17px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_44_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_44_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_45"
@@ -2505,7 +2507,7 @@
 			style="top: 162.68px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_45_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_45_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_46"
@@ -2513,7 +2515,7 @@
 			style="top: 179.19px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_46_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_46_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_47"
@@ -2521,7 +2523,7 @@
 			style="top: 195.70px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_47_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_47_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_48"
@@ -2529,7 +2531,7 @@
 			style="top: 212.21px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_48_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_48_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_49"
@@ -2537,7 +2539,7 @@
 			style="top: 228.72px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_49_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_49_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_50"
@@ -2545,7 +2547,7 @@
 			style="top: 245.23px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_50_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_50_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_51"
@@ -2553,7 +2555,7 @@
 			style="top: 261.74px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_51_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_51_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_52"
@@ -2561,7 +2563,7 @@
 			style="top: 278.25px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_52_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_52_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_53"
@@ -2569,7 +2571,7 @@
 			style="top: 294.76px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_53_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_53_change);"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Row_54"
@@ -2577,7 +2579,7 @@
 			style="top: 311.27px;left: 649.5px;font-size: 9.3px;height: 13.7px;width: 19.2px;text-align:center;overflow-x:scroll;visibility: hidden"
 			type="text"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_54_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Adventuring_Gear_Location_Row_54_change);"
 		/>
 
 		<input
@@ -2585,21 +2587,21 @@
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left:  44.4px;font-size: 9.3px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed);visibility: hidden"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="this.value=format1(String(this.value))"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Subtotal_2"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left:  95.1px;font-size: 9.3px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed);visibility: hidden"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="this.value=format1(String(this.value))"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Subtotal_3"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 145.8px;font-size: 9.3px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed);visibility: hidden"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="this.value=format1(String(this.value))"
 		/>
 
 		<input
@@ -2607,21 +2609,21 @@
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 283.1px;font-size: 9.3px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed);visibility: hidden"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="this.value=format1(String(this.value))"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Subtotal_5"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 333.8px;font-size: 9.3px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed);visibility: hidden"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="this.value=format1(String(this.value))"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Subtotal_6"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 384.5px;font-size: 9.3px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed);visibility: hidden"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="this.value=format1(String(this.value))"
 		/>
 
 		<input
@@ -2629,21 +2631,21 @@
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 521.8px;font-size: 9.3px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed);visibility: hidden"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="this.value=format1(String(this.value))"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Subtotal_8"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 572.5px;font-size: 9.3px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed);visibility: hidden"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="this.value=format1(String(this.value))"
 		/>
 		<input
 			id="Adventuring_Gear_Location.Subtotal_9"
 			class="field inputfield-noneditable"
 			style="top: 327.88px;left: 623.2px;font-size: 9.3px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed);visibility: hidden"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value"
+			onchange="this.value=format1(String(this.value))"
 		/>
 
 		<!-- BlueText -->
@@ -2659,8 +2661,8 @@
 			style="top: 307px;left: 840px;width: 20px;text-align: center;visibility: hidden;"
 			value="1"
 			type="text"
-			oninput="adapter_helper_keystroke1(this, true, false)"
-			onchange="event.value=this.value;format2();this.value=event.value;eventManager.handle_event(EventType.Carrying_Capacity_Multiplier_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format2(this.value);eventManager.handle_event(EventType.Carrying_Capacity_Multiplier_change)"
 		/>
 
 		<script type="text/javascript">
@@ -2677,11 +2679,12 @@
 						event_type,
 						function() {
 							let loc_subt_id = 'Adventuring_Gear_Location.Subtotal_' + String(subTotalInd);
-							event.target.name = adapter_helper_convert_id_to_fieldname(loc_subt_id);
-							CalcCarriedLocation();
+							let newVal = CalcCarriedLocation(adapter_helper_convert_id_to_fieldname(loc_subt_id));
 							let locSubtElement = document.getElementById(loc_subt_id);
-							locSubtElement.value = event.value;
-							locSubtElement.dispatchEvent(new Event('change'));
+							if (locSubtElement.value != newVal) {
+								locSubtElement.value = newVal;
+								locSubtElement.dispatchEvent(new Event('change'));
+							}
 						}
 					)
 				});
@@ -2700,18 +2703,17 @@
 						event_type,
 						function() {
 							let subTotalId = 'Adventuring_Gear_Weight_Subtotal_' + loc;
-							event.target.name = adapter_helper_convert_id_to_fieldname(subTotalId);
-							CalcWeightSubtotal();
+							let newVal = CalcWeightSubtotal(adapter_helper_convert_id_to_fieldname(subTotalId));
 							let weightElement = document.getElementById(subTotalId);
-							if (weightElement.value != event.value) {
-								weightElement.value = event.value;
+							if (weightElement.value != newVal) {
+								weightElement.value = newVal;
 								weightElement.dispatchEvent(new Event('change'));
 							}
 						}
 					)
 				});
 			})
-			// Weight carried
+			// Weight Carried
 			console.log("waiting for some racing thing...");
 			[
 				EventType.AC_Armor_Weight_change,
@@ -2751,15 +2753,7 @@
 			].forEach(function(event_type) {
 				eventManager.add_listener(
 					event_type,
-					function() {
-						CalcWeightCarried();
-						let newValue = event.value;
-						let weightCarriedElement = document.getElementById('Weight_Carried');
-						if (newValue != weightCarriedElement.value) {
-							weightCarriedElement.value = newValue;
-							weightCarriedElement.dispatchEvent(new Event('change'));
-						}
-					}
+					function() {CalcWeightCarried();}
 				);
 			});
 			// Encumbrance
@@ -2779,11 +2773,10 @@
 					eventManager.add_listener(
 						event_type,
 						function() {
-							event.target.name = adapter_helper_convert_id_to_fieldname(field_id);
-							CalcEncumbrance();
+							let newVal = CalcEncumbrance(adapter_helper_convert_id_to_fieldname(field_id));
 							let capElement = document.getElementById(field_id);
-							if (event.value != capElement.value) {
-								capElement.value = event.value;
+							if (newVal != capElement.value) {
+								capElement.value = newVal;
 								capElement.dispatchEvent(new Event('change'));
 							}
 						}

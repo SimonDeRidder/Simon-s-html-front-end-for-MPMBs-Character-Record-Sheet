@@ -332,11 +332,11 @@ function sign(x) {
 	return x > 0 ? 1 : x < 0 ? -1 : x;
 };
 
-function format1(extraDec, fixedDec, unit) {
+function format1(value, extraDec, fixedDec, unit) {
 	var plusDec = extraDec && !isNaN(extraDec) ? Number(extraDec) : 0;
 	var decShow = 0;
 	AFNumber_Format(2 + plusDec, 1, 0, 0, "", false);
-	var decLoc = event.value.indexOf(".");
+	var decLoc = value.indexOf(".");
 	var decSep = What("Decimal Separator");
 
 	decShow = (3 + plusDec) - decLoc;
@@ -350,114 +350,69 @@ function format1(extraDec, fixedDec, unit) {
 		AFNumber_Format(decShow, 0, 0, 0, "", false);
 		if (decShow) {
 			// Replace any trailing zeroes with nothing
-			event.value = event.value.replace(/[0]+$/, "");
+			value = value.replace(/[0]+$/, "");
 			// Replace a trailing decimal with nothing
-			event.value = event.value.replace(/\.$/, "");
+			value = value.replace(/\.$/, "");
 		}
 	} else if (decSep === "comma") {
 		AFNumber_Format(decShow, 2, 0, 0, "", false);
 		if (decShow) {
 			// Replace any trailing zeroes with nothing
-			event.value = event.value.replace(/[0]+$/, "");
+			value = value.replace(/[0]+$/, "");
 			// Replace a trailing decimal with nothing
-			event.value = event.value.replace(/,$/, "");
+			value = value.replace(/,$/, "");
 		}
 	}
 
-	if (event.value !== "" && unit && unit === "mass") {
+	if (value !== "" && unit && unit === "mass") {
 		var UnitSystem = What("Unit System");
 		if (UnitSystem === "imperial") {
-			event.value += " lb";
+			value += " lb";
 		} else if (UnitSystem === "metric") {
-			event.value += " kg";
+			value += " kg";
 		}
 	}
+	return value;
 }
 
 //replace all commas and dots with the set decimal separator
-function format2() {
+function format2(value) {
 	var theDec = What("Decimal Separator") === "dot" ? "." : ",";
-	if (event.value) event.value = event.value.replace(/(\.|,)/, theDec);
+	if (value) value = value.replace(/(\.|,)/, theDec);
+	return value;
 }
 
-function keystroke1(allowDec, allowNegative) {
-	if (!event.willCommit) {
-		event.change = event.change.replace(/ /g, '');
+function keystroke1(allowDec, allowNegative, value, change, selStart, selEnd, willCommit) {
+	if (!willCommit) {
+		change = change.replace(/ /g, '');
 		if (allowDec) {
-			var tests = !isNaN(event.change) || ((/,|\./g).test(event.change) && (!(/,|\./g).test(event.value) || (/,|\./g).test(event.value.substring(event.selStart, event.selEnd))));
+			var tests = !isNaN(change) || ((/,|\./g).test(change) && (!(/,|\./g).test(value) || (/,|\./g).test(value.substring(selStart, selEnd))));
 		} else {
-			var tests = !isNaN(event.change);
+			var tests = !isNaN(change);
 		}
 		if (allowNegative) {
-			tests = tests || (event.change === "-" && event.selStart === 0 && (!(/-/g).test(event.value) || (/-/g).test(event.value.substring(event.selStart, event.selEnd))));
+			tests = tests || (change === "-" && selStart === 0 && (!(/-/g).test(value) || (/-/g).test(value.substring(selStart, selEnd))));
 		}
-		event.rc = tests;
+		return tests;
 	} else {
-		event.rc = !isNaN(event.value.replace(/,/, "."));
+		return !isNaN(value.replace(/,/, "."));
 	}
 }
 
-function keystroke2() {
-	var allowedA = [".", ",", "-", "+", "*", "/"];
-	var tests = event.value === "";
-	if (!event.willCommit) {
-		tests = !isNaN(event.change) || allowedA.indexOf(event.change) !== -1;
-	} else if (event.value !== "") {
-		tests = false;
-		var toUse = event.value.replace(/(\.)+(\,)+/g, ",").replace(/(\.|\,)+/g, "$1");
-		toUse = toUse.replace(/(\-)+(\+)+/g, "-").replace(/(\+|\-)+/g, "$1").replace(/(\*|\/|\+|\-)+/g, "$1").replace(/^(\*|\/)/, "");
-		var toTest = toUse.replace(/,/g, ".");
-		try {
-			var tests = !isNaN(eval_ish(toTest));
-			event.value = toUse;
-		} catch (err) {
-			try {
-				var tests = !isNaN(eval_ish(toTest.slice(0, -1)));
-				event.value = toUse.slice(0, -1);
-			} catch (err) {
-				var tests = false;
-			}
-		}
-	}
-	event.rc = tests;
-};
-
 // a format function for the "Die" field of the Hit Dice section
-function FormatHD() {
-	var theResult = clean(event.value, " ");
+function FormatHD(name, value) {
+	var theResult = clean(value, " ");
 	if (theResult !== "") {
-		var QI = getTemplPre(event.target.name, "AScomp");
+		var QI = getTemplPre(name, "AScomp");
 		var theCon = Number(What(QI === true ? "Con Mod" : QI + "Comp.Use.Ability.Con.Mod"));
-		event.value = "d" + theResult + (theCon < 0 ? theCon : "+" + theCon);
+		value = "d" + theResult + (theCon < 0 ? theCon : "+" + theCon);
 	}
-};
-
-//format the date (format)
-function FormatDay() {
-	var isDate = util.scand('yy-mm-dd', event.value);
-	event.value = event.value && isDate ? util.printd(What("DateFormat_Remember"), isDate) : "";
-};
-
-//make sure the date is entered in the correct format (keystroke)
-function KeystrokeDay() {
-	if (event.willCommit && event.value) {
-		var isDate = util.scand('yy-mm-dd', event.value);
-		if (!isDate) {
-			event.value = "";
-			if (IsNotImport) {
-				app.alert({
-					cMsg : "Please enter a valid date using the date-picker (the little arrow in the field) or enter the date manually using of the form \"Year-Month-Day\".\n\nYou can change the way the date is displayed with the \"Logsheet Options\" at the top of each Adventurers Logsheet. Note that the format of the date in the field never changes, only the way it is displayed.",
-					cTitle : "Invalid date format",
-					nIcon : 1
-				});
-			};
-		};
-	};
+	return value;
 };
 
 //a field "format" function to add a space at the start and end of the field, to make sure it looks better on the sheet
-function addWhitespace() {
-	event.value = " " + event.value + " ";
+function addWhitespace(value) {
+	return " " + value.trim() + " ";
 };
 
 function RoundTo(inputNmbr, roundNmbr, emptyAtZero, applyDec) {
@@ -1052,12 +1007,6 @@ function setDialogName(dialogElem, itemID, attrNm, setAttr) {
 //return a random number between 1 and the input 'die'
 function RollD(die) {
 	return Math.floor(Math.random() * die) + 1;
-};
-
-//set the other checkbox Dis/Adv off when clicking this field (on MouseUp)
-function SetDisAdv() {
-	var Adv = (/Adv$/).test(event.target.name);
-	this.getField(event.target.name.replace(Adv ? "Adv" : "Dis", Adv ? "Dis" : "Adv")).value = "Off";
 };
 
 //see if two strings don't differ too much in length

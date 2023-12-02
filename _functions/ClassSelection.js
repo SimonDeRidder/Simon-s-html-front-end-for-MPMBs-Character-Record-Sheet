@@ -1040,18 +1040,20 @@ async function SelectClass() {
 			Value("Class and Levels", txtFinal);
 		} else { // text stayed the same, so just update the class level
 			classes.totallevel = lvlFinal;
-			ApplyClassLevel();
+			await ApplyClassLevel();
 		}
 	};
 };
 
 //and On Click function for the Class and Levels field
-async function ClickClasses() {
-	if (!CurrentVars.manual.classes && app.viewerVersion >= 15 && (!event.target.value || event.modifier || event.shift)) {
-		event.target.remVal = event.target.value;
+async function ClickClasses(value, modifier) {
+	let remVal = undefined;
+	if (!CurrentVars.manual.classes && app.viewerVersion >= 15 && (!value || modifier)) {
+		remVal = value;
 		tDoc.getField("Player Name").setFocus();
 		await SelectClass();
 	};
+	return remVal;
 };
 
 // After changing the level field, ask which class to add a level to, or start multiclassing
@@ -1320,7 +1322,7 @@ async function AskMulticlassing(lvlAlreadyAdded) {
 		Value("Class and Levels", newClassText);
 	} else { // text stayed the same, so just update the class level
 		classes.totallevel = CharLVL;
-		ApplyClassLevel();
+		await ApplyClassLevel();
 	}
 };
 

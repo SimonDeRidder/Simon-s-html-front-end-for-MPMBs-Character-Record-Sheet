@@ -175,7 +175,6 @@
 		<button id="tabbuttonfeaq" onclick="openPage(this)" data-page="pfeaq" class="tablink">Features & Equipment</button>
 		<button id="tabbuttonnofe" onclick="openPage(this)" data-page="pnofe" class="tablink">Notes & Feats</button>
 		<button id="tabbuttonback" onclick="openPage(this)" data-page="pback" class="tablink">Background</button>
-		<button id="tabbuttoncomp" onclick="openPage(this)" data-page="pcomp" class="tablink">Companion</button>
 		<button id="tabbuttonnote" onclick="openPage(this)" data-page="pnote" class="tablink">Notes</button>
 		<button id="tabbuttonrefe" onclick="openPage(this)" data-page="prefe" class="tablink">Reference</button>
 	</div>
@@ -185,7 +184,7 @@
 		<div id="pfeaq" class="page" page-url="pages/page_features_equipment.html"></div>
 		<div id="pnofe" class="page" page-url="pages/page_notes_feats.html"></div>
 		<div id="pback" class="page" page-url="pages/page_appearance_background.html"></div>
-		<div id="pcomp" class="page" page-url="pages/page_companion.html"></div>
+		<div id="pcomptempl" class="page" page-url="pages/page_companion.html"></div>
 		<div id="pwildtempl" class="page" page-url="pages/page_wildshape.html"></div>
 		<div id="pnote" class="page" page-url="pages/page_notes.html"></div>
 		<div id="pspellstempl" class="page" page-url="pages/page_spells.html"></div>
@@ -236,7 +235,7 @@
 
 		<div id="User_Imported_Files.Stringified" class="field" value="new UserImportedFilesAdapter({})"></div>
 		<div id="ChangesDialogSkip.Stringified" class="field" value="new ChangesDialogSkipAdapter()"></div>
-		<div id="CurrentSpells.Stringified" class="field" value="([])##########(Object({incl: [], excl: [], amendSPDescr: false, allowSpellAdd: true, emptyFields: false, glossary: true}))"></div>
+		<div id="CurrentSpells.Stringified" class="field" value="(Object({}))##########(Object({incl: [], excl: [], amendSPDescr: false, allowSpellAdd: true, emptyFields: false, glossary: true}))"></div>
 		<div id="CurrentSources.Stringified" class="field" value="new CurrentSourcesAdapter()"></div>
 		<div id="CurrentEvals.Stringified" class="field" value="Object()"></div>
 		<div id="CurrentProfs.Stringified" class="field" value="new CurrentProfsAdapter()"></div>
@@ -247,7 +246,7 @@
 
 	<!-- Assorted others. -->
 	<div style="visibility:hidden">
-		<input id="SelectFile" class="field" value=""/>
+		<input id="SelectFile" class="field" value="" style="display: none"/>
 
 		<div id="Color.Theme" class="field"></div>
 		<div id="Color.DragonHeads" class="field"></div>
@@ -260,11 +259,11 @@
 	includePage("pfeaq", 2);
 	includePage("pnofe", 3);
 	includePage("pback", 4);
-	includePage("pcomp", 5, prefix = "P4.AScomp.");
+	includePage("pcomptempl", 0, prefix = "P4.AScomp.", add_to_inventory = false);
 	includePage("pwildtempl", 0, prefix="", add_to_inventory=false);
-	includePage("pnote", 6, prefix = "P5.ASnotes.");
+	includePage("pnote", 5, prefix = "P5.ASnotes.");
 	includePage("pspellstempl", 0, prefix="", add_to_inventory=false);
-	includePage("prefe", 7);
+	includePage("prefe", 6);
 </script>
 <script>
 	function openPage(buttonElmnt) {

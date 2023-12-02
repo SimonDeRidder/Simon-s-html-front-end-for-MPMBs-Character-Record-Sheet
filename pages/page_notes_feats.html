@@ -38,7 +38,6 @@
 			style="top: 33px;left: 51px;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_2"
@@ -47,7 +46,6 @@
 			style="top: 150px;left: 51px;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_3"
@@ -56,7 +54,6 @@
 			style="top: 267px;left: 51px;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_4"
@@ -65,7 +62,6 @@
 			style="top: 384px;left: 51px;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_5"
@@ -74,7 +70,6 @@
 			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_6"
@@ -83,7 +78,6 @@
 			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_7"
@@ -92,7 +86,6 @@
 			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Feat_Name_8"
@@ -101,7 +94,6 @@
 			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<datalist id="feat_options">
 			<option value=""></option>
@@ -262,6 +254,40 @@
 			style="visibility: hidden;"
 			onclick="MakeFeatMenu_FeatOptions(null, 8)"
 		>&gt;</button>
+
+		<script type="text/javascript">
+			// Feat_Name_* change
+			for (let i = 1; i <= 8; i++) {
+				let elm = document.getElementById('Feat_Name_' + String(i));
+				elm.onfocus = function() {
+					this.dataset.oldVal = this.value;
+				}
+				elm.addEventListener(
+					"calculate",
+					(e) => {
+						if (e.target.dataset.setVal !== undefined) {
+							e.target.value = e.target.dataset.setVal;
+							e.target.dispatchEvent(new Event('change'));
+						}
+					},
+					false,
+				);
+				elm.onchange = async function() {
+					if (this.dataset.setVal !== undefined) {
+						delete this.dataset.setVal;
+					} else {
+						calcStartSet = true;
+						calcStop();
+						let rc = await doDropDownValCalcWithChoices(new AdapterClassFieldReference([this]));
+						if (!rc) {
+							this.value = this.dataset.oldVal;
+						}
+						calcStartSet = false;
+						calcCont();
+					}
+				}
+			}
+		</script>
 	</div>
 
 
@@ -345,7 +371,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_2"
@@ -355,7 +380,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_3"
@@ -365,7 +389,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_4"
@@ -375,7 +398,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_5"
@@ -385,7 +407,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_6"
@@ -395,7 +416,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_7"
@@ -405,7 +425,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_8"
@@ -415,7 +434,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_9"
@@ -425,7 +443,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_10"
@@ -435,7 +452,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_11"
@@ -445,7 +461,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<input
 			id="Extra.Magic_Item_12"
@@ -455,7 +470,6 @@
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;event.name='Validate';doDropDownValCalcWithChoices()"
 		/>
 		<datalist id="magic_item_options">
 			<option value=""></option>
@@ -778,84 +792,84 @@
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 28px;left: 284px"
-			onchange="ApplyAttunementMI(1)"
+			onchange="ApplyAttunementMI(1, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_2"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 145px;left: 284px"
-			onchange="ApplyAttunementMI(2)"
+			onchange="ApplyAttunementMI(2, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_3"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 262px;left: 284px"
-			onchange="ApplyAttunementMI(3)"
+			onchange="ApplyAttunementMI(3, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_4"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 379px;left: 284px"
-			onchange="ApplyAttunementMI(4)"
+			onchange="ApplyAttunementMI(4, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_5"
 			class="field checkcircle"
 			type="checkbox"
 			style="top: 496px;left: 284px"
-			onchange="ApplyAttunementMI(5)"
+			onchange="ApplyAttunementMI(5, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_6"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden"
-			onchange="ApplyAttunementMI(6)"
+			onchange="ApplyAttunementMI(6, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_7"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden"
-			onchange="ApplyAttunementMI(7)"
+			onchange="ApplyAttunementMI(7, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_8"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden"
-			onchange="ApplyAttunementMI(8)"
+			onchange="ApplyAttunementMI(8, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_9"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden"
-			onchange="ApplyAttunementMI(9)"
+			onchange="ApplyAttunementMI(9, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_10"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden" 
-			nchange="ApplyAttunementMI(10)"
+			onchange="ApplyAttunementMI(10, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_11"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden" 
-			nchange="ApplyAttunementMI(11)"
+			onchange="ApplyAttunementMI(11, new AdapterClassFieldReference([this]))"
 		/>
 		<input
 			id="Extra.Magic_Item_Attuned_12"
 			class="field checkcircle"
 			type="checkbox"
 			style="visibility: hidden" 
-			nchange="ApplyAttunementMI(12)"
+			onchange="ApplyAttunementMI(12, new AdapterClassFieldReference([this]))"
 		/>
 
 		<textarea
@@ -947,73 +961,73 @@
 			id="Extra.Magic_Item_Button_1"
 			class="field button nonprintable"
 			style="top: 30.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 1)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 1, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_2"
 			class="field button nonprintable"
 			style="top: 147.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 2)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 2, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_3"
 			class="field button nonprintable"
 			style="top: 264.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 3)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 3, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_4"
 			class="field button nonprintable"
 			style="top: 381.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 4)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 4, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_5"
 			class="field button nonprintable"
 			style="top: 498.5px;left: 8.5px"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 5)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 5, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_6"
 			class="field button nonprintable"
 			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 6)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 6, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_7"
 			class="field button nonprintable"
 			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 7)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 7, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_8"
 			class="field button nonprintable"
 			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 8)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 8, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_9"
 			class="field button nonprintable"
 			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 9)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 9, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_10"
 			class="field button nonprintable"
 			style="visibility: hidden;" 
-			nclick="MakeMagicItemMenu_MagicItemOptions(null, 10)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 10, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_11"
 			class="field button nonprintable"
 			style="visibility: hidden;" 
-			nclick="MakeMagicItemMenu_MagicItemOptions(null, 11)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 11, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 		<button
 			id="Extra.Magic_Item_Button_12"
 			class="field button nonprintable"
 			style="visibility: hidden;" 
-			nclick="MakeMagicItemMenu_MagicItemOptions(null, 12)"
+			onclick="MakeMagicItemMenu_MagicItemOptions(null, 12, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
 
 		<!-- Bluetext -->
@@ -1030,8 +1044,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_1_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_1_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1041,8 +1055,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_2_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_2_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1052,8 +1066,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_3_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_3_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1063,8 +1077,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_4_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_4_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1074,8 +1088,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_5_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_5_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1085,8 +1099,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_6_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_6_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1096,8 +1110,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_7_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_7_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1107,8 +1121,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_8_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_8_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1118,8 +1132,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_9_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_9_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1129,8 +1143,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_10_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_10_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1140,8 +1154,8 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_11_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_11_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
 		<input
@@ -1151,10 +1165,43 @@
 			aria-label="Magic item's weight"
 			type="text"
 			value="0"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1('', '', 'mass');this.value=event.value;eventManager.handle_event(EventType.Extra_Magic_Item_Weight_12_change)"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_12_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
+
+		<script type="text/javascript">
+			for (let i = 1; i <= 12; i++) {
+				let elm = document.getElementById('Extra.Magic_Item_' + String(i));
+				elm.onfocus = function() {
+					this.dataset.oldVal = this.value;
+				}
+				elm.addEventListener(
+					"calculate",
+					(e) => {
+						if (e.target.dataset.setVal !== undefined) {
+							e.target.value = e.target.dataset.setVal;
+							e.target.dispatchEvent(new Event('change'));
+						}
+					},
+					false,
+				);
+				elm.onchange = async function() {
+					if (this.dataset.setVal !== undefined) {
+						delete this.dataset.setVal;
+					} else {
+						calcStartSet = true;
+						calcStop();
+						let rc = await doDropDownValCalcWithChoices(new AdapterClassFieldReference([this]));
+						if (!rc) {
+							this.value = this.dataset.oldVal;
+						}
+						calcStartSet = false;
+						calcCont();
+					}
+				}
+			}
+		</script>
 	</div>
 
 
@@ -1186,8 +1233,8 @@
 			style="top:  31.6px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_2#1"
@@ -1195,8 +1242,8 @@
 			style="top:  48.1px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_3#1"
@@ -1204,8 +1251,8 @@
 			style="top:  64.6px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_4#1"
@@ -1213,8 +1260,8 @@
 			style="top:  81.1px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_5#1"
@@ -1222,8 +1269,8 @@
 			style="top:  97.6px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_6#1"
@@ -1231,8 +1278,8 @@
 			style="top: 114.1px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_7#1"
@@ -1240,8 +1287,8 @@
 			style="top: 130.6px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_8#1"
@@ -1249,8 +1296,8 @@
 			style="top: 147.1px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_9#1"
@@ -1258,8 +1305,8 @@
 			style="top: 163.6px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_10#1"
@@ -1267,8 +1314,8 @@
 			style="top: 180.1px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_11#1"
@@ -1276,8 +1323,8 @@
 			style="top: 196.6px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_12#1"
@@ -1285,8 +1332,8 @@
 			style="top: 213.1px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_13#1"
@@ -1294,8 +1341,8 @@
 			style="top: 229.6px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_14#1"
@@ -1303,8 +1350,8 @@
 			style="top: 246.1px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_15#1"
@@ -1312,8 +1359,8 @@
 			style="top: 262.6px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_16#1"
@@ -1321,8 +1368,8 @@
 			style="top: 279.1px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_17#1"
@@ -1330,8 +1377,8 @@
 			style="top: 295.6px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_18#1"
@@ -1339,8 +1386,8 @@
 			style="top: 312.1px;left: 21.3px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 
 		<input
@@ -1349,8 +1396,8 @@
 			style="top:  31.6px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_20#1"
@@ -1358,8 +1405,8 @@
 			style="top:  48.1px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_21#1"
@@ -1367,8 +1414,8 @@
 			style="top:  64.6px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_22#1"
@@ -1376,8 +1423,8 @@
 			style="top:  81.1px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_23#1"
@@ -1385,8 +1432,8 @@
 			style="top:  97.6px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_24#1"
@@ -1394,8 +1441,8 @@
 			style="top: 114.1px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_25#1"
@@ -1403,8 +1450,8 @@
 			style="top: 130.6px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_26#1"
@@ -1412,8 +1459,8 @@
 			style="top: 147.1px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_27#1"
@@ -1421,8 +1468,8 @@
 			style="top: 163.6px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_28#1"
@@ -1430,8 +1477,8 @@
 			style="top: 180.1px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_29#1"
@@ -1439,8 +1486,8 @@
 			style="top: 196.6px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_30#1"
@@ -1448,8 +1495,8 @@
 			style="top: 213.1px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_31#1"
@@ -1457,8 +1504,8 @@
 			style="top: 229.6px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_32#1"
@@ -1466,8 +1513,8 @@
 			style="top: 246.1px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_33#1"
@@ -1475,8 +1522,8 @@
 			style="top: 262.6px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_34#1"
@@ -1484,8 +1531,8 @@
 			style="top: 279.1px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_35#1"
@@ -1493,8 +1540,8 @@
 			style="top: 295.6px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 		<input
 			id="Extra.Gear_Row_36#1"
@@ -1502,8 +1549,8 @@
 			style="top: 312.1px;left: 244.5px;font-size: 12px;height: 13.7px;width: 171px"
 			type="text"
 			spellcheck="true"
-			onfocus="this.dataset.temp=this.value;/*RememberGearTempOnFocus*/"
-			onblur="event.target.value=this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.temp=this.dataset.temp;SetGearWeightOnBlur();"
+			onfocus="this.dataset.temp=this.value"
+			onblur="SetGearWeightOnBlur(adapter_helper_convert_id_to_fieldname(this.id), this.value);delete this.dataset.temp"
 		/>
 
 
@@ -1804,8 +1851,8 @@
 			style="top: 31.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_1_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_1_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_2#1"
@@ -1813,8 +1860,8 @@
 			style="top: 48.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_2_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_2_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_3#1"
@@ -1822,8 +1869,8 @@
 			style="top: 64.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_3_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_3_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_4#1"
@@ -1831,8 +1878,8 @@
 			style="top: 81.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_4_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_4_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_5#1"
@@ -1840,8 +1887,8 @@
 			style="top: 97.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_5_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_5_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_6#1"
@@ -1849,8 +1896,8 @@
 			style="top: 114.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_6_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_6_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_7#1"
@@ -1858,8 +1905,8 @@
 			style="top: 130.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_7_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_7_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_8#1"
@@ -1867,8 +1914,8 @@
 			style="top: 147.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_8_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_8_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_9#1"
@@ -1876,8 +1923,8 @@
 			style="top: 163.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_9_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_9_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_10#1"
@@ -1885,8 +1932,8 @@
 			style="top: 180.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_10_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_10_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_11#1"
@@ -1894,8 +1941,8 @@
 			style="top: 196.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_11_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_11_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_12#1"
@@ -1903,8 +1950,8 @@
 			style="top: 213.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_12_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_12_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_13#1"
@@ -1912,8 +1959,8 @@
 			style="top: 229.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_13_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_13_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_14#1"
@@ -1921,8 +1968,8 @@
 			style="top: 246.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_14_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_14_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_15#1"
@@ -1930,8 +1977,8 @@
 			style="top: 262.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_15_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_15_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_16#1"
@@ -1939,8 +1986,8 @@
 			style="top: 279.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_16_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_16_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_17#1"
@@ -1948,8 +1995,8 @@
 			style="top: 295.6px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_17_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_17_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_18#1"
@@ -1957,8 +2004,8 @@
 			style="top: 312.1px;left: 215.6px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_18_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_18_change);"
 		/>
 
 		<input
@@ -1967,8 +2014,8 @@
 			style="top: 31.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_19_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_19_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_20#1"
@@ -1976,8 +2023,8 @@
 			style="top: 48.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_20_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_20_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_21#1"
@@ -1985,8 +2032,8 @@
 			style="top: 64.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_21_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_21_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_22#1"
@@ -1994,8 +2041,8 @@
 			style="top: 81.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_22_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_22_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_23#1"
@@ -2003,8 +2050,8 @@
 			style="top: 97.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_23_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_23_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_24#1"
@@ -2012,8 +2059,8 @@
 			style="top:114.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_24_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_24_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_25#1"
@@ -2021,8 +2068,8 @@
 			style="top: 130.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_25_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_25_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_26#1"
@@ -2030,8 +2077,8 @@
 			style="top: 147.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_26_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_26_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_27#1"
@@ -2039,8 +2086,8 @@
 			style="top: 163.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_27_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_27_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_28#1"
@@ -2048,8 +2095,8 @@
 			style="top: 180.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_28_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_28_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_29#1"
@@ -2057,8 +2104,8 @@
 			style="top: 196.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_29_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_29_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_30#1"
@@ -2066,8 +2113,8 @@
 			style="top: 213.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_30_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_30_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_31#1"
@@ -2075,8 +2122,8 @@
 			style="top: 229.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_31_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_31_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_32#1"
@@ -2084,8 +2131,8 @@
 			style="top: 246.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_32_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_32_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_33#1"
@@ -2093,8 +2140,8 @@
 			style="top: 262.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_33_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_33_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_34#1"
@@ -2102,8 +2149,8 @@
 			style="top: 279.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_34_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_34_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_35#1"
@@ -2111,8 +2158,8 @@
 			style="top: 295.6px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_35_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_35_change);"
 		/>
 		<input
 			id="Extra.Gear_Weight_36#1"
@@ -2120,8 +2167,8 @@
 			style="top: 312.1px;left: 439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right"
 			type="number"
 			onfocus="this.dataset.temp=this.value;"
-			oninput="adapter_helper_keystroke1(this, true)"
-			onchange="event.value=this.value;format1();this.value=event.value;{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_36_change);"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(String(this.value));{let outcome='';if (isNaN(this.value)&&this.value.indexOf(',') !== -1){outcome=this.value.replace(',', '.')*1};if(isNaN(outcome)||outcome<0){this.value=this.dataset.temp;};};eventManager.handle_event(EventType.Extra_Gear_Weight_36_change);"
 		/>
 
 		<input
@@ -2129,232 +2176,232 @@
 			class="field inputfield-noneditable"
 			style="top: 328px;left: 215.5px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed)"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Extra_Gear_Weight_Subtotal_Left_change)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Extra_Gear_Weight_Subtotal_Left_change)"
 		/>
 		<input
 			id="Extra.Gear_Weight_Subtotal_Right"
 			class="field inputfield-noneditable"
 			style="top: 328px;left:   439px;font-size: 12px;height: 13.7px;width: 20.6px;text-align:right;color:var(--text-dimmed)"
 			type="number"
-			onchange="event.value=this.value;format1();this.value=event.value;eventManager.handle_event(EventType.Extra_Gear_Weight_Subtotal_Right_change)"
+			onchange="this.value=format1(String(this.value));eventManager.handle_event(EventType.Extra_Gear_Weight_Subtotal_Right_change)"
 		/>
 
 		<button
 			id="Extra.Gear_Button_1" 
 			class="field button nonprintable"
 			style="top:  32.3px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_2" 
 			class="field button nonprintable"
 			style="top:  48.8px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_3" 
 			class="field button nonprintable"
 			style="top:  65.3px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_4" 
 			class="field button nonprintable"
 			style="top:  81.8px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_5" 
 			class="field button nonprintable"
 			style="top:  98.3px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_6" 
 			class="field button nonprintable"
 			style="top: 114.8px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_7" 
 			class="field button nonprintable"
 			style="top: 131.3px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_8" 
 			class="field button nonprintable"
 			style="top: 147.8px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_9" 
 			class="field button nonprintable"
 			style="top: 164.3px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_10"
 			class="field button nonprintable"
 			style="top: 180.8px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_11"
 			class="field button nonprintable"
 			style="top: 197.3px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_12"
 			class="field button nonprintable"
 			style="top: 213.8px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_13"
 			class="field button nonprintable"
 			style="top: 230.3px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_14"
 			class="field button nonprintable"
 			style="top: 246.8px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_15"
 			class="field button nonprintable"
 			style="top: 263.3px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_16"
 			class="field button nonprintable"
 			style="top: 279.8px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_17"
 			class="field button nonprintable"
 			style="top: 296.3px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 		<button
 			id="Extra.Gear_Button_18"
 			class="field button nonprintable"
 			style="top: 312.8px;left: -4px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&gt;</button>
 
 		<button
 			id="Extra.Gear_Button_19"
 			class="field button nonprintable"
 			style="top:  32.3px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_20"
 			class="field button nonprintable"
 			style="top:  48.8px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_21"
 			class="field button nonprintable"
 			style="top:  65.3px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_22"
 			class="field button nonprintable"
 			style="top:  81.8px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_23"
 			class="field button nonprintable"
 			style="top:  98.3px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_24"
 			class="field button nonprintable"
 			style="top: 114.8px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_25"
 			class="field button nonprintable"
 			style="top: 131.3px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_26"
 			class="field button nonprintable"
 			style="top: 147.8px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_27"
 			class="field button nonprintable"
 			style="top: 164.3px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_28"
 			class="field button nonprintable"
 			style="top: 180.8px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_29"
 			class="field button nonprintable"
 			style="top: 197.3px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_30"
 			class="field button nonprintable"
 			style="top: 213.8px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_31"
 			class="field button nonprintable"
 			style="top: 230.3px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_32"
 			class="field button nonprintable"
 			style="top: 246.8px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_33"
 			class="field button nonprintable"
 			style="top: 263.3px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_34"
 			class="field button nonprintable"
 			style="top: 279.8px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_35"
 			class="field button nonprintable"
 			style="top: 296.3px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 		<button
 			id="Extra.Gear_Button_36"
 			class="field button nonprintable"
 			style="top: 312.8px;left: 477.5px;"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);MakeInventoryLineMenu();InventoryLineOptions();"
+			onclick="MakeInventoryLineMenu(adapter_helper_convert_id_to_fieldname(this.id));InventoryLineOptions()"
 		>&lt;</button>
 
 		<div
@@ -2374,7 +2421,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  31.60px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_1_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_1_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_2"
@@ -2382,7 +2429,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  48.09px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_2_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_2_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_3"
@@ -2390,7 +2437,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  64.58px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_3_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_3_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_4"
@@ -2398,7 +2445,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  81.07px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_4_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_4_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_5"
@@ -2406,7 +2453,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  97.56px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_5_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_5_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_6"
@@ -2414,7 +2461,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 114.05px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_6_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_6_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_7"
@@ -2422,7 +2469,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 130.54px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_7_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_7_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_8"
@@ -2430,7 +2477,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 147.03px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_8_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_8_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_9"
@@ -2438,7 +2485,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 163.52px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_9_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_9_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_10"
@@ -2446,7 +2493,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 180.01px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_10_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_10_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_11"
@@ -2454,7 +2501,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 196.50px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_11_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_11_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_12"
@@ -2462,7 +2509,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 212.99px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_12_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_12_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_13"
@@ -2470,7 +2517,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 229.48px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_13_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_13_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_14"
@@ -2478,7 +2525,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 245.97px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_14_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_14_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_15"
@@ -2486,7 +2533,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 262.46px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_15_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_15_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_16"
@@ -2494,7 +2541,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 278.95px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_16_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_16_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_17"
@@ -2502,7 +2549,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 295.44px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_17_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_17_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_18"
@@ -2510,7 +2557,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 311.93px;left: 173.1px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_18_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_18_change);"
 		/>
 
 		<input
@@ -2519,7 +2566,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  31.60px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_19_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_19_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_20"
@@ -2527,7 +2574,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  48.09px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_20_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_20_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_21"
@@ -2535,7 +2582,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  64.58px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_21_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_21_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_22"
@@ -2543,7 +2590,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  81.07px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_22_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_22_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_23"
@@ -2551,7 +2598,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top:  97.56px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_23_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_23_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_24"
@@ -2559,7 +2606,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 114.05px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_24_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_24_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_25"
@@ -2567,7 +2614,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 130.54px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_25_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_25_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_26"
@@ -2575,7 +2622,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 147.03px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_26_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_26_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_27"
@@ -2583,7 +2630,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 163.52px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_27_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_27_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_28"
@@ -2591,7 +2638,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 180.01px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_28_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_28_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_29"
@@ -2599,7 +2646,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 196.50px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_29_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_29_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_30"
@@ -2607,7 +2654,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 212.99px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_30_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_30_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_31"
@@ -2615,7 +2662,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 229.48px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_31_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_31_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_32"
@@ -2623,7 +2670,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 245.97px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_32_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_32_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_33"
@@ -2631,7 +2678,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 262.46px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_33_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_33_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_34"
@@ -2639,7 +2686,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 278.95px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_34_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_34_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_35"
@@ -2647,7 +2694,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 295.44px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_35_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_35_change);"
 		/>
 		<input
 			id="Extra.Gear_Location.Row_36"
@@ -2655,7 +2702,7 @@
 			type="text"
 			style="font-size: 9.3px;text-align: center;top: 311.93px;left: 396.4px;height: 13.7px;width: 19.2px;visibility: hidden"
 			spellcheck="true"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.value=this.value;SetCarriedLocations();eventManager.handle_event(EventType.Extra_Gear_Location_Row_36_change);"
+			onchange="SetCarriedLocations(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Extra_Gear_Location_Row_36_change);"
 		/>
 
 		<script type="text/javascript">
@@ -2673,9 +2720,12 @@
 						event_type,
 						function() {
 							let subTotalId = 'Extra.Gear_Weight_Subtotal_' + loc;
-							event.target.name = adapter_helper_convert_id_to_fieldname(subTotalId);
-							CalcWeightSubtotal();
-							document.getElementById(subTotalId).value = event.value;
+							let newVal = CalcWeightSubtotal(adapter_helper_convert_id_to_fieldname(subTotalId));
+							let element = document.getElementById(subTotalId);
+							if (element.value != newVal) {
+								element.value = newVal;
+								element.dispatchEvent(new Event('change'));
+							}
 						}
 					)
 				});

@@ -31,7 +31,7 @@
 			type="text"
 			spellcheck="true"
 			data-default=""
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;ValidateAdvLogInfo()"
+			onchange="ValidateAdvLogInfo(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
 		/>
 
 		<input
@@ -98,7 +98,7 @@
 			type="number"
 			min="0"
 			step="1"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
 		/>
 
 		<input
@@ -166,7 +166,7 @@
 			type="number"
 			min="0"
 			step="1"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
 		/>
 
 		<input
@@ -234,7 +234,7 @@
 			type="number"
 			min="0"
 			step="1"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
 		/>
 
 		<input
@@ -302,7 +302,7 @@
 			type="number"
 			min="0"
 			step="1"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
 		/>
 
 		<input
@@ -370,7 +370,7 @@
 			type="number"
 			min="0"
 			step="1"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
 		/>
 
 		<input
@@ -438,7 +438,7 @@
 			type="number"
 			min="0"
 			step="1"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
 		/>
 
 		<input
@@ -506,7 +506,7 @@
 			type="number"
 			min="0"
 			step="1"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
 		/>
 
 		<input
@@ -574,7 +574,7 @@
 			type="number"
 			min="0"
 			step="1"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
 		/>
 
 		<input
@@ -642,7 +642,7 @@
 			type="number"
 			min="0"
 			step="1"
-			onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(event.target.name.slice(-1), parseFloat(this.value))"
+			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
 		/>
 
 		<div
@@ -705,17 +705,17 @@
 
 		<script type="text/javascript">
 			{
-				let prefix = adapter_helper_get_prefix_from_script('spellshead.Text');
+				let prefix = adapter_helper_get_prefix_from_script('Image.DnDLogo.short');
 				// zAdvLog.PC_Name
 				eventManager.add_listener(
 					EventType.PC_Name_change,
 					function () {
-						event.target.name = prefix + 'zAdvLog.PC Name';
-						CalcAdvLogInfo();
-						if (event.value !== undefined) {
-							let nameElement = document.getElementById(prefix + 'zAdvLog.PC Name');
-							if (nameElement != null) {
-								nameElement.value = event.value;
+						let newValue = CalcAdvLogInfo(prefix + 'zAdvLog.PC Name');
+						if (newValue !== undefined) {
+							let nameElement = document.getElementById(prefix + 'zAdvLog.PC_Name');
+							if (nameElement.value != newValue) {
+								nameElement.value = newValue;
+								nameElement.dispatchEvent(new Event('change'));
 							}
 						}
 					}
@@ -727,32 +727,33 @@
 
 	<div id="spell_sheet_table" class="pane" style="top: 180px;left: 34px;width: 825px;height: 972px">
 
-		<div
-			id="spellshead.Image.Header.Left.0"
-			class="field"
-			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px"
-		>
-			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
+		<div id="spellshead.container.0" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;z-index: 3">
+			<div
+				id="spellshead.Image.Header.Left.0"
+				class="field"
+				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px"
+			>
+				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
-			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
-			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
-			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
-
+				<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
+				<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
+				<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+			</div>
 			<input
 				id="spellshead.Text.header.0"
 				class="field inputfield"
 				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
 				type="text"
-				data-submit_name=""
+				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
-				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+				onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 			/>
 			<select
 				id="spellshead.ability.0"
 				class="field inputfield"
 				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
-				onchange="{let wrapper = new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_0_change)})}"
+				onchange="SaveSpellcastingAbility(new AdapterClassFieldReference([this])).then(() => {eventManager.handle_event(EventType.spellshead_ability_0_change)})"
 			>
 				<option value="nothing"></option>
 				<option value="Str Mod">  Strength</option>
@@ -768,7 +769,7 @@
 				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
 				type="text"
 				data-default=""
-				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
 			/>
 			<input
 				id="spellshead.dc.0"
@@ -779,15 +780,17 @@
 				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_0_change)"
 			/>
 
-			<div
-				id="spellshead.Image.prepare.0"
-				class="field"
-				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
-				onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.contextTransfers=['name'];MakePreparedMenu_PreparedOptions()"
-			>
-				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
+			<div id="spellshead.prepare.container.0" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;z-index: 1">
+				<div
+					id="spellshead.Image.prepare.0"
+					class="field"
+					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id), false)"
+				>
+					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
-				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+					<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+				</div>
 
 				<input
 					id="spellshead.prepare.0"
@@ -814,9 +817,10 @@
 				aria-label="Spell Attack Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_attack_0_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_attack_0_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.0"
@@ -825,9 +829,10 @@
 				aria-label="Saving Throw DC Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_dc_0_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_dc_0_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.0"
@@ -836,38 +841,41 @@
 				aria-label="Spells to Prepare Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_0_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_prepare_0_change)"
 			/>
 		</div>
 
-		<div
-			id="spellshead.Image.Header.Left.1"
-			class="field"
-			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
-		>
-			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
+		<div id="spellshead.container.1" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;z-index: 2">
+			<div
+				id="spellshead.Image.Header.Left.1"
+				class="field"
+				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
+			>
+				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
-			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
-			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
-			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+				<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
+				<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
+				<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+			</div>
 
 			<input
 				id="spellshead.Text.header.1"
 				class="field inputfield"
-				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
-				data-submit_name=""
+				data-submit_name="spellshead.dummy.remember.1"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
-				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+				onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 			/>
 			<select
 				id="spellshead.ability.1"
 				class="field inputfield"
-				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
-				onchange="{let wrapper = new AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_1_change)})}"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
+				onchange="SaveSpellcastingAbility(new AdapterClassFieldReference([this])).then(() => {eventManager.handle_event(EventType.spellshead_ability_1_change)})"
 			>
 				<option value="nothing"></option>
 				<option value="Str Mod">  Strength</option>
@@ -880,34 +888,36 @@
 			<input
 				id="spellshead.attack.1"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
-				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_1_change)"
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.spellshead_attack_1_change)"
 			/>
 			<input
 				id="spellshead.dc.1"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_1_change)"
 			/>
 
-			<div
-				id="spellshead.Image.prepare.1"
-				class="field"
-				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
-				onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
-			>
-				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
+			<div id="spellshead.prepare.container.1" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;z-index: 1">
+				<div
+					id="spellshead.Image.prepare.1"
+					class="field"
+					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer;visibility: hidden"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id), false)"
+				>
+					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
-				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+					<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+				</div>
 
 				<input
 					id="spellshead.prepare.1"
 					class="field inputfield-noneditable"
-					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;visibility: hidden"
 					type="number"
 					data-default=""
 					onchange="eventManager.handle_event(EventType.spellshead_prepare_1_change)"
@@ -929,9 +939,10 @@
 				aria-label="Spell Attack Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_attack_1_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_attack_1_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.1"
@@ -940,9 +951,10 @@
 				aria-label="Saving Throw DC Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_1_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_dc_1_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.1"
@@ -951,38 +963,41 @@
 				aria-label="Spells to Prepare Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_1_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_prepare_1_change)"
 			/>
 		</div>
 
-		<div
-			id="spellshead.Image.Header.Left.2"
-			class="field"
-			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
-		>
-			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
+		<div id="spellshead.container.2" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;z-index: 1">
+			<div
+				id="spellshead.Image.Header.Left.2"
+				class="field"
+				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
+			>
+				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
-			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
-			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
-			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+				<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
+				<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
+				<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+			</div>
 
 			<input
 				id="spellshead.Text.header.2"
 				class="field inputfield"
-				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
-				data-submit_name=""
+				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
-				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+				onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 			/>
 			<select
 				id="spellshead.ability.2"
 				class="field inputfield"
-				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
-				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_2_change)})}"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
+				onchange="SaveSpellcastingAbility(new AdapterClassFieldReference([this])).then(() => {eventManager.handle_event(EventType.spellshead_ability_2_change)})"
 			>
 				<option value="nothing"></option>
 				<option value="Str Mod">  Strength</option>
@@ -995,34 +1010,36 @@
 			<input
 				id="spellshead.attack.2"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
-				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
 			/>
 			<input
 				id="spellshead.dc.2"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_2_change)"
 			/>
 
-			<div
-				id="spellshead.Image.prepare.2"
-				class="field"
-				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
-				onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
-			>
-				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
+			<div id="spellshead.prepare.container.2" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;z-index: 1">
+				<div
+					id="spellshead.Image.prepare.2"
+					class="field"
+					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id), false)"
+				>
+					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px">
 
-				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+					<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+				</div>
 
 				<input
 					id="spellshead.prepare.2"
 					class="field inputfield-noneditable"
-					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;visibility: hidden"
 					type="number"
 					data-default=""
 					onchange="eventManager.handle_event(EventType.spellshead_prepare_2_change)"
@@ -1044,9 +1061,10 @@
 				aria-label="Spell Attack Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_attack_2_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_attack_2_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.2"
@@ -1055,9 +1073,10 @@
 				aria-label="Saving Throw DC Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_2_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_dc_2_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.2"
@@ -1066,38 +1085,41 @@
 				aria-label="Spells to Prepare Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_2_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_prepare_2_change)"
 			/>
 		</div>
 
-		<div
-			id="spellshead.Image.Header.Left.3"
-			class="field"
-			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
-		>
-			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
+		<div id="spellshead.container.3" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px">
+			<div
+				id="spellshead.Image.Header.Left.3"
+				class="field"
+				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden"
+			>
+				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
-			<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
-			<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
-			<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+				<div class="textlabel" style="top: 38.3px;left: 329.4px;width: 111.7px;text-align: center;font-size: 9.8px">SPELLCASTING ABILITY</div>
+				<div class="textlabel" style="top: 38.3px;left: 556.4px;width: 96.7px;text-align: center;font-size: 9.8px">ATTACK MODIFIER</div>
+				<div class="textlabel" style="top: 38.3px;left: 669.8px;width: 96.9px;text-align: center;font-size: 9.8px">SAVING THROW DC</div>
+			</div>
 
 			<input
 				id="spellshead.Text.header.3"
 				class="field inputfield"
-				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
-				data-submit_name=""
+				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
 				data-default=""
-				onchange="this.value=this.value.toUpperCase();event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;HideSpellSheetElement()"
+				onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 			/>
 			<select
 				id="spellshead.ability.3"
 				class="field inputfield"
-				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
-				onchange="{let wrapper = AdapterClassFieldReference([this]);event.target.name=wrapper.name;event.target.currentValueIndices=wrapper.currentValueIndices;SaveSpellcastingAbility().then(() => {eventManager.handle_event(EventType.spellshead_ability_3_change)})}"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
+				onchange="SaveSpellcastingAbility(new AdapterClassFieldReference([this])).then(() => {eventManager.handle_event(EventType.spellshead_ability_3_change)})"
 			>
 				<option value="nothing"></option>
 				<option value="Str Mod">  Strength</option>
@@ -1110,34 +1132,37 @@
 			<input
 				id="spellshead.attack.3"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
-				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + event.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
+				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
 			/>
 			<input
 				id="spellshead.dc.3"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_3_change)"
 			/>
 
-			<div
-				id="spellshead.Image.prepare.3"
-				class="field"
-				style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;cursor: pointer"
-				onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id))"
-			>
-				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
 
-				<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+			<div id="spellshead.prepare.container.3" style="position: absolute;top: 0px;left: 454px;width: 89.5px;height: 64px;z-index: 1">
+				<div
+					id="spellshead.Image.prepare.3"
+					class="field"
+					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer;visibility: hidden"
+					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id), false)"
+				>
+					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
+
+					<div class="textlabel" style="top: 38.3px;left: 3.8px;width: 81.9px;text-align: center;font-size: 9.8px">TO PREPARE</div>
+				</div>
 
 				<input
 					id="spellshead.prepare.3"
 					class="field inputfield-noneditable"
-					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;visibility: hidden"
 					type="number"
 					data-default=""
 					onchange="eventManager.handle_event(EventType.spellshead_prepare_3_change)"
@@ -1159,9 +1184,10 @@
 				aria-label="Spell Attack Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_attack_3_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_attack_3_change)"
 			/>
 			<input
 				id="BlueText.spellshead.dc.3"
@@ -1170,9 +1196,10 @@
 				aria-label="Saving Throw DC Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();;eventManager.handle_event(EventType.BlueText_spellshead_dc_3_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);;eventManager.handle_event(EventType.BlueText_spellshead_dc_3_change)"
 			/>
 			<input
 				id="BlueText.spellshead.prepare.3"
@@ -1181,9 +1208,10 @@
 				aria-label="Spells to Prepare Bonus Modifier"
 				value="0"
 				data-default="0"
-				onchange="event.value=this.value;ValidateBonus();this.value=(event.target.valueCalculated!==undefined)?event.target.valueCalculated:event.value"
-				onclick="{let adapter=new AdapterClassFieldReference([this]);event.target.name=adapter.name;event.target.submitName=adapter.submitName;event.target.userName=adapter.userName;event.target.value=adapter.value;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetThisFldVal().then(() => {adapter_helper_storeSetThisFldValResult(adapter)});}"
-				onblur="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=this.value;SetSpellBluetext();eventManager.handle_event(EventType.BlueText_spellshead_prepare_3_change)"
+				onfocus="this.dataset.oldVal=this.value"
+				onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value}"
+				onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+				onblur="SetSpellBluetext(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.BlueText_spellshead_prepare_3_change)"
 			/>
 		</div>
 
@@ -1201,7 +1229,8 @@
 			style="top: 72px;left: 205.2px;font-size: 10.6px;width: 410.5px;height: 14px;text-align: center;font-weight: bold;text-transform: uppercase;font-family: 'scala-sans'"
 			type="text"
 			data-default=""
-			onchange="this.value=this.value.toUpperCase();event.value = this.value;event.target.name=adapter_helper_convert_id_to_fieldname(this.id);HideSpellSheetElement();"
+			data-submit_name="spellsdiv.dummy.remember.0"
+			onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
 		/>
 
 		<div id="spellscontainer.0" style="position: absolute;top: 96px;left: 0px;width:825px;height: 15.6px;">
@@ -1211,16 +1240,15 @@
 				style="position: absolute;width: 14px;height: 14px;left: 2px;top: 2px;font-size: 10px;font-weight: bold;text-align: center;"
 				data-default=""
 				value=""
-				onclick=" event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;if(!['checkedbox', 'markedbox', 'checkbox', 'atwill', 'oncelr', 'oncesr'].includes(event.target.submitName)){document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName};document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
-				onchange="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.submitName=this.dataset.submit_name;event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox();if (event.target.submitName != this.dataset.submit_name){this.dataset.submit_name=event.target.submitName;if(!['checkedbox', 'markedbox', 'checkbox', 'atwill', 'oncelr', 'oncesr'].includes(event.target.submitName)){document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=event.target.submitName};document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}"
+				onchange="{let wrapper = new AdapterClassFieldReference([this]);let oldSubmitName = wrapper.submitName;SetSpellCheckbox(wrapper, event.ctrlKey || event.shiftKey).then(() => {let newSubmitName = wrapper.submitName;if (newSubmitName != oldSubmitName){if(!['checkedbox', 'markedbox', 'checkbox', 'atwill', 'oncelr', 'oncesr'].includes(newSubmitName)){document.getElementById(this.id.replace('.check.', '.checkbox.')).innerText=newSubmitName};document.getElementById(this.id.replace('.check.', '.checkbox.')).style.color='black'}})}"
 			>&gt;</button>
 			<button
 				id="spells.checkbox.0"
 				class="field button nonprintable"
-				style="position: absolute;top: 2px;left: 2px;width: 14px;height: 14px;text-align: center;font-size: 10px;padding: 0;z-index: 1;;visibility: hidden;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;"
+				style="position: absolute;top: 2px;left: 2px;width: 14px;height: 14px;text-align: center;font-size: 10px;padding: 0;z-index: 2;visibility: visible;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;"
 				aria-label="Click here for the options for this row."
 				data-default="false"
-				onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.value=((this.value != undefined) ? this.value : this.dataset.default);event.target.submitName=this.dataset.submit_name;event.modifier=event.ctrlKey;event.shift=event.shiftKey;SetSpellCheckbox()"
+				onclick="this.value=((this.value != undefined) ? this.value : this.dataset.default);SetSpellCheckbox(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 			>&gt;</button>
 			<input
 				id="spells.name.0"
@@ -1316,7 +1344,7 @@
 			id="spellsgloss.Image.0"
 			class="field"
 			style="position: absolute;top: 782.4px;left: 0px;width: 825px;height: 187.6px;cursor: pointer;visibility: hidden"
-			onclick="event.target.name=adapter_helper_convert_id_to_fieldname(this.id);event.target.contextTransfers=['name'];MakeGlossMenu_GlossOptions()"
+			onclick="MakeGlossMenu_GlossOptions(adapter_helper_convert_id_to_fieldname(this.id))"
 		>
 			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/glossary.svg" style="top: 0px;left: 0px;width: 825px;height: 187.6px;">
 
@@ -1457,37 +1485,40 @@
 				}
 
 				// spelshead.prepare
-				for (let i=0; i<4; i++) {
-					[
-						EventType.Str_Mod_change,
-						EventType.Dex_Mod_change,
-						EventType.Con_Mod_change,
-						EventType.Int_Mod_change,
-						EventType.Wis_Mod_change,
-						EventType.Cha_Mod_change,
-						EventType.HoS_Mod_change,
-						EventType['spellshead_class_' + String(i) + '_change'],
-						EventType['spellshead_dc_' + String(i) + '_change'],
-						EventType['spellshead_attack_' + String(i) + '_change'],
-						EventType['spellshead_ability_' + String(i) + '_change'],
-						EventType['BlueText_spellshead_dc_' + String(i) + '_change'],
-						EventType['BlueText_spellshead_attack_' + String(i) + '_change'],
-						EventType['BlueText_spellshead_prepare_' + String(i) + '_change'],
-						EventType.BlueText_Players_Make_All_Rolls_change,
-						EventType.Proficiency_Bonus_change,
-					].forEach(function (eventType) {
-						eventManager.add_listener(
-							eventType,
-							function () {
-								event.target.name = prefix + 'spellshead.prepare.' + String(i);
-								CalcSpellScores();
-								if (event.value !== undefined) {
-									let prepareElement = document.getElementById(prefix + 'spellshead.prepare.' + String(i));
-									prepareElement.value = event.value;
+				if (prefix != "") {
+					for (let i=0; i<4; i++) {
+						[
+							EventType.Str_Mod_change,
+							EventType.Dex_Mod_change,
+							EventType.Con_Mod_change,
+							EventType.Int_Mod_change,
+							EventType.Wis_Mod_change,
+							EventType.Cha_Mod_change,
+							EventType.HoS_Mod_change,
+							EventType['spellshead_class_' + String(i) + '_change'],
+							EventType['spellshead_ability_' + String(i) + '_change'],
+							EventType['BlueText_spellshead_dc_' + String(i) + '_change'],
+							EventType['BlueText_spellshead_attack_' + String(i) + '_change'],
+							EventType['BlueText_spellshead_prepare_' + String(i) + '_change'],
+							EventType.BlueText_Players_Make_All_Rolls_change,
+							EventType.Proficiency_Bonus_change,
+						].forEach(function (eventType) {
+							eventManager.add_listener(
+								eventType,
+								function () {
+									let element_id = prefix + 'spellshead.prepare.' + String(i);
+									let result = CalcSpellScores(element_id);
+									if (result !== undefined) {
+										let prepareElement = document.getElementById(element_id);
+										if (prepareElement.value != result) {
+											prepareElement.value = result;
+											prepareElement.dispatchEvent(new Event('change'));
+										}
+									}
 								}
-							}
-						);
-					});
+							);
+						});
+					}
 				}
 			}
 		</script>
@@ -1518,5 +1549,10 @@
 		<div id="Image.SpellSlots.Checkboxes.7" class="field"></div>
 		<div id="Image.SpellSlots.Checkboxes.8" class="field"></div>
 		<div id="Image.SpellSlots.Checkboxes.9" class="field"></div>
+		<div id="spellsdiv.dummy.remember.0" class="field"></div>
+		<div id="spellshead.dummy.remember.0" class="field"></div>
+		<div id="spellshead.dummy.remember.1" class="field"></div>
+		<div id="spellshead.dummy.remember.2" class="field"></div>
+		<div id="spellshead.dummy.remember.3" class="field"></div>
 	</div>
 </div>

@@ -8,12 +8,12 @@
 // TODO: switch to <select> for all non-customisable dropdowns
 // TODO: connect thermoM to floating fade-out status message
 // TODO: revamp number formatting (keystroke[12] and format[12])
-// TODO: make sure setting setVal on magic items/feats triggers a calculation (see doDropDownValCalcWithChoices) (change event should suffice)
 // TODO: make sure field getters in CurrentEvals.hp trigger calculation of (Comp.Use.)HP.Max
 // TODO: set default values up to P4.AScomp.Comp.Type
 // TODO: parse CurrentEvals stuff for proper event triggering
 // TODO: find a way to import from pdf (MPMBOpenFile in DirectImport)
 // TODO: better context menu (with scroll for long options)
+// TODO: create conversion script for additional content
 
 // Load functions
 
@@ -47,15 +47,7 @@ function makeSaveLoadButtons() {
 function initialCalculationEvents() {
 	// First set CurrentWeapons (errors otherwise)
 	FindWeapons();
-	FindCompWeapons(undefined, 'P4.AScomp.');
-	// trigger AC calculation
-	document.getElementById('AC_Armor_Bonus').dispatchEvent(new Event('change'));
-	// trigger Adventuring_Gear_Location_Subtotal_* and Adventuring_Gear_Weight_Subtotal_* calculation
-	document.getElementById('Adventuring_Gear_Amount_1').dispatchEvent(new Event('change'));
-	document.getElementById('Adventuring_Gear_Amount_19').dispatchEvent(new Event('change'));
-	document.getElementById('Adventuring_Gear_Amount_37').dispatchEvent(new Event('change'));
-	document.getElementById('Extra.Gear_Amount_1#1').dispatchEvent(new Event('change'));
-	document.getElementById('P4.AScomp.Comp.eqp.Gear_Amount_1').dispatchEvent(new Event('change'));
+	FindCompWeapons();
 	// trigger ability mods calculation (and ST calculation) and AC_Dexterity_Modifier calculation (and all skills) (and Attack.i.To Hit)
 	document.getElementById('Con').dispatchEvent(new Event('change'));
 	document.getElementById('Cha').dispatchEvent(new Event('change'));
@@ -64,37 +56,64 @@ function initialCalculationEvents() {
 	document.getElementById('HoS').dispatchEvent(new Event('change'));
 	document.getElementById('Str').dispatchEvent(new Event('change'));
 	document.getElementById('Wis').dispatchEvent(new Event('change'));
+	// trigger Proficiency_Bonus calculation
+	document.getElementById('Proficiency_Bonus_Modifier').dispatchEvent(new Event('change'));
 	// trigger weight texts
 	document.getElementById('Unit_System').dispatchEvent(new Event('change'));
+	// trigger feat_name & magic items calculations
+	for (let i = 1; i <= 8; i++) {
+		document.getElementById('Feat_Name_' + String(i)).dispatchEvent(new Event('calculate'));
+	}
+	for (let i = 1; i <= 12; i++) {
+		document.getElementById('Extra.Magic_Item_' + String(i)).dispatchEvent(new Event('calculate'));
+	}
+	// trigger AC calculation
+	document.getElementById('AC_Armor_Bonus').dispatchEvent(new Event('change'));
+	// trigger Adventuring_Gear_Location_Subtotal_* and Adventuring_Gear_Weight_Subtotal_* calculation
+	document.getElementById('Adventuring_Gear_Amount_1').dispatchEvent(new Event('change'));
+	document.getElementById('Adventuring_Gear_Amount_19').dispatchEvent(new Event('change'));
+	document.getElementById('Adventuring_Gear_Amount_37').dispatchEvent(new Event('change'));
+	document.getElementById('Extra.Gear_Amount_1#1').dispatchEvent(new Event('change'));
+	document.getElementById('P4.AScomp.Comp.eqp.Gear_Amount_1').dispatchEvent(new Event('change'));
 }
 
-loadScript('_functions/AbilityScores_old.js')
-	.then(script => loadScript('_functions/AbilityScores.js'))
-	.then(script => loadScript('_functions/ClassSelection.js'))
-	.then(script => loadScript('_functions/DomParser.js'))
-	.then(script => loadScript('_functions/Functions0.js'))
-	.then(script => loadScript('import_utils/overwrite_Functions0.js'))
-	.then(script => loadScript('_functions/Functions1.js'))
-	.then(script => loadScript('_functions/Functions2.js'))
-	.then(script => loadScript('_functions/Functions3.js'))
-	.then(script => loadScript('_functions/FunctionsImport.js'))
-	.then(script => loadScript('_functions/FunctionsResources.js'))
-	.then(script => loadScript('_functions/FunctionsSpells.js'))
-	.then(script => loadScript('_functions/Shutdown.js'))
-	.then(script => loadScript('_variables/Icons.js'))
-	.then(script => loadScript('_variables/Lists.js'))
-	.then(script => loadScript('_variables/ListsBackgrounds.js'))
-	.then(script => loadScript('_variables/ListsClasses.js'))
-	.then(script => loadScript('_variables/ListsCompanions.js'))
-	.then(script => loadScript('_variables/ListsCreatures.js'))
-	.then(script => loadScript('_variables/ListsFeats.js'))
-	.then(script => loadScript('_variables/ListsGear.js'))
-	.then(script => loadScript('_variables/ListsMagicItems.js'))
-	.then(script => loadScript('_variables/ListsPsionics.js'))
-	.then(script => loadScript('_variables/ListsRaces.js'))
-	.then(script => loadScript('_variables/ListsSources.js'))
-	.then(script => loadScript('_variables/ListsSpells.js'))
-	.then(script => makeSaveLoadButtons())
-	.then(script => loadScript('_functions/Startup.js'));
-	// .then(script => loadScript('import_utils/overwrite_Startup.js'))
-	// .then(script => initialCalculationEvents());
+async function loadAll() {
+	await loadScript('_functions/AbilityScores_old.js')
+		.then(script => loadScript('_functions/AbilityScores.js'))
+		.then(script => loadScript('_functions/ClassSelection.js'))
+		.then(script => loadScript('_functions/DomParser.js'))
+		.then(script => loadScript('_functions/Functions0.js'))
+		.then(script => loadScript('import_utils/overwrite_Functions0.js'))
+		.then(script => loadScript('_functions/Functions1.js'))
+		.then(script => loadScript('_functions/Functions2.js'))
+		.then(script => loadScript('_functions/Functions3.js'))
+		.then(script => loadScript('_functions/FunctionsImport.js'))
+		.then(script => loadScript('_functions/FunctionsResources.js'))
+		.then(script => loadScript('_functions/FunctionsSpells.js'))
+		.then(script => loadScript('_functions/Shutdown.js'))
+		.then(script => loadScript('_variables/Icons.js'))
+		.then(script => loadScript('_variables/Lists.js'))
+		.then(script => loadScript('_variables/ListsBackgrounds.js'))
+		.then(script => loadScript('_variables/ListsClasses.js'))
+		.then(script => loadScript('_variables/ListsCompanions.js'))
+		.then(script => loadScript('_variables/ListsCreatures.js'))
+		.then(script => loadScript('_variables/ListsFeats.js'))
+		.then(script => loadScript('_variables/ListsGear.js'))
+		.then(script => loadScript('_variables/ListsMagicItems.js'))
+		.then(script => loadScript('_variables/ListsPsionics.js'))
+		.then(script => loadScript('_variables/ListsRaces.js'))
+		.then(script => loadScript('_variables/ListsSources.js'))
+		.then(script => loadScript('_variables/ListsSpells.js'))
+		.then(script => makeSaveLoadButtons())
+		.then(script => loadScript('_functions/Startup.js'));
+}
+
+
+if (document.readyState === "loading") {
+	// Loading hasn't finished yet
+	document.addEventListener("DOMContentLoaded", loadAll);
+  } else {
+	// `DOMContentLoaded` has already fired
+	loadAll();
+  }
+

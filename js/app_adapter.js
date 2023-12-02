@@ -579,6 +579,12 @@ class AdapterClassFieldReference {
 		if (submitName_ == undefined) {
 			return "";
 		}
+		if (
+			!isNaN(submitName_)
+			&& this.html_elements[0].classList.contains('submitnumber')
+		) {
+			return Number(submitName_);
+		}
 		return submitName_;
 	}
 
@@ -983,47 +989,84 @@ class AdapterClassFieldReference {
 		if (actionType != 'Calculate') {  // do nothing
 			throw "Unknown action type for setAction: " + actionType;
 		}
+		// TODO: remove is_known stuff when we're confident enough in the change rule matching
+		let is_known = false;
+		for (let abi of ['Cha', 'Str', 'Dex', 'Con', 'Wis', 'Int', 'HoS']) {
+			for (let pattern of [
+				"event.value = Math.max(1, What('$$ABI$$ Mod'));",
+				"event.value = What('$$ABI$$ Mod');",
+				"event.value = Math.max(1, tDoc.getField('$$ABI$$ Mod').value);",
+				"event.value = 1 + What('$$ABI$$ Mod');",
+				"event.value = Math.max(2, Number(What('$$ABI$$ Mod')) * 2);",
+				"event.value = What('$$ABI$$ Mod') + 5;",
+				"event.value = What('$$ABI$$ Mod') + 6;",
+				"event.value = Math.max(1 + 0, What('$$ABI$$ Mod') + 0);",
+				"event.value = Math.max(1 + 1, What('$$ABI$$ Mod') + 1);",
+				"event.value = Math.max(1 + 2, What('$$ABI$$ Mod') + 2);",
+				"event.value = Math.max(1 + 3, What('$$ABI$$ Mod') + 3);",
+				"event.value = Math.max(1 + 4, What('$$ABI$$ Mod') + 4);",
+			]) {
+				if (pattern.replace('$$ABI$$', abi) == actionStr) {
+					is_known = true;
+				}
+			}
+		}
 		if (
 			[
-				"event.value = Math.max(1, What('Cha Mod'));",
-				"event.value = Math.max(1, What('Str Mod'));",
-				"event.value = Math.max(1, What('Dex Mod'));",
-				"event.value = Math.max(1, What('Con Mod'));",
-				"event.value = Math.max(1, What('Wis Mod'));",
-				"event.value = Math.max(1, What('Int Mod'));",
-				"event.value = Math.max(1, What('HoS Mod'));",
-				"event.value = 1 + What('Cha Mod');",
 				"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var DCmod = Number(usages) * 5; event.value = (isNaN(Number(usages)) || usages === '') ? 'DC  ' : 'DC ' + Number(10 + DCmod);",
 				'event.value = "As a reaction when a ranged weapon attack hits me while I\'m wearing these gloves, I can reduce the damage by 1d10 + " + Number(What("Dex Mod")) + " (my Dexterity modifier). This only works if I have a free hand. If I reduce the damage to 0, I can catch the missile if it is small enough for me to hold in that hand.";',
 				"event.value = How('Proficiency Bonus');",
-				"event.value = 'I can use my Breath Weapon to roar instead. Chosen creatures within 30 ft that see and hear me must make a DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Cha Mod'))) + ' Wis save (8 + Prof Bonus + Cha mod) or be frightened of me for 1 min. A target can repeat the save whenever it takes damage. [+1 Str, Con, or Cha]';",
+				"event.value = Number(How('Proficiency Bonus'))*2",
+				"event.value = Number(How('Proficiency Bonus'));",
+				"event.value = Math.max(1, tDoc.getField('Proficiency Bonus').submitName);",
 				"event.value = 'As a reaction when I take damage from a creature that is within 10 ft of me, I can have it take 2d8 force damage and push it up to 10 ft away from me. If it succeeds a Strength save DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Int Mod'))) + ' (8 + Prof Bonus + Int mod), it halves the damage and isn't pushed. I can do this my Proficiency Bonus per long rest. [+1 Intelligence]';",
 				"event.value = 'As a reaction when I take damage from a creature that is within 10 ft of me, I can have it take 2d8 force damage and push it up to 10 ft away from me. If it succeeds a Strength save DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Wis Mod'))) + ' (8 + Prof Bonus + Wis mod), it halves the damage and isn't pushed. I can do this my Proficiency Bonus per long rest. [+1 Wisdom]';",
 				"event.value = 'As a reaction when I take damage from a creature that is within 10 ft of me, I can have it take 2d8 force damage and push it up to 10 ft away from me. If it succeeds a Strength save DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Cha Mod'))) + ' (8 + Prof Bonus + Cha mod), it halves the damage and isn't pushed. I can do this my Proficiency Bonus per long rest. [+1 Charisma]';",
 				"event.value = '0 m';",
 				"event.value = '0 ft';",
+				"var FieldNmbr = parseFloat(event.target.name.slice(-2)); var usages = What('Limited Feature Used ' + FieldNmbr); var useMult = isNaN(Number(usages)) || !Number(usages) ? 1 : Math.pow(10, usages); var charLvl = What('Character Level'); var total = (Math.round(charLvl * useMult) * 10); total = total > 1000000 ? total / 1000000 + 'M' : total > 1000 ? total / 1000 + 'k' : total; event.value = total + ' gp';",
+				"event.value = Math.floor(classes.known['dawnforgedcast-alchemist'].level/2) + What('Int Mod');",
+				"event.value = Math.floor(classes.known['dawnforgedcast-alchemist'].level/2) + 3 + tDoc.getField('Int Mod').value;",
+				"event.value = ''; event.target.setAction('Calculate', ''); event.target.submitName = '';",
+				"event.value = !classes.known.warlock ? '' : (1 + classes.known.warlock.level) + 'd6';",
+				"event.value = !event.value || event.value == 'Resets to 1 after ' ? 1 : event.value;",
+				"event.value = event.value.toString().replace(/ ?per ?/i, '');",
+				"event.value = 'I learn two conducting techniques of my choice from those available to the College of the Maestro. The saving throw DC for this is ' + (8 + How('Proficiency Bonus') + What('Cha Mod')) + ' (8 + proficiency bonus + Cha mod). I gain one bardic inspiration die (d6), which I regain when I finish a short rest.';",
+				"event.value = 'I can spend 10 minutes inspiring up to 6 friendly creatures within 30 feet who can see or hear and can understand me. Each gains lvl (' + What('Character Level') + ') + Cha mod (' + What('Cha Mod') + \") temporary hit points. One can't gain temporary hit points from this feat again until after a short rest.\";",
+				"event.value = \"I can ably create written ciphers that others can't decipher unless I teach them, they succeed on an Intelligence check DC \" + (What('Int') + Number(How('Proficiency Bonus'))) + ' (Intelligence score + proficiency bonus), or they use magic to decipher it. I learn three languages of my choice. [+1 Intelligence]';",
+				"event.value = 'I learn two maneuvers of my choice from those available to the Battle Master (2nd page \"Choose Feature\" button). The saving throw DC for this is ' + (8 + Number(How('Proficiency Bonus')) + Math.max(Number(What('Str Mod')), Number(What('Dex Mod')))) + ' (8 + proficiency bonus + Str/Dex mod). I gain one superiority die (d6), which I regain when I finish a short rest.';",
+				"event.value = 'I can use my Breath Weapon to roar instead. Chosen creatures within 30 ft that see and hear me must make a DC ' + (8 + Number(How('Proficiency Bonus')) + Number(What('Cha Mod'))) + ' Wis save (8 + Prof Bonus + Cha mod) or be frightened of me for 1 min. A target can repeat the save whenever it takes damage. [+1 Str, Con, or Cha]';",
+				'event.value = "As a bonus action, I can use Bolstering Rally on myself or an ally within 30 ft that I can see and can see or hear me. They gain 1d8 + " + (Number(How("Proficiency Bonus")) + Number(What("Con Mod"))) + " temporary hit points (1d8 + proficiency bonus + Constitution modifier). I can do this my proficiency bonus per long rest. [+1 Constitution]";',
+				'event.value = "As a bonus action, I can use Bolstering Rally on myself or an ally within 30 ft that I can see and can see or hear me. They gain 1d8 + " + (Number(How("Proficiency Bonus")) + Number(What("Wis Mod"))) + " temporary hit points (1d8 + proficiency bonus + Wisdom modifier). I can do this my proficiency bonus per long rest. [+1 Wisdom]";',
+				'event.value = "As a bonus action, I can use Bolstering Rally on myself or an ally within 30 ft that I can see and can see or hear me. They gain 1d8 + " + (Number(How("Proficiency Bonus")) + Number(What("Cha Mod"))) + " temporary hit points (1d8 + proficiency bonus + Charisma modifier). I can do this my proficiency bonus per long rest. [+1 Charisma]";',
+				'event.value = "Once per turn, when I hit a creature with a weapon attack, I can have it make a Wisdom save DC " + (8 + Number(How("Proficiency Bonus")) + Number(What("Int Mod"))) + " (8 + Prof Bonus + Int mod) or be frightened of me until my next turn ends. On a successful save, the target has disadv. on its next attack before its next turn ends. I can do this my proficiency bonus per long rest. [+1 Int]";',
+				'event.value = "Once per turn, when I hit a creature with a weapon attack, I can have it make a Wisdom save DC " + (8 + Number(How("Proficiency Bonus")) + Number(What("Wis Mod"))) + " (8 + Prof Bonus + Wis mod) or be frightened of me until my next turn ends. On a successful save, the target has disadv. on its next attack before its next turn ends. I can do this my proficiency bonus per long rest. [+1 Wis]";',
+				'event.value = "Once per turn, when I hit a creature with a weapon attack, I can have it make a Wisdom save DC " + (8 + Number(How("Proficiency Bonus")) + Number(What("Cha Mod"))) + " (8 + Prof Bonus + Cha mod) or be frightened of me until my next turn ends. On a successful save, the target has disadv. on its next attack before its next turn ends. I can do this my proficiency bonus per long rest. [+1 Cha]";',
 			].includes(actionStr)
-		) {  // TODO: remove when we're confident enough in the change rule matching
-			let accessedFieldIds = getAccessedFieldIds(actionStr);
-			let currentFieldId = this.html_elements[0].id;
-			let changeEventName;
-			for (let fieldID of accessedFieldIds) {
-				changeEventName = fieldID + '_change';
-				if (!(changeEventName in EventType)) {
-					throw "Could not find change event for field id " + fieldID;
-				}
-				eventManager.add_listener(EventType[changeEventName], function() {
-					let theElement = document.getElementById(currentFieldId);
-					event.target.name = adapter_helper_convert_id_to_fieldname(theElement.id);
-					eval(actionStr.replace("isn't", "isn&apos;t"));
-					theElement.value = event.value.replace("&apos;", "'");
-				})
-			}
-		} else {
+		) {
+			is_known = true;
+		}
+		if (!is_known) {
 			throw (
 				"setAction called for '" + actionType + "', with unknown non-empty value '" + actionStr + "'. "
 				+ "Make sure the code analyser above is functioning properly, then add it to whitelist."
 			);
+		}
+		let accessedFieldIds = getAccessedFieldIds(actionStr);
+		let currentFieldId = this.html_elements[0].id;
+		let changeEventName;
+		for (let fieldID of accessedFieldIds) {
+			changeEventName = fieldID + '_change';
+			if (!(changeEventName in EventType)) {
+				throw "Could not find change event for field id " + fieldID;
+			}
+			eventManager.add_listener(EventType[changeEventName], function() {
+				let theElement = document.getElementById(currentFieldId);
+				let theElementAdapter = new AdapterClassFieldReference([theElement]);
+				let theReturnValue = theElementAdapter.value;
+				eval(actionStr.replace("event.target", "theElementAdapter").replace("event.value", "theReturnValue").replace("isn't", "isn&apos;t"));
+				theElementAdapter.value = theReturnValue.replace("&apos;", "'");
+			})
 		}
 	}
 

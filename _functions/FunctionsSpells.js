@@ -3882,8 +3882,9 @@ function OrderSpells(inputArray, outputFormat, sepPsionics, bonusSp, maxLvl) {
 };
 
 //return the value of a spellsheet's number (field calculation)
-function CalcSpellsheetNumber() {
-	var prefix = event.target.name.substring(0, event.target.name.indexOf("SpellSheet"));
+// $$[note]$$ event.target.name -> fldName
+function CalcSpellsheetNumber(fldName) {
+	var prefix = fldName.substring(0, fldName.indexOf("SpellSheet"));
 	var SSmoreA = What("Template.extras.SSmore").split(",");
 	SSmoreA[0] = What("Template.extras.SSfront").split(",")[1];
 	if (!SSmoreA[0]) SSmoreA.shift();

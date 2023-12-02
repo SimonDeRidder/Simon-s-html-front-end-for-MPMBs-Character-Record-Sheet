@@ -31,7 +31,7 @@ async function ImportExport_Button() {
 };
 
 //a function to open the sheet and call a timeout
-async function StartDirectImport() {
+async function StartDirectImport(target) {
 	//test if the version of Acrobat being used is good (DC or later)
 	if (app.viewerVersion < 15) {
 		app.alert({
@@ -41,9 +41,9 @@ async function StartDirectImport() {
 		return;
 	} else if (MPMBImportFunctionsInstalled) {
 		await DirectImport();
-	} else if (event.target === undefined && !MPMBImportFunctionsInstalled) {
+	} else if (target === undefined && !MPMBImportFunctionsInstalled) {
 		await DirectImport(true);
-	} else if (event.target !== undefined && !MPMBImportFunctionsInstalled) {
+	} else if (target !== undefined && !MPMBImportFunctionsInstalled) {
 		await AddFolderJavaScript(false);
 	}
 }

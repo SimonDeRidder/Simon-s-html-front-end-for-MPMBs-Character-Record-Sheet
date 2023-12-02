@@ -3716,9 +3716,10 @@ function gatherPrereqevalVars() {
 }
 
 // set the checkbox for "Players Make All Rolls" (also field MouseUp)
-async function setPlayersMakeAllRolls(enable) {
+// $$[note]$$ event.target.name -> fldName
+async function setPlayersMakeAllRolls(enable, fldName) {
 	// See if anything is about to be changed, otherwise just stop
-	var isEvent = event.target && event.target.name == "BlueText.Players Make All Rolls";
+	var isEvent = fldName == "BlueText.Players Make All Rolls";
 	var changedState = isEvent ? true : tDoc.getField("BlueText.Players Make All Rolls").isBoxChecked(0) != (enable || enable === undefined ? 1 : 0);
 	if (!changedState) return;
 	// If not called by the MouseUp event, set the checkbox first

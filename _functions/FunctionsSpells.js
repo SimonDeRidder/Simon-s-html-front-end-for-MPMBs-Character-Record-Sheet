@@ -306,11 +306,10 @@ function applySpellcastingAbility(oSpell, oCast) {
 
 // call this on validation of the hidden spell remember field, to apply something to the spell line
 // "" = reset all the fields; "HideThisLine" = hide all the fields; recognized spell = apply that spell; not recognized spell = don't do anything (assume name change); "setcaptions" or  "setcaptions##Me" = make this a caption line; if followed by "##Me" or "##Kn", change the first line to be either "Me" or "Kn" as the first column, or show or hide the box for checkmark; "___" = put all lines in the fields, making it fillable by hand
-function ApplySpell(FldValue, rememberFldName) {
+function ApplySpell(FldValue, base) {
 	calcStop();
 
-	var input = FldValue !== undefined ? FldValue.split("##") : event.value.split("##");
-	var base = rememberFldName ? rememberFldName : event.target.name;
+	var input = FldValue.split("##");
 	var spFlds = ReturnSpellFieldsArray(undefined, undefined, base);
 
 	//make this a header line if the input is "setcaptions"

@@ -77,31 +77,43 @@ function initialCalculationEvents() {
 	document.getElementById('P4.AScomp.Comp.eqp.Gear_Amount_1').dispatchEvent(new Event('change'));
 }
 
-loadScript('_functions/AbilityScores_old.js')
-	.then(script => loadScript('_functions/AbilityScores.js'))
-	.then(script => loadScript('_functions/ClassSelection.js'))
-	.then(script => loadScript('_functions/DomParser.js'))
-	.then(script => loadScript('_functions/Functions0.js'))
-	.then(script => loadScript('import_utils/overwrite_Functions0.js'))
-	.then(script => loadScript('_functions/Functions1.js'))
-	.then(script => loadScript('_functions/Functions2.js'))
-	.then(script => loadScript('_functions/Functions3.js'))
-	.then(script => loadScript('_functions/FunctionsImport.js'))
-	.then(script => loadScript('_functions/FunctionsResources.js'))
-	.then(script => loadScript('_functions/FunctionsSpells.js'))
-	.then(script => loadScript('_functions/Shutdown.js'))
-	.then(script => loadScript('_variables/Icons.js'))
-	.then(script => loadScript('_variables/Lists.js'))
-	.then(script => loadScript('_variables/ListsBackgrounds.js'))
-	.then(script => loadScript('_variables/ListsClasses.js'))
-	.then(script => loadScript('_variables/ListsCompanions.js'))
-	.then(script => loadScript('_variables/ListsCreatures.js'))
-	.then(script => loadScript('_variables/ListsFeats.js'))
-	.then(script => loadScript('_variables/ListsGear.js'))
-	.then(script => loadScript('_variables/ListsMagicItems.js'))
-	.then(script => loadScript('_variables/ListsPsionics.js'))
-	.then(script => loadScript('_variables/ListsRaces.js'))
-	.then(script => loadScript('_variables/ListsSources.js'))
-	.then(script => loadScript('_variables/ListsSpells.js'))
-	.then(script => makeSaveLoadButtons())
-	.then(script => loadScript('_functions/Startup.js'));
+async function loadAll() {
+	await loadScript('_functions/AbilityScores_old.js')
+		.then(script => loadScript('_functions/AbilityScores.js'))
+		.then(script => loadScript('_functions/ClassSelection.js'))
+		.then(script => loadScript('_functions/DomParser.js'))
+		.then(script => loadScript('_functions/Functions0.js'))
+		.then(script => loadScript('import_utils/overwrite_Functions0.js'))
+		.then(script => loadScript('_functions/Functions1.js'))
+		.then(script => loadScript('_functions/Functions2.js'))
+		.then(script => loadScript('_functions/Functions3.js'))
+		.then(script => loadScript('_functions/FunctionsImport.js'))
+		.then(script => loadScript('_functions/FunctionsResources.js'))
+		.then(script => loadScript('_functions/FunctionsSpells.js'))
+		.then(script => loadScript('_functions/Shutdown.js'))
+		.then(script => loadScript('_variables/Icons.js'))
+		.then(script => loadScript('_variables/Lists.js'))
+		.then(script => loadScript('_variables/ListsBackgrounds.js'))
+		.then(script => loadScript('_variables/ListsClasses.js'))
+		.then(script => loadScript('_variables/ListsCompanions.js'))
+		.then(script => loadScript('_variables/ListsCreatures.js'))
+		.then(script => loadScript('_variables/ListsFeats.js'))
+		.then(script => loadScript('_variables/ListsGear.js'))
+		.then(script => loadScript('_variables/ListsMagicItems.js'))
+		.then(script => loadScript('_variables/ListsPsionics.js'))
+		.then(script => loadScript('_variables/ListsRaces.js'))
+		.then(script => loadScript('_variables/ListsSources.js'))
+		.then(script => loadScript('_variables/ListsSpells.js'))
+		.then(script => makeSaveLoadButtons())
+		.then(script => loadScript('_functions/Startup.js'));
+}
+
+
+if (document.readyState === "loading") {
+	// Loading hasn't finished yet
+	document.addEventListener("DOMContentLoaded", loadAll);
+  } else {
+	// `DOMContentLoaded` has already fired
+	loadAll();
+  }
+

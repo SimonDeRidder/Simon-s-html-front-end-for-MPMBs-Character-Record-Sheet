@@ -6804,7 +6804,7 @@ async function processArmourProfs(AddRemove, srcNm, itemArr) {
 // set the armour/weapon proficiency manually (field action)
 async function setCheckboxProfsManual(theField) {
 	calcStop();
-	var fld = theField ? tDoc.getField(theField) : event.target;
+	var fld = tDoc.getField(theField);
 	var isActive = fld.isBoxChecked(0) === 1;
 	var sort = (/simple|martial/i).test(fld.name) ? "weapon" : "armour";
 	var type = fld.name.replace(/proficiency |armor |weapon /ig, '').toLowerCase();

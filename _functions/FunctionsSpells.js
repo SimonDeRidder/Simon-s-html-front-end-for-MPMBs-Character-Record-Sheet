@@ -488,13 +488,7 @@ function ApplySpell(FldValue, base) {
 }
 
 //on blur, put the value in the remember field, location one (on field blur)
-function SetSpell(FldValue, nameFldName) {
-	if (event.target && event.target.richText) {
-		tDoc.getField(event.target.name).richValue = "";
-		tDoc.getField(event.target.name).richText = false;
-	} //first disable any rich text value if it was set
-	var input = FldValue ? FldValue : What(event.target.name);
-	var base = nameFldName ? nameFldName : event.target.name;
+function SetSpell(input, base) {
 	var remFld = base.replace("name", "remember");
 	if (input.toLowerCase() === "" || (/setcaptions/).test(input) || input.indexOf("##") !== -1) { //if the name field has a ## in it, assume we need to replace everything in the remember field
 		var toUseValue = input;

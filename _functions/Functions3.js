@@ -2708,7 +2708,7 @@ async function ApplyMagicItem(input, FldNmbr, field) {
 	}
 
 	// Set the visibility of the attuned checkbox
-	setMIattunedVisibility(FldNmbr);
+	setMIattunedVisibility(FldNmbr, undefined, field.name);
 
 	thermoM(thermoTxt, true); // Stop progress bar
 	return returnRC;
@@ -2777,7 +2777,7 @@ async function ApplyAttunementMI(FldNmbr, field) {
 }
 
 // Hide/show the attuned checkbox for a magic item entry
-function setMIattunedVisibility(FldNmbr, force) {
+function setMIattunedVisibility(FldNmbr, force, fldName) {
 	var MIflds = ReturnMagicItemFieldsArray(FldNmbr);
 	var hideIt = How(MIflds[4]) != "";
 	if (!force && hideIt == isDisplay(MIflds[4])) return; // already the right display
@@ -2810,7 +2810,7 @@ function setMIattunedVisibility(FldNmbr, force) {
 	noteRect[2] = noteRect[0] + noteWidth;
 	tDoc.getField(MIflds[1] + ".1").rect = noteRect;
 	tDoc.getField(MIflds[0] + ".1").rect = nameRect;
-	if (!event.target || event.target.name !== MIflds[0]) {
+	if (!fldName || fldName !== MIflds[0]) {
 		// Re-input the value as to counteract the changing of font rendering
 		tDoc.getField(MIflds[0]).value = tDoc.getField(MIflds[0]).value;
 	}
@@ -3235,8 +3235,8 @@ async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr, field
 				thermoM(i/(MIflds.length - 1)); //increment the progress dialog's progress
 			}
 			// Correct the visibility of the attuned fields
-			setMIattunedVisibility(itemNmbr);
-			setMIattunedVisibility(otherNmbr);
+			setMIattunedVisibility(itemNmbr, undefined, field.name);
+			setMIattunedVisibility(otherNmbr, undefined, field.name);
 			// Correct the entry in the CurrentMagicItems.known array
 			if (!CurrentVars.manual.items) {
 				var thisKnown = CurrentMagicItems.known[itemNmbr - 1];
@@ -3275,7 +3275,7 @@ async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr, field
 			thermoTxt = thermoM((visibleAttunement ? "Hiding" : "Showing") + " the attuned checkbox...", false);
 			var currentlyChecked = tDoc.getField(MIflds[4]).isBoxChecked(0);
 			Checkbox(MIflds[4], !visibleAttunement && What(MIflds[0]), undefined, visibleAttunement ? "hide" : "");
-			setMIattunedVisibility(itemNmbr);
+			setMIattunedVisibility(itemNmbr, undefined, field.name);
 			// Now if attunement was visible and it was unchecked, we have to reapply the magic item's properties
 			if (!CurrentVars.manual.items) {
 				if (theMI && visibleAttunement && !currentlyChecked) {
@@ -3419,7 +3419,7 @@ async function MagicItemInsert(itemNmbr, field) {
 				CurrentMagicItems.choices[it - 1] = CurrentMagicItems.choices[it - 2];
 			}
 			// Correct the attuned checkbox visibility
-			setMIattunedVisibility(it);
+			setMIattunedVisibility(it, field.name);
 			// Correct the description (normal/long)
 			if (it == FieldNumbers.magicitemsD + 1) await correctMIdescriptionLong(it, field);
 		}
@@ -3461,7 +3461,7 @@ async function MagicItemDelete(itemNmbr, field) {
 			CurrentMagicItems.choices[it - 1] = CurrentMagicItems.choices[it];
 		}
 		// Correct the attuned checkbox visibility
-		setMIattunedVisibility(it);
+		setMIattunedVisibility(it, field.name);
 		// Correct the description (normal/long)
 		if (it == FieldNumbers.magicitemsD) await correctMIdescriptionLong(it, field);
 	}

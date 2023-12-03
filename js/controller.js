@@ -77,6 +77,17 @@ function initialCalculationEvents() {
 	document.getElementById('P4.AScomp.Comp.eqp.Gear_Amount_1').dispatchEvent(new Event('change'));
 }
 
+function setSheetVersion() {
+	return new Promise(function (resolve, reject) {
+		console.log("doin it");
+		for (let sheetInfoElement of document.getElementsByClassName("sheetinfo")) {
+			console.log("for ", sheetInfoElement.id);
+			sheetInfoElement.innerHTML = "Based on MorePurpleMoreBetter&apos;s D&amp;D 5th edition Character Record Sheet " + this.info.SheetVersion + " (Printer Friendly)"
+		}
+		resolve();
+	});
+}
+
 async function loadAll() {
 	await loadScript('_functions/AbilityScores_old.js')
 		.then(script => loadScript('_functions/AbilityScores.js'))
@@ -105,6 +116,7 @@ async function loadAll() {
 		.then(script => loadScript('_variables/ListsSources.js'))
 		.then(script => loadScript('_variables/ListsSpells.js'))
 		.then(script => makeSaveLoadButtons())
+		.then(script => setSheetVersion())
 		.then(script => loadScript('_functions/Startup.js'));
 }
 

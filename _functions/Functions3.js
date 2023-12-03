@@ -2334,7 +2334,15 @@ function ParseMagicItem(input, bForInventory) {
 				var keySub = kObj.choices[i].toLowerCase();
 				var sObj = kObj[keySub];
 				// Continue if choice doesn't exist or source is excluded
-				if (!sObj || testSource(key + "-" + keySub, sObj, "magicitemExcl")) continue;
+				if (!sObj) {
+					console.println("The subchoice '" + kObj.choices[i] + "' for the magic item '" + kObj.name + "' doesn't have a corresponding object entry. Please contact its author to have this issue corrected. The choice will be ignored for now.");
+					console.show();
+					// Remove this array entry, but make sure we don't skip an entry
+					kObj.choices.splice(i, 1);
+					i--;
+					continue;
+				}
+				if (testSource(key + "-" + keySub, sObj, "magicitemExcl")) continue;
 				// If looking for something in the inventory, only process those with a weight
 				if (bForInventory && !sObj.weight) continue;
 				varArr.push(kObj.choices[i]);
@@ -2615,7 +2623,6 @@ async function ApplyMagicItem(input, FldNmbr, field) {
 		// Set the field calculation
 		if (theMI.calculate) {
 			var theCalc = What("Unit System") === "imperial" ? theMI.calculate : ConvertToMetric(theMI.calculate, 0.5);
-			if (typePF) theCalc = theCalc.replace("\n", " ");
 			tDoc.getField(MIflds[2]).setAction("Calculate", theCalc);
 		}
 
@@ -2660,7 +2667,6 @@ async function ApplyMagicItem(input, FldNmbr, field) {
 		if (!theMI.calculate) {
 			theDesc = FldNmbr > FieldNumbers.magicitemsD && theMI.descriptionLong ? theMI.descriptionLong : theMI.description ? theMI.description : "";
 			if (What("Unit System") !== "imperial") theDesc = ConvertToMetric(theDesc, 0.5);
-			if (typePF) theDesc = theDesc.replace("\n", " ");
 		}
 
 		// Set it all to the appropriate field
@@ -2735,7 +2741,6 @@ async function correctMIdescriptionLong(FldNmbr, field) {
 
 	var theDesc = FldNmbr > FieldNumbers.magicitemsD && theMI.descriptionLong ? theMI.descriptionLong : theMI.description ? theMI.description : "";
 	if (What("Unit System") !== "imperial") theDesc = ConvertToMetric(theDesc, 0.5);
-	if (typePF) theDesc = theDesc.replace("\n", " ");
 	Value("Extra.Magic Item Description " + FldNmbr, theDesc);
 	// Apply the chooseGear item again to the description
 	var hasChooseGear = aMIvar && aMIvar.chooseGear ? aMIvar.chooseGear : aMI.chooseGear;
@@ -3290,7 +3295,8 @@ async function MakeMagicItemMenu_MagicItemOptions(MenuSelection, itemNmbr, field
 }
 
 // Add a magic item to the third page or overflow page
-async function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forceAttunedVisible) {
+// $$[note]$$ event.target.name -> fldName
+async function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forceAttunedVisible, fldName) {
 	// Check if the item is recognized and if that is already known to be present
 	var aParsedItem = ParseMagicItem(item);
 	if (aParsedItem[0] && !MagicItemsList[aParsedItem[0]].allowDuplicates && CurrentMagicItems.known.indexOf(MagicItemsList[0]) !== -1) {
@@ -3310,6 +3316,8 @@ async function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forc
 	for (var n = 1; n <= 2; n++) {
 		for (var i = startFld; i <= FieldNumbers.magicitems; i++) {
 			var MIflds = ReturnMagicItemFieldsArray(i);
+			// first check if a selection made in this field wasn't the one initiating this function, because then it should be skipped
+			if (fldName && fldName === MIflds[0]) continue;
 			var curItem = What(MIflds[0]);
 			if (n === 1 && ((RegExItem.test(curItem) && !RegExItemNo.test(curItem)) || curItem.toLowerCase() === itemLower)) {
 				return; // the item already exists
@@ -3326,9 +3334,9 @@ async function AddMagicItem(item, attuned, itemDescr, itemWeight, overflow, forc
 					Checkbox(MIflds[4], false);
 					await ApplyAttunementMI(i);
 				}
-				var isAttuneVisible = How("Extra.Magic Item Attuned " + i) == "";
+				var isAttuneVisible = How(MIflds[4]) == "";
 				if (forceAttunedVisible !== undefined && forceAttunedVisible !== isAttuneVisible) {
-					AddTooltip("Extra.Magic Item Attuned " + i, undefined, forceAttunedVisible ? "" : "hide");
+					AddTooltip(MIflds[4], undefined, forceAttunedVisible ? "" : "hide");
 					setMIattunedVisibility(i);
 					if (attuned === undefined) {
 						Checkbox(MIflds[4], forceAttunedVisible);

@@ -42,7 +42,7 @@ const app = {
 		buttonParent.style.width = '100%';
 		buttonParent.style.height = '13px';
 		let newButton = document.createElement('button');
-		newButton.className = "field button";
+		newButton.className = "field button nonprintable";
 		newButton.id = cName;
 		if (oIcon) {
 			console.log("Warning: addToolButton with oIcon not implemented:", cName, ":", oIcon);
@@ -2058,7 +2058,6 @@ function is_movable_field(fieldName /*String*/) /*boolean*/ {
 		"Image.SaveDCarrow.1",
 		"Image.SaveDC.1",
 		"Spell DC 1 Mod",
-		"Spell save DC 1",
 		"Spell DC 1 Bonus"
 	].includes(fieldName)) {
 		return true;

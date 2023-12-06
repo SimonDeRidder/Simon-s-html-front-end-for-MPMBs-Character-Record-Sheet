@@ -79,9 +79,7 @@ function initialCalculationEvents() {
 
 function setSheetVersion() {
 	return new Promise(function (resolve, reject) {
-		console.log("doin it");
 		for (let sheetInfoElement of document.getElementsByClassName("sheetinfo")) {
-			console.log("for ", sheetInfoElement.id);
 			sheetInfoElement.innerHTML = "Based on MorePurpleMoreBetter&apos;s D&amp;D 5th edition Character Record Sheet " + this.info.SheetVersion + " (Printer Friendly)"
 		}
 		resolve();
@@ -124,8 +122,7 @@ async function loadAll() {
 if (document.readyState === "loading") {
 	// Loading hasn't finished yet
 	document.addEventListener("DOMContentLoaded", loadAll);
-  } else {
+} else {
 	// `DOMContentLoaded` has already fired
 	loadAll();
-  }
-
+}

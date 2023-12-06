@@ -119,10 +119,22 @@ async function loadAll() {
 }
 
 
+function startLoadingContent() {
+	if (navigator.userAgent.indexOf("Firefox") > 0) {
+		// For some reason, Firefox needs just a little extra delay to get things loaded
+		setTimeout(loadAll, 100);
+	} else {
+		loadAll();
+	}
+}
+
+
 if (document.readyState === "loading") {
 	// Loading hasn't finished yet
-	document.addEventListener("DOMContentLoaded", loadAll);
+	console.log("with listener");
+	document.addEventListener("DOMContentLoaded", startLoadingContent);
 } else {
 	// `DOMContentLoaded` has already fired
-	loadAll();
+	console.log("immediately");
+	startLoadingContent();
 }

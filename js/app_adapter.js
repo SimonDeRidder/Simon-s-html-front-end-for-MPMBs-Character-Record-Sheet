@@ -155,6 +155,7 @@ const app = {
 				"IMPORT FROM PDF DIALOG",
 				"Set the Font, the Font Size, and Hide Text Lines",
 				"Choose the functions you want to set to manual",
+				"Choose the pages you want to print"
 			].includes(monitor.description.name)
 		) {
 			// TODO: remove this if all execDialogs are converted
@@ -429,6 +430,56 @@ this.deletePages = function(nStart /*Number*/, nEnd /*Number*/) {
 			buttonContainerElement.removeChild(button);
 		}
 	}
+}
+
+
+this.getPrintParams = function() /*Object*/ {
+	return {
+		constants: {
+			interactionLevel: {full: 0},
+			duplexTypes: {
+				DuplexFlipLongEdge: 0,
+				Simplex: 1,
+			}
+		}
+	}
+}
+
+
+this.print_ = function(printOptions /*Object*/) {
+	let pagesIndexesToPrint = [];
+	printOptions.printRange.forEach((printEntry) => {
+		if (!pagesIndexesToPrint.includes(printEntry[0])) {
+			pagesIndexesToPrint.push(printEntry[0]);
+		}
+	});
+
+	let pageIDsToHide = [];
+	let lastToPrint = null;
+	for (let index in globalPageInventory) {
+		if (!pagesIndexesToPrint.includes(Number(index))) {
+			pageIDsToHide.push(globalPageInventory[index].id);
+		} else {
+			lastToPrint = globalPageInventory[index].id;
+		}
+	}
+
+	let tempCssAddition = "@media print {\n";
+	for (let pageID of pageIDsToHide) {
+		tempCssAddition += "\t#" + pageID + " {display: none!important;}\n";
+	}
+	if (lastToPrint != null) {
+		tempCssAddition += "\t#" + lastToPrint + " {break-after: avoid!important;page-break-after: avoid!important;}\n";
+	}
+	tempCssAddition += "}";
+
+	let tempStyleSheet = document.createElement("style");
+	tempStyleSheet.innerText = tempCssAddition;
+	document.head.appendChild(tempStyleSheet);
+
+	window.print();
+
+	tempStyleSheet.remove();
 }
 
 
@@ -1680,7 +1731,7 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 						'Attack.4.Description_Tooltip',
 						'Attack.5.Description_Tooltip',
 						'AdvLogS.Background_Faction.Text',
-						'AdvLog.HeaderIcon'
+						'AdvLog.HeaderIcon',
 					].includes(field_id)
 				) {
 					return null

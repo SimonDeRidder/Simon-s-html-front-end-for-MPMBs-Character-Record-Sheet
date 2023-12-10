@@ -6352,7 +6352,7 @@ async function PrintButton() {
 		SetPrintPages_Dialog["bDupl"] = false;
 	}
 
-	var theDialog = app.execDialog(SetPrintPages_Dialog);
+	var theDialog = await app.execDialog(SetPrintPages_Dialog);
 
 	var Proceed = false;
 	switch (theDialog) {
@@ -6419,7 +6419,7 @@ function PrintTheSheet() {
 	if (PageArray) {
 		GoPrint.printRange = PagesToPrint;
 	};
-	tDoc.print(GoPrint);
+	tDoc.print_(GoPrint);
 };
 
 //Hide (true) or show (false) all the different form fields in the entire sheet

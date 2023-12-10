@@ -480,3 +480,42 @@ input[type=number] {
 .cm_container li {
 	font-size: 9.3px;
 }
+
+/* Print settings */
+
+@media print {
+	@page { margin: 0; }
+
+	#button-container,#button-separator {
+		display: none !important;
+	}
+
+	.page-container {
+		margin-top: 20px;
+		box-shadow: none;
+		zoom: 85%;
+		-moz-transform: scale(0.9) translate(0, -60px);
+	}
+
+	.page:not(.templ) {
+		display: block !important;
+		break-after: always;
+		page-break-after: always;
+	}
+	#prefe {
+		break-after: avoid!important;
+		page-break-after: avoid!important;
+	}
+
+	#page-wrapper {
+		display: block;
+	}
+
+	.nonprintable {
+		display: none !important;
+	}
+
+	.inputfield {
+		background-color: transparent;
+	}
+}

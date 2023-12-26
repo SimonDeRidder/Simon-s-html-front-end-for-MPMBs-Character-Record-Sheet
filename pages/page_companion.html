@@ -46,7 +46,7 @@
 			aria-label="Type (or select) the name of the race you want to have on this page. Not that first a list of player races is given, followed by an alphabetical list of creatures. You are not limited by the names in the list. Just typing 'Drow' will also be recognised, for example."
 			spellcheck="true"
 			onfocus="this.dataset.oldVal=this.value"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			onchange="ApplyCompRace(this.value, this.id.slice(0, this.id.indexOf('Comp.Race')), '', true, this.dataset.oldVal).then(() => {this.dataset.oldVal=this.value})"
 		/>
 		<datalist id="comp_race_options">
@@ -223,7 +223,7 @@
 			style="top: 126px;left: 364px;width: 123px;height: 13pt;font-size: 10.6pt"
 			type="text"
 			list="comp_monstertype_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			spellcheck="true"
 		/>
 		<datalist id="comp_monstertype_options">
@@ -262,7 +262,7 @@
 			style="top: 126px;left: 715px;font-size: 9.8pt;width: 107px;height: 17px"
 			type="text"
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			list="comp_alignment_options"
 		/>
 		<datalist id="comp_alignment_options">
@@ -287,7 +287,7 @@
 			spellcheck="true"
 			value="COMPANION"
 			data-default="COMPANION"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<datalist id="comp_type_options">
 			<option value="COHORT">COHORT</option>
@@ -897,10 +897,10 @@
 			style="top: 127.5px;left: 40px;font-size: 12px;width: 43px;height: 16px;text-align: center;padding: 0 0 0 0;"
 			type="text"
 			data-default=""
-			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
+			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '')"
 			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Comp_Use_HD_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);{let templEl=document.getElementById('Template.extras.AScomp');let origTemplVal=templEl.getAttribute('value');templEl.setAttribute('value', ','+origTemplVal.replace(/^,/, ''));SetHPTooltip(false, true);templEl.setAttribute('value', origTemplVal)}"
+			onchange="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.Comp_Use_HD_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);{let templEl=document.getElementById('Template.extras.AScomp');let origTemplVal=templEl.getAttribute('value');templEl.setAttribute('value', ','+origTemplVal.replace(/^,/, ''));SetHPTooltip(false, true);templEl.setAttribute('value', origTemplVal)}"
 		/>
 
 		<input
@@ -978,7 +978,7 @@
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				spellcheck="true"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
@@ -1034,7 +1034,7 @@
 				style="top: 0px;left: 438px;height: 15px;width: 68px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				data-default=""
 				onchange="eventManager.handle_event(EventType.Comp_Use_Attack_1_Damage_Type_change)"
 			/>
@@ -1075,7 +1075,7 @@
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				spellcheck="true"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
@@ -1131,7 +1131,7 @@
 				style="top: 0px;left: 438px;height: 15px;width: 68px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				data-default=""
 				onchange="eventManager.handle_event(EventType.Comp_Use_Attack_2_Damage_Type_change)"
 			/>
@@ -1172,7 +1172,7 @@
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
 				spellcheck="true"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
 			<input
@@ -1228,7 +1228,7 @@
 				style="top: 0px;left: 438px;height: 15px;width: 68px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				data-default=""
 				onchange="eventManager.handle_event(EventType.Comp_Use_Attack_3_Damage_Type_change)"
 			/>

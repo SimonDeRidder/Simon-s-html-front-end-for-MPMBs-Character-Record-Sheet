@@ -68,7 +68,7 @@ const dialogManager = {
 								theElement.onclick = function (event) {
 									let elWidth = this.style.width.trim();
 									if (elWidth.endsWith('px')) {
-										if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {
+										if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {
 											this.value='';
 										}
 									} else if (elWidth.endsWith('ch')) {
@@ -397,7 +397,7 @@ const dialogManager = {
 				element.onclick = function (event) {
 					let elWidth = this.style.width.trim();
 					if (elWidth.endsWith('px')) {
-						if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {
+						if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {
 							this.value='';
 						}
 					} else if (elWidth.endsWith('ch')) {

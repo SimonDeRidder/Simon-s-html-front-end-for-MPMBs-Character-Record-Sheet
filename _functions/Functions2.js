@@ -1829,7 +1829,6 @@ function RemoveWildshape(input) {
 }
 
 //make a menu for wild shape options
-// $$[note]$$ event.target.name -> fldName
 function MakeWildshapeMenu(fldName) {
 	var prefix = getTemplPre(fldName, "WSfront", true);
 
@@ -2094,9 +2093,8 @@ function MakeWildshapeMenu(fldName) {
 };
 
 //call the wildshape menu and do something with the results
-// $$[note]$$ getTemplPre(event.target.name, "WSfront", true) -> prefix
 async function WildshapeOptions(prefix) {
-	var MenuSelection = getMenu("wildshape");
+	var MenuSelection = await getMenu("wildshape");
 	if (!MenuSelection || MenuSelection[0] == "nothing") return;
 	switch (MenuSelection[0]) {
 	 case "recalculate" :

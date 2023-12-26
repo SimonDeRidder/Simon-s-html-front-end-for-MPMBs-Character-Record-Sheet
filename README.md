@@ -40,8 +40,6 @@ Please see the [How-To Guide - Add More Content](https://www.flapkan.com/how-to/
 
 ## Known issues
 
-- print button not functional yet
-- wildshape page not functional yet
 - multiple spells pages not functional yet
 - several hidden fields (*BlueText*) not functional yet
 - No option to host a HTTPS server yet

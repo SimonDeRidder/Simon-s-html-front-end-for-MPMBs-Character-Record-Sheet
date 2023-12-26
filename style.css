@@ -518,4 +518,13 @@ input[type=number] {
 	.inputfield {
 		background-color: transparent;
 	}
+
+	.pane .checkcircle {
+		border-color: var(--black);
+		background-color: var(--background);
+	}
+
+	.pane .checkcircle:checked {
+		background-color: var(--black);
+	}
 }

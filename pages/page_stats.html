@@ -85,7 +85,7 @@
 			style="top: 124px;left: 365px;font-size: 11pt;width: 130pt;height: 15pt"
 			aria-label="Background"
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<datalist id="background_options">
 			<option value="Acolyte">
@@ -97,7 +97,7 @@
 			style="top: 146px;left: 445px;font-size: 7pt;width: 70pt;height: 8pt;color: var(--text-dimmed)"
 			spellcheck="true"
 			aria-label="First fill out a background in the field above."
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<datalist id="background_sub_options">
 			<option value=""></option>
@@ -108,7 +108,7 @@
 			list="race_options"
 			style="top: 124px;left: 545px;font-size: 14.7px;width: 108px;height: 20px"
 			aria-label="Race"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			spellcheck="true"
 			onchange="ApplyRace(this.value)"
 		/>
@@ -532,7 +532,7 @@
 			class="field inputfield"
 			list="resistances_options"
 			style="top: 84.8px;left: 16px;font-size: 12px;width: 73.6px;height: 14px"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			spellcheck="true"
 			onchange="this.value=addWhitespace(this.value)"
 		/>
@@ -541,7 +541,7 @@
 			class="field inputfield"
 			list="resistances_options"
 			style="top: 104.4px;left: 16px;font-size: 12px;width: 73.6px;height: 14px"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			spellcheck="true"
 			onchange="this.value=addWhitespace(this.value)"
 		/>
@@ -550,7 +550,7 @@
 			class="field inputfield"
 			list="resistances_options"
 			style="top: 123.9px;left: 16px;font-size: 12px;width: 73.6px;height: 14px"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			spellcheck="true"
 			onchange="this.value=addWhitespace(this.value)"
 		/>
@@ -559,7 +559,7 @@
 			class="field inputfield"
 			list="resistances_options"
 			style="top: 84.8px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			spellcheck="true"
 			onchange="this.value=addWhitespace(this.value)"
 		/>
@@ -568,7 +568,7 @@
 			class="field inputfield"
 			list="resistances_options"
 			style="top: 104.4px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			spellcheck="true"
 			onchange="this.value=addWhitespace(this.value)"
 		/>
@@ -577,7 +577,7 @@
 			class="field inputfield"
 			list="resistances_options"
 			style="top: 123.9px;left: 95.7px;font-size: 12px;width: 73.6px;height: 14px"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			spellcheck="true"
 			onchange="this.value=addWhitespace(this.value)"
 		/>
@@ -896,30 +896,30 @@
 			class="field inputfield-notched die"
 			style="top: 211px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
-			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
+			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '')"
 			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD1_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
+			onchange="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD1_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
 		<input
 			id="HD2_Die"
 			class="field inputfield-notched die"
 			style="top: 230px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
-			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
+			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '')"
 			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD2_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
+			onchange="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD2_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
 		<input
 			id="HD3_Die"
 			class="field inputfield-notched die"
 			style="top: 249px;left: 135px;font-size: 10px;width: 28px;height: 13.3px;"
 			type="text"
-			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')"
+			onfocus="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '')"
 			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD3_Die_change)"
-			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
+			onchange="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);eventManager.handle_event(EventType.HD3_Die_change)"
+			onblur="this.value=('' + this.value).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '');this.value=FormatHD(adapter_helper_convert_id_to_fieldname(this.id), this.value);SetHPTooltip(false, false)"
 		/>
 
 		<input
@@ -953,15 +953,14 @@
 			data-default=""
 			spellcheck="true"
 		/>
-		<input
+		<textarea
 			id="Speed"
 			class="field inputfield"
-			style="top: 225px;left: 215.2px;font-size: 20px;width: 66.7px;height: 50px;text-align: center;padding: 0 0 0 0"
-			type="text"
+			style="top: 225px;left: 215.2px;font-size: 14px;width: 66.7px;height: 49px;text-align: center;padding: 0 0 0 0;line-height: 16px;"
 			aria-label="The total walking speed comes from:"
 			data-default=""
 			spellcheck="true"
-		/>
+		></textarea>
 
 		<!-- BlueText -->
 		<div
@@ -1037,6 +1036,12 @@
 				eventManager.add_listener(
 					event_type,
 					function () {
+						if (event_type == EventType.Con_change) {
+							// Also recalculate HD fields to make sure Con modifier on die is correct
+							for (let i=1; i<=3; i++) {
+								document.getElementById('HD' + String(i) + '_Die').dispatchEvent(new Event('change'));
+							}
+						}
 						calcHP('');
 					}
 				)
@@ -1165,7 +1170,7 @@
 			aria-label="Armor AC"
 			spellcheck="true"
 			onchange="ApplyArmor(this.value);eventManager.handle_event(EventType.AC_Armor_Description_change);"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<datalist id="armor_type_options">
 			<option value=""> </option>
@@ -2600,7 +2605,7 @@
 			style="top: 25.6px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_2"
@@ -2608,7 +2613,7 @@
 			style="top: 45.9px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_3"
@@ -2616,7 +2621,7 @@
 			style="top: 66.2px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_4"
@@ -2624,7 +2629,7 @@
 			style="top: 86.5px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_5"
@@ -2632,7 +2637,7 @@
 			style="top: 106.8px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_6"
@@ -2640,7 +2645,7 @@
 			style="top: 127.1px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_7"
@@ -2648,7 +2653,7 @@
 			style="top: 147.4px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_8"
@@ -2656,7 +2661,7 @@
 			style="top: 167.7px;left: 191px;font-size: 9px;height: 15.3px;width: 51px"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_9"
@@ -2664,7 +2669,7 @@
 			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_10"
@@ -2672,7 +2677,7 @@
 			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_11"
@@ -2680,7 +2685,7 @@
 			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_12"
@@ -2688,7 +2693,7 @@
 			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_13"
@@ -2696,7 +2701,7 @@
 			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_14"
@@ -2704,7 +2709,7 @@
 			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_15"
@@ -2712,7 +2717,7 @@
 			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="Limited_Feature_Recovery_16"
@@ -2720,7 +2725,7 @@
 			style="font-size: 9px;height: 15.3px;width: 51px;visibility: hidden;"
 			type="text"
 			list="limited_features_recover_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<datalist id="limited_features_recover_options">
 			<option value="short rest">SR</option>
@@ -3864,7 +3869,7 @@
 			spellcheck="true"
 			aria-label="Select or type in the ammunition you want to use and all its attributes will be filled out automatically."
 			onchange="ApplyAmmo(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<input
 			id="AmmoRightDisplay.Name"
@@ -3875,7 +3880,7 @@
 			spellcheck="true"
 			aria-label="Select or type in the ammunition you want to use and all its attributes will be filled out automatically."
 			onchange="ApplyAmmo(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<datalist id="ammunition_types">
 			<option value="Alchemist's Fire, flasks">
@@ -5184,7 +5189,7 @@
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				spellcheck="true"
 				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
@@ -5236,7 +5241,7 @@
 				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				onchange="eventManager.handle_event(EventType.Attack_1_Damage_Type_change);"
 			/>
 			<input
@@ -5266,7 +5271,7 @@
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				spellcheck="true"
 				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
@@ -5318,7 +5323,7 @@
 				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				onchange="eventManager.handle_event(EventType.Attack_2_Damage_Type_change);"
 			/>
 			<input
@@ -5348,7 +5353,7 @@
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				spellcheck="true"
 				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
@@ -5400,7 +5405,7 @@
 				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				onchange="eventManager.handle_event(EventType.Attack_3_Damage_Type_change);"
 			/>
 			<input
@@ -5430,7 +5435,7 @@
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				spellcheck="true"
 				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
@@ -5482,7 +5487,7 @@
 				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				onchange="eventManager.handle_event(EventType.Attack_4_Damage_Type_change);"
 			/>
 			<input
@@ -5512,7 +5517,7 @@
 				type="text"
 				list="attacks_names"
 				aria-label="Type in the name of the attack (or select it from the drop-down menu) and all its attributes will be filled out automatically, provided that it's a recognised attack."
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				spellcheck="true"
 				onchange="ApplyWeapon(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 			/>
@@ -5564,7 +5569,7 @@
 				style="top: 0px;left: 431px;height: 15px;width: 66px;font-size: 12px"
 				type="text"
 				list="attacks_damage_types"
-				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+				onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 				onchange="eventManager.handle_event(EventType.Attack_5_Damage_Type_change);"
 			/>
 			<input

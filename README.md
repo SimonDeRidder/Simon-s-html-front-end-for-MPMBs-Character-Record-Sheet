@@ -39,8 +39,6 @@ Each file is a complete script. You can add multiple files, but take note that t
 
 ## Known issues
 
-- print button not functional yet
-- wildshape page not functional yet
 - multiple spells pages not functional yet
 - several hidden fields (*BlueText*) not functional yet
 - No option to host a HTTPS server yet

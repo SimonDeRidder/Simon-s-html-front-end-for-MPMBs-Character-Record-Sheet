@@ -3078,7 +3078,7 @@ async function getMenu(menuname) {
 		![
 			"actions", "attacks", "background", "classfeatures", "companion", "faq", "feats", "gearline", "glossary",
 			"hp", "icon", "limfea", "importexport", "importscripts", "inventory", "magicitems", "pages", "raceoptions",
-			"skills", "spells", "spellsLine", "spellsPrepared", "sources", "texts"
+			"skills", "spells", "spellsLine", "spellsPrepared", "sources", "texts", "wildshape"
 		].includes(menuname)
 		) {  // TODO: remove when all done
 		throw "error: unknown context menu: '" + menuname + "', make sure it is async";

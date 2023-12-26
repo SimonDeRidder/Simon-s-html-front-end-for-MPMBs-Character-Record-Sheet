@@ -93,7 +93,7 @@
 			style="top: 19px;left: 91px;font-size: 12px;width: 247px;height: 13.3px"
 			spellcheck="true"
 			aria-label="Select or type in the background feature you want to use and its text will be filled out below automatically."
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			onfocus="this.dataset.oldValue=(this.value == '' ? ' ' : this.value)"
 			onload="this.dataset.oldValue=(this.value == '' ? ' ' : this.value)"
 			onchange="ApplyBackgroundFeature(this.value, this.dataset.oldValue);this.dataset.oldValue=(this.value == '' ? ' ' : this.value)"

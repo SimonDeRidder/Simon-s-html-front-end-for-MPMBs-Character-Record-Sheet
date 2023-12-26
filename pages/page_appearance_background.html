@@ -56,9 +56,10 @@
 		<select
 			id="Size_Category"
 			class="field inputfield"
-			style="top: 88px;left: 552px;font-size: 11pt;width: 84.5px;height: 17px"
-			onchange="eventManager.handle_event(EventType.Size_Category_change)"
+			style="top: 88px;left: 552px;font-size: 14.7px;width: 84.5px;height: 17px"
+			onchange="if (this.options[this.selectedIndex].text == 'Gargantuan') {this.style.fontSize='12.7px'} else {this.style.fontSize='14.7px'};eventManager.handle_event(EventType.Size_Category_change)"
 		>
+			<option disabled selected value> </option>
 			<option value="8">Gargantuan</option>
 			<option value="4">Huge</option>
 			<option value="2">Large</option>
@@ -88,7 +89,7 @@
 			spellcheck="true"
 			type="text"
 			list="alignment_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 		/>
 		<datalist id="alignment_options">
 			<option value="Lawful Good">Lawful Good</option>
@@ -184,7 +185,7 @@
 			type="text"
 			list="faction_options"
 			aria-label="Select one of the factions from the list, or write in your own."
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			onchange="SetFactionSymbol('Background_Faction.Text', this.value, true);"
 		/>
 		<datalist id="faction_options">
@@ -223,7 +224,7 @@
 			id="Background_FactionRank.Text"
 			class="field inputfield"
 			list="faction_rank_options"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			spellcheck="true"
 			style="top: 310px;left: 290px;width: 130px;visibility: hidden"
 		/>
@@ -260,7 +261,7 @@
 			type="text"
 			list="lifestyle_options"
 			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-14) {this.value='';}"
+			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
 			onchange="setLifeStyle(this.value)"
 		/>
 		<datalist id="lifestyle_options">

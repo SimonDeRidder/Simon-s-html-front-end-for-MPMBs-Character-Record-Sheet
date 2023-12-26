@@ -18,6 +18,7 @@ const app = {
 			return this._text;
 		},
 		set text(new_text /*str*/) {
+			console.log(new_text);
 			this._text = new_text;
 		},
 		end: function () { },
@@ -680,7 +681,7 @@ class AdapterClassFieldReference {
 			return false;
 		}
 		if (this.html_elements[0].classList.contains('die')) {
-			return ('' + value_).replace(/^\s*d/, '').replace(/\s*\+\s*\d+\s*$/, '')
+			return ('' + value_).replace(/^\s*d/, '').replace(/\s*[+-]\s*\d+\s*$/, '')
 		}
 		return value_;
 	}
@@ -922,6 +923,14 @@ class AdapterClassFieldReference {
 
 	set setVal(new_setVal /*String*/) {
 		this.html_elements[0].dataset.setVal = new_setVal;
+	}
+
+	get defaultValue() /*String*/ {
+		let defaultValue = this.html_elements[0].dataset.default;
+		if (defaultValue == undefined) {
+			throw "calling defaultValue when none is set for " + this.html_elements[0].id;
+		}
+		return defaultValue;
 	}
 
 	toSource() /*str*/ {
@@ -1256,11 +1265,11 @@ class AdapterClassPage {
 			this.pageIdPrefix = 'pcomptempl';
 			this.buttonFollower = 'tabbuttonnote';
 			this.isTempl = (type == 'pcomptempl') ? false: true;
-		} else if (type.startsWith('pwildtempl')) {
+		} else if ((type == 'WSfront') || type.startsWith('pwildtempl')) {
 			this.page_ = 'pages/page_wildshape.html';
 			this.prefix_ = (prefix == null) ? 'P#.WSfront.': prefix;
 			this.buttonPrefix_ = "Wildshape";
-			this.buttonIDPrefix_ = null;
+			this.buttonIDPrefix_ = 'tabbuttonwild';
 			this.pageIdPrefix = 'pwildtempl';
 			this.buttonFollower = 'tabbuttonnote';
 			this.isTempl = (type == 'pwildtempl') ? false: true;
@@ -1330,7 +1339,7 @@ class AdapterClassPage {
 
 		let index = 1;
 		if (this.isTempl) {
-			while (document.getElementById(self.pageIdPrefix + '_' + String(index)) != null) {
+			while (document.getElementById(this.pageIdPrefix + '_' + String(index)) != null) {
 				index += 1;
 			}
 		}
@@ -1368,6 +1377,7 @@ class AdapterClassPage {
 			buttonElement.innerText = buttonName;
 			buttonContainerElement.insertBefore(buttonElement, document.getElementById(this.buttonFollower));
 		}
+		await setSheetVersion();
 	}
 }
 
@@ -1891,7 +1901,7 @@ function adapter_helper_keystroke1(
 	let origLen = change.length;
 	let selStart = current_selection[0];
 	let selEnd = current_selection[1];
-	let rc = keystroke1(allowDec, allowNegative, value, change, selStart, selEnd, isFinal);
+	let rc = keystroke1(allowDec, allowNegative, value, change, selStart-change.length, selEnd, isFinal);
 	if (!rc) {
 		element.value = element.value.substring(0,selStart-origLen)+element.value.substring(selEnd);
 	} else {
@@ -2156,7 +2166,7 @@ function escapeUnicode(uText /*String*/) /*String*/ {
 	for(let i = 0; i < uText.length; i++){
 		// Assumption: all characters are < 0xffff
 		let num = uText[i].charCodeAt(0);
-		if (num < 256) {
+		if (num < 127) {
 			result += uText[i];
 		} else {
 			result += "\\u" + ("000" + num.toString(16)).substr(-4);

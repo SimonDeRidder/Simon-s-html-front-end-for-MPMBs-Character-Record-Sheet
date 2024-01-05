@@ -1289,6 +1289,14 @@ class AdapterClassPage {
 			this.pageIdPrefix = 'pspellstempl';
 			this.buttonFollower = 'tabbuttonrefe';
 			this.isTempl = (type == 'pspellstempl') ? false: true;
+		} else if ((type == 'SSmore') || type.startsWith('pspelmotempl')) {
+			this.page_ = 'pages/page_spells_more.html';
+			this.prefix_ = (prefix == null) ? 'P#.SSmore.': prefix;
+			this.buttonPrefix_ = "Spells";
+			this.buttonIDPrefix_ = 'tabbuttonspmo';
+			this.pageIdPrefix = 'pspelmotempl';
+			this.buttonFollower = 'tabbuttonrefe';
+			this.isTempl = (type == 'pspelmotempl') ? false: true;
 		} else if (type == 'prefe') {
 			this.page_ = 'pages/page_reference.html';
 			this.prefix_ = (prefix == null) ? '': prefix;
@@ -1339,6 +1347,9 @@ class AdapterClassPage {
 
 		let index = 1;
 		if (this.isTempl) {
+			if (this.pageIdPrefix == 'pspelmotempl') {
+				index += 1;
+			}
 			while (document.getElementById(this.pageIdPrefix + '_' + String(index)) != null) {
 				index += 1;
 			}

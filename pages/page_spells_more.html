@@ -1,737 +1,21 @@
-<div id="SSfront" class="field page-container">
+<div id="SSmore" class="field page-container">
 
-	<div id="spell_sheet_header" class="pane" style="width: var(--page-width);height: 182px;">
-		<img class="pane-bg" alt="" src="img/bg_splashy_stripes.svg" style="top: 4px;width: var(--page-width);height: 174.2px">
-		<img class="pane-bg" alt="" src="img/page_spells/backgrounds/header.svg" style="top: 40px;left: 23.5px;width: 847.5px;height: 122.3px;">
-
-		<img
-			id="Image.DnDLogo.short"
-			class="field"
-			alt="D&amp;D®"
-			src="img/dnd/5ednd.svg"
-			style="position: absolute;top: 2px;left: 370px;width: 75px;height: 75px;visibility: hidden"
-		/>
-
-		<div class="textlabel-bold" style="top: 131.6px;left: 360.4px;width: 469.3px">SPELL SLOTS</div>
-		<span class="textlabel" style="top: 143px;left: 101.5px">CHARACTER NAME</span>
-		<span class="textlabel" style="top: 83.1px;left: 365.34px;font-size: 9px"><b>1</b>ST LEVEL</span>
-		<span class="textlabel" style="top: 83.1px;left: 417.48px;font-size: 9px"><b>2</b>ND LEVEL</span>
-		<span class="textlabel" style="top: 83.1px;left: 469.63px;font-size: 9px"><b>3</b>RD LEVEL</span>
-		<span class="textlabel" style="top: 83.1px;left: 521.77px;font-size: 9px"><b>4</b>TH LEVEL</span>
-		<span class="textlabel" style="top: 83.1px;left: 573.92px;font-size: 9px"><b>5</b>TH LEVEL</span>
-		<span class="textlabel" style="top: 83.1px;left: 626.06px;font-size: 9px"><b>6</b>TH LEVEL</span>
-		<span class="textlabel" style="top: 83.1px;left: 678.21px;font-size: 9px"><b>7</b>TH LEVEL</span>
-		<span class="textlabel" style="top: 83.1px;left: 730.35px;font-size: 9px"><b>8</b>TH LEVEL</span>
-		<span class="textlabel" style="top: 83.1px;left: 782.48px;font-size: 9px"><b>9</b>TH LEVEL</span>
-
-		<input
-			id="zAdvLog.PC_Name"
-			class="field inputfield"
-			style="top: 105px;left: 72px;font-size: 12.5pt;width: 168pt;height: 14.5pt;text-align: center"
-			type="text"
-			spellcheck="true"
-			data-default=""
-			onchange="ValidateAdvLogInfo(adapter_helper_convert_id_to_fieldname(this.id), this.value)"
-		/>
-
-		<input
-			id="SpellSlots.Checkboxes.lvl1.top2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 367px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl1.top2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 384.5px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl1.bottom2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 367px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl1.bottom2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 384.5px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl1.top1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 375.75px;width: 11px;height: 11px;visibility: hidden"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl1.bottom1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px; left: 375.75px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl1.mid"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 100.5px;left: 375.75px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<div
-			id="SpellSlots.Extra.lvl1"
-			class="field"
-			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
-			data-default=""
-		></div>
-		<input
-			id="SpellSlots.CheckboxesSet.lvl1"
-			class="field inputfield bluetext"
-			style="visibility: hidden;top: 130px;left: 367px;width: 12px;height: 11px;text-align: center"
-			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
-			value="0"
-			data-default="0"
-			type="number"
-			min="0"
-			step="1"
-			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
-		/>
-
-		<input
-			id="SpellSlots.Checkboxes.lvl2.top2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 419.14px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl2.top2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 436.64px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl2.bottom2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 419.14px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl2.bottom2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 436.64px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl2.top1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 427.89px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl2.bottom1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 427.89px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl2.mid"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 100.5px;left: 427.89px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<div
-			id="SpellSlots.Extra.lvl2"
-			class="field"
-			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
-			data-default=""
-		></div>
-		<input
-			id="SpellSlots.CheckboxesSet.lvl2"
-			class="field inputfield bluetext"
-			style="visibility: hidden;top: 130px;left: 419.14px;width: 12px;height: 11px;text-align: center"
-			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
-			value="0"
-			data-default="0"
-			type="number"
-			min="0"
-			step="1"
-			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
-		/>
-
-		<input
-			id="SpellSlots.Checkboxes.lvl3.top2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 471.28px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl3.top2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 488.78px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl3.bottom2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 471.28px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl3.bottom2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 488.78px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl3.top1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 480.03px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl3.bottom1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 480.03px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl3.mid"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 100.5px;left: 480.03px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<div
-			id="SpellSlots.Extra.lvl3"
-			class="field"
-			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
-			data-default=""
-		></div>
-		<input
-			id="SpellSlots.CheckboxesSet.lvl3"
-			class="field inputfield bluetext"
-			style="visibility: hidden;top: 130px;left: 471.28px;width: 12px;height: 11px;text-align: center"
-			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
-			value="0"
-			data-default="0"
-			type="number"
-			min="0"
-			step="1"
-			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
-		/>
-
-		<input
-			id="SpellSlots.Checkboxes.lvl4.top2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 523.42px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl4.top2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 540.92px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl4.bottom2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 523.42px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl4.bottom2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 540.92px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl4.top1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 532.17px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl4.bottom1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 532.17px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl4.mid"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 100.5px;left: 532.17px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<div
-			id="SpellSlots.Extra.lvl4"
-			class="field"
-			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
-			data-default=""
-		></div>
-		<input
-			id="SpellSlots.CheckboxesSet.lvl4"
-			class="field inputfield bluetext"
-			style="visibility: hidden;top: 130px;left: 523.42px;width: 12px;height: 11px;text-align: center"
-			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
-			value="0"
-			data-default="0"
-			type="number"
-			min="0"
-			step="1"
-			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
-		/>
-
-		<input
-			id="SpellSlots.Checkboxes.lvl5.top2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 575.56px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl5.top2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 593.06px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl5.bottom2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 575.56px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl5.bottom2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 593.06px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl5.top1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 584.31px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl5.bottom1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 584.31px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl5.mid"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 100.5px;left: 584.31px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<div
-			id="SpellSlots.Extra.lvl5"
-			class="field"
-			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
-			data-default=""
-		></div>
-		<input
-			id="SpellSlots.CheckboxesSet.lvl5"
-			class="field inputfield bluetext"
-			style="visibility: hidden;top: 130px;left: 575.56px;width: 12px;height: 11px;text-align: center"
-			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
-			value="0"
-			data-default="0"
-			type="number"
-			min="0"
-			step="1"
-			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
-		/>
-
-		<input
-			id="SpellSlots.Checkboxes.lvl6.top2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 627.70px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl6.top2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 645.20px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl6.bottom2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 627.70px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl6.bottom2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 645.20px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl6.top1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 636.45px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl6.bottom1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 636.45px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl6.mid"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 100.5px;left: 636.45px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<div
-			id="SpellSlots.Extra.lvl6"
-			class="field"
-			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
-			data-default=""
-		></div>
-		<input
-			id="SpellSlots.CheckboxesSet.lvl6"
-			class="field inputfield bluetext"
-			style="visibility: hidden;top: 130px;left: 627.70px;width: 12px;height: 11px;text-align: center"
-			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
-			value="0"
-			data-default="0"
-			type="number"
-			min="0"
-			step="1"
-			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
-		/>
-
-		<input
-			id="SpellSlots.Checkboxes.lvl7.top2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 679.84px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl7.top2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 697.34px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl7.bottom2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 679.84px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl7.bottom2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 697.34px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl7.top1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 688.59px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl7.bottom1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 688.59px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl7.mid"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 100.5px;left: 688.59px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<div
-			id="SpellSlots.Extra.lvl7"
-			class="field"
-			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
-			data-default=""
-		></div>
-		<input
-			id="SpellSlots.CheckboxesSet.lvl7"
-			class="field inputfield bluetext"
-			style="visibility: hidden;top: 130px;left: 679.84px;width: 12px;height: 11px;text-align: center"
-			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
-			value="0"
-			data-default="0"
-			type="number"
-			min="0"
-			step="1"
-			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
-		/>
-
-		<input
-			id="SpellSlots.Checkboxes.lvl8.top2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 731.98px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl8.top2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 749.48px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl8.bottom2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 731.98px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl8.bottom2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 749.48px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl8.top1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 740.73px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl8.bottom1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 740.73px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl8.mid"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 100.5px;left: 740.73px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<div
-			id="SpellSlots.Extra.lvl8"
-			class="field"
-			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
-			data-default=""
-		></div>
-		<input
-			id="SpellSlots.CheckboxesSet.lvl8"
-			class="field inputfield bluetext"
-			style="visibility: hidden;top: 130px;left: 731.98px;width: 12px;height: 11px;text-align: center"
-			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
-			value="0"
-			data-default="0"
-			type="number"
-			min="0"
-			step="1"
-			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
-		/>
-
-		<input
-			id="SpellSlots.Checkboxes.lvl9.top2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 784.12px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl9.top2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 801.62px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl9.bottom2.1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 784.12px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl9.bottom2.2"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 801.62px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl9.top1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 92px;left: 792.87px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl9.bottom1"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 109px;left: 792.87px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<input
-			id="SpellSlots.Checkboxes.lvl9.mid"
-			class="field checkcircle"
-			type="checkbox"
-			style="top: 100.5px;left: 792.87px;width: 11px;height: 11px;visibility: hidden"
-			data-default="false"
-		/>
-		<div
-			id="SpellSlots.Extra.lvl9"
-			class="field"
-			style="position: absolute;top: 118px;left: 375.75px;text-align: right"
-			data-default=""
-		></div>
-		<input
-			id="SpellSlots.CheckboxesSet.lvl9"
-			class="field inputfield bluetext"
-			style="visibility: hidden;top: 130px;left: 784.12px;width: 12px;height: 11px;text-align: center"
-			aria-label="Set the amount of spell slots (circles) of spell level (0-4 circles)"
-			value="0"
-			data-default="0"
-			type="number"
-			min="0"
-			step="1"
-			onchange="{let fldName = adapter_helper_convert_id_to_fieldname(this.id);SetSpellSlotsCheckboxes(fldName, fldName.slice(-1), parseFloat(this.value))}"
-		/>
-
-		<div
-			id="Image.SpellPoints"
-			class="field"
-			style="position: absolute;top: 96.2px;left: 356.1px;width: 478px;height: 65px;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/page_spells/backgrounds/spellpoints.svg');visibility: hidden"
-		>
-			<div class="textlabel-bold" style="top: 35px;left: 0px;width: 478.3px">SPELL POINT COST</div>
-			<div class="textlabel-bold" style="top: 4px;left: 4.7px;width: 51.7px;height: 20px;font-family: SegoeUI;font-size: 16px;">2</div>
-			<div class="textlabel-bold" style="top: 4px;left: 56.7px;width: 51.7px;height: 20px;font-family: SegoeUI;font-size: 16px;">3</div>
-			<div class="textlabel-bold" style="top: 4px;left: 108.8px;width: 51.7px;height: 20px;font-family: SegoeUI;font-size: 16px;">5</div>
-			<div class="textlabel-bold" style="top: 4px;left: 160.9px;width: 51.7px;height: 20px;font-family: SegoeUI;font-size: 16px;">6</div>
-			<div class="textlabel-bold" style="top: 4px;left: 213.0px;width: 51.7px;height: 20px;font-family: SegoeUI;font-size: 16px;">7</div>
-			<div class="textlabel-bold" style="top: 4px;left: 265.2px;width: 51.7px;height: 20px;font-family: SegoeUI;font-size: 16px;">9</div>
-			<div class="textlabel-bold" style="top: 4px;left: 317.3px;width: 51.7px;height: 20px;font-family: SegoeUI;font-size: 16px;">10</div>
-			<div class="textlabel-bold" style="top: 4px;left: 369.5px;width: 51.7px;height: 20px;font-family: SegoeUI;font-size: 16px;">11</div>
-			<div class="textlabel-bold" style="top: 4px;left: 421.6px;width: 51.7px;height: 20px;font-family: SegoeUI;font-size: 16px;">13</div>
-			<span class="textlabel" style="top: 22px;left: 282.7px;font-family: SegoeUI;font-size: 7px;">USE 1xLR</span>
-			<span class="textlabel" style="top: 22px;left: 334.8px;font-family: SegoeUI;font-size: 7px;">USE 1xLR</span>
-			<span class="textlabel" style="top: 22px;left: 386.9px;font-family: SegoeUI;font-size: 7px;">USE 1xLR</span>
-			<span class="textlabel" style="top: 22px;left: 439px;font-family: SegoeUI;font-size: 7px;">USE 1xLR</span>
-
-			<input
-				id="SpellSlots.Checkboxes.SpellPoints.lvl6"
-				class="field checkcircle"
-				type="checkbox"
-				style="top: 20px;left: 269px;width: 8px;height: 8px;visibility: hidden"
-				data-default="false"
-			/>
-			<input
-				id="SpellSlots.Checkboxes.SpellPoints.lvl7"
-				class="field checkcircle"
-				type="checkbox"
-				style="top: 20px;left: 321.1px;width: 8px;height: 8px;visibility: hidden"
-				data-default="false"
-			/>
-			<input
-				id="SpellSlots.Checkboxes.SpellPoints.lvl8"
-				class="field checkcircle"
-				type="checkbox"
-				style="top: 20px;left: 373.2px;width: 8px;height: 8px;visibility: hidden"
-				data-default="false"
-			/>
-			<input
-				id="SpellSlots.Checkboxes.SpellPoints.lvl9"
-				class="field checkcircle"
-				type="checkbox"
-				style="top: 20px;left: 425.3px;width: 8px;height: 8px;visibility: hidden"
-				data-default="false"
-			/>
-		</div>
-
-		<button
-			id="Spells_Button"
-			class="field button nonprintable"
-			style="top: 30px;left: 554px;font-size: 8.4px"
-			aria-label="Get a menu with the options to:"
-			onclick="MakeSpellMenu_SpellOptions()"
-		>Spell Sheet Options</button>
-
-		<script type="text/javascript">
-			{
-				let prefix = adapter_helper_get_prefix_from_script('Image.DnDLogo.short');
-				// zAdvLog.PC_Name
-				eventManager.add_listener(
-					EventType.PC_Name_change,
-					function () {
-						let newValue = CalcAdvLogInfo(prefix + 'zAdvLog.PC Name');
-						if (newValue !== undefined) {
-							let nameElement = document.getElementById(prefix + 'zAdvLog.PC_Name');
-							if (nameElement.value != newValue) {
-								nameElement.value = newValue;
-								nameElement.dispatchEvent(new Event('change'));
-							}
-						}
-					}
-				)
-			}
-		</script>
-	</div>
+	<button
+		id="Spells_Button"
+		class="field button nonprintable"
+		style="top: 27px;left: 784px;font-size: 8.4px"
+		aria-label="Get a menu with the options to:"
+		onclick="MakeSpellMenu_SpellOptions()"
+	>Spell Sheet Options</button>
 
 
-	<div id="spell_sheet_table" class="pane" style="top: 180px;left: 34px;width: 825px;height: 972px">
+	<div id="spell_sheet_table" class="pane" style="top: 42px;left: 34px;width: 825px;height: 972px">
 
-		<div id="spellshead.container.0" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;z-index: 3">
+		<div id="spellshead.container.0" style="position: absolute;top: 397.8px;left: 0px;width: 825px;height: 62.4px">
 			<div
 				id="spellshead.Image.Header.Left.0"
 				class="field"
-				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px"
+				style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;visibility: hidden;"
 			>
 				<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader.svg" style="top: 3px;left: 0px;width: 825px;height: 55.3px;">
 
@@ -742,7 +26,7 @@
 			<input
 				id="spellshead.Text.header.0"
 				class="field inputfield"
-				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans'"
+				style="top: 16px;left: 12.5px;font-size: 12px;width: 278.7px;height: 27.3px;text-align: center;font-weight: bold;font-family: 'scala-sans';visibility: hidden"
 				type="text"
 				data-submit_name="spellshead.dummy.remember.0"
 				aria-label="Clear the content of this field to make its prepared section visible again, if you had hidden it."
@@ -752,7 +36,7 @@
 			<select
 				id="spellshead.ability.0"
 				class="field inputfield"
-				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px"
+				style="top: 18px;left: 343px;font-size: 13.5px;width: 92px;height: 19px;text-align: center;padding-left: 0px;padding-right: 0px;visibility: hidden"
 				onchange="SaveSpellcastingAbility(new AdapterClassFieldReference([this])).then(() => {eventManager.handle_event(EventType.spellshead_ability_0_change)})"
 			>
 				<option value="nothing"></option>
@@ -766,7 +50,7 @@
 			<input
 				id="spellshead.attack.0"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px"
+				style="top: 19px;left: 565px;font-size: 15px;width: 79px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value !== '' && this.value >= 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.spellshead_attack_0_change)"
@@ -774,7 +58,7 @@
 			<input
 				id="spellshead.dc.0"
 				class="field inputfield-noneditable"
-				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px"
+				style="top: 19px;left: 676px;font-size: 15px;width: 80px;height: 16px;visibility: hidden"
 				type="text"
 				data-default=""
 				onchange="if (tDoc.info.SpellsOnly && this.value > 0) {this.value = 'DC' + this.value};eventManager.handle_event(EventType.spellshead_dc_0_change)"
@@ -784,7 +68,7 @@
 				<div
 					id="spellshead.Image.prepare.0"
 					class="field"
-					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer"
+					style="position: absolute;top: 0px;left: 0px;width: 89.5px;height: 64px;cursor: pointer;visibility: hidden"
 					onclick="MakePreparedMenu_PreparedOptions(adapter_helper_convert_id_to_fieldname(this.id), false)"
 				>
 					<img class="pane-bg" alt="" src="img/page_spells/backgrounds/classheader_to_prepare.svg" style="top: 9.5px;left: 0px;width: 89.5px;height: 42.4px;">
@@ -795,7 +79,7 @@
 				<input
 					id="spellshead.prepare.0"
 					class="field inputfield-noneditable"
-					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px"
+					style="top: 19px;left: 19px;font-size: 15px;width: 47px;height: 16px;visibility: hidden"
 					type="number"
 					data-default=""
 					onchange="eventManager.handle_event(EventType.spellshead_prepare_0_change)"
@@ -848,7 +132,7 @@
 			/>
 		</div>
 
-		<div id="spellshead.container.1" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;z-index: 2">
+		<div id="spellshead.container.1" style="position: absolute;top: 397.8px;left: 0px;width: 825px;height: 62.4px">
 			<div
 				id="spellshead.Image.Header.Left.1"
 				class="field"
@@ -970,7 +254,7 @@
 			/>
 		</div>
 
-		<div id="spellshead.container.2" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px;z-index: 1">
+		<div id="spellshead.container.2" style="position: absolute;top: 397.8px;left: 0px;width: 825px;height: 62.4px">
 			<div
 				id="spellshead.Image.Header.Left.2"
 				class="field"
@@ -1092,7 +376,7 @@
 			/>
 		</div>
 
-		<div id="spellshead.container.3" style="position: absolute;top: 0px;left: 0px;width: 825px;height: 62.4px">
+		<div id="spellshead.container.3" style="position: absolute;top: 397.8px;left: 0px;width: 825px;height: 62.4px">
 			<div
 				id="spellshead.Image.Header.Left.3"
 				class="field"
@@ -1215,25 +499,7 @@
 			/>
 		</div>
 
-		<div
-			id="spellsdiv.Image.0"
-			class="field"
-			style="position: absolute;top: 64px;left: 0px;width: 825px;height: 31.2px"
-			data-default=""
-		>
-			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/divider.svg" style="top: 0px;left: 0px;width: 825px;height: 32px;">
-		</div>
-		<input
-			id="spellsdiv.Text.0"
-			class="field inputfield"
-			style="top: 72px;left: 205.2px;font-size: 10.6px;width: 410.5px;height: 14px;text-align: center;font-weight: bold;text-transform: uppercase;font-family: 'scala-sans'"
-			type="text"
-			data-default=""
-			data-submit_name="spellsdiv.dummy.remember.0"
-			onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
-		/>
-
-		<div id="spellscontainer.0" style="position: absolute;top: 96px;left: 0px;width:825px;height: 15.6px;">
+		<div id="spellscontainer.0" style="position: absolute;top: 0px;left: 0px;width:825px;height: 15.6px;">
 			<button
 				id="spells.check.0"
 				class="field button nonprintable"
@@ -1336,14 +602,32 @@
 		<input
 			id="spells.remember.0"
 			class="field"
-			style="visibility: hidden;position: absolute;top: 96px;left: 0px;width:825px;height: 15.6px"
+			style="visibility: hidden;position: absolute;top: 0px;left: 0px;width:825px;height: 15.6px"
 			onchange="ApplySpell(this.value, adapter_helper_convert_id_to_fieldname(this.id))"
 		/>
 
 		<div
+			id="spellsdiv.Image.0"
+			class="field"
+			style="position: absolute;top: 460.2px;left: 0px;width: 825px;height: 31.2px"
+			data-default=""
+		>
+			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/divider.svg" style="top: 0px;left: 0px;width: 825px;height: 32px;">
+		</div><!--spellsdiv.Image.0-->
+		<input
+			id="spellsdiv.Text.0"
+			class="field inputfield"
+			style="top: 468.2px;left: 205.2px;font-size: 10.6px;width: 410.5px;height: 14px;text-align: center;font-weight: bold;text-transform: uppercase;font-family: 'scala-sans'"
+			type="text"
+			data-default=""
+			data-submit_name="spellsdiv.dummy.remember.0"
+			onchange="this.value=this.value.toUpperCase();HideSpellSheetElement(adapter_helper_convert_id_to_fieldname(this.id), true, this.value)"
+		/><!--spellsdiv.Text.0-->
+
+		<div
 			id="spellsgloss.Image.0"
 			class="field"
-			style="position: absolute;top: 782.4px;left: 0px;width: 825px;height: 187.6px;cursor: pointer;visibility: hidden"
+			style="position: absolute;top: 0px;left: 0px;width: 825px;height: 187.6px;cursor: pointer;visibility: hidden;z-index: 1;"
 			onclick="MakeGlossMenu_GlossOptions(adapter_helper_convert_id_to_fieldname(this.id))"
 		>
 			<img class="pane-bg" alt="" src="img/page_spells/backgrounds/glossary.svg" style="top: 0px;left: 0px;width: 825px;height: 187.6px;">
@@ -1448,17 +732,17 @@
 			<div class="textlabel" style="top: 122.0px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Unearthed Arcana</div>
 			<div class="textlabel" style="top: 135.7px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Explorer's Guide to Wildemount</div>
 			<div class="textlabel" style="top: 149.4px;left: 651px;width: 200px;text-align: left;font-size: 10.4px">Xanathar's Guide to Everything</div>
-		</div>
+		</div><!--spellsgloss.Image.0-->
 
 		<script type="text/javascript">
 			{
-				var prefix = adapter_helper_get_prefix_from_script('spellshead.Text');
+				var prefix = adapter_helper_get_prefix_from_script('spellshead.Image.Header.Left.0');
 
 				// clone spell rows & divs
 				for (
 					let templateDef of [
-						['spellscontainer.0', 55, true, true],
-						['spells.remember.0', 55, true, false],
+						['spellscontainer.0', 70, true, true],
+						['spells.remember.0', 70, true, false],
 						['spellsdiv.Image.0', 9, false, false],
 						['spellsdiv.Text.0', 9, false, false],
 					]
@@ -1506,6 +790,7 @@
 							eventManager.add_listener(
 								eventType,
 								function () {
+									// let prefix let= adapter_helper_get_prefix_from_script('spellshead.Image.Header.Left.0');
 									let element_id = prefix + 'spellshead.prepare.' + String(i);
 									let result = CalcSpellScores(element_id);
 									if (result !== undefined) {
@@ -1518,17 +803,6 @@
 								}
 							);
 						});
-					}
-
-					// copy spell slot visibility
-					let spellSlotPrefix, templName, thisName;
-					for (let spellLvl = 1; spellLvl<=9; spellLvl++) {
-						spellSlotPrefix = "SpellSlots.Checkboxes.lvl" + spellLvl + ".";
-						for (let suffix of ["mid", "top1", "top2.1", "top2.2", "bottom1", "bottom2.1", "bottom2.2"]) {
-							templName = spellSlotPrefix + suffix;
-							thisName = prefix + templName;
-							document.getElementById(thisName).style.visibility = document.getElementById(templName).style.visibility;
-						}
 					}
 				}
 			}
@@ -1548,24 +822,4 @@
 	>
 		Made by Joost Wijnen (mpmb@flapkan.com); Web front-end by Simon De Ridder
 	</span>
-
-	<!-- Invisible fields (some are bluetext mods, sort these out later) -->
-	<div style="visibility:hidden">
-		<div id="SpellSlots.Checkboxes.SpellPoints" class="field"></div>
-		<div id="SpellSlotsRemember" class="field"></div>
-		<div id="Image.SpellSlots.Checkboxes.1" class="field"></div>
-		<div id="Image.SpellSlots.Checkboxes.2" class="field"></div>
-		<div id="Image.SpellSlots.Checkboxes.3" class="field"></div>
-		<div id="Image.SpellSlots.Checkboxes.4" class="field"></div>
-		<div id="Image.SpellSlots.Checkboxes.5" class="field"></div>
-		<div id="Image.SpellSlots.Checkboxes.6" class="field"></div>
-		<div id="Image.SpellSlots.Checkboxes.7" class="field"></div>
-		<div id="Image.SpellSlots.Checkboxes.8" class="field"></div>
-		<div id="Image.SpellSlots.Checkboxes.9" class="field"></div>
-		<div id="spellsdiv.dummy.remember.0" class="field"></div>
-		<div id="spellshead.dummy.remember.0" class="field"></div>
-		<div id="spellshead.dummy.remember.1" class="field"></div>
-		<div id="spellshead.dummy.remember.2" class="field"></div>
-		<div id="spellshead.dummy.remember.3" class="field"></div>
-	</div>
 </div>

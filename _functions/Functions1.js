@@ -5321,7 +5321,6 @@ function FeatDelete(itemNmbr) {
 }
 
 // Add a feat to the second/third page or overflow page
-// $$[note]$$ event.target.name -> fldName
 async function AddFeat(sFeat, fldName) {
 	if (!sFeat) return;
 	// Check if this feat is recognized and if so, quit if it already exists

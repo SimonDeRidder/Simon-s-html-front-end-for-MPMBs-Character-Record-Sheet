@@ -132,6 +132,26 @@
 			spellcheck="true"
 			data-default=""
 		/>
+
+		<script type="text/javascript">
+			{
+				let prefix = adapter_helper_get_prefix_from_script('Image.DnDLogo.short');
+				// PC_Name#2
+				eventManager.add_listener(
+					EventType.PC_Name_change,
+					function () {
+						let newValue = document.getElementById('PC_Name').value;
+						if (newValue !== undefined) {
+							let nameElement = document.getElementById('PC_Name#2');
+							if (nameElement.value != newValue) {
+								nameElement.value = newValue;
+								nameElement.dispatchEvent(new Event('change'));
+							}
+						}
+					}
+				)
+			}
+		</script>
 	</div>
 
 

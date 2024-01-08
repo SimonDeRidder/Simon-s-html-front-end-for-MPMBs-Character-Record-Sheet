@@ -5775,6 +5775,52 @@
 			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 
+		<input
+			id="BlueText.Attack.1.Damage_Die"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top:  42px;left: 532.5px;height: 15px;width: 33.5px;text-align: center;font-size: 9px"
+			aria-label="Weapon Damage Die"
+			data-default=""
+			onchange="eventManager.handle_event(EventType.BlueText_Attack_1_Damage_Die_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+		<input
+			id="BlueText.Attack.2.Damage_Die"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top:  90px;left: 532.5px;height: 15px;width: 33.5px;text-align: center;font-size: 9px"
+			aria-label="Weapon Damage Die"
+			data-default=""
+			onchange="eventManager.handle_event(EventType.BlueText_Attack_2_Damage_Die_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+		<input
+			id="BlueText.Attack.3.Damage_Die"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 138px;left: 532.5px;height: 15px;width: 33.5px;text-align: center;font-size: 9px"
+			aria-label="Weapon Damage Die"
+			data-default=""
+			onchange="eventManager.handle_event(EventType.BlueText_Attack_3_Damage_Die_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+		<input
+			id="BlueText.Attack.4.Damage_Die"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 186px;left: 532.5px;height: 15px;width: 33.5px;text-align: center;font-size: 9px"
+			aria-label="Weapon Damage Die"
+			data-default=""
+			onchange="eventManager.handle_event(EventType.BlueText_Attack_4_Damage_Die_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+		<input
+			id="BlueText.Attack.5.Damage_Die"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 234px;left: 532.5px;height: 15px;width: 33.5px;text-align: center;font-size: 9px"
+			aria-label="Weapon Damage Die"
+			data-default=""
+			onchange="eventManager.handle_event(EventType.BlueText_Attack_5_Damage_Die_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+
 		<script type="text/javascript">
 			// Attack.i.To Hit (and Damage)
 			for (let i = 1; i <= 5; i++) {
@@ -5885,10 +5931,5 @@
 		<div id="BlueText.Attack.3.To_Hit_Bonus" class="field"></div>
 		<div id="BlueText.Attack.4.To_Hit_Bonus" class="field"></div>
 		<div id="BlueText.Attack.5.To_Hit_Bonus" class="field"></div>
-		<div id="BlueText.Attack.1.Damage_Die" class="field"></div>
-		<div id="BlueText.Attack.2.Damage_Die" class="field"></div>
-		<div id="BlueText.Attack.3.Damage_Die" class="field"></div>
-		<div id="BlueText.Attack.4.Damage_Die" class="field"></div>
-		<div id="BlueText.Attack.5.Damage_Die" class="field"></div>
 	</div>
 </div>

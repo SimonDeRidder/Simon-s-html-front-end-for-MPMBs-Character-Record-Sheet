@@ -5821,6 +5821,62 @@
 			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 
+		<input
+			id="BlueText.Attack.1.To_Hit_Bonus"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top:  23px;left:532.5px;width:13.5px;height:15px;text-align:center"
+			aria-label="To Hit Bonus Modifier"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, false, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.BlueText_Attack_1_To_Hit_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+		<input
+			id="BlueText.Attack.2.To_Hit_Bonus"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top:  71px;left:532.5px;width:13.5px;height:15px;text-align:center"
+			aria-label="To Hit Bonus Modifier"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, false, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.BlueText_Attack_2_To_Hit_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+		<input
+			id="BlueText.Attack.3.To_Hit_Bonus"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 119px;left:532.5px;width:13.5px;height:15px;text-align:center"
+			aria-label="To Hit Bonus Modifier"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, false, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.BlueText_Attack_3_To_Hit_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+		<input
+			id="BlueText.Attack.4.To_Hit_Bonus"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 167px;left:532.5px;width:13.5px;height:15px;text-align:center"
+			aria-label="To Hit Bonus Modifier"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, false, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.BlueText_Attack_4_To_Hit_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+		<input
+			id="BlueText.Attack.5.To_Hit_Bonus"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 215px;left:532.5px;width:13.5px;height:15px;text-align:center"
+			aria-label="To Hit Bonus Modifier"
+			value="0"
+			data-default="0"
+			onfocus="this.dataset.oldVal=this.value"
+			onchange="{let values = ValidateBonus(adapter_helper_convert_id_to_fieldname(this.id), this.value, this.dataset.oldVal, false, true);this.value=values[0];this.dataset.valueCalculated=values[1];this.dataset.oldVal=this.value};eventManager.handle_event(EventType.BlueText_Attack_5_To_Hit_Bonus_change)"
+			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
+		/>
+
 		<script type="text/javascript">
 			// Attack.i.To Hit (and Damage)
 			for (let i = 1; i <= 5; i++) {
@@ -5911,11 +5967,6 @@
 		<div id="BlueText.Attack.3.Range" class="field"></div>
 		<div id="BlueText.Attack.4.Range" class="field"></div>
 		<div id="BlueText.Attack.5.Range" class="field"></div>
-		<div id="BlueText.Attack.1.Damage_Type" class="field"></div>
-		<div id="BlueText.Attack.2.Damage_Type" class="field"></div>
-		<div id="BlueText.Attack.3.Damage_Type" class="field"></div>
-		<div id="BlueText.Attack.4.Damage_Type" class="field"></div>
-		<div id="BlueText.Attack.5.Damage_Type" class="field"></div>
 		<div id="BlueText.Attack.1.Description" class="field"></div>
 		<div id="BlueText.Attack.2.Description" class="field"></div>
 		<div id="BlueText.Attack.3.Description" class="field"></div>
@@ -5926,10 +5977,5 @@
 		<div id="BlueText.Attack.3.Description_Tooltip" class="field"></div>
 		<div id="BlueText.Attack.4.Description_Tooltip" class="field"></div>
 		<div id="BlueText.Attack.5.Description_Tooltip" class="field"></div>
-		<div id="BlueText.Attack.1.To_Hit_Bonus" class="field"></div>
-		<div id="BlueText.Attack.2.To_Hit_Bonus" class="field"></div>
-		<div id="BlueText.Attack.3.To_Hit_Bonus" class="field"></div>
-		<div id="BlueText.Attack.4.To_Hit_Bonus" class="field"></div>
-		<div id="BlueText.Attack.5.To_Hit_Bonus" class="field"></div>
 	</div>
 </div>

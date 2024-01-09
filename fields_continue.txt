@@ -1,5 +1,4 @@
-Bluetext.Attack.<i:1-5>.To_Hit_Bonus	-	done
+Bluetext.Attack.<i:1-5>.Weight	-	done
 
 // trigger events on change:
-"BlueText.Attack." + i + ".Weight": BlueText_Attack_<i:1-5>_Weight_change
 "BlueText.Players Make All Rolls": BlueText_Players_Make_All_Rolls_change

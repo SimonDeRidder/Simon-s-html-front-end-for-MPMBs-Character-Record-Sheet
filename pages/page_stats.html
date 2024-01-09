@@ -5877,6 +5877,62 @@
 			onclick="SetThisFldVal(new AdapterClassFieldReference([this]), event.ctrlKey || event.shiftKey)"
 		/>
 
+		<input
+			id="BlueText.Attack.1.Weight"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top:  58px;left: 487px;width: 30px;height: 12px"
+			aria-label="Weapon's weight"
+			value="0"
+			data-default="0"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.BlueText_Attack_1_Weight_change)"
+			onclick="this.value=this.value.replace(/\D*$/, '');"
+		/>
+		<input
+			id="BlueText.Attack.2.Weight"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 106px;left: 487px;width: 30px;height: 12px"
+			aria-label="Weapon's weight"
+			value="0"
+			data-default="0"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.BlueText_Attack_2_Weight_change)"
+			onclick="this.value=this.value.replace(/\D*$/, '');"
+		/>
+		<input
+			id="BlueText.Attack.3.Weight"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 154px;left: 487px;width: 30px;height: 12px"
+			aria-label="Weapon's weight"
+			value="0"
+			data-default="0"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.BlueText_Attack_3_Weight_change)"
+			onclick="this.value=this.value.replace(/\D*$/, '');"
+		/>
+		<input
+			id="BlueText.Attack.4.Weight"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 202px;left: 487px;width: 30px;height: 12px"
+			aria-label="Weapon's weight"
+			value="0"
+			data-default="0"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.BlueText_Attack_4_Weight_change)"
+			onclick="this.value=this.value.replace(/\D*$/, '');"
+		/>
+		<input
+			id="BlueText.Attack.5.Weight"
+			class="field inputfield bluetext"
+			style="visibility: hidden;top: 250px;left: 487px;width: 30px;height: 12px"
+			aria-label="Weapon's weight"
+			value="0"
+			data-default="0"
+			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
+			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.BlueText_Attack_5_Weight_change)"
+			onclick="this.value=this.value.replace(/\D*$/, '');"
+		/>
+
 		<script type="text/javascript">
 			// Attack.i.To Hit (and Damage)
 			for (let i = 1; i <= 5; i++) {
@@ -5941,37 +5997,11 @@
 		<div id="HoSRememberState" class="field" value=""></div>
 		<div id="HP_Max_Current" class="field"></div>
 		<div id="BlueText.Players_Make_All_Rolls" class="field"></div>
-		<div id="BlueText.Attack" class="field"></div>
-		<div id="BlueText.Attack.1.Weight" class="field"></div>
-		<div id="BlueText.Attack.2.Weight" class="field"></div>
-		<div id="BlueText.Attack.3.Weight" class="field"></div>
-		<div id="BlueText.Attack.4.Weight" class="field"></div>
-		<div id="BlueText.Attack.5.Weight" class="field"></div>
 		<div id="BlueText.Attack.1.Weight_Title" class="field"></div>
 		<div id="BlueText.Attack.2.Weight_Title" class="field"></div>
 		<div id="BlueText.Attack.3.Weight_Title" class="field"></div>
 		<div id="BlueText.Attack.4.Weight_Title" class="field"></div>
 		<div id="BlueText.Attack.5.Weight_Title" class="field"></div>
-		<div id="BlueText.Attack.1.Proficiency" class="field"></div>
-		<div id="BlueText.Attack.2.Proficiency" class="field"></div>
-		<div id="BlueText.Attack.3.Proficiency" class="field"></div>
-		<div id="BlueText.Attack.4.Proficiency" class="field"></div>
-		<div id="BlueText.Attack.5.Proficiency" class="field"></div>
-		<div id="BlueText.Attack.1.Mod" class="field"></div>
-		<div id="BlueText.Attack.2.Mod" class="field"></div>
-		<div id="BlueText.Attack.3.Mod" class="field"></div>
-		<div id="BlueText.Attack.4.Mod" class="field"></div>
-		<div id="BlueText.Attack.5.Mod" class="field"></div>
-		<div id="BlueText.Attack.1.Range" class="field"></div>
-		<div id="BlueText.Attack.2.Range" class="field"></div>
-		<div id="BlueText.Attack.3.Range" class="field"></div>
-		<div id="BlueText.Attack.4.Range" class="field"></div>
-		<div id="BlueText.Attack.5.Range" class="field"></div>
-		<div id="BlueText.Attack.1.Description" class="field"></div>
-		<div id="BlueText.Attack.2.Description" class="field"></div>
-		<div id="BlueText.Attack.3.Description" class="field"></div>
-		<div id="BlueText.Attack.4.Description" class="field"></div>
-		<div id="BlueText.Attack.5.Description" class="field"></div>
 		<div id="BlueText.Attack.1.Description_Tooltip" class="field"></div>
 		<div id="BlueText.Attack.2.Description_Tooltip" class="field"></div>
 		<div id="BlueText.Attack.3.Description_Tooltip" class="field"></div>

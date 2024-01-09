@@ -994,6 +994,15 @@
 			onchange="eventManager.handle_event(EventType.Proficiency_Bonus_Modifier_change)"
 		/>
 
+		<input
+			id="BlueText.Players_Make_All_Rolls"
+			class="field checkcircle bluetext"
+			type="checkbox"
+			style="/*visibility: hidden;*/top: -11px;left: 252px;"
+			aria-label="Select this to use the variant rules 'Players Make All Rolls', where the DM doesn't make any rolls for attacks or saving throws, but in stead the players make those rolls."
+			onclick="setPlayersMakeAllRolls(undefined, adapter_helper_convert_id_to_fieldname(this.id));eventManager.handle_event(EventType.BlueText_Players_Make_All_Rolls_change)"
+		/>
+
 		<script type="text/javascript">
 			// AC
 			[
@@ -6028,6 +6037,5 @@
 		<div id="Extra.Layers_Remember" class="field"></div>
 		<div id="HoSRememberState" class="field" value=""></div>
 		<div id="HP_Max_Current" class="field"></div>
-		<div id="BlueText.Players_Make_All_Rolls" class="field"></div>
 	</div>
 </div>

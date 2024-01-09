@@ -970,7 +970,7 @@
 			data-default="Use Dice"
 		>Use Dice</div>
 		<div
-			id="Proficiency_Bonus_Modifier_Title"
+			id="Proficiency_Bonus_Modifiers_Title"
 			class="field bluetext"
 			style="position: absolute;top: 0px;left: 99px;width: 42px;height: 12px;text-align: center;visibility: hidden"
 			data-default="Use Dice"
@@ -998,10 +998,15 @@
 			id="BlueText.Players_Make_All_Rolls"
 			class="field checkcircle bluetext"
 			type="checkbox"
-			style="/*visibility: hidden;*/top: -11px;left: 252px;"
+			style="visibility: hidden;top: -11px;left: 252px;"
 			aria-label="Select this to use the variant rules 'Players Make All Rolls', where the DM doesn't make any rolls for attacks or saving throws, but in stead the players make those rolls."
 			onclick="setPlayersMakeAllRolls(undefined, adapter_helper_convert_id_to_fieldname(this.id));eventManager.handle_event(EventType.BlueText_Players_Make_All_Rolls_change)"
 		/>
+		<div
+			id="BlueText.Players_Make_All_Rolls_Title"
+			class="field textlabel bluetext"
+			style="visibility: hidden;top: -9px;left: 268px;width: 100px;height: 18px"
+		>Players Make All Rolls</div>
 
 		<script type="text/javascript">
 			// AC
@@ -6029,9 +6034,6 @@
 
 	<!-- Invisible fields (some are bluetext mods, sort these out later) -->
 	<div style="visibility:hidden">
-		<div id="MoreProficiencies" class="field" value=""></div>
-
-		<div id="Proficiency_Bonus_Modifiers_Title" class="field"></div>
 		<div id="Text.Header.Combat" class="field"></div>
 		<div id="Text.SaveDC.1" class="field" style="top: 0px;left: 0px;width: 0px;height: 0px"></div>
 		<div id="Extra.Layers_Remember" class="field"></div>

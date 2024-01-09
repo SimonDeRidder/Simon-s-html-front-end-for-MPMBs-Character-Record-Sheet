@@ -1,4 +1,4 @@
-Bluetext.Attack.<i:1-5>.Weight_Title	-	done
+Bluetext.Attack.Modifiers_Title	-	done
 
 // trigger events on change:
 "BlueText.Players Make All Rolls": BlueText_Players_Make_All_Rolls_change

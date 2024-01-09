@@ -40,8 +40,6 @@ Please see the [How-To Guide - Add More Content](https://www.flapkan.com/how-to/
 
 ## Known issues
 
-- multiple spells pages not functional yet
-- several hidden fields (*BlueText*) not functional yet
 - No option to host a HTTPS server yet
 - the global buttons are ugly and only in the upper left corner of the stats tab
 

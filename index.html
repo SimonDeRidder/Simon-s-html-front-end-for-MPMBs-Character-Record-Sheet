@@ -6,6 +6,21 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<link rel="stylesheet" href="packages/contextmenujs/contextmenu.css" />
 	<link rel="stylesheet" href="style.css" />
+	<script type="module">
+		// ES module import for compiled WebAssembly
+		import init, { Character, input_int, update_ability } from './wasm/wasm.js';
+
+		async function run() {
+			// First load the wasm file
+			await init();
+
+			window.wasm_character = Character.new(['Str']);
+			console.log("wasm_character", window.wasm_character);
+		}
+		run();
+		window.input_int = input_int;  // TODO: fix passing all fns to window
+		window.update_ability = update_ability;
+	</script>
 	<script type="text/javascript">
 		class Queue {
 			constructor() {
@@ -256,39 +271,55 @@
 		<div id="Color.HPDragon" class="field"></div>
 		<div id="Color.DC" class="field"></div>
 	</div>
+	<script>
+		includePage("pstat", 1);
+		includePage("pfeaq", 2);
+		includePage("pnofe", 3);
+		includePage("pback", 4);
+		includePage("pcomptempl", 0, prefix = "P4.AScomp.", add_to_inventory = false);
+		includePage("pwildtempl", 0, prefix="", add_to_inventory=false);
+		includePage("pnote", 5, prefix = "P5.ASnotes.");
+		includePage("pspellstempl", 0, prefix="", add_to_inventory=false);
+		includePage("prefe", 6);
+	</script>
+	<script>
+		function openPage(buttonElmnt) {
+			// Hide all elements with class="tabcontent" by default */
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("page");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+
+			// Remove the background color of all tablinks/buttons
+			tablinks = document.getElementsByClassName("tablink");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].style.backgroundColor = "";
+			}
+			document.getElementById(buttonElmnt.dataset.page).style.display = "block";
+			buttonElmnt.style.backgroundColor = "#ddd";
+		}
+
+		// Get the element with class="defaultOpen" and click on it
+		document.getElementsByClassName("defaultOpen")[0].click();
+	</script>
+	<script type="text/javascript" src="js/controller.js"></script>
+	<script type="module">
+		// ES module import for compiled WebAssembly
+		import { render_all } from './wasm/wasm.js';
+
+		function render() {
+			// render all wasm-created elements
+			if (window.wasm_character == undefined) {
+				setTimeout(render, 50);
+			} else {
+				console.log("starting render");
+				render_all(window.wasm_character);
+				console.log("done rendering");
+			}
+		}
+		render();
+	</script>
 </body>
-<script>
-	includePage("pstat", 1);
-	includePage("pfeaq", 2);
-	includePage("pnofe", 3);
-	includePage("pback", 4);
-	includePage("pcomptempl", 0, prefix = "P4.AScomp.", add_to_inventory = false);
-	includePage("pwildtempl", 0, prefix="", add_to_inventory=false);
-	includePage("pnote", 5, prefix = "P5.ASnotes.");
-	includePage("pspellstempl", 0, prefix="", add_to_inventory=false);
-	includePage("prefe", 6);
-</script>
-<script>
-	function openPage(buttonElmnt) {
-		// Hide all elements with class="tabcontent" by default */
-		var i, tabcontent, tablinks;
-		tabcontent = document.getElementsByClassName("page");
-		for (i = 0; i < tabcontent.length; i++) {
-			tabcontent[i].style.display = "none";
-		}
-
-		// Remove the background color of all tablinks/buttons
-		tablinks = document.getElementsByClassName("tablink");
-		for (i = 0; i < tablinks.length; i++) {
-			tablinks[i].style.backgroundColor = "";
-		}
-		document.getElementById(buttonElmnt.dataset.page).style.display = "block";
-		buttonElmnt.style.backgroundColor = "#ddd";
-	}
-
-	// Get the element with class="defaultOpen" and click on it
-	document.getElementsByClassName("defaultOpen")[0].click();
-</script>
-<script type="text/javascript" src="js/controller.js"></script>
 
 </html>

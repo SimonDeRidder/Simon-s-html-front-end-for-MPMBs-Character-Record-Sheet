@@ -166,14 +166,15 @@
 	text-align: center;
 }
 
-input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button {
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
 
 input[type=number] {
 	appearance: textfield;
-	-moz-appearance:textfield;
+	-moz-appearance: textfield;
 }
 
 .radiobox-hint {
@@ -185,9 +186,12 @@ input[type=number] {
 }
 
 .rotate_m118 {
-	-webkit-transform: rotate(-118deg);  /* Chrome, Opera 15+, Safari 3.1+ */
-	-ms-transform: rotate(-118deg);  /* IE 9 */
-	transform: rotate(-118deg);  /* Firefox 16+, IE 10+, Opera */
+	-webkit-transform: rotate(-118deg);
+	/* Chrome, Opera 15+, Safari 3.1+ */
+	-ms-transform: rotate(-118deg);
+	/* IE 9 */
+	transform: rotate(-118deg);
+	/* Firefox 16+, IE 10+, Opera */
 }
 
 .rotate_m84 {
@@ -481,12 +485,156 @@ input[type=number] {
 	font-size: 9.3px;
 }
 
+
+/**************/
+/* New Styles */
+/**************/
+
+/********************/
+/* pane backgrounds */
+/********************/
+
+/* grey-bg */
+div.grey-bg-tb-fancy {
+	background-color: #DEDDDE;
+	-webkit-print-color-adjust: exact;
+	print-color-adjust: exact;
+}
+
+div.grey-bg-tb-fancy::before {
+	background-image: url(img/decorators/background_abilities/top.svg);
+	background-repeat: no-repeat;
+	background-size: 100%;
+	filter: invert(100%) sepia(96%) saturate(15%) hue-rotate(212deg) brightness(104%) contrast(104%);
+	width: 100%;
+	height: 20px;
+	content: '';
+	position: absolute;
+	top: 0;
+	-webkit-print-color-adjust: exact;
+	print-color-adjust: exact;
+}
+
+div.grey-bg-tb-fancy::after {
+	background-image: url(img/decorators/background_abilities/bottom.svg);
+	background-repeat: no-repeat;
+	background-size: 100%;
+	filter: invert(100%) sepia(96%) saturate(15%) hue-rotate(212deg) brightness(104%) contrast(104%);
+	width: 100%;
+	height: 20px;
+	content: '';
+	position: absolute;
+	bottom: -3px;
+	-webkit-print-color-adjust: exact;
+	print-color-adjust: exact;
+}
+
+/******************/
+/* display styles */
+/******************/
+
+div.display-field {
+	position: absolute;
+	border: none;
+	padding: 0;
+	font-family: SegoeUI;
+	overflow: hidden;
+	resize: none;
+	pointer-events: none;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/****************/
+/* input styles */
+/****************/
+
+.inputfield-regular {
+	position: absolute;
+	background-color: var(--input-background);
+	border: none;
+	border-width: 0px;
+	color: var(--black);
+	font-family: SegoeUI;
+	overflow: hidden;
+	resize: none;
+	padding: 0;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/*********************/
+/* element positions */
+/*********************/
+
+/* Abilities */
+#CSfront div.abilities {
+	top: 16.55%;
+	left: 3.8%;
+	width: 10.15%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	padding-top: 1%;
+	padding-bottom: 1%;
+}
+
+#CSfront div.abilities-6 {
+	height: 55.6%;
+}
+
+#CSfront div.abilities-7 {
+	height: 64.65%;
+}
+
+#CSfront div.abilities div.ability {
+	background-image: url(img/decorators/background_abilities/entry.svg);
+	background-repeat: no-repeat;
+	background-size: 100%;
+	margin-left: 6.75%;
+	width: 86.5%;
+	aspect-ratio: 0.843;
+	position: relative;
+	-webkit-print-color-adjust: exact;
+	print-color-adjust: exact;
+}
+
+#CSfront div.abilities div.ability div.ability-name {
+	top: 8.5%;
+	width: 100%;
+}
+
+#CSfront div.abilities div.ability div.ability-mod {
+	top: 16%;
+	width: 100%;
+	height: 48%;
+	font-size: 38px;
+}
+
+#CSfront div.abilities div.ability input.ability-value {
+	width: 44%;
+	height: 25%;
+	bottom: 2%;
+	left: 28%;
+	font-size: 20px;
+}
+
+
+/******************/
 /* Print settings */
+/******************/
 
 @media print {
-	@page { margin: 0; }
+	@page {
+		margin: 0;
+	}
 
-	#button-container,#button-separator {
+	#button-container,
+	#button-separator {
 		display: none !important;
 	}
 
@@ -502,9 +650,10 @@ input[type=number] {
 		break-after: always;
 		page-break-after: always;
 	}
+
 	#prefe {
-		break-after: avoid!important;
-		page-break-after: avoid!important;
+		break-after: avoid !important;
+		page-break-after: avoid !important;
 	}
 
 	#page-wrapper {

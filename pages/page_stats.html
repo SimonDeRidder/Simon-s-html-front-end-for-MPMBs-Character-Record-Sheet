@@ -188,8 +188,9 @@
 		</script>
 	</div>
 
+	<div id="character_abilities2" class="pane grey-bg-tb-fancy abilities"></div>
 
-	<div id="character_abilities" class="pane" style="top: 195px; left:34px; width: 99px; height: 678.7px;">
+	<div id="character_abilities" class="pane" style="top: 195px; left:34px; width: 99px; height: 678.7px;visibility: hidden;">
 		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/attributes.svg" style="top: 1.5px;width: 91px;height: 678.7px">
 
 		<div class="textlabel-bold" style="top: 33px;left: 7px;width: 77px;">STRENGTH</div>
@@ -1365,11 +1366,10 @@
 		<select
 			id="Spell_DC_1_Mod.0"
 			class="field inputfield"
-			list="ability_save_dc_options"
 			style="top: 19px;font-size: 8px;height: 10px;left: 130px;text-align: center;width: 75px;font-family: 'scala-sans';font-weight: bold"
 			onchange="document.getElementById('Spell_DC_1_Mod.1').value=this.value;eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
 		>
-			<option value=""></option>
+			<option value="" label = " "></option>
 			<option value="Str Mod">  STRENGTH</option>
 			<option value="Dex Mod">  DEXTERITY</option>
 			<option value="Con Mod">CONSTITUTION</option>
@@ -1380,11 +1380,10 @@
 		<select
 			id="Spell_DC_1_Mod.1"
 			class="field inputfield"
-			list="ability_save_dc_options"
 			style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;font-family: 'scala-sans'"
 			onchange="document.getElementById('Spell_DC_1_Mod.0').value=this.value;eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
 		>
-			<option value=""></option>
+			<option value="" label = " "></option>
 			<option value="Str Mod">  STRENGTH</option>
 			<option value="Dex Mod">  DEXTERITY</option>
 			<option value="Con Mod">CONSTITUTION</option>
@@ -1395,11 +1394,10 @@
 		<select
 			id="Spell_DC_2_Mod"
 			class="field inputfield"
-			list="ability_save_dc_options"
 			style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 121.5px;text-align: center;width: 54px;font-family: 'scala-sans'"
 			onchange="eventManager.handle_event(EventType.Spell_DC_2_Mod_change)"
 		>
-			<option value=""></option>
+			<option value="" label = " "></option>
 			<option value="Str Mod">  STRENGTH</option>
 			<option value="Dex Mod">  DEXTERITY</option>
 			<option value="Con Mod"> CONSTITUTION</option>

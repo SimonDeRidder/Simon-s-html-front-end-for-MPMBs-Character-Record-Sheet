@@ -1,7 +1,6 @@
 mod config;
 mod domain;
 mod render;
-mod services;
 mod utils;
 
 use wasm_bindgen::prelude::wasm_bindgen;

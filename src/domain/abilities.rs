@@ -1,3 +1,5 @@
+use leptos::{create_memo, create_rw_signal, Memo, RwSignal, SignalGet as _};
+
 use super::types::Modifier;
 
 pub struct Abilities {
@@ -18,19 +20,22 @@ impl Abilities {
 pub struct Ability {
 	pub abbreviation: &'static str,
 	pub name: &'static str,
-	pub value: u8,
+	pub value: RwSignal<u8>,
+	pub modifier: Memo<Modifier>,
 }
 
 impl Ability {
 	pub fn new(abbreviation: &'static str, name: &'static str, value: u8) -> Self {
+		let value_signal = create_rw_signal(value);
 		Ability {
 			abbreviation,
 			name,
-			value,
+			value: value_signal,
+			modifier: create_memo(move |_| calc_ability_modifier(value_signal.get())),
 		}
 	}
+}
 
-	pub fn modifier(&self) -> Modifier {
-		(self.value / 2) - 5 as Modifier
-	}
+fn calc_ability_modifier(value: u8) -> Modifier {
+	((value / 2) as i8) - 5 as Modifier
 }

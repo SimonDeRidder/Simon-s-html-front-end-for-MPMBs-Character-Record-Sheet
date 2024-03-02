@@ -1,1 +1,1 @@
-pub type Modifier = u8;
+pub type Modifier = i8;

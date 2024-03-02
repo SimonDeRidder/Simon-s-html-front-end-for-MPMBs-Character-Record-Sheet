@@ -9,7 +9,7 @@ use super::error::RenderError;
 
 mod abilities;
 
-pub fn render_stats_page(character: Character, document: &Document) -> Result<(), RenderError> {
+pub fn render_stats_page(character: &Character, document: &Document) -> Result<(), RenderError> {
 	// try to render all, only propagate errors at the end
 	console::log_1(&JsValue::from_str("> Rendering stats page"));
 	let results: Vec<Result<(), RenderError>> = vec![render_abilities(character, document)];

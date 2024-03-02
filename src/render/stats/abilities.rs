@@ -1,20 +1,25 @@
-use wasm_bindgen::{JsCast, JsValue};
-use web_sys::{console, js_sys::Function, Document, HtmlElement};
+use leptos::{
+	ev, event_target_value,
+	html::{div, input, Div},
+	leptos_dom::logging::console_log,
+	HtmlElement, SignalGet as _, SignalGetUntracked, SignalSet as _,
+};
+use wasm_bindgen::JsCast;
 
 use crate::{
 	domain::abilities::Ability,
-	render::{error::RenderError, utils::RenderableValue as _},
+	render::{error::RenderError, utils::input_int, utils::RenderableValue as _},
 	Character,
 };
 
-pub fn render_abilities(character: Character, document: &Document) -> Result<(), RenderError> {
-	console::log_1(&JsValue::from_str(">> Rendering abilities pane"));
+pub fn render_abilities(character: &Character, document: &web_sys::Document) -> Result<(), RenderError> {
+	console_log(">> Rendering abilities pane");
 	let ability_pane = match document.get_element_by_id("character_abilities2") {
 		Some(element) => Ok(element),
 		None => Err(RenderError::new("Could not find ablity pane character_abilities2!")),
 	}?
-	.dyn_into::<HtmlElement>()?;
-	let abilities = character.abilities.abilities;
+	.dyn_into::<web_sys::HtmlElement>()?;
+	let abilities = &character.abilities.abilities;
 	// first, set the length of the whole pane
 	if abilities.len() <= 6 {
 		ability_pane.class_list().add_1("abilities-6")?;
@@ -23,41 +28,31 @@ pub fn render_abilities(character: Character, document: &Document) -> Result<(),
 	}
 	// Add individual ability elements
 	for ability in abilities {
-		let ability_pane_element = create_ability_pane(ability, document)?;
-		ability_pane.append_child(&ability_pane_element)?;
+		ability_pane.append_child(&create_ability_pane(ability))?;
 	}
 	Ok(())
 }
 
-fn create_ability_pane(ability: Ability, document: &Document) -> Result<HtmlElement, RenderError> {
-	let ability_pane_element = document.create_element("div")?.dyn_into::<HtmlElement>()?;
-	ability_pane_element.set_id((String::from("wasm_") + ability.abbreviation).as_str());
-	ability_pane_element.set_class_name("ability");
+fn create_ability_pane(ability: &Ability) -> HtmlElement<Div> {
+	let ability_modifier = ability.modifier;
+	let ability_value = ability.value;
 
-	let ability_name_element: HtmlElement = document.create_element("div")?.dyn_into::<HtmlElement>()?;
-	ability_name_element.set_class_name("textlabel-bold ability-name");
-	ability_name_element.set_inner_text(ability.name.to_uppercase().as_str());
-
-	let ability_mod_element: HtmlElement = document.create_element("div")?.dyn_into::<HtmlElement>()?;
-	ability_mod_element.set_class_name("display-field ability-mod");
-	ability_mod_element.set_inner_text(ability.modifier().render().as_str());
-
-	let ability_value_element: HtmlElement = document.create_element("input")?.dyn_into::<HtmlElement>()?;
-	ability_value_element.set_class_name("inputfield-regular ability-value");
-	ability_value_element.set_inner_text(ability.modifier().render().as_str());
-	ability_value_element.set_attribute("type", "number")?;
-	ability_value_element.set_attribute("value", format!("{}", ability.value).as_str())?;
-	ability_value_element.set_oninput(Some(&Function::new_no_args("this.value=input_int(this.value)")));
-	ability_value_element.set_onchange(Some(&Function::new_no_args(
-		format!(
-			"this.value=input_int(this.value);update_ability('{}', Number(this.value))",
-			ability.abbreviation
-		)
-		.as_str(),
-	)));
-
-	ability_pane_element.append_child(&ability_name_element)?;
-	ability_pane_element.append_child(&ability_mod_element)?;
-	ability_pane_element.append_child(&ability_value_element)?;
-	Ok(ability_pane_element)
+	div()
+		.id(String::from("wasm_") + ability.abbreviation)
+		.classes("ability")
+		.child((
+			div().classes("textlabel-bold ability-name").child(ability.name),
+			div()
+				.classes("display-field ability-mod")
+				.child(move || ability_modifier.get().render()),
+			input()
+				.classes("inputfield-regular ability-value")
+				.attr("type", "number")
+				.attr("value", ability_value.get_untracked())
+				.prop("value", ability_value)
+				// TODO: evaluate whether rendering is fast enought to update signals on input
+				.on(ev::change, move |event| {
+					ability_value.set(input_int(event_target_value(&event), false) as u8)
+				}),
+		))
 }

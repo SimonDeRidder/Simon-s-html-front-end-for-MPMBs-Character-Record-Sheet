@@ -8,18 +8,16 @@
 	<link rel="stylesheet" href="style.css" />
 	<script type="module">
 		// ES module import for compiled WebAssembly
-		import init, { Character, input_int, update_ability } from './wasm/wasm.js';
+		import init, { Character } from './wasm/wasm.js';
 
 		async function run() {
 			// First load the wasm file
 			await init();
 
-			window.wasm_character = Character.new(['Str']);
+			window.wasm_character = Character.new();
 			console.log("wasm_character", window.wasm_character);
 		}
 		run();
-		window.input_int = input_int;  // TODO: fix passing all fns to window
-		window.update_ability = update_ability;
 	</script>
 	<script type="text/javascript">
 		class Queue {

@@ -606,6 +606,7 @@ div.display-field {
 #CSfront div.abilities div.ability div.ability-name {
 	top: 8.5%;
 	width: 100%;
+	text-transform: uppercase;
 }
 
 #CSfront div.abilities div.ability div.ability-mod {

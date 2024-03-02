@@ -2,15 +2,16 @@ use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 use web_sys::{console, Document};
 
 mod error;
+mod interface;
 mod stats;
 mod utils;
 
 use crate::Character;
 
-use self::stats::render_stats_page;
+use self::{interface::create_all_effects, stats::render_stats_page};
 
 #[wasm_bindgen]
-pub fn render_all(character: Character) {
+pub fn render_all(character: &Character) {
 	let document = match get_document() {
 		Some(doc) => doc,
 		None => log_and_panic("Could not get global document!"),
@@ -21,6 +22,9 @@ pub fn render_all(character: Character) {
 			log_error(err.message.as_str());
 		},
 	};
+
+	// set up interface
+	create_all_effects(character);
 }
 
 fn get_document() -> Option<Document> {

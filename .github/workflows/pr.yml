@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: apk add musl-dev
-      - run: cargo -q test
+      - run: cargo test
   tarpaulin:
     name: Tarpaulin coverage
     runs-on: [self-hosted, linux, x64]
@@ -20,9 +20,9 @@ jobs:
       image: rust:1.77.0-alpine
     steps:
       - uses: actions/checkout@v4
-      - run: apk add pkgconfig
+      - run: apk add pkgconfig openssl zlib
       - run: cargo install cargo-tarpaulin
-      - run: cargo -q tarpaulin --ignore-tests -- -q
+      - run: cargo tarpaulin --ignore-tests
   clippy:
     name: Clippy
     runs-on: [self-hosted, linux, x64]
@@ -30,8 +30,9 @@ jobs:
       image: rust:1.77.0-alpine
     steps:
       - uses: actions/checkout@v4
+      - run: apk add musl-dev
       - run: rustup component add clippy
-      - run: cargo -q clippy -- -D warnings
+      - run: cargo clippy -- -D warnings
   fmt:
     name: rustfmt
     runs-on: [self-hosted, linux, x64]
@@ -40,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: rustup component add rustfmt
-      - run: cargo -q fmt -- --check
+      - run: cargo fmt -- --check
   audit:
     name: Cargo audit
     runs-on: [self-hosted, linux, x64]
@@ -50,4 +51,4 @@ jobs:
       - uses: actions/checkout@v4
       - run: apk add musl-dev
       - run: cargo install cargo-audit
-      - run: cargo -q audit --ignore RUSTSEC-2023-0028 --ignore RUSTSEC-2023-0050 --ignore RUSTSEC-2023-0081 --ignore RUSTSEC-2021-0146 --ignore RUSTSEC-2021-0145
+      - run: cargo audit --ignore RUSTSEC-2023-0028 --ignore RUSTSEC-2023-0050 --ignore RUSTSEC-2023-0081 --ignore RUSTSEC-2021-0146 --ignore RUSTSEC-2021-0145

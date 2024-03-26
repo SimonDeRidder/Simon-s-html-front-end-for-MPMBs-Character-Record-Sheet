@@ -2,7 +2,7 @@ name: pull request
 run-name: pull request
 on: [pull_request]
 permissions:
-	content: read
+	contents: read
 jobs:
 	unit_test:
 		name: Rust unit tests

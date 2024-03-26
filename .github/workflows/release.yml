@@ -4,7 +4,7 @@ on:
 	push:
 		tags: ["v*.*.*"]
 permissions:
-	content: read
+	contents: read
 jobs:
 	build:
 		name: Compile and build wasm

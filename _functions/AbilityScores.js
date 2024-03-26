@@ -302,10 +302,8 @@ async function AbilityScores_Button(onlySetTooltip) {
 		if (sect.txt) tooltipTxt.push(sect.title + "\n" + sect.txt);
 	}
 	tooltipTxt = tooltipTxt.join("\n\n");
-	var remTooltip = Who("Str");
-	for (i = 0; i < AbilityScores.abbreviations.length; i++) {
-		AddTooltip(AbilityScores.abbreviations[i], tooltipTxt);
-	};
+	var remTooltip = wasm_character.get_abilities_tooltip();
+	wasm_character.set_abilities_tooltip(tooltipTxt);
 	if (onlySetTooltip) return remTooltip !== tooltipTxt; // if only doing the tooltips, exit the function now
 
 	// Create the columns for the dialog
@@ -396,13 +394,13 @@ async function AbilityScores_Button(onlySetTooltip) {
 					"exTx" : explanatoryTxt,
 					"img1" : allIcons.scores,
 					"olNm" : "Current Score",
-					"olSt" : ASround(What("Str")),
-					"olDx" : ASround(What("Dex")),
-					"olCn" : ASround(What("Con")),
-					"olIn" : ASround(What("Int")),
-					"olWs" : ASround(What("Wis")),
-					"olCh" : ASround(What("Cha")),
-					"olHS" : ASround(What("HoS")),
+					"olSt" : wasm_character.get_ability("Str"),
+					"olDx" : wasm_character.get_ability("Dex"),
+					"olCn" : wasm_character.get_ability("Con"),
+					"olIn" : wasm_character.get_ability("Int"),
+					"olWs" : wasm_character.get_ability("Wis"),
+					"olCh" : wasm_character.get_ability("Cha"),
+					"olHS" : wasm_character.get_ability("HoS"),
 					"nmNm" : "Ability Name",
 					"nmSt" : "Strength",
 					"nmDx" : "Dexterity",
@@ -476,8 +474,7 @@ async function AbilityScores_Button(onlySetTooltip) {
 				// Set the new ability scores to the fields (and their mods, so functions use the new one)
 				for (var s = 0; s < 7; s++) {
 					var theAbi = Number(res["to"+asab2[s]]);
-					Value(asab3[s], theAbi);
-					Value(asab3[s] + " Mod", Math.round((theAbi - 10.5) * 0.5));
+					wasm_character.set_ability(asab3[s], theAbi);
 				}
 				// Update the Honor/Sanity
 				if (this.fieldHoS !== curHoS) ShowHonorSanity(this.fieldHoS);

@@ -3,10 +3,11 @@ mod domain;
 mod render;
 mod utils;
 
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::config::get_config;
-use crate::domain::abilities::Abilities;
+use config::Config;
+use domain::stats::Stats;
 
 // Called when the wasm module is instantiated
 #[wasm_bindgen(start)]
@@ -16,8 +17,10 @@ pub fn main() {
 }
 
 #[wasm_bindgen]
+#[derive(Serialize, Deserialize)]
 pub struct Character {
-	abilities: Abilities,
+	config: Config,
+	stats: Stats,
 }
 
 #[wasm_bindgen]
@@ -25,10 +28,11 @@ pub struct Character {
 impl Character {
 	pub fn new() -> Self {
 		// get config
-		let config = get_config();
+		let config = Config::get();
 		// build character
 		Character {
-			abilities: Abilities::new(&config.ability_names),
+			config: config.clone(),
+			stats: Stats::new(&config),
 		}
 	}
 }

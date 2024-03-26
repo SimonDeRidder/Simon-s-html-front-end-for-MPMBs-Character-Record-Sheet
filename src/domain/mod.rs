@@ -1,2 +1,2 @@
-pub mod abilities;
+pub mod stats;
 pub mod types;

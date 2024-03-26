@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
 	<meta charset="utf-8" />
@@ -14,6 +14,7 @@
 			// First load the wasm file
 			await init();
 
+			window.wasm_character_class = Character;
 			window.wasm_character = Character.new();
 			console.log("wasm_character", window.wasm_character);
 		}
@@ -316,6 +317,7 @@
 				console.log("done rendering");
 			}
 		}
+		window.wasm_character_rerender = render;
 		render();
 	</script>
 </body>

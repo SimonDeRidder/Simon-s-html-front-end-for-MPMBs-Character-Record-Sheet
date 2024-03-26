@@ -11,10 +11,12 @@ crate-type = ["cdylib"]
 default = ["console_error_panic_hook"]
 
 [dependencies]
-wasm-bindgen = "0.2.91"
+wasm-bindgen = "0.2.92"
 regex = "1.10.3"
-leptos = { version = "0.6.6", features = ["csr"] }
+leptos = { version = "0.6.7", features = ["csr"] }
 console_error_panic_hook = { version = "0.1.7", optional = true }
+serde = "1.0.197"
+gloo-utils = { version = "0.1", features = ["serde"] }
 
 [dependencies.web-sys]
 version = "0.3"
@@ -29,7 +31,7 @@ features = [
 ]
 
 [dev-dependencies]
-wasm-bindgen-cli = "0.2.91"
+wasm-bindgen-cli = "0.2.92"
 wasm-bindgen-test = "0.3.40"
 
 [profile.release]

@@ -730,7 +730,7 @@ function CalcSpellScores(fldName) {
 	var Fld = fldName.replace("spellshead." + fldType, "spellshead.DINGDONG");
 	var modFldName = Fld.replace("DINGDONG", "ability");
 	var modFld = What(modFldName);
-	var theMod = Number(What(modFld));
+	var theMod = wasm_character.get_ability_modifier(modFld.slice(0, 3));
 	var aClass = What(Fld.replace("DINGDONG", "class")); //find the associated class
 	var cSpells = aClass && CurrentSpells[aClass] ? CurrentSpells[aClass] : false;
 	var fixedDC = cSpells && !isNaN(cSpells.fixedDC) ? Number(cSpells.fixedDC) : false;

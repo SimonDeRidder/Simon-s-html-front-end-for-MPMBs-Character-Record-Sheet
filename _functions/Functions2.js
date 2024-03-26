@@ -3179,10 +3179,6 @@ async function MakePagesMenu() {
 	var HoSvis = What("HoSRememberState").toLowerCase();
 	menuLVL2(pageone.oSubMenu, ["Ability Scores", "scores"], [
 		["Open the Ability Scores dialog", "dialog"],
-		["-", "-"],
-		["Disable the 7th ability score", "disable"],
-		["Make the 7th ability score 'Honor'", "honor"],
-		["Make the 7th ability score 'Sanity'", "sanity"]
 	]);
 	//1st page: add the menu for setting hp on the first page
 	await MakeHPMenu_HPOptions("", "justMenu");
@@ -4013,13 +4009,8 @@ function ShowHonorSanity(input) {
 	var HideShow = toShow ? "Hide" : "Show";
 	if (typePF) {
 		var fieldsArray = [
-			"Text.HoS.Ability",
-			"Text.HoS.Save",
-			"Image.HoS",
 			"Vision.1",
 			"Passive Perception.1",
-			"HoS",
-			"HoS Mod",
 			"HoS ST Mod",
 			"HoS ST Prof"
 		];
@@ -4027,23 +4018,15 @@ function ShowHonorSanity(input) {
 			"Vision.0",
 			"Passive Perception.0"
 		];
-		Value("Text.HoS.Ability", toShow.toUpperCase());
-		Value("Text.HoS.Save", toShow.toUpperCase());
 
 		if (ShowHide === "Show") {
 			Show("Image." + What("BoxesLinesRemember") + ".HoS")
-		} else {
-			Hide("Image.calc_lines.HoS");
-			Hide("Image.calc_boxes.HoS");
 		}
 	} else {
 		var fieldsArray = [
-			"Text.HoS",
 			"Image.Stats.6",
 			"Saving Throw advantages / disadvantages.1",
 			"Text.Header.Saving Throw advantages / disadvantages",
-			"HoS",
-			"HoS Mod",
 			"HoS ST Mod",
 			"HoS ST Adv",
 			"HoS ST Dis",
@@ -4082,9 +4065,9 @@ function setLifeStyle(input) {
 
 // Give the total HP (average, fixed, max) for the main character (prefix == "") or a companion page
 function calcHPtotals(prefix) {
-	var conFld = prefix ? prefix + "Comp.Use.Ability.Con.Score" : "Con";
+	let conFldVal = prefix ? What(prefix + "Comp.Use.Ability.Con.Score") : wasm_character.get_ability("Con");
 	var HD = {
-		conMod : What(conFld) ? Math.round((Math.floor(What(conFld)) - 10.5) * 0.5) : 0,
+		conMod : conFldVal ? Math.round((Math.floor(conFldVal) - 10.5) * 0.5) : 0,
 		conCorrection : false,
 		count : 0,
 		dieStr : [],
@@ -4482,11 +4465,6 @@ function ShowCalcBoxesLines(input) {
 			tDoc[ShowBHideL](prefix + "Image.calc_boxes");
 			tDoc[HideBShowL](prefix + "Image.calc_lines");
 		}
-	}
-
-	if (!minVer && What("HoSRememberState") !== "Honor" && What("HoSRememberState") !== "Honor") {
-		Hide("Image.calc_lines.HoS");
-		Hide("Image.calc_boxes.HoS");
 	}
 	thermoM(thermoTxt, true); // Stop progress bar
 }
@@ -5656,7 +5634,7 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 		fields.Proficiency = !QI ? true : isProficientWithWeapon(WeaponName, theWea);
 
 		//add mod
-		var StrDex = What(QI ? "Str" : prefix + "Comp.Use.Ability.Str.Score") < What(QI ? "Dex" : prefix + "Comp.Use.Ability.Dex.Score") ? 2 : 1;
+		var StrDex = (QI ? wasm_character.get_ability("Str") : What(prefix + "Comp.Use.Ability.Str.Score")) < (QI ? wasm_character.get_ability("Dex") : What(prefix + "Comp.Use.Ability.Dex.Score")) ? 2 : 1;
 		fields.Mod = isReCalc && !theWea.ability ? tDoc.getField(fldBase + "Mod").currentValueIndices :
 			(/finesse/i).test(theWea.description) ? StrDex : theWea.ability;
 
@@ -6175,7 +6153,7 @@ function getAbiModValue(ability, prefix, wildshapeNo) {
 	var abi = !isNaN(ability) && ability > 0 && ability <= AbilityScores.abbreviations.length ?  AbilityScores.abbreviations[ability - 1] : AbilityScores.abbreviations.indexOf(ability) !== -1 ? ability : "error";
 	if (abi === "error") return mod;
 	if (!prefix) {
-		mod = Number(What(abi + " Mod"));
+		mod = wasm_character.get_ability_modifier(abi) ;
 	} else if (wildshapeNo) {
 		mod = Number(What(prefix + "Wildshape." + wildshapeNo + ".Ability." + abi + ".Mod"));
 	} else {
@@ -6202,8 +6180,8 @@ function EvalBonus(input, prefix, isSpecial, useProfB) {
 	input = input.replace(/[+-/*]+([+/*])/g, "$1").replace(/--/g, "+").replace(/^[+/*]+|[+-/*]+$/g, "");
 	// change ability score abbreviations with their modifier
 	["Str", "Dex", "Con", "Int", "Wis", "Cha", "HoS"].forEach(function(AbiS) {
-		input = input.replace(RegExp("o" + AbiS, "ig"), Number(What(AbiS + " Mod")));
-		input = input.replace(RegExp(AbiS, "ig"), Number(What(modStr[0] + AbiS + modStr[1])));
+		input = input.replace(RegExp("o" + AbiS, "ig"), wasm_character.get_ability_modifier(AbiS));
+		input = input.replace(RegExp(AbiS, "ig"), prefix === true ? wasm_character.get_ability_modifier(AbiS) : Number(What(modStr[0] + AbiS + modStr[1])));
 	});
 	// change Prof with the proficiency bonus
 	input = input.replace(/oProf/ig, How("Proficiency Bonus")).replace(/Prof/ig, ProfB);

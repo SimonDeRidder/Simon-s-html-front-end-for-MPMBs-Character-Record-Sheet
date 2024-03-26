@@ -49,13 +49,20 @@ function initialCalculationEvents() {
 	FindWeapons();
 	FindCompWeapons();
 	// trigger ability mods calculation (and ST calculation) and AC_Dexterity_Modifier calculation (and all skills) (and Attack.i.To Hit)
-	document.getElementById('Con').dispatchEvent(new Event('change'));
-	document.getElementById('Cha').dispatchEvent(new Event('change'));
-	document.getElementById('Dex').dispatchEvent(new Event('change'));
-	document.getElementById('Int').dispatchEvent(new Event('change'));
-	document.getElementById('HoS').dispatchEvent(new Event('change'));
-	document.getElementById('Str').dispatchEvent(new Event('change'));
-	document.getElementById('Wis').dispatchEvent(new Event('change'));
+	eventManager.handle_event(EventType.Con_change);
+	eventManager.handle_event(EventType.Cha_change);
+	eventManager.handle_event(EventType.Dex_change);
+	eventManager.handle_event(EventType.Int_change);
+	eventManager.handle_event(EventType.HoS_change);
+	eventManager.handle_event(EventType.Str_change);
+	eventManager.handle_event(EventType.Wis_change);
+	eventManager.handle_event(EventType.Con_Mod_change);
+	eventManager.handle_event(EventType.Cha_Mod_change);
+	eventManager.handle_event(EventType.Dex_Mod_change);
+	eventManager.handle_event(EventType.Int_Mod_change);
+	eventManager.handle_event(EventType.HoS_Mod_change);
+	eventManager.handle_event(EventType.Str_Mod_change);
+	eventManager.handle_event(EventType.Wis_Mod_change);
 	// trigger Proficiency_Bonus calculation
 	document.getElementById('Proficiency_Bonus_Modifier').dispatchEvent(new Event('change'));
 	// trigger weight texts
@@ -86,14 +93,14 @@ function setSheetVersion() {
 	});
 }
 
-async function loadWoTC() {
+async function loadAdditional(filename /*String*/) {
 	// fetch and read file
-	let resp = await fetch("additional content/all_WotC_published.js");
+	let resp = await fetch("additional content/" + filename);
 	let content = await resp.text()
 	InitiateLists();
 	if (RunUserScript(false, content)) {
 			Value("User Script", content);
-			console.log("Successfully loaded WoTC content");
+			console.log("Successfully loaded '" + filename + "' content");
 			retResDia = "also";
 	} else {
 			InitiateLists();
@@ -185,8 +192,7 @@ async function loadAll() {
 		.then(script => loadScript('_variables/ListsSpells.js'))
 		.then(script => makeSaveLoadButtons())
 		.then(script => setSheetVersion())
-		.then(script => loadScript('_functions/Startup.js'))//;
-		.then(script => loadWoTC());
+		.then(script => loadScript('_functions/Startup.js'));
 }
 
 

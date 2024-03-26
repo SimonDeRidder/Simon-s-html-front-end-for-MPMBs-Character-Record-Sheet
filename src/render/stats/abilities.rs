@@ -2,34 +2,34 @@ use leptos::{
 	ev, event_target_value,
 	html::{div, input, Div},
 	leptos_dom::logging::console_log,
-	HtmlElement, SignalGet as _, SignalGetUntracked, SignalSet as _,
+	HtmlElement, SignalGet as _, SignalGetUntracked as _, SignalSet as _,
 };
-use wasm_bindgen::JsCast;
 
 use crate::{
-	domain::abilities::Ability,
+	domain::stats::abilities::Ability,
 	render::{error::RenderError, utils::input_int, utils::RenderableValue as _},
 	Character,
 };
 
-pub fn render_abilities(character: &Character, document: &web_sys::Document) -> Result<(), RenderError> {
+pub fn render_abilities(character: &Character, stats_page: &web_sys::HtmlElement) -> Result<(), RenderError> {
 	console_log(">> Rendering abilities pane");
-	let ability_pane = match document.get_element_by_id("character_abilities2") {
-		Some(element) => Ok(element),
-		None => Err(RenderError::new("Could not find ablity pane character_abilities2!")),
-	}?
-	.dyn_into::<web_sys::HtmlElement>()?;
-	let abilities = &character.abilities.abilities;
-	// first, set the length of the whole pane
-	if abilities.len() <= 6 {
-		ability_pane.class_list().add_1("abilities-6")?;
-	} else {
-		ability_pane.class_list().add_1("abilities-7")?;
-	}
+	let abilities = &character.stats.abilities.abilities;
+	let abilities_tooltip = character.stats.abilities.tooltip;
+	let ability_classes = String::from("pane grey-bg-tb-fancy abilities ")
+		+ if abilities.len() <= 6 {
+			"abilities-6"
+		} else {
+			"abilities-7"
+		};
+	let mut ability_pane = div()
+		.id("character_abilities")
+		.classes(ability_classes)
+		.attr("title", move || abilities_tooltip.get());
 	// Add individual ability elements
 	for ability in abilities {
-		ability_pane.append_child(&create_ability_pane(ability))?;
+		ability_pane = ability_pane.child(create_ability_pane(ability));
 	}
+	stats_page.append_child(&ability_pane)?;
 	Ok(())
 }
 
@@ -38,10 +38,12 @@ fn create_ability_pane(ability: &Ability) -> HtmlElement<Div> {
 	let ability_value = ability.value;
 
 	div()
-		.id(String::from("wasm_") + ability.abbreviation)
+		.id(String::from("wasm_") + &ability.abbreviation)
 		.classes("ability")
 		.child((
-			div().classes("textlabel-bold ability-name").child(ability.name),
+			div()
+				.classes("textlabel-bold ability-name")
+				.child(ability.name.clone()),
 			div()
 				.classes("display-field ability-mod")
 				.child(move || ability_modifier.get().render()),

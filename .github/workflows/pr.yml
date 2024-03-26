@@ -10,7 +10,7 @@ jobs:
     container:
       image: rust:1.77.0-alpine
     steps:
-      - uses: actions/checkout@v4.1
+      - uses: actions/checkout@v4
       - run: cargo -q test
   tarpaulin:
     name: Tarpaulin coverage
@@ -18,7 +18,7 @@ jobs:
     container:
       image: rust:1.77.0-alpine
     steps:
-      - uses: actions/checkout@v4.1
+      - uses: actions/checkout@v4
       - run: cargo -q tarpaulin --ignore-tests -- -q
   clippy:
     name: Clippy
@@ -26,7 +26,7 @@ jobs:
     container:
       image: rust:1.77.0-alpine
     steps:
-      - uses: actions/checkout@v4.1
+      - uses: actions/checkout@v4
       - run: cargo -q clippy -- -D warnings
   fmt:
     name: rustfmt
@@ -34,7 +34,7 @@ jobs:
     container:
       image: rust:1.77.0-alpine
     steps:
-      - uses: actions/checkout@v4.1
+      - uses: actions/checkout@v4
       - run: cargo -q fmt -- --check
   audit:
     name: Cargo audit
@@ -42,5 +42,5 @@ jobs:
     container:
       image: rust:1.77.0-alpine
     steps:
-      - uses: actions/checkout@v4.1
+      - uses: actions/checkout@v4
       - run: cargo -q audit --ignore RUSTSEC-2023-0028 --ignore RUSTSEC-2023-0050 --ignore RUSTSEC-2023-0081 --ignore RUSTSEC-2021-0146 --ignore RUSTSEC-2021-0145

@@ -20,7 +20,7 @@ jobs:
       image: rust:1.77.0-alpine
     steps:
       - uses: actions/checkout@v4
-      - run: apk add pkgconfig openssl zlib
+      - run: apk add musl-dev pkgconfig openssl zlib
       - run: cargo install cargo-tarpaulin
       - run: cargo tarpaulin --ignore-tests
   clippy:
@@ -31,8 +31,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: apk add musl-dev
+      - run: rustup target add wasm32-unknown-unknown
       - run: rustup component add clippy
-      - run: cargo clippy -- -D warnings
+      - run: cargo clippy --target wasm32-unknown-unknown -- -D warnings
   fmt:
     name: rustfmt
     runs-on: [self-hosted, linux, x64]

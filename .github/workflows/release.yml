@@ -1,23 +1,23 @@
 name: pull request
 run-name: pull request
 on:
-	push:
-		tags: ["v*.*.*"]
+  push:
+    tags: ["v*.*.*"]
 permissions:
-	contents: read
+  contents: read
 jobs:
-	build:
-		name: Compile and build wasm
-		runs-on: [self-hosted, linux, x64]
-		container:
-			image: rust:1.77.0-alpine
-		steps:
-			- uses: actions/checkout@v4.1
-			- run: wasm-pack build -m no-install --no-typescript -t web --dev -d wasm --out-name wasm --no-pack
-			- run: rm -r src target Cargo.* *.sh rustfmt.toml
-			- run: tar -czvf Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet-${{github.ref_name}}.tar.gz *
-			- run: apt install zip -y
-			- run: zip Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet-${{github.ref_name}}.zip * -x *.tar.gz
-			- uses: softprops/action-gh-release@v2
-			  with:
-			  files: '*.tar.gz'
+  build:
+    name: Compile and build wasm
+    runs-on: [self-hosted, linux, x64]
+    container:
+      image: rust:1.77.0-alpine
+    steps:
+      - uses: actions/checkout@v4.1
+      - run: wasm-pack build -m no-install --no-typescript -t web --dev -d wasm --out-name wasm --no-pack
+      - run: rm -r src target Cargo.* *.sh rustfmt.toml
+      - run: tar -czvf Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet-${{github.ref_name}}.tar.gz *
+      - run: apt install zip -y
+      - run: zip Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet-${{github.ref_name}}.zip * -x *.tar.gz
+      - uses: softprops/action-gh-release@v2
+        with:
+        files: '*.tar.gz'

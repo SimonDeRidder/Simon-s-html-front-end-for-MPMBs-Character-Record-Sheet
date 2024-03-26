@@ -2,45 +2,45 @@ name: pull request
 run-name: pull request
 on: [pull_request]
 permissions:
-	contents: read
+  contents: read
 jobs:
-	unit_test:
-		name: Rust unit tests
-		runs-on: [self-hosted, linux, x64]
-		container:
-			image: rust:1.77.0-alpine
-		steps:
-			- uses: actions/checkout@v4.1
-			- run: cargo -q test
-	tarpaulin:
-		name: Tarpaulin coverage
-		runs-on: [self-hosted, linux, x64]
-		container:
-			image: rust:1.77.0-alpine
-		steps:
-			- uses: actions/checkout@v4.1
-			- run: cargo -q tarpaulin --ignore-tests -- -q
-	clippy:
-		name: Clippy
-		runs-on: [self-hosted, linux, x64]
-		container:
-			image: rust:1.77.0-alpine
-		steps:
-			- uses: actions/checkout@v4.1
-			- run: cargo -q clippy -- -D warnings
-	fmt:
-		name: rustfmt
-		runs-on: [self-hosted, linux, x64]
-		container:
-			image: rust:1.77.0-alpine
-		steps:
-			- uses: actions/checkout@v4.1
-			- run: cargo -q fmt -- --check
-	audit:
-		name: Cargo audit
-		runs-on: [self-hosted, linux, x64]
-		container:
-			image: rust:1.77.0-alpine
-		steps:
-			- uses: actions/checkout@v4.1
-			- run: cargo -q audit --ignore RUSTSEC-2023-0028 --ignore RUSTSEC-2023-0050 --ignore RUSTSEC-2023-0081 --ignore RUSTSEC-2021-0146 --ignore RUSTSEC-2021-0145
+  unit_test:
+    name: Rust unit tests
+    runs-on: [self-hosted, linux, x64]
+    container:
+      image: rust:1.77.0-alpine
+    steps:
+      - uses: actions/checkout@v4.1
+      - run: cargo -q test
+  tarpaulin:
+    name: Tarpaulin coverage
+    runs-on: [self-hosted, linux, x64]
+    container:
+      image: rust:1.77.0-alpine
+    steps:
+      - uses: actions/checkout@v4.1
+      - run: cargo -q tarpaulin --ignore-tests -- -q
+  clippy:
+    name: Clippy
+    runs-on: [self-hosted, linux, x64]
+    container:
+      image: rust:1.77.0-alpine
+    steps:
+      - uses: actions/checkout@v4.1
+      - run: cargo -q clippy -- -D warnings
+  fmt:
+    name: rustfmt
+    runs-on: [self-hosted, linux, x64]
+    container:
+      image: rust:1.77.0-alpine
+    steps:
+      - uses: actions/checkout@v4.1
+      - run: cargo -q fmt -- --check
+  audit:
+    name: Cargo audit
+    runs-on: [self-hosted, linux, x64]
+    container:
+      image: rust:1.77.0-alpine
+    steps:
+      - uses: actions/checkout@v4.1
+      - run: cargo -q audit --ignore RUSTSEC-2023-0028 --ignore RUSTSEC-2023-0050 --ignore RUSTSEC-2023-0081 --ignore RUSTSEC-2021-0146 --ignore RUSTSEC-2021-0145

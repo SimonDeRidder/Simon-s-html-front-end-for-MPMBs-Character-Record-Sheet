@@ -20,6 +20,7 @@ jobs:
       image: rust:1.77.0-alpine
     steps:
       - uses: actions/checkout@v4
+      - run: apk add pkgconfig
       - run: cargo install cargo-tarpaulin
       - run: cargo -q tarpaulin --ignore-tests -- -q
   clippy:
@@ -29,7 +30,7 @@ jobs:
       image: rust:1.77.0-alpine
     steps:
       - uses: actions/checkout@v4
-      - run: cargo install cargo-clippy
+      - run: rustup component add clippy
       - run: cargo -q clippy -- -D warnings
   fmt:
     name: rustfmt
@@ -38,7 +39,7 @@ jobs:
       image: rust:1.77.0-alpine
     steps:
       - uses: actions/checkout@v4
-      - run: cargo install cargo-fmt
+      - run: rustup component add rustfmt
       - run: cargo -q fmt -- --check
   audit:
     name: Cargo audit
@@ -47,5 +48,6 @@ jobs:
       image: rust:1.77.0-alpine
     steps:
       - uses: actions/checkout@v4
+      - run: apk add musl-dev
       - run: cargo install cargo-audit
       - run: cargo -q audit --ignore RUSTSEC-2023-0028 --ignore RUSTSEC-2023-0050 --ignore RUSTSEC-2023-0081 --ignore RUSTSEC-2021-0146 --ignore RUSTSEC-2021-0145

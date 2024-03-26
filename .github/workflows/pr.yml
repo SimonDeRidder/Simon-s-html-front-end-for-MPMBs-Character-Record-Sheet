@@ -20,7 +20,7 @@ jobs:
       image: rust:1.77.0-alpine
     steps:
       - uses: actions/checkout@v4
-      - run: apk add musl-dev pkgconfig openssl-dev libressl-dev
+      - run: apk add musl-dev pkgconfig openssl1.0-dev
       - run: cargo install cargo-tarpaulin
       - run: cargo tarpaulin --ignore-tests
   clippy:

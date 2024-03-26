@@ -45,7 +45,7 @@ impl<'de> serde::Deserialize<'de> for Config {
 		let hash = String::deserialize(deserializer)?;
 		let config = Config::get();
 		let current_hash = config.get_hash();
-		if (hash != "") && (current_hash != hash) {
+		if !hash.is_empty() && (current_hash != hash) {
 			console_log(format!("Loaded hash: {}, current hash: {}", hash, current_hash).as_str());
 			return Err(serde::de::Error::custom("Incorrect hash!"));
 		}

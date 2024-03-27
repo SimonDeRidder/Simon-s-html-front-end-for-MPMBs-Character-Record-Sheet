@@ -1,7 +1,6 @@
 #!/bin/sh
 set -e
 
-# TODO: use proper github actions when merged into main
 echo "======================= test ======================="
 cargo -q test
 echo "===================== tarpaulin ===================="

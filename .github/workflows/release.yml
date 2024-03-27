@@ -22,4 +22,4 @@ jobs:
       - run: zip Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet-${{github.ref_name}}.zip * -x *.tar.gz
       - uses: softprops/action-gh-release@v2
         with:
-        files: '*.tar.gz'
+          files: '*.tar.gz'

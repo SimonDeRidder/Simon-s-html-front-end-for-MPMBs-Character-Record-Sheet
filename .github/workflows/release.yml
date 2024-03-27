@@ -13,7 +13,7 @@ jobs:
       image: rust:1.77.0-alpine
     steps:
       - uses: actions/checkout@v4
-      - run: apk add tar zip
+      - run: apk add musl-dev tar zip
       - run: rustup target add wasm32-unknown-unknown
       - run: cargo install -f wasm-bindgen-cli
       - run: wasm-pack build -m no-install --no-typescript -t web --dev -d wasm --out-name wasm --no-pack

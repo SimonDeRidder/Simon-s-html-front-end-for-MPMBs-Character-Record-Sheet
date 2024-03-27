@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: apk add musl-dev tar zip
       - run: rustup target add wasm32-unknown-unknown
-      - run: cargo install -f wasm-bindgen-cli
+      - run: cargo install -f wasm-bindgen-cli wasm-pack
       - run: wasm-pack build -m no-install --no-typescript -t web --dev -d wasm --out-name wasm --no-pack
       - run: rm -r src target Cargo.* *.sh rustfmt.toml
       - run: tar -czvf Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet-${{github.ref_name}}.tar.gz *

@@ -1,24 +1,64 @@
-# Simon's HTML front end for MorePurpleMoreBetter's D&D 5e Character Record Sheet
+# Simon's HTML front end for MPMB's D&D 5e Character Record Sheet
 
-This repository contains both an HTML front end with JavaScript adapter, as well as the back-end document-level JavaScript that is used in [MPMB's Character Record Sheet](https://github.com/morepurplemorebetter/MPMBs-Character-Record-Sheet).
+This repository contains a webapplication to host an interactive character sheet for D&D 5e.
+The front end is HTML+CSS, while the "back end" (run by the browser) is JavaScript and Webassembly (from Rust).
+This back end is predominantly based on the document-level JavaScript that is used in [MPMB's Character Record Sheet](https://github.com/morepurplemorebetter/MPMBs-Character-Record-Sheet).
 
-## How to run
+## How to use
+
+### Download
+
+You can download the latest release from the [releases page](https://github.com/SimonDeRidder/Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet/releases).
+Simply download and extract the `.tar.gz` or `.zip` to a folder of you choice.
+Alternatively, you can [build the Webassembly from source yourself](#building-from-source).
+
+### Run
 
 Simply opening `index.html` will cause CORS issues in most browsers.
+You will have to run a server to serve the files to your browser.
+Fortunately, this is quite simple, and can be done in multiple ways.
+Here are some of them:
 
-Fortunately, the front end is simple enough to run a server over regular HTTP.
-The easiest way to set up a simple server is to use the built-in python module:
-```
+#### Running with Python
+The easiest way to set up a simple server with Python is to use the built-in python module (in the downloaded folder):
+```sh
 python -m http.server 8080
 ```
 You can replace 8080 with whatever port you like. On Windows, see [here](https://www.wikihow.com/Install-Python-on-Windows) to install Python.
 
-You can then open the sheet with any of the following urls on your own device:
+Then, you're ready to [Open the character sheet in your browser](#open-the-character-sheet-in-your-browser).
+
+#### Running with Node.js
+
+To install Node.js, see [here](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs).
+With Node.js installed, install a http server with
+```sh
+npm install http-server -g
+```
+Then, in the downloaded folder, simply run
+```sh
+http-server
+```
+Then, you're ready to [Open the character sheet in your browser](#open-the-character-sheet-in-your-browser).
+
+#### Running with Static Web Server (SWS)
+
+This is a blazing fast file server built in Rust.
+You can download it [here] (https://static-web-server.net/download-and-install).
+Then, in the downloaded folder, run
+```sh
+static-web-server --port 8080 --root .
+```
+Then, you're ready to [Open the character sheet in your browser](#open-the-character-sheet-in-your-browser).
+
+#### Open the character sheet in your browser
+
+With the server running, you can open the sheet with any of the following urls on your own device:
 - http://localhost:8080
 - http://127.0.0.1:8080
 - http://0.0.0.0:8080
 
-(If you changed the port in the server command, also change it in these urls.)
+(If you changed the port in the server command, also change it in this url.)
 
 For other devices on a local network, [find your local ip](https://www.wikihow.com/Find-an-IP-Address), and use
 - `http://<local_ip>:8080`
@@ -28,9 +68,29 @@ The url for your friends is then:
 - `http://<public_ip_address>:<forwarded_port>`
 
 
+### Building from source
+
+This is not necessary when you've downloaded a pre-built binary from the [releases page](https://github.com/SimonDeRidder/Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet/releases), but if you like, you may build the WebAssembly from it's Rust source code.
+
+1) Install the Rust ecosystem. The easiest way to do this is with [rustup](https://rustup.rs).
+2) Set WASM as a target with
+	```sh
+	rustup target add wasm32-unknown-unknown
+	```
+2) Install wasm-pack with
+	```sh
+	cargo install wasm-pack
+	```
+3) Build the WASM folder with the included `build.sh`. Alternatively, run wasm-pack directly with
+	```sh
+	wasm-pack build -m no-install --no-typescript -t web --dev -d wasm --out-name wasm --no-pack
+	```
+
+Now you're ready to go ahead and [Run](#run).
+
 ## Extra content
 
-This front end should work with any extra content written for MPMB's Character Record Sheet. You can find such additional content at the [/r/mpmb subreddit](https://www.reddit.com/r/mpmb/). There is also [the MPMB Discord sever](https://discord.gg/Qjq9Z5Q) for discussion and questions.
+This web application works with any extra content written for MPMB's Character Record Sheet. You can find such additional content at the [/r/mpmb subreddit](https://www.reddit.com/r/mpmb/). There is also [the MPMB Discord sever](https://discord.gg/Qjq9Z5Q) for discussion and questions.
 
 For syntax to write your own, consult [additional content syntax](https://github.com/morepurplemorebetter/MPMBs-Character-Record-Sheet/tree/master/additional%20content%20syntax).
 
@@ -43,26 +103,19 @@ Please see the [How-To Guide - Add More Content](https://www.flapkan.com/how-to/
 - No option to host a HTTPS server yet
 - the global buttons are ugly and only in the upper left corner of the stats tab
 
-
 ## Legal Information
-Simon's HTML front end for MorePurpleMoreBetter's D&D 5e Character Record Sheet automates some of the administrative tasks around playing the game of Dungeon & Dragons 5th edition (C) Wizards of the Coast, Inc.
+Simon's HTML front end for MPMB's D&D 5e Character Record Sheet automates some of the administrative tasks around playing the game of Dungeon & Dragons 5th edition &copy; Wizards of the Coast, Inc.
 
-The `_functions`, `_variables`, `additional content` and `additional content syntax` are under Copyright (C) 2014 Joost Wijnen; Flapkan Productions
+The `_functions`, `_variables`, `additional content` and `additional content syntax` are under Copyright &copy; 2014 Joost Wijnen; Flapkan Productions
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-any later version.
+The files in these folders are modified to integrate with the rest of the application.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
 
-You can find a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
 
-&nbsp;
+You can find a copy of the GNU General Public License along with this program.
+If not, see <http://www.gnu.org/licenses/>.
 
-Certain parts of the content are copyright of Wizards of the Coast
-and are including using the Open Game License version 1.0a.
+Certain parts of the content are copyright of Wizards of the Coast and are including using the Open Game License version 1.0a.

@@ -1,4 +1,3 @@
-
 const minVer = false;
 const MPMBImportFunctions_isInstalled = true;
 const app = {
@@ -48,11 +47,11 @@ const app = {
 		if (oIcon) {
 			console.log("Warning: addToolButton with oIcon not implemented:", cName, ":", oIcon);
 		}
-		newButton.onclick = async function() {
+		newButton.onclick = async function () {
 			let res = eval(cExec);
 			return new Promise((resolve) => {
 				if (res && res.next) {
-					res.next(() => {resolve()});
+					res.next(() => { resolve() });
 				} else {
 					return res;
 				}
@@ -205,7 +204,7 @@ const app = {
 		)
 	},
 
-	launchURL: function(cURL /*String*/, bNewFrame /*boolean*/) {
+	launchURL: function (cURL /*String*/, bNewFrame /*boolean*/) {
 		let target = bNewFrame ? '_blank' : '_self';
 		window.open(cURL, target, 'noreferrer');
 	},
@@ -240,7 +239,7 @@ const color = {
 	yellow: ["CMYK", 0, 0, 1, 0],
 	dkGray: ["G", 0.25],
 	gray: ["G", 0.5],
-	ltGray: ["G", 0.75] ,
+	ltGray: ["G", 0.75],
 };
 
 const border = {
@@ -315,6 +314,23 @@ this.getField = function (field /*str|AdapterClassFieldReference*/) /*AdapterCla
 	if (field.constructor.name == 'AdapterClassFieldReference') {
 		return field;
 	}
+	// intercept oversight from wasm migration
+	if (["Str", "Dex", "Con", "Int", "Wis", "Cha", "HoS", "Str Mod", "Dex Mod", "Con Mod", "Int Mod", "Wis Mod", "Cha Mod", "HoS Mod"].includes(field)) {
+		console.warn("getField called for ability field '" + String(field) + "', replace with direct call to wasm_character.(g/s)et_ability(_modifier)");
+		console.trace();
+		if (field.endsWith(" Mod")) {
+			return new AdapterClassWasmFieldReference(
+				function () { return window.wasm_character.get_ability_modifier(field.slice(0, 3)) },
+				function (newVal) { throw "attempted to set modifier value directly for ", field; },
+			)
+		} else {
+			return new AdapterClassWasmFieldReference(
+				function () { return window.wasm_character.get_ability(field) },
+				function (newVal) { window.wasm_character.set_ability(field, newVal) },
+			)
+		}
+	}
+
 	if (field.startsWith('SaveIMG.') && (field != 'SaveIMG.Patreon')) {
 		return adapter_helper_get_saveimg_field(field.replace(/^SaveIMG\./, ''))
 	}
@@ -399,7 +415,7 @@ this.resetForm = function (aFields = null /*String|[String]|null*/) {
 };
 
 
-this.exportDataObject = function(data /*Object*/) {
+this.exportDataObject = function (data /*Object*/) {
 	//creating an invisible element
 	var element = document.createElement('a');
 	element.setAttribute('href', "documents/" + data.cName);
@@ -411,12 +427,12 @@ this.exportDataObject = function(data /*Object*/) {
 }
 
 
-this.getTemplate = function(cName /*String*/) /*AdapterClassPage*/ {
+this.getTemplate = function (cName /*String*/) /*AdapterClassPage*/ {
 	return new AdapterClassPage(cName);
 }
 
 
-this.deletePages = function(nStart /*Number*/, nEnd /*Number*/) {
+this.deletePages = function (nStart /*Number*/, nEnd /*Number*/) {
 	if (nEnd) {
 		throw "deletePages not implemented for multiple pages, nEnd specified:", nEnd;
 	}
@@ -434,10 +450,10 @@ this.deletePages = function(nStart /*Number*/, nEnd /*Number*/) {
 }
 
 
-this.getPrintParams = function() /*Object*/ {
+this.getPrintParams = function () /*Object*/ {
 	return {
 		constants: {
-			interactionLevel: {full: 0},
+			interactionLevel: { full: 0 },
 			duplexTypes: {
 				DuplexFlipLongEdge: 0,
 				Simplex: 1,
@@ -447,7 +463,7 @@ this.getPrintParams = function() /*Object*/ {
 }
 
 
-this.print_ = function(printOptions /*Object*/) {
+this.print_ = function (printOptions /*Object*/) {
 	let pagesIndexesToPrint = [];
 	printOptions.printRange.forEach((printEntry) => {
 		if (!pagesIndexesToPrint.includes(printEntry[0])) {
@@ -516,7 +532,7 @@ function AFNumber_Format(nDec /*int*/, sepStyle /*int*/, negStyle /*int*/, currS
 
 
 const util = {
-	readFileIntoStream: async function(cDIPath /*String*/, bEncodeBase64 /*bool*/) /*AdapterClassReadStream*/ {
+	readFileIntoStream: async function (cDIPath /*String*/, bEncodeBase64 /*bool*/) /*AdapterClassReadStream*/ {
 		if (bEncodeBase64) {
 			throw "readFileIntoStream with bEncodeBase64 not implemented.";
 		}
@@ -525,14 +541,14 @@ const util = {
 		}
 		return new Promise((resolve, reject) => {
 			let elm = document.createElement('input');
-			elm.style.visibility='hidden';
+			elm.style.visibility = 'hidden';
 			elm.setAttribute('type', 'file');
 			elm.addEventListener('change', function () {
 				if (elm.files && elm.files.length > 0) {
 					var file = elm.files[0];
 					var reader = new FileReader();
 					elm.value = '';
-					reader.onload = function(e) {
+					reader.onload = function (e) {
 						resolve(new AdapterClassReadStream(reader.result));
 						elm.remove();
 					};
@@ -543,14 +559,14 @@ const util = {
 		});
 	},
 
-	stringFromStream: async function(oStream /*AdapterClassReadStream*/) /*String*/ {
+	stringFromStream: async function (oStream /*AdapterClassReadStream*/) /*String*/ {
 		if (oStream.constructor.name != 'AdapterClassReadStream') {
 			throw "stringFromStream not implemented for type " + oStream.constructor.name;
 		}
 		return await oStream.read();
 	},
 
-	printd: function(cFormat /*String|Number*/, oDate /*Date*/, bXFAPicture /*boolean*/) /*String*/ {
+	printd: function (cFormat /*String|Number*/, oDate /*Date*/, bXFAPicture /*boolean*/) /*String*/ {
 		if (typeof cFormat == 'Number') {
 			throw "printd with Number-type cFormat not implemented";
 		}
@@ -559,28 +575,28 @@ const util = {
 		}
 		return (
 			cFormat
-			.replace(/(?<!\\)mmmm/g, '#$$$$#')
-			.replace(/(?<!\\)mmm/g, '#$$$#')
-			.replace(/(?<!\\)mm/g, ("0" + (oDate.getMonth() + 1)).slice(-2))
-			.replace(/(?<!\\)m/g, String(oDate.getMonth() + 1))
-			.replace(/(?<!\\)dddd/g, '#%%%%#')
-			.replace(/(?<!\\)ddd/g, '#%%%#')
-			.replace(/(?<!\\)dd/g, ("0" + oDate.getDate()).slice(-2))
-			.replace(/(?<!\\)d/g, String(oDate.getDate()))
-			.replace(/(?<!\\)yyyy/g, String(oDate.getFullYear()))
-			.replace(/(?<!\\)yy/g, String(oDate.getFullYear()).slice(-2))
-			.replace(/(?<!\\)HH/g, ("0" + oDate.getHours()).slice(-2))
-			.replace(/(?<!\\)H/g, String(oDate.getHours()))
-			.replace(/(?<!\\)hh/g, ("0" + (((oDate.getHours() + 11) % 12) - 1)).slice(-2))
-			.replace(/(?<!\\)h/g, String(((oDate.getHours() + 11) % 12) - 1))
-			.replace(/(?<!\\)ss/g, ("0" + oDate.getSeconds()).slice(-2))
-			.replace(/(?<!\\)s/g, String(oDate.getSeconds()))
-			.replace(/(?<!\\)tt/g, (oDate.getHours() >=12 ? 'pm' : 'am'))
-			.replace(/(?<!\\)t/g, (oDate.getHours() >=12 ? 'p' : 'a'))
-			.replace(/#$$$$#/g, oDate.toString().split(' ')[1])
-			.replace(/#$$$#/g, oDate.toString().split(' ')[1].slice(0, 3))
-			.replace(/#%%%%#/g, oDate.toString().split(' ')[0])
-			.replace(/#%%%#/g, oDate.toString().split(' ')[0].slice(0, 3))
+				.replace(/(?<!\\)mmmm/g, '#$$$$#')
+				.replace(/(?<!\\)mmm/g, '#$$$#')
+				.replace(/(?<!\\)mm/g, ("0" + (oDate.getMonth() + 1)).slice(-2))
+				.replace(/(?<!\\)m/g, String(oDate.getMonth() + 1))
+				.replace(/(?<!\\)dddd/g, '#%%%%#')
+				.replace(/(?<!\\)ddd/g, '#%%%#')
+				.replace(/(?<!\\)dd/g, ("0" + oDate.getDate()).slice(-2))
+				.replace(/(?<!\\)d/g, String(oDate.getDate()))
+				.replace(/(?<!\\)yyyy/g, String(oDate.getFullYear()))
+				.replace(/(?<!\\)yy/g, String(oDate.getFullYear()).slice(-2))
+				.replace(/(?<!\\)HH/g, ("0" + oDate.getHours()).slice(-2))
+				.replace(/(?<!\\)H/g, String(oDate.getHours()))
+				.replace(/(?<!\\)hh/g, ("0" + (((oDate.getHours() + 11) % 12) - 1)).slice(-2))
+				.replace(/(?<!\\)h/g, String(((oDate.getHours() + 11) % 12) - 1))
+				.replace(/(?<!\\)ss/g, ("0" + oDate.getSeconds()).slice(-2))
+				.replace(/(?<!\\)s/g, String(oDate.getSeconds()))
+				.replace(/(?<!\\)tt/g, (oDate.getHours() >= 12 ? 'pm' : 'am'))
+				.replace(/(?<!\\)t/g, (oDate.getHours() >= 12 ? 'p' : 'a'))
+				.replace(/#$$$$#/g, oDate.toString().split(' ')[1])
+				.replace(/#$$$#/g, oDate.toString().split(' ')[1].slice(0, 3))
+				.replace(/#%%%%#/g, oDate.toString().split(' ')[0])
+				.replace(/#%%%#/g, oDate.toString().split(' ')[0].slice(0, 3))
 		);
 	}
 };
@@ -612,7 +628,7 @@ Array.prototype.toSource = function () /*str*/ {
 
 
 Object.defineProperty(Object.prototype, 'toSource', {
-	value: function() {
+	value: function () {
 		return adapter_helper_recursive_toSource(this);
 	},
 	enumerable: false,
@@ -879,27 +895,27 @@ class AdapterClassFieldReference {
 		}
 	}
 
-	set fillColor(color /*[char, ...]*/ ) {
+	set fillColor(color /*[char, ...]*/) {
 		let bgColor = adapter_helper_convert_colour(color);
 		for (let el of this.html_elements) {
 			el.style.backgroundColor = bgColor;
 		}
 	}
 
-	set lineWidth(width /*Number*/ ) {
+	set lineWidth(width /*Number*/) {
 		for (let el of this.html_elements) {
 			el.style.borderWidth = String(width) + 'px';
 		}
 	}
 
-	set strokeColor(color /*[char, ...]*/ ) {
+	set strokeColor(color /*[char, ...]*/) {
 		let bgColor = adapter_helper_convert_colour(color);
 		for (let el of this.html_elements) {
 			el.style.borderColor = bgColor;
 		}
 	}
 
-	set borderStyle(style /*String*/ ) {
+	set borderStyle(style /*String*/) {
 		let borderStyle = null;
 		if (['solid', 'beveled'].includes(style)) {
 			borderStyle = 'solid';
@@ -1015,13 +1031,13 @@ class AdapterClassFieldReference {
 			throw "buttonImportIcon with nPage not implemented.";
 		}
 		let elm = document.createElement('input');
-		elm.style.visibility='hidden';
+		elm.style.visibility = 'hidden';
 		elm.setAttribute('type', 'file');
 		let thisElement = this.html_elements[0];
 		elm.addEventListener('change', function () {
 			if (elm.files && elm.files.length > 0) {
 				let reader = new FileReader();
-				reader.onload = function(e) {
+				reader.onload = function (e) {
 					thisElement.style.backgroundImage = "url(" + reader.result + ")";
 					thisElement.dataset.customUrl = true;
 				};
@@ -1120,7 +1136,7 @@ class AdapterClassFieldReference {
 			if (!(changeEventName in EventType)) {
 				throw "Could not find change event for field id " + fieldID;
 			}
-			eventManager.add_listener(EventType[changeEventName], function() {
+			eventManager.add_listener(EventType[changeEventName], function () {
 				let theElement = document.getElementById(currentFieldId);
 				let theElementAdapter = new AdapterClassFieldReference([theElement]);
 				let theReturnValue = theElementAdapter.value;
@@ -1158,7 +1174,7 @@ class AdapterClassFieldReference {
 		return childFields;
 	}
 
-	getItemAt(nIdx /*Number*/, bExportValue /*Boolean*/) /*String*/{
+	getItemAt(nIdx /*Number*/, bExportValue /*Boolean*/) /*String*/ {
 		if ((this.html_elements[0].tagName.toLowerCase() == 'input') && this.html_elements[0].hasAttribute('list')) {
 			throw "getItemAt for input-list type not implemented yet: " + this.html_elements[0].id;
 		} else if (this.html_elements[0].tagName.toLowerCase() == 'select') {
@@ -1182,7 +1198,7 @@ class AdapterClassFieldReference {
 
 	browseForFileToSubmit() {
 		let elm = document.createElement('input');
-		elm.style.visibility='hidden';
+		elm.style.visibility = 'hidden';
 		elm.setAttribute('type', 'file');
 		let thisElement = this.html_elements[0];
 		elm.addEventListener('change', function () {
@@ -1200,6 +1216,60 @@ class AdapterClassFieldReference {
 		elm.click();
 	}
 }
+
+
+class AdapterClassWasmFieldReference {
+	constructor(getter /* function */, setter /* function */) {
+		this._getter = getter;
+		this._setter = setter;
+	}
+
+	get submitName() /*String*/ { throw "Unimplemented"; }
+	set submitName(new_submitName /*String*/) { throw "Unimplemented"; }
+	get name() /*String*/ { throw "Unimplemented"; }
+
+	get value() /*String|Number|Boolean*/ {
+		return this._getter();
+	}
+
+	set value(new_value /*String|[String]*/) {
+		this._setter(new_value);
+	}
+
+	get userName() /*str*/ { throw "Unimplemented"; }
+	set userName(new_userName /*str*/) { throw "Unimplemented"; }
+	get display() /*int*/ { throw "Unimplemented"; }
+	set display(newDisplay /*int*/) { throw "Unimplemented"; }
+	get type() /*str*/ { throw "Unimplemented"; }
+	get currentValueIndices() /*int*/ { throw "Unimplemented"; }
+	set currentValueIndices(newIndex /*int*/) { throw "Unimplemented"; }
+	get page() /*Number*/ { throw "Unimplemented"; }
+	get rect() /*[Number]*/ { throw "Unimplemented"; }
+	set rect(newRect /*[Number]*/) { throw "Unimplemented"; }
+	set fillColor(color /*[char, ...]*/) { throw "Unimplemented"; }
+	set lineWidth(width /*Number*/) { throw "Unimplemented"; }
+	set strokeColor(color /*[char, ...]*/) { throw "Unimplemented"; }
+	set borderStyle(style /*String*/) { throw "Unimplemented"; }
+	get setVal() /*String*/ { throw "Unimplemented"; }
+	set setVal(new_setVal /*String*/) { throw "Unimplemented"; }
+	get defaultValue() /*String*/ { throw "Unimplemented"; }
+	toSource() /*str*/ { throw "Unimplemented"; }
+	isBoxChecked(nWidget /*int*/) /*Number*/ { throw "Unimplemented"; }
+	checkThisBox(nWidget /*int*/, bCheckIt = true /*boolean*/) { throw "Unimplemented"; }
+	getItems() /*[str|[str;2]]*/ { throw "Unimplemented"; }
+	setItems(oArray /*[str|[str;2]]*/) { throw "Unimplemented"; }
+	buttonSetIcon(icon /*String*/) { throw "Unimplemented"; }
+	buttonImportIcon(cPath /*String*/, nPage /*Number*/) { throw "Unimplemented"; }
+	buttonGetCaption() /*String*/ { throw "Unimplemented"; }
+	buttonSetCaption(cCaption /*String*/, nFace /*Number*/) { throw "Unimplemented"; }
+	setAction(actionType /*String*/, actionStr /*String*/) { throw "Unimplemented"; }
+	setFocus() { throw "Unimplemented"; }
+	deleteRemVal() { throw "Unimplemented"; }
+	getArray() /*[AdapterClassFieldReference]*/ { throw "Unimplemented"; }
+	getItemAt(nIdx /*Number*/, bExportValue /*Boolean*/) /*String*/ { throw "Unimplemented"; }
+	browseForFileToSubmit() { throw "Unimplemented"; }
+}
+
 
 
 class AdapterClassImageReference {
@@ -1227,7 +1297,7 @@ class AdapterClassPage {
 	constructor(type /*String*/, prefix = null /* String|null */) {
 		if (type == 'pstat') {
 			this.page_ = 'pages/page_stats.html';
-			this.prefix_ = (prefix == null) ? '': prefix;
+			this.prefix_ = (prefix == null) ? '' : prefix;
 			this.buttonPrefix_ = "Stats";
 			this.buttonIDPrefix_ = 'tabbuttonstat';
 			this.pageIdPrefix = 'pstat';
@@ -1235,7 +1305,7 @@ class AdapterClassPage {
 			this.isTempl = false;
 		} else if (type == 'pfeaq') {
 			this.page_ = 'pages/page_features_equipment.html';
-			this.prefix_ = (prefix == null) ? '': prefix;
+			this.prefix_ = (prefix == null) ? '' : prefix;
 			this.buttonPrefix_ = "Features & Equipment";
 			this.buttonIDPrefix_ = 'tabbuttonfeaq';
 			this.pageIdPrefix = 'pfeaq';
@@ -1243,7 +1313,7 @@ class AdapterClassPage {
 			this.isTempl = false;
 		} else if (type == 'pnofe') {
 			this.page_ = 'pages/page_notes_feats.html';
-			this.prefix_ = (prefix == null) ? '': prefix;
+			this.prefix_ = (prefix == null) ? '' : prefix;
 			this.buttonPrefix_ = "Notes & Feats";
 			this.buttonIDPrefix_ = 'tabbuttonnofe';
 			this.pageIdPrefix = 'pnofe';
@@ -1251,7 +1321,7 @@ class AdapterClassPage {
 			this.isTempl = false;
 		} else if (type == 'pback') {
 			this.page_ = 'pages/page_appearance_background.html';
-			this.prefix_ = (prefix == null) ? '': prefix;
+			this.prefix_ = (prefix == null) ? '' : prefix;
 			this.buttonPrefix_ = "Background";
 			this.buttonIDPrefix_ = 'tabbuttonback';
 			this.pageIdPrefix = 'pback';
@@ -1259,23 +1329,23 @@ class AdapterClassPage {
 			this.isTempl = false;
 		} else if ((type == 'AScomp') || type.startsWith('pcomptempl')) {
 			this.page_ = 'pages/page_companion.html';
-			this.prefix_ = (prefix == null) ? 'P#.AScomp.': prefix;
+			this.prefix_ = (prefix == null) ? 'P#.AScomp.' : prefix;
 			this.buttonPrefix_ = "Companion";
 			this.buttonIDPrefix_ = 'tabbuttoncomp';
 			this.pageIdPrefix = 'pcomptempl';
 			this.buttonFollower = 'tabbuttonnote';
-			this.isTempl = (type == 'pcomptempl') ? false: true;
+			this.isTempl = (type == 'pcomptempl') ? false : true;
 		} else if ((type == 'WSfront') || type.startsWith('pwildtempl')) {
 			this.page_ = 'pages/page_wildshape.html';
-			this.prefix_ = (prefix == null) ? 'P#.WSfront.': prefix;
+			this.prefix_ = (prefix == null) ? 'P#.WSfront.' : prefix;
 			this.buttonPrefix_ = "Wildshape";
 			this.buttonIDPrefix_ = 'tabbuttonwild';
 			this.pageIdPrefix = 'pwildtempl';
 			this.buttonFollower = 'tabbuttonnote';
-			this.isTempl = (type == 'pwildtempl') ? false: true;
+			this.isTempl = (type == 'pwildtempl') ? false : true;
 		} else if (type == 'pnote') {
 			this.page_ = 'pages/page_notes.html';
-			this.prefix_ = (prefix == null) ? 'P5.ASnotes.': prefix;
+			this.prefix_ = (prefix == null) ? 'P5.ASnotes.' : prefix;
 			this.buttonPrefix_ = "Notes";
 			this.buttonIDPrefix_ = 'tabbuttonnote';
 			this.pageIdPrefix = 'pnote';
@@ -1283,23 +1353,23 @@ class AdapterClassPage {
 			this.isTempl = false;
 		} else if ((type == 'SSfront') || type.startsWith('pspellstempl')) {
 			this.page_ = 'pages/page_spells.html';
-			this.prefix_ = (prefix == null) ? 'P#.SSfront.': prefix;
+			this.prefix_ = (prefix == null) ? 'P#.SSfront.' : prefix;
 			this.buttonPrefix_ = "Spells";
 			this.buttonIDPrefix_ = 'tabbuttonspel';
 			this.pageIdPrefix = 'pspellstempl';
 			this.buttonFollower = 'tabbuttonrefe';
-			this.isTempl = (type == 'pspellstempl') ? false: true;
+			this.isTempl = (type == 'pspellstempl') ? false : true;
 		} else if ((type == 'SSmore') || type.startsWith('pspelmotempl')) {
 			this.page_ = 'pages/page_spells_more.html';
-			this.prefix_ = (prefix == null) ? 'P#.SSmore.': prefix;
+			this.prefix_ = (prefix == null) ? 'P#.SSmore.' : prefix;
 			this.buttonPrefix_ = "Spells";
 			this.buttonIDPrefix_ = 'tabbuttonspmo';
 			this.pageIdPrefix = 'pspelmotempl';
 			this.buttonFollower = 'tabbuttonrefe';
-			this.isTempl = (type == 'pspelmotempl') ? false: true;
+			this.isTempl = (type == 'pspelmotempl') ? false : true;
 		} else if (type == 'prefe') {
 			this.page_ = 'pages/page_reference.html';
-			this.prefix_ = (prefix == null) ? '': prefix;
+			this.prefix_ = (prefix == null) ? '' : prefix;
 			this.buttonPrefix_ = "Reference";
 			this.buttonIDPrefix_ = 'tabbuttonrefe';
 			this.pageIdPrefix = 'prefe';
@@ -1376,14 +1446,14 @@ class AdapterClassPage {
 		pageElement.setAttribute('page-url', this.page_);
 		pageElement.setAttribute('page-prefix', prefix);
 		pageWrapperElement.appendChild(pageElement);
-		await insertPage(pageID, nPage, prefix=prefix);
+		await insertPage(pageID, nPage, prefix = prefix);
 		if (this.buttonIDPrefix_) {
 			// insert button
 			let buttonContainerElement = document.getElementById('button-container');
 			let buttonElement = document.createElement('button');
 			buttonElement.id = this.buttonIDPrefix_ + ((this.isTempl) ? '_' + String(index) : '');
 			buttonElement.dataset.page = pageID;
-			buttonElement.onclick = function() {openPage(this)};
+			buttonElement.onclick = function () { openPage(this) };
 			buttonElement.className = 'tablink';
 			buttonElement.innerText = buttonName;
 			buttonContainerElement.insertBefore(buttonElement, document.getElementById(this.buttonFollower));
@@ -1394,10 +1464,10 @@ class AdapterClassPage {
 
 
 class AdapterClassBookmark {
-	constructor() {}
+	constructor() { }
 
-	set color (newColor /*[char, ...]*/) {}
-	set style (newColor /*Number*/) {}
+	set color(newColor /*[char, ...]*/) { }
+	set style(newColor /*Number*/) { }
 }
 
 // Other tdoc functions
@@ -1726,7 +1796,7 @@ function adapter_helper_get_number_field_selection() /*[int, int]*/ {
 function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFieldReference|AdapterClassFieldContainterReference|null*/ {
 	let element = document.getElementById(field_id);
 	let elements = [];
-	if ((element == null ) || (!element.classList.contains('field'))) {
+	if ((element == null) || (!element.classList.contains('field'))) {
 		// No single element by this id, look for "child elements" that start with the id as prefix
 		[...document.getElementsByClassName('field')].forEach(element => {
 			if (element.id.match(new RegExp("^" + field_id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "(?:\.|#)?.*"))) {
@@ -1737,7 +1807,7 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 			// try removing '.1' at the end (for .rect)
 			if (field_id.endsWith('.1')) {
 				element = document.getElementById(field_id.replace(/\.1$/, ''));
-				if ((element != null ) && element.classList.contains('field')) {
+				if ((element != null) && element.classList.contains('field')) {
 					elements.push(element);
 				}
 			}
@@ -1770,7 +1840,7 @@ function adapter_helper_reference_factory(field_id /*String*/) /*AdapterClassFie
 	} else {
 		elements.push(element);
 	}
-	return new AdapterClassFieldReference(html_elements=elements);
+	return new AdapterClassFieldReference(html_elements = elements);
 }
 
 function adapter_helper_get_saveimg_field(img_name /*String*/) /*AdapterClassImageReference|null*/ {
@@ -1885,7 +1955,7 @@ function adapter_helper_convert_colour(color /*[char, ...]*/) /*String|null*/ {
 			bgColor = "white";
 		}
 	} else if (color[0] == 'RGB') {
-		bgColor = "rgb(" + String(color[1]*255) + ", " + String(color[2]*255) + ", " + String(color[3]*255) + ")";
+		bgColor = "rgb(" + String(color[1] * 255) + ", " + String(color[2] * 255) + ", " + String(color[3] * 255) + ")";
 	}
 	if (bgColor == null) {
 		throw "Setting unimplemented color:", color;
@@ -1912,11 +1982,11 @@ function adapter_helper_keystroke1(
 	let origLen = change.length;
 	let selStart = current_selection[0];
 	let selEnd = current_selection[1];
-	let rc = keystroke1(allowDec, allowNegative, value, change, selStart-change.length, selEnd, isFinal);
+	let rc = keystroke1(allowDec, allowNegative, value, change, selStart - change.length, selEnd, isFinal);
 	if (!rc) {
-		element.value = element.value.substring(0,selStart-origLen)+element.value.substring(selEnd);
+		element.value = element.value.substring(0, selStart - origLen) + element.value.substring(selEnd);
 	} else {
-		element.value = element.value.substring(0,selStart-origLen)+change+element.value.substring(selEnd);
+		element.value = element.value.substring(0, selStart - origLen) + change + element.value.substring(selEnd);
 	}
 }
 
@@ -1944,13 +2014,16 @@ function adapter_helper_save_all() {
 		}
 	}
 
+	// save wasm content and combine
+	let totalSaveData = window.wasm_character.get_character_json();
+	totalSaveData.js = {};
+	totalSaveData.js.pages = pages;
+	totalSaveData.js.elements = elements;
+
 	// jsonify and save
-	let saveData = "data:application/json;base64," + btoa(escapeUnicode(JSON.stringify({
-		pages: pages,
-		elements: elements,
-	})));
+	let saveData = "data:application/json;base64," + btoa(escapeUnicode(JSON.stringify(totalSaveData)));
 	let elm = document.createElement('a');
-	elm.style.visibility='hidden';
+	elm.style.visibility = 'hidden';
 	elm.setAttribute('href', saveData);
 	elm.setAttribute("download", "save.json");
 	elm.click();
@@ -1965,8 +2038,62 @@ function adapter_helper_load() {
 		tDoc.calculate = false;
 		tDoc.delay = true;
 
+		// differentiate old and new save formats
+		let jsData, wasmData;
+		if ('js' in saveData) {
+			// new format, js prop is js data, other stuff is wasm data
+			const { js, ...wasm } = saveData;
+			jsData = js;
+			wasmData = wasm;
+		} else {
+			// old format, all js data with ability elements in elements prop
+			jsData = {pages: saveData.pages, elements: []};
+			jsData.pages = saveData.pages;
+			let copyElement;
+			wasmData = {config: "", stats: {abilities: []}};
+			let abiArray = ["Str", "Dex", "Con", "Int", "Wis", "Cha", "HoS"];
+			while (saveData.elements.length > 0) {
+				copyElement = saveData.elements.pop();
+				if (abiArray.includes(copyElement.name)) {
+					if (copyElement.value) {
+						let fullname = {
+							Str: "Strength",
+							Dex: "Dexterity",
+							Con: "Constitution",
+							Int: "Intelligence",
+							Wis: "Wisdom",
+							Cha: "Charisma",
+							HoS: "Honor/Sanity"
+						}[copyElement.name]
+						wasmData.stats.abilities.push([copyElement.name, fullname, copyElement.value]);
+					}
+				} else if (
+					![
+						"Str Mod",
+						"Dex Mod",
+						"Con Mod",
+						"Int Mod",
+						"Wis Mod",
+						"Cha Mod",
+						"HoS Mod",
+						"Image.HoS",
+						"Text.HoS.Save",
+						"Text.HoS.Ability",
+						"Image.calc_lines.HoS",
+						"Image.calc boxes.HoS",
+						"Image.calc boxes.CSfront",
+					].includes(copyElement.name)
+				) {
+					jsData.elements.push(copyElement);
+				}
+			}
+			wasmData.stats.abilities = wasmData.stats.abilities.sort(
+				function(a, b) {return abiArray.indexOf(a[0]) - abiArray.indexOf(b[0]);}
+			)
+		}
+
 		// set pages
-		let pages = saveData.pages;
+		let pages = jsData.pages;
 		while (Object.keys(globalPageInventory).length > 0) {
 			this.deletePages(1);
 		}
@@ -1978,13 +2105,13 @@ function adapter_helper_load() {
 			if (pageAdapter.isTempl) {
 				templPages.push([pageAdapter, pageNum]);
 			} else {
-				await pageAdapter.spawn(nPage=pageNum, bRename=true, bOverlay=false);
+				await pageAdapter.spawn(nPage = pageNum, bRename = true, bOverlay = false);
 			}
 			pageNum += 1;
 		}
 		// add template pages last so their buttons are in the "right" place
 		for (let pageAdapterInfo of templPages) {
-			await pageAdapterInfo[0].spawn(nPage=pageAdapterInfo[1], bRename=true, bOverlay=false);
+			await pageAdapterInfo[0].spawn(nPage = pageAdapterInfo[1], bRename = true, bOverlay = false);
 		}
 
 		// set stat page to open by default and open it
@@ -1995,13 +2122,17 @@ function adapter_helper_load() {
 		}
 		makeSaveLoadButtons();
 
+		// set wasm character and re-render
+		window.wasm_character = window.wasm_character_class.get_character_from_json(wasmData);
+		window.wasm_character_rerender();
+
 		// set fields
-		for (let element of saveData.elements) {
+		for (let element of jsData.elements) {
 			adapter_helper_deserialise_field(element);
 		}
 
 		// initialise global variables etc.
-		InitializeEverything(noButtons=false, noVars=false);
+		InitializeEverything(noButtons = false, noVars = false);
 
 		// continue calculations
 		calcCont();
@@ -2011,8 +2142,8 @@ function adapter_helper_load() {
 	var input = document.createElement('input');
 	input.type = 'file';
 	// input.setAttribute('accept', "application/json");
-	input.onchange = e => { 
-		let file = e.target.files[0]; 
+	input.onchange = e => {
+		let file = e.target.files[0];
 		let reader = new FileReader();
 		reader.readAsText(file, 'UTF-8');
 		reader.onload = readerEvent => {
@@ -2028,7 +2159,7 @@ function adapter_helper_serialise_field(element /*HTMLElement*/) /*Object*/ {
 	if (fieldVar.constructor.name != 'AdapterClassFieldReference') {
 		throw "adapter_helper_serialise_field not implemented for field type '" + String(typeof fieldVar) + "', constructor '" + fieldVar.constructor.name + "'";
 	}
-	let result = {name: fieldVar.name};
+	let result = { name: fieldVar.name };
 	if (['User_Imported_Files', 'User_Script'].includes(element.id)) {
 		result.value = btoa(escapeUnicode(element.getAttribute('value')));
 		return result;
@@ -2071,7 +2202,7 @@ function adapter_helper_serialise_field(element /*HTMLElement*/) /*Object*/ {
 
 function adapter_helper_deserialise_field(element_info /*Object*/) {
 	let fieldVar = this.getField(element_info.name);
-	if (fieldVar.constructor.name!= 'AdapterClassFieldReference') {
+	if (fieldVar.constructor.name != 'AdapterClassFieldReference') {
 		throw "adapter_helper_serialise_field not implemented for field type '" + String(typeof fieldVar) + "', constructor '" + fieldVar.constructor.name + "'";
 	}
 	if (element_info.name == 'User Script') {
@@ -2174,7 +2305,7 @@ function is_movable_field(fieldName /*String*/) /*boolean*/ {
 
 function escapeUnicode(uText /*String*/) /*String*/ {
 	let result = "";
-	for(let i = 0; i < uText.length; i++){
+	for (let i = 0; i < uText.length; i++) {
 		// Assumption: all characters are < 0xffff
 		let num = uText[i].charCodeAt(0);
 		if (num < 127) {
@@ -2189,9 +2320,9 @@ function escapeUnicode(uText /*String*/) /*String*/ {
 
 function unescapeUnicode(lText /*String*/) /*String*/ {
 	let result = "";
-	for(let i = 0; i < lText.length; i++){
+	for (let i = 0; i < lText.length; i++) {
 		if (/\\u[0-9a-fA-F]{4}/.test(lText.slice(i, i + 6))) {
-			result += String.fromCharCode(Number("0x" + lText.slice(i+2, i + 6)));
+			result += String.fromCharCode(Number("0x" + lText.slice(i + 2, i + 6)));
 			i += 5;
 		} else {
 			result += lText[i]

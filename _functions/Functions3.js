@@ -1616,7 +1616,7 @@ async function UpdateSheetDisplay() {
 	// if something affecting the stats changed
 	// possible options for stats: statsoverride, statsclasses, statsrace, statsfeats, statsitems
 	if (CUflat.indexOf("stats") !== -1 || CurrentUpdates.types.indexOf("testasi") !== -1) {
-		Changes_Dialog.oldStats = Who("Str");
+		Changes_Dialog.oldStats = wasm_character.get_abilities_tooltip();
 		if (await AbilityScores_Button(true)) { // sets tooltip for stats and returns true if anything changed
 			var strStats = "";
 			// ability score improvements
@@ -1694,7 +1694,7 @@ async function UpdateSheetDisplay() {
 						["Ability Score changes", "The text above is part of the 'Ability Scores Dialog' and the tooltip (mouseover text) of the ability score fields.\nYou can always open the 'Ability Scores Dialog' using the 'Scores' button in the 'JavaScript Window'-toolbar or the 'Ability Scores' bookmark."],
 						[
 							["Old ability score modifiers", this.oldStats],
-							["New ability score modifiers", Who("Str")]
+							["New ability score modifiers", wasm_character.get_abilities_tooltip()]
 						],
 						true
 					);

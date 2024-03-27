@@ -1345,7 +1345,7 @@ async function ApplyArmor(input) {
 
 //a function to calculate the value of the Dex field in the Armour section (returns a value)
 function calcMaxDexToAC() {
-	var dexMod = What("Dex Mod");
+	var dexMod = wasm_character.get_ability_modifier("Dex");
 	if (dexMod === "" || isNaN(dexMod)) return "";
 	dexMod = Number(dexMod);
 	if (CurrentArmour.dex !== "" && CurrentArmour.dex !== undefined && !isNaN(CurrentArmour.dex)) {
@@ -4512,7 +4512,7 @@ function CalcAllSkills(name, isCompPage) {
 	var mod = {};
 	for (var i = 0; i < abiFlds.length; i++) {
 		var abi = abiFlds[i];
-		mod[abi] = What(!pr ? abi + " Mod" : pr + "Comp.Use.Ability." + abi + ".Mod");
+		mod[abi] = !pr ? wasm_character.get_ability_modifier(abi) : What(pr + "Comp.Use.Ability." + abi + ".Mod");
 	}
 	var profB = Number(!pr ? How("Proficiency Bonus") : What(pr + "Comp.Use.Proficiency Bonus"));
 	var profDie = tDoc.getField(!pr ? "Proficiency Bonus Dice" : pr + "BlueText.Comp.Use.Proficiency Bonus Dice").isBoxChecked(0);
@@ -4603,7 +4603,7 @@ function CalcSave(name) {
 		// copy the total from the first page, ignoring any modifiers on this page
 		return What(Ability + " ST Mod");
 	}
-	var Mod = What(Save.substring(0, Sabi) + "Mod");
+	var Mod = QI ? wasm_character.get_ability_modifier(Ability) : What(Save.substring(0, Sabi) + "Mod");
 
 	//get the proficiency bonus if applicable
 	var Sprof = tDoc.getField(Save.replace("Mod", "Prof")).isBoxChecked(0) === 1;
@@ -5503,7 +5503,7 @@ function HealItNow(name) {
 
 //calculate the encumbrance (field calculation)
 function CalcEncumbrance(FldName) {
-	var Str = What("Str"), result = "";
+	var Str = wasm_character.get_ability("Str"), result = "";
 	var Size = What("Size Category");
 	Size = Size ? Size : 1;
 	var CarMult = Math.max(What("Carrying Capacity Multiplier"), 0);
@@ -6767,7 +6767,7 @@ function CalcAbilityDC(fieldName) {
 			useSSDCothers = foundSSDC.length > foundSSDCref[useSSDCmin].length;
 			DCtot = useSSDCmin - (modIpvDC ? 8 : 0);
 		} else {
-			DCtot = (modIpvDC ? 0 : 8) + Number(How("Proficiency Bonus")) + Number(What(What(sFldMod))) + EvalBonus(sFldBonusVal, true);
+			DCtot = (modIpvDC ? 0 : 8) + Number(How("Proficiency Bonus")) + wasm_character.get_ability_modifier(What(sFldMod).slice(0, 3)) + EvalBonus(sFldBonusVal, true);
 		}
 	}
 	let resultValue = DCtot && modIpvDC && DCtot >= 0 ? "+" + DCtot : DCtot;

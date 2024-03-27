@@ -49,13 +49,20 @@ function initialCalculationEvents() {
 	FindWeapons();
 	FindCompWeapons();
 	// trigger ability mods calculation (and ST calculation) and AC_Dexterity_Modifier calculation (and all skills) (and Attack.i.To Hit)
-	document.getElementById('Con').dispatchEvent(new Event('change'));
-	document.getElementById('Cha').dispatchEvent(new Event('change'));
-	document.getElementById('Dex').dispatchEvent(new Event('change'));
-	document.getElementById('Int').dispatchEvent(new Event('change'));
-	document.getElementById('HoS').dispatchEvent(new Event('change'));
-	document.getElementById('Str').dispatchEvent(new Event('change'));
-	document.getElementById('Wis').dispatchEvent(new Event('change'));
+	eventManager.handle_event(EventType.Con_change);
+	eventManager.handle_event(EventType.Cha_change);
+	eventManager.handle_event(EventType.Dex_change);
+	eventManager.handle_event(EventType.Int_change);
+	eventManager.handle_event(EventType.HoS_change);
+	eventManager.handle_event(EventType.Str_change);
+	eventManager.handle_event(EventType.Wis_change);
+	eventManager.handle_event(EventType.Con_Mod_change);
+	eventManager.handle_event(EventType.Cha_Mod_change);
+	eventManager.handle_event(EventType.Dex_Mod_change);
+	eventManager.handle_event(EventType.Int_Mod_change);
+	eventManager.handle_event(EventType.HoS_Mod_change);
+	eventManager.handle_event(EventType.Str_Mod_change);
+	eventManager.handle_event(EventType.Wis_Mod_change);
 	// trigger Proficiency_Bonus calculation
 	document.getElementById('Proficiency_Bonus_Modifier').dispatchEvent(new Event('change'));
 	// trigger weight texts
@@ -84,6 +91,76 @@ function setSheetVersion() {
 		}
 		resolve();
 	});
+}
+
+async function loadAdditional(filename /*String*/) {
+	// fetch and read file
+	let resp = await fetch("additional content/" + filename);
+	let content = await resp.text()
+	InitiateLists();
+	if (RunUserScript(false, content)) {
+			Value("User Script", content);
+			console.log("Successfully loaded '" + filename + "' content");
+			retResDia = "also";
+	} else {
+			InitiateLists();
+			RunUserScript(false, false);
+	};
+	amendPsionicsToSpellsList();
+	if (retResDia) {
+		let forceDDupdate = 'also';
+		var spellSources = [];
+		SetStringifieds("sources");
+		var remCS = What("CurrentSources.Stringified");
+		var onlySRD = [];
+		var exclObj = {}, inclObj = {};
+		for (var src in SourceList) {
+			if (this.info.SpellsOnly && spellSources.indexOf(src) === -1) continue;
+			var srcGroup = !SourceList[src].group ? "other" : SourceList[src].group;
+			var srcName = SourceList[src].name.replace(RegExp(srcGroup + " ?:? ?", "i"), "") + " (" + SourceList[src].abbreviation + ")";
+			if (srcGroup === "Unearthed Arcana" && SourceList[src].date) srcName = SourceList[src].date + " " + srcName;
+			if (!srcGroup || srcGroup === "default") continue;
+			onlySRD.push(src);
+			if (!/(core|primary) source/i.test(srcGroup.indexOf)) srcGroup = "\u200B" + srcGroup;
+			if (!exclObj[srcGroup]) exclObj[srcGroup] = {};
+			if (!inclObj[srcGroup]) inclObj[srcGroup] = {};
+			if (CurrentSources.globalExcl.indexOf(src) !== -1) {
+				exclObj[srcGroup][srcName] = -1;
+			} else {
+				inclObj[srcGroup][srcName] = -1;
+			};
+		};
+		onlySRD = onlySRD.length === 1 && onlySRD[0] === "SRD";
+
+		var getMoreCont = "\u200B\u200B>> click this line to get more content <<";
+		exclObj[getMoreCont] = -1;
+		exclObj = CleanObject(exclObj); inclObj = CleanObject(inclObj);
+
+		cleanExclSources();
+		// Start progress bar and stop calculations
+		calcStop();
+		UpdateDropdown("resources");
+
+		// Change how some things are now recognized by the sheet
+		await getDynamicFindVariables();
+
+		// Set the visibility of the Choose Feature and Racial Options button
+		ClassMenuVisibility();
+		if (ParseRace(What("Race"))[2].length) {
+			DontPrint("Race Features Menu");
+		} else {
+			Hide("Race Features Menu");
+		}
+		//if something changed for the spells make the spell menu again
+		var oldCS = eval(remCS);
+		if (forceDDupdate || oldCS.globalExcl !== CurrentSources.globalExcl || oldCS.classExcl !== CurrentSources.classExcl || oldCS.spellsExcl !== CurrentSources.spellsExcl) {
+			setSpellVariables(forceDDupdate || oldCS.spellsExcl !== CurrentSources.spellsExcl);
+			SetGearVariables();
+		};
+		if (forceDDupdate || oldCS.globalExcl !== CurrentSources.globalExcl || oldCS.magicitemExcl !== CurrentSources.magicitemExcl) {
+			ParseMagicItemMenu();
+		}
+	}
 }
 
 async function loadAll() {
@@ -131,10 +208,8 @@ function startLoadingContent() {
 
 if (document.readyState === "loading") {
 	// Loading hasn't finished yet
-	console.log("with listener");
 	document.addEventListener("DOMContentLoaded", startLoadingContent);
 } else {
 	// `DOMContentLoaded` has already fired
-	console.log("immediately");
 	startLoadingContent();
 }

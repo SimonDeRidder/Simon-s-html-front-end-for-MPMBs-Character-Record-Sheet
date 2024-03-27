@@ -188,212 +188,6 @@
 		</script>
 	</div>
 
-
-	<div id="character_abilities" class="pane" style="top: 195px; left:34px; width: 99px; height: 678.7px;">
-		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/attributes.svg" style="top: 1.5px;width: 91px;height: 678.7px">
-
-		<div class="textlabel-bold" style="top: 33px;left: 7px;width: 77px;">STRENGTH</div>
-		<div class="textlabel-bold" style="top: 141px;left: 7px;width: 77px;">DEXTERITY</div>
-		<div class="textlabel-bold" style="top: 249px;left: 7px;width: 77px;">CONSTITUTION</div>
-		<div class="textlabel-bold" style="top: 357px;left: 7px;width: 77px;">INTELLIGENCE</div>
-		<div class="textlabel-bold" style="top: 465px;left: 7px;width: 77px;">WISDOM</div>
-		<div class="textlabel-bold" style="top: 573px;left: 7px;width: 77px;">CHARISMA</div>
-		<div
-			id="Text.HoS.Ability"
-			class="field textlabel-bold"
-			style="visibility: hidden;top: 681px;left: 7px;width: 77px;z-index: 2"
-			data-default=""
-			onchange="this.innerText=this.getAttribute('value')"
-		></div>
-
-		<div
-			id="Image.calc_boxes.CSfront"
-			class="field"
-			style="visibility: hidden"
-		></div>
-
-		<input
-			id="Str"
-			class="field inputfield"
-			style="top: 93px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center"
-			type="number"
-			min="0"
-			step="1"
-			aria-label="Racial ability score improvements"
-			data-default=""
-			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="eventManager.handle_event(EventType.Str_change)"
-		/>
-		<input
-			id="Dex"
-			class="field inputfield"
-			style="top: 201px;left: 27px;font-size: 15px;width: 25pt;height: 16pt;text-align: center"
-			type="number"
-			min="0"
-			step="1"
-			aria-label="Primary class abilities & Multiclassing prerequisites"
-			data-default=""
-			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="eventManager.handle_event(EventType.Dex_change)"
-		/>
-		<input
-			id="Con"
-			class="field inputfield"
-			style="top: 309px;left: 27px;font-size: 15px;width: 25pt;height: 16pt;text-align: center"
-			type="number"
-			min="0"
-			step="1"
-			data-default=""
-			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="SetHPTooltip(false, false);eventManager.handle_event(EventType.Con_change)"
-		/>
-		<input
-			id="Int"
-			class="field inputfield"
-			style="top: 417px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center"
-			type="number"
-			min="0"
-			step="1"
-			data-default=""
-			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="eventManager.handle_event(EventType.Int_change)"
-		/>
-		<input
-			id="Wis"
-			class="field inputfield"
-			style="top: 525px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center"
-			type="number"
-			min="0"
-			step="1"
-			data-default=""
-			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="eventManager.handle_event(EventType.Wis_change)"
-		/>
-		<input
-			id="Cha"
-			class="field inputfield"
-			style="top: 633px;left: 27px;font-size: 15px;width: 25pt;height: 16pt;text-align: center"
-			type="number"
-			min="0"
-			step="1"
-			data-default=""
-			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="eventManager.handle_event(EventType.Cha_change)"
-		/>
-		<input
-			id="HoS"
-			class="field inputfield"
-			style="visibility: hidden;top: 741px;left: 27px;font-size: 14pt;width: 25pt;height: 16pt;text-align: center;z-index:2"
-			type="number"
-			min="0"
-			step="1"
-			data-default=""
-			oninput="adapter_helper_keystroke1(this, false, false, this.value, event.data)"
-			onchange="eventManager.handle_event(EventType.HoS_change)"
-		/>
-
-		<input
-			id="Str_Mod"
-			class="field isNumber inputfield-noneditable"
-			style="top: 40px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0"
-			type="text"
-			value="0"
-			data-default=""
-			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Str_Mod_change)"
-		/>
-		<input
-			id="Dex_Mod"
-			class="field isNumber inputfield-noneditable"
-			style="top: 148px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
-			type="text"
-			value="0"
-			data-default=""
-			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Dex_Mod_change)"
-		/>
-		<input
-			id="Con_Mod"
-			class="field isNumber inputfield-noneditable"
-			style="top: 256px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
-			type="text"
-			value="0"
-			data-default=""
-			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Con_Mod_change)"
-		/>
-		<input
-			id="Int_Mod"
-			class="field isNumber inputfield-noneditable"
-			style="top: 364px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
-			type="text"
-			value="0"
-			data-default=""
-			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Int_Mod_change)"
-		/>
-		<input
-			id="Wis_Mod"
-			class="field isNumber inputfield-noneditable"
-			style="top: 472px;left: 7px;font-size: 25pt;width: 77px;text-align: center;padding: 0"
-			type="text"
-			value="0"
-			data-default=""
-			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Wis_Mod_change)"
-		/>
-		<input
-			id="Cha_Mod"
-			class="field isNumber inputfield-noneditable"
-			style="top: 580px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0"
-			type="text"
-			value="0"
-			data-default=""
-			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.Cha_Mod_change)"
-		/>
-		<input
-			id="HoS_Mod"
-			class="field isNumber inputfield-noneditable"
-			style="visibility: hidden;top: 696px;left: 7px;font-size: 32px;width: 77px;text-align: center;padding: 0;z-index: 2"
-			type="text"
-			value="0"
-			data-default=""
-			onchange="if (Number(this.value) > 0) {this.value = '+' + this.value};eventManager.handle_event(EventType.HoS_Mod_change)"
-		/>
-
-		<div
-			id="Image.HoS"
-			class="field"
-			style="position:absolute;top: 660px;left: 0px;width: 282.75px;height: 168px;background-size: 100% 100%;background-repeat: no-repeat;background-position: center;background-image: url('img/page_stats/backgrounds/hos.svg');visibility: hidden;z-index:1"
-		>
-			<div class="textlabel" style="top: 56px;left: 175px;width: 83px;height: 20px;font-size: 8.6px;text-align:center">PASSIVE WISDOM (PERCEPTION)</div>
-			<div class="textlabel-bold" style="top: 149px;left: 106.5px;width: 170px;">SENSES</div>
-		</div>
-		<div
-			id="Text.HoS.Save"
-			class="field"
-			style="position: absolute;z-index: 2;top: 802px;left: 58px;font-size: 9px;line-height: 8px;width: 24px;height: 16px;visibility: hidden"
-			onchange="this.innerText=this.getAttribute('value').slice(0,3) + ' SAVE'"
-			data-default=""
-			type="text"
-		></div>
-		<div
-			id="Image.calc_boxes.HoS"
-			class="field"
-			style="visibility: hidden"
-		></div>
-
-		<script type="text/javascript">
-			// Ability Mods
-			['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha', 'HoS'].forEach(function(ability) {
-				eventManager.add_listener(
-					EventType[ability + '_change'],
-					function () {
-						let mod_element = document.getElementById(ability + '_Mod');
-						mod_element.value = CalcMod(ability + ' Mod');
-						mod_element.dispatchEvent(new Event('change'));
-					}
-				)
-			});
-		</script>
-	</div>
-
-
 	<div id="character_resistances_saving_throws" class="pane" style="top: 195px;left: 133px;width: 190px;height: 275px;">
 		<img class="pane-bg" alt="" src="img/page_stats/backgrounds/resistances_saving_throws.svg" style="width: 177px;height: 267px;top: 1.5px;left: 5.6px;">
 
@@ -1365,11 +1159,10 @@
 		<select
 			id="Spell_DC_1_Mod.0"
 			class="field inputfield"
-			list="ability_save_dc_options"
 			style="top: 19px;font-size: 8px;height: 10px;left: 130px;text-align: center;width: 75px;font-family: 'scala-sans';font-weight: bold"
 			onchange="document.getElementById('Spell_DC_1_Mod.1').value=this.value;eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
 		>
-			<option value=""></option>
+			<option value="" label = " "></option>
 			<option value="Str Mod">  STRENGTH</option>
 			<option value="Dex Mod">  DEXTERITY</option>
 			<option value="Con Mod">CONSTITUTION</option>
@@ -1380,11 +1173,10 @@
 		<select
 			id="Spell_DC_1_Mod.1"
 			class="field inputfield"
-			list="ability_save_dc_options"
 			style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 61px;text-align: center;width: 54px;font-family: 'scala-sans'"
 			onchange="document.getElementById('Spell_DC_1_Mod.0').value=this.value;eventManager.handle_event(EventType.Spell_DC_1_Mod_change)"
 		>
-			<option value=""></option>
+			<option value="" label = " "></option>
 			<option value="Str Mod">  STRENGTH</option>
 			<option value="Dex Mod">  DEXTERITY</option>
 			<option value="Con Mod">CONSTITUTION</option>
@@ -1395,11 +1187,10 @@
 		<select
 			id="Spell_DC_2_Mod"
 			class="field inputfield"
-			list="ability_save_dc_options"
 			style="visibility: hidden;top: 25px;font-size: 8px;font-weight: bold;height: 10px;left: 121.5px;text-align: center;width: 54px;font-family: 'scala-sans'"
 			onchange="eventManager.handle_event(EventType.Spell_DC_2_Mod_change)"
 		>
-			<option value=""></option>
+			<option value="" label = " "></option>
 			<option value="Str Mod">  STRENGTH</option>
 			<option value="Dex Mod">  DEXTERITY</option>
 			<option value="Con Mod"> CONSTITUTION</option>

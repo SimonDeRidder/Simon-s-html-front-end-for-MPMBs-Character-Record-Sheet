@@ -404,7 +404,7 @@ function FormatHD(name, value) {
 	var theResult = clean(value, " ");
 	if (theResult !== "") {
 		var QI = getTemplPre(name, "AScomp");
-		var theCon = Number(What(QI === true ? "Con Mod" : QI + "Comp.Use.Ability.Con.Mod"));
+		var theCon = QI === true ? wasm_character.get_ability_modifier("Con") : Number(What(QI + "Comp.Use.Ability.Con.Mod"));
 		value = "d" + theResult + (theCon < 0 ? theCon : "+" + theCon);
 	}
 	return value;

@@ -19,7 +19,7 @@ jobs:
       - run: wasm-pack build -m no-install --no-typescript -t web --dev -d wasm --out-name wasm --no-pack
       - run: rm -r src target Cargo.* *.sh rustfmt.toml
       - run: tar -czvf Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet-${{github.ref_name}}.tar.gz *
-      - run: zip Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet-${{github.ref_name}}.zip * -x *.tar.gz
+      - run: zip -r Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet-${{github.ref_name}}.zip * -x *.tar.gz
       - uses: softprops/action-gh-release@v2
         with:
           files: |

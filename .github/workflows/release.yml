@@ -1,10 +1,10 @@
-name: pull request
-run-name: pull request
+name: release
+run-name: release assets
 on:
   push:
     tags: ["v*.*.*"]
 permissions:
-  contents: read
+  contents: write
 jobs:
   build:
     name: Compile and build wasm

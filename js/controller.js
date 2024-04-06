@@ -86,6 +86,75 @@ function setSheetVersion() {
 	});
 }
 
+async function loadAdditional(filename /*String*/) {
+	// fetch and read file
+	let resp = await fetch("additional content/" + filename);
+	let content = await resp.text()
+	if (RunUserScript(false, content)) {
+			Value("User Script", content);
+			console.log("Successfully loaded '" + filename + "' content");
+			retResDia = "also";
+	} else {
+			InitiateLists();
+			RunUserScript(false, false);
+	};
+	amendPsionicsToSpellsList();
+	if (retResDia) {
+		let forceDDupdate = 'also';
+		var spellSources = [];
+		SetStringifieds("sources");
+		var remCS = What("CurrentSources.Stringified");
+		var onlySRD = [];
+		var exclObj = {}, inclObj = {};
+		for (var src in SourceList) {
+			if (this.info.SpellsOnly && spellSources.indexOf(src) === -1) continue;
+			var srcGroup = !SourceList[src].group ? "other" : SourceList[src].group;
+			var srcName = SourceList[src].name.replace(RegExp(srcGroup + " ?:? ?", "i"), "") + " (" + SourceList[src].abbreviation + ")";
+			if (srcGroup === "Unearthed Arcana" && SourceList[src].date) srcName = SourceList[src].date + " " + srcName;
+			if (!srcGroup || srcGroup === "default") continue;
+			onlySRD.push(src);
+			if (!/(core|primary) source/i.test(srcGroup.indexOf)) srcGroup = "\u200B" + srcGroup;
+			if (!exclObj[srcGroup]) exclObj[srcGroup] = {};
+			if (!inclObj[srcGroup]) inclObj[srcGroup] = {};
+			if (CurrentSources.globalExcl.indexOf(src) !== -1) {
+				exclObj[srcGroup][srcName] = -1;
+			} else {
+				inclObj[srcGroup][srcName] = -1;
+			};
+		};
+		onlySRD = onlySRD.length === 1 && onlySRD[0] === "SRD";
+
+		var getMoreCont = "\u200B\u200B>> click this line to get more content <<";
+		exclObj[getMoreCont] = -1;
+		exclObj = CleanObject(exclObj); inclObj = CleanObject(inclObj);
+
+		cleanExclSources();
+		// Start progress bar and stop calculations
+		calcStop();
+		UpdateDropdown("resources");
+
+		// Change how some things are now recognized by the sheet
+		await getDynamicFindVariables();
+
+		// Set the visibility of the Choose Feature and Racial Options button
+		ClassMenuVisibility();
+		if (ParseRace(What("Race"))[2].length) {
+			DontPrint("Race Features Menu");
+		} else {
+			Hide("Race Features Menu");
+		}
+		//if something changed for the spells make the spell menu again
+		var oldCS = eval(remCS);
+		if (forceDDupdate || oldCS.globalExcl !== CurrentSources.globalExcl || oldCS.classExcl !== CurrentSources.classExcl || oldCS.spellsExcl !== CurrentSources.spellsExcl) {
+			setSpellVariables(forceDDupdate || oldCS.spellsExcl !== CurrentSources.spellsExcl);
+			SetGearVariables();
+		};
+		if (forceDDupdate || oldCS.globalExcl !== CurrentSources.globalExcl || oldCS.magicitemExcl !== CurrentSources.magicitemExcl) {
+			ParseMagicItemMenu();
+		}
+	}
+}
+
 async function loadAll() {
 	await loadScript('_functions/AbilityScores_old.js')
 		.then(script => loadScript('_functions/AbilityScores.js'))

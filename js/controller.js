@@ -97,7 +97,6 @@ async function loadAdditional(filename /*String*/) {
 	// fetch and read file
 	let resp = await fetch("additional content/" + filename);
 	let content = await resp.text()
-	InitiateLists();
 	if (RunUserScript(false, content)) {
 			Value("User Script", content);
 			console.log("Successfully loaded '" + filename + "' content");

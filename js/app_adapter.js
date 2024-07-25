@@ -853,6 +853,9 @@ class AdapterClassFieldReference {
 	}
 
 	get page() /*Number*/ {
+		if (this.html_elements[0].dataset.page == undefined) {
+			return -1;
+		}
 		return Number(this.html_elements[0].dataset.page);
 	}
 
@@ -1319,6 +1322,14 @@ class AdapterClassPage {
 			this.pageIdPrefix = 'pnofe';
 			this.buttonFollower = 'tabbuttonback';
 			this.isTempl = false;
+		} else if ((type == 'ASoverflow') || type.startsWith('povertempl')) {
+			this.page_ = 'pages/page_overflow.html';
+			this.prefix_ = (prefix == null) ? '': prefix;
+			this.buttonPrefix_ = "Overflow";
+			this.buttonIDPrefix_ = 'tabbuttonover';
+			this.pageIdPrefix = 'povertempl';
+			this.buttonFollower = 'tabbuttonback';
+			this.isTempl = false;
 		} else if (type == 'pback') {
 			this.page_ = 'pages/page_appearance_background.html';
 			this.prefix_ = (prefix == null) ? '' : prefix;
@@ -1437,16 +1448,22 @@ class AdapterClassPage {
 			prefix = this.prefix_.replace('P#', 'P' + String(nPage));
 		}
 
-		// insert page
-		let pageWrapperElement = document.getElementById('page-wrapper');
-		let pageElement = document.createElement('div');
 		let pageID = this.pageIdPrefix + ((this.isTempl) ? '_' + String(index) : '');
-		pageElement.id = pageID;
-		pageElement.className = 'page';
-		pageElement.setAttribute('page-url', this.page_);
-		pageElement.setAttribute('page-prefix', prefix);
-		pageWrapperElement.appendChild(pageElement);
-		await insertPage(pageID, nPage, prefix = prefix);
+		let pageElement = document.getElementById(pageID);
+		if (this.pageIdPrefix == 'povertempl' && pageElement != null) {
+			editRecursive(pageElement, nPage, prefix="");
+			insertIntoInventory(pageElement, nPage);
+		} else {
+			// insert page
+			let pageWrapperElement = document.getElementById('page-wrapper');
+			pageElement = document.createElement('div');
+			pageElement.id = pageID;
+			pageElement.className = 'page';
+			pageElement.setAttribute('page-url', this.page_);
+			pageElement.setAttribute('page-prefix', prefix);
+			pageWrapperElement.appendChild(pageElement);
+			await insertPage(pageID, nPage, prefix = prefix);
+		}
 		if (this.buttonIDPrefix_) {
 			// insert button
 			let buttonContainerElement = document.getElementById('button-container');

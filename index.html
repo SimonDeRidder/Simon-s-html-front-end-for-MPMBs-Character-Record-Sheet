@@ -142,17 +142,21 @@
 
 		async function insertPage(page_id, page_number, prefix = "") {
 			await includePage(page_id, page_number, prefix=prefix, add_to_inventory = false);
-			let i = page_number;
 			let currentPageElement = document.getElementById(page_id);
+			insertIntoInventory(currentPageElement, page_number)
+		}
+
+		function insertIntoInventory(page_element, page_number) {
+			let i = page_number;
 			let replacedPage = globalPageInventory[i];
-			globalPageInventory[i] = currentPageElement;
+			globalPageInventory[i] = page_element;
 			while (replacedPage != null) {
-				globalPageInventory[i] = currentPageElement;
+				globalPageInventory[i] = page_element;
 				replacePage(replacedPage, i+1);
 				i = i + 1;
-				currentPageElement = replacedPage;
+				page_element = replacedPage;
 				replacedPage = globalPageInventory[i];
-				globalPageInventory[i] = currentPageElement;
+				globalPageInventory[i] = page_element;
 			}
 		}
 
@@ -178,10 +182,9 @@
 
 <body>
 	<div id="button-container">
-		<button id="tabbuttonstat" onclick="openPage(this)" data-page="pstat" class="tablink">Stats</button>
+		<button id="tabbuttonstat" onclick="openPage(this)" data-page="pstat" class="tablink defaultOpen">Stats</button>
 		<button id="tabbuttonfeaq" onclick="openPage(this)" data-page="pfeaq" class="tablink">Features & Equipment</button>
 		<button id="tabbuttonnofe" onclick="openPage(this)" data-page="pnofe" class="tablink">Notes & Feats</button>
-		<button id="tabbuttonover" onclick="openPage(this)" data-page="pover" class="tablink defaultOpen">Overflow</button>
 		<button id="tabbuttonback" onclick="openPage(this)" data-page="pback" class="tablink">Background</button>
 		<button id="tabbuttonnote" onclick="openPage(this)" data-page="pnote" class="tablink">Notes</button>
 		<button id="tabbuttonrefe" onclick="openPage(this)" data-page="prefe" class="tablink">Reference</button>
@@ -191,7 +194,7 @@
 		<div id="pstat" class="page" page-url="pages/page_stats.html"></div>
 		<div id="pfeaq" class="page" page-url="pages/page_features_equipment.html"></div>
 		<div id="pnofe" class="page" page-url="pages/page_notes_feats.html"></div>
-		<div id="pover" class="page" page-url="pages/page_overflow.html"></div>
+		<div id="povertempl" class="page templ" page-url="pages/page_overflow.html"></div>
 		<div id="pback" class="page" page-url="pages/page_appearance_background.html"></div>
 		<div id="pcomptempl" class="page templ" page-url="pages/page_companion.html"></div>
 		<div id="pwildtempl" class="page templ" page-url="pages/page_wildshape.html"></div>
@@ -243,7 +246,6 @@
 		<div id="UseUnicode" class="field" value="true"></div>
 		<div id="User_Script" class="field" value=""></div>
 		<div id="Image.DnDLogo.long" class="field"></div>
-		<div id="MoreProficiencies" class="field"></div>
 
 		<div id="User_Imported_Files.Stringified" class="field" value="new UserImportedFilesAdapter({})"></div>
 		<div id="ChangesDialogSkip.Stringified" class="field" value="new ChangesDialogSkipAdapter()"></div>
@@ -269,13 +271,13 @@
 		includePage("pstat", 1);
 		includePage("pfeaq", 2);
 		includePage("pnofe", 3);
-		includePage("pover", 4);
-		includePage("pback", 5);
+		includePage("povertempl", 0, prefix="", add_to_inventory=false);
+		includePage("pback", 4);
 		includePage("pcomptempl", 0, prefix = "P4.AScomp.", add_to_inventory = false);
 		includePage("pwildtempl", 0, prefix="", add_to_inventory=false);
-		includePage("pnote", 6, prefix = "P5.ASnotes.");
+		includePage("pnote", 5, prefix = "P5.ASnotes.");
 		includePage("pspellstempl", 0, prefix="", add_to_inventory=false);
-		includePage("prefe", 7);
+		includePage("prefe", 6);
 	</script>
 	<script>
 		function openPage(buttonElmnt) {

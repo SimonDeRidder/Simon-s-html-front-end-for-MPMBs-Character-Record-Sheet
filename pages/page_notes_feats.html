@@ -63,38 +63,6 @@
 			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
 			spellcheck="true"
 		/>
-		<input
-			id="Feat_Name_5"
-			class="field inputfield"
-			list="feat_options"
-			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
-			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
-			spellcheck="true"
-		/>
-		<input
-			id="Feat_Name_6"
-			class="field inputfield"
-			list="feat_options"
-			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
-			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
-			spellcheck="true"
-		/>
-		<input
-			id="Feat_Name_7"
-			class="field inputfield"
-			list="feat_options"
-			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
-			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
-			spellcheck="true"
-		/>
-		<input
-			id="Feat_Name_8"
-			class="field inputfield"
-			list="feat_options"
-			style="visibility: hidden;font-size: 12px;width: 178px;height: 13.3px"
-			aria-label="Type in the name of the feat (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized feat. Ability scores will not be altered other than their tool tips (mouseover texts)."
-			spellcheck="true"
-		/>
 		<datalist id="feat_options">
 			<option value=""></option>
 			<option value="Grappler">Grappler</option>
@@ -122,30 +90,6 @@
 			id="Feat_Note_4"
 			class="field inputfield"
 			style="top: 384px;left: 235px;font-size: 12px;width: 89.5px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Feat_Note_5"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 12px;width: 89.5px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Feat_Note_6"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 12px;width: 89.5px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Feat_Note_7"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 12px;width: 89.5px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Feat_Note_8"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 12px;width: 89.5px;height: 13.3px;text-align: right"
 			spellcheck="true"
 		/>
 
@@ -177,34 +121,6 @@
 			style="top: 402.5px;left: 29.5px;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
 			spellcheck="true"
 		></textarea>
-		<textarea
-			id="Feat_Description_5"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
-		<textarea
-			id="Feat_Description_6"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
-		<textarea
-			id="Feat_Description_7"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
-		<textarea
-			id="Feat_Description_8"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
 
 		<button
 			id="Feat_Button_1"
@@ -230,34 +146,10 @@
 			style="top: 385px;left: 8.5px"
 			onclick="MakeFeatMenu_FeatOptions(null, 4)"
 		>&gt;</button>
-		<button
-			id="Feat_Button_5"
-			class="field button nonprintable"
-			style="visibility: hidden;"
-			onclick="MakeFeatMenu_FeatOptions(null, 5)"
-		>&gt;</button>
-		<button
-			id="Feat_Button_6"
-			class="field button nonprintable"
-			style="visibility: hidden;"
-			onclick="MakeFeatMenu_FeatOptions(null, 6)"
-		>&gt;</button>
-		<button
-			id="Feat_Button_7"
-			class="field button nonprintable"
-			style="visibility: hidden;"
-			onclick="MakeFeatMenu_FeatOptions(null, 7)"
-		>&gt;</button>
-		<button
-			id="Feat_Button_8"
-			class="field button nonprintable"
-			style="visibility: hidden;"
-			onclick="MakeFeatMenu_FeatOptions(null, 8)"
-		>&gt;</button>
 
 		<script type="text/javascript">
 			// Feat_Name_* change
-			for (let i = 1; i <= 8; i++) {
+			for (let i = 1; i <= 4; i++) {
 				let elm = document.getElementById('Feat_Name_' + String(i));
 				elm.onfocus = function() {
 					this.dataset.oldVal = this.value;
@@ -327,41 +219,6 @@
 			class="field textlabel"
 			style="top: 499.5px;left: 299px;font-size: 8.8px"
 		>Attuned</span>
-		<span
-			id="Image.MagicItemAttuned.6"
-			class="field textlabel"
-			style="visibility: hidden;font-size: 8.8px">Attun
-		ed</span>
-		<span
-			id="Image.MagicItemAttuned.7"
-			class="field textlabel"
-			style="visibility: hidden;font-size: 8.8px">Attun
-		ed</span>
-		<span
-			id="Image.MagicItemAttuned.8"
-			class="field textlabel"
-			style="visibility: hidden;font-size: 8.8px">Attun
-		ed</span>
-		<span
-			id="Image.MagicItemAttuned.9"
-			class="field textlabel"
-			style="visibility: hidden;font-size: 8.8px">Attun
-		ed</span>
-		<span
-			id="Image.MagicItemAttuned.10"
-			class="field textlabel"
-			style="visibility: hidden;font-size: 8.8px">Attun
-		ed</span>
-		<span
-			id="Image.MagicItemAttuned.11"
-			class="field textlabel"
-			style="visibility: hidden;font-size: 8.8px">Attun
-		ed</span>
-		<span
-			id="Image.MagicItemAttuned.12"
-			class="field textlabel"
-			style="visibility: hidden;font-size: 8.8px">Attun
-		ed</span>
 
 		<input
 			id="Extra.Magic_Item_1"
@@ -404,69 +261,6 @@
 			class="field inputfield"
 			list="magic_item_options"
 			style="top: 497px;left: 81px;font-size: 12px;width: 157px;height: 13.3px"
-			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
-			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
-		/>
-		<input
-			id="Extra.Magic_Item_6"
-			class="field inputfield"
-			list="magic_item_options"
-			style="visibility:hidden;" 
-			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
-			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
-		/>
-		<input
-			id="Extra.Magic_Item_7"
-			class="field inputfield"
-			list="magic_item_options"
-			style="visibility:hidden;" 
-			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
-			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
-		/>
-		<input
-			id="Extra.Magic_Item_8"
-			class="field inputfield"
-			list="magic_item_options"
-			style="visibility:hidden;" 
-			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
-			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
-		/>
-		<input
-			id="Extra.Magic_Item_9"
-			class="field inputfield"
-			list="magic_item_options"
-			style="visibility:hidden;" 
-			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
-			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
-		/>
-		<input
-			id="Extra.Magic_Item_10"
-			class="field inputfield"
-			list="magic_item_options"
-			style="visibility:hidden;" 
-			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
-			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
-		/>
-		<input
-			id="Extra.Magic_Item_11"
-			class="field inputfield"
-			list="magic_item_options"
-			style="visibility:hidden;" 
-			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
-			spellcheck="true"
-			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
-		/>
-		<input
-			id="Extra.Magic_Item_12"
-			class="field inputfield"
-			list="magic_item_options"
-			style="visibility:hidden;" 
 			aria-label="Type in the name of the magic item (or select it from the drop-down menu) and its text and features will be filled out automatically, provided it is a recognized magic item."
 			spellcheck="true"
 			onclick="if (event.offsetX > Number(this.style.width.replace('px', ''))-16) {this.value='';}"
@@ -744,48 +538,6 @@
 			style="top: 497px;left: 244px;font-size: 7.3px;width: 38px;height: 13.3px;text-align: right"
 			spellcheck="true"
 		/>
-		<input
-			id="Extra.Magic_Item_Note_6"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 7.3px;width: 38px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Extra.Magic_Item_Note_7"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 7.3px;width: 38px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Extra.Magic_Item_Note_8"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 7.3px;width: 38px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Extra.Magic_Item_Note_9"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 7.3px;width: 38px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Extra.Magic_Item_Note_10"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 7.3px;width: 38px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Extra.Magic_Item_Note_11"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 7.3px;width: 38px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
-		<input
-			id="Extra.Magic_Item_Note_12"
-			class="field inputfield"
-			style="visibility: hidden;font-size: 7.3px;width: 38px;height: 13.3px;text-align: right"
-			spellcheck="true"
-		/>
 
 		<input
 			id="Extra.Magic_Item_Attuned_1"
@@ -821,55 +573,6 @@
 			type="checkbox"
 			style="top: 496px;left: 284px"
 			onchange="ApplyAttunementMI(5, new AdapterClassFieldReference([this]))"
-		/>
-		<input
-			id="Extra.Magic_Item_Attuned_6"
-			class="field checkcircle"
-			type="checkbox"
-			style="visibility: hidden"
-			onchange="ApplyAttunementMI(6, new AdapterClassFieldReference([this]))"
-		/>
-		<input
-			id="Extra.Magic_Item_Attuned_7"
-			class="field checkcircle"
-			type="checkbox"
-			style="visibility: hidden"
-			onchange="ApplyAttunementMI(7, new AdapterClassFieldReference([this]))"
-		/>
-		<input
-			id="Extra.Magic_Item_Attuned_8"
-			class="field checkcircle"
-			type="checkbox"
-			style="visibility: hidden"
-			onchange="ApplyAttunementMI(8, new AdapterClassFieldReference([this]))"
-		/>
-		<input
-			id="Extra.Magic_Item_Attuned_9"
-			class="field checkcircle"
-			type="checkbox"
-			style="visibility: hidden"
-			onchange="ApplyAttunementMI(9, new AdapterClassFieldReference([this]))"
-		/>
-		<input
-			id="Extra.Magic_Item_Attuned_10"
-			class="field checkcircle"
-			type="checkbox"
-			style="visibility: hidden" 
-			onchange="ApplyAttunementMI(10, new AdapterClassFieldReference([this]))"
-		/>
-		<input
-			id="Extra.Magic_Item_Attuned_11"
-			class="field checkcircle"
-			type="checkbox"
-			style="visibility: hidden" 
-			onchange="ApplyAttunementMI(11, new AdapterClassFieldReference([this]))"
-		/>
-		<input
-			id="Extra.Magic_Item_Attuned_12"
-			class="field checkcircle"
-			type="checkbox"
-			style="visibility: hidden" 
-			onchange="ApplyAttunementMI(12, new AdapterClassFieldReference([this]))"
 		/>
 
 		<textarea
@@ -907,55 +610,6 @@
 			style="top: 518.2px;left: 29.6px;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
 			spellcheck="true"
 		></textarea>
-		<textarea
-			id="Extra.Magic_Item_Description_6"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
-		<textarea
-			id="Extra.Magic_Item_Description_7"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
-		<textarea
-			id="Extra.Magic_Item_Description_8"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
-		<textarea
-			id="Extra.Magic_Item_Description_9"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
-		<textarea
-			id="Extra.Magic_Item_Description_10"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
-		<textarea
-			id="Extra.Magic_Item_Description_11"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
-		<textarea
-			id="Extra.Magic_Item_Description_12"
-			class="field inputfield"
-			rows="4"
-			style="visibility: hidden;width: 295px;height: 64px;font-size: 10.2px;line-height: 16.5px;padding-top: 3.6px"
-			spellcheck="true"
-		></textarea>
 
 		<button
 			id="Extra.Magic_Item_Button_1"
@@ -987,52 +641,10 @@
 			style="top: 498.5px;left: 8.5px"
 			onclick="MakeMagicItemMenu_MagicItemOptions(null, 5, new AdapterClassFieldReference([this]))"
 		>&gt;</button>
-		<button
-			id="Extra.Magic_Item_Button_6"
-			class="field button nonprintable"
-			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 6, new AdapterClassFieldReference([this]))"
-		>&gt;</button>
-		<button
-			id="Extra.Magic_Item_Button_7"
-			class="field button nonprintable"
-			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 7, new AdapterClassFieldReference([this]))"
-		>&gt;</button>
-		<button
-			id="Extra.Magic_Item_Button_8"
-			class="field button nonprintable"
-			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 8, new AdapterClassFieldReference([this]))"
-		>&gt;</button>
-		<button
-			id="Extra.Magic_Item_Button_9"
-			class="field button nonprintable"
-			style="visibility: hidden;"
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 9, new AdapterClassFieldReference([this]))"
-		>&gt;</button>
-		<button
-			id="Extra.Magic_Item_Button_10"
-			class="field button nonprintable"
-			style="visibility: hidden;" 
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 10, new AdapterClassFieldReference([this]))"
-		>&gt;</button>
-		<button
-			id="Extra.Magic_Item_Button_11"
-			class="field button nonprintable"
-			style="visibility: hidden;" 
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 11, new AdapterClassFieldReference([this]))"
-		>&gt;</button>
-		<button
-			id="Extra.Magic_Item_Button_12"
-			class="field button nonprintable"
-			style="visibility: hidden;" 
-			onclick="MakeMagicItemMenu_MagicItemOptions(null, 12, new AdapterClassFieldReference([this]))"
-		>&gt;</button>
 
 		<!-- Bluetext -->
 		<div
-			id="Extra.Magic_Item_Weight_Title"
+			id="Extra.Magic_Item_Weight_Title#2"
 			class="field textlabel bluetext"
 			style="top: 7.5px;left: 347.7px;height: 9.5px;width: 37.2px;text-align: center;font-size: 8.7px;visibility: hidden;"
 		>WEIGHT</div>
@@ -1092,86 +704,9 @@
 			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_5_change)"
 			onclick="this.value=this.value.replace(/\D*$/, '');"
 		/>
-		<input
-			id="Extra.Magic_Item_Weight_6"
-			class="field inputfield bluetext"
-			style="height: 13.3px;width: 28px;visibility: hidden;"
-			aria-label="Magic item's weight"
-			type="text"
-			value="0"
-			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
-			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_6_change)"
-			onclick="this.value=this.value.replace(/\D*$/, '');"
-		/>
-		<input
-			id="Extra.Magic_Item_Weight_7"
-			class="field inputfield bluetext"
-			style="height: 13.3px;width: 28px;visibility: hidden;"
-			aria-label="Magic item's weight"
-			type="text"
-			value="0"
-			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
-			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_7_change)"
-			onclick="this.value=this.value.replace(/\D*$/, '');"
-		/>
-		<input
-			id="Extra.Magic_Item_Weight_8"
-			class="field inputfield bluetext"
-			style="height: 13.3px;width: 28px;visibility: hidden;"
-			aria-label="Magic item's weight"
-			type="text"
-			value="0"
-			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
-			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_8_change)"
-			onclick="this.value=this.value.replace(/\D*$/, '');"
-		/>
-		<input
-			id="Extra.Magic_Item_Weight_9"
-			class="field inputfield bluetext"
-			style="height: 13.3px;width: 28px;visibility: hidden;"
-			aria-label="Magic item's weight"
-			type="text"
-			value="0"
-			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
-			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_9_change)"
-			onclick="this.value=this.value.replace(/\D*$/, '');"
-		/>
-		<input
-			id="Extra.Magic_Item_Weight_10"
-			class="field inputfield bluetext"
-			style="height: 13.3px;width: 28px;visibility: hidden;"
-			aria-label="Magic item's weight"
-			type="text"
-			value="0"
-			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
-			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_10_change)"
-			onclick="this.value=this.value.replace(/\D*$/, '');"
-		/>
-		<input
-			id="Extra.Magic_Item_Weight_11"
-			class="field inputfield bluetext"
-			style="height: 13.3px;width: 28px;visibility: hidden;"
-			aria-label="Magic item's weight"
-			type="text"
-			value="0"
-			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
-			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_11_change)"
-			onclick="this.value=this.value.replace(/\D*$/, '');"
-		/>
-		<input
-			id="Extra.Magic_Item_Weight_12"
-			class="field inputfield bluetext"
-			style="height: 13.3px;width: 28px;visibility: hidden;"
-			aria-label="Magic item's weight"
-			type="text"
-			value="0"
-			oninput="adapter_helper_keystroke1(this, true, false, this.value, event.data)"
-			onchange="this.value=format1(this.value, '', '', 'mass');eventManager.handle_event(EventType.Extra_Magic_Item_Weight_12_change)"
-			onclick="this.value=this.value.replace(/\D*$/, '');"
-		/>
 
 		<script type="text/javascript">
-			for (let i = 1; i <= 12; i++) {
+			for (let i = 1; i <= 5; i++) {
 				let elm = document.getElementById('Extra.Magic_Item_' + String(i));
 				elm.onfocus = function() {
 					this.dataset.oldVal = this.value;

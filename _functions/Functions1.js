@@ -5346,7 +5346,7 @@ function FeatInsert(itemNmbr) {
 			// Copy all the fields
 			var FfldsFrom = ReturnFeatFieldsArray(f - 1);
 			var FfldsTo = ReturnFeatFieldsArray(f);
-			for (var i = 0; i < FfldsFrom.length - 1; i++) {
+			for (var i = 0; i < FfldsFrom.length; i++) {
 				var exclObj = i != 0 ? {} : { userName : true, submitName : true, noCalc : true };
 				copyField(FfldsFrom[i], FfldsTo[i], exclObj);
 			}
@@ -5371,7 +5371,7 @@ function FeatDelete(itemNmbr) {
 	var thermoTxt = thermoM("Deleting feat...");
 	calcStop();
 
-	var maxNmbr = FieldNumbers.feats;
+	var maxItem = FieldNumbers.feats;
 	// Stop at the end of the first page if last one on first page is empty
 	if (itemNmbr <= FieldNumbers.featsD && !What("Feat Name " + FieldNumbers.featsD)) maxItem = FieldNumbers.featsD;
 

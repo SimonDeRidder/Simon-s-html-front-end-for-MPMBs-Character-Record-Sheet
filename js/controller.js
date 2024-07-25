@@ -1,5 +1,4 @@
 
-// TODO: Make a field "Whiteout.Standard.0" that controls the lines in multi-line inputs fields (I think)
 // TODO: connect "Color.Theme"
 // TODO: "SaveIMG.Header.Left." + colour, "SaveIMG.Divider." + colour
 // TODO: find a way to show tooltips

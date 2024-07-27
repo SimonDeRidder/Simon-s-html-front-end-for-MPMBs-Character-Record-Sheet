@@ -305,7 +305,7 @@ AdapterParsePopUpMenu = function (aParams, resolve) {
 
 this.info = {
 	SheetType: "printer friendly",
-	SheetVersion: "v13.1.13",
+	SheetVersion: "v13.1.14",
 	SpellsOnly: false,
 };
 this.path = "./index.html";
@@ -934,6 +934,18 @@ class AdapterClassFieldReference {
 			throw "calling defaultValue when none is set for " + this.html_elements[0].id;
 		}
 		return defaultValue;
+	}
+
+	get setValPrepared() /*String*/ {
+		let setValPrepared_ = this.html_elements[0].dataset.setValPrepared;
+		if (setValPrepared_ == undefined) {
+			return "";
+		}
+		return setValPrepared_;
+	}
+
+	set setValPrepared(new_setValPrepared /*String*/) {
+		this.html_elements[0].dataset.setValPrepared = new_setValPrepared;
 	}
 
 	toSource() /*str*/ {

@@ -167,6 +167,7 @@
 				elm.onchange = async function() {
 					if (this.dataset.setVal !== undefined) {
 						delete this.dataset.setVal;
+						delete this.dataset.setValPrepared;
 					} else {
 						calcStartSet = true;
 						calcStop();
@@ -724,6 +725,7 @@
 				elm.onchange = async function() {
 					if (this.dataset.setVal !== undefined) {
 						delete this.dataset.setVal;
+						delete this.dataset.setValPrepared;
 					} else {
 						calcStartSet = true;
 						calcStop();

@@ -539,6 +539,7 @@ async function ApplyCompRace(newRace, prefix, sCompType, bIsRaceFld, oldValue) {
 		thermoM(3/10); //increment the progress dialog's progress
 
 		//add any weapons the creature possesses
+		SetWeaponsdropdown(false, prefix);
 		for (var a = 0; a < aCrea.attacks.length; a++) {
 			AddWeapon(aCrea.attacks[a].name, undefined, prefix);
 		}
@@ -2777,17 +2778,27 @@ function LimFeaDelete(itemNmbr) {
 
 //a way of going to a specified field (for making bookmarks independent of templates)
 async function Bookmark_Goto(BookNm) {
+	// Set focus to the last iteration of the field
+	var gotoField = function(fldName) {
+		var fld = tDoc.getField(fldName);
+		if (fld && isArray(fld.page)) {
+			fld = tDoc.getField(fldName + "." + (fld.page.length - 1));
+		}
+		if (fld) fld.setFocus();
+	}
+
+	// Find the field corresponding to the bookmark name
 	var isVisible = true;
 	var prefix = "";
 	if (isArray(isVisible)) {
 		prefix = isVisible[1];
 		isVisible = isVisible[0];
 	}
-	var theFld = prefix + BookMarkList[BookNm];
+	var fldName = prefix + BookMarkList[BookNm];
 
 	// Determine if the selected section is on a visible page, and if so go to it.
-	if (isVisible && theFld && tDoc.getField(theFld)) {
-		tDoc.getField(theFld).setFocus();
+	if (isVisible && fldName && tDoc.getField(fldName)) {
+		gotoField(fldName);
 		return;
 	};
 };
@@ -2796,7 +2807,7 @@ async function Bookmark_Goto(BookNm) {
 function deletePage(fldNm, onTemplate) {
 	var tempFld = tDoc.getField(fldNm);
 	if (!tempFld) return false;
-	var tempPage = onTemplate ? Math.max.apply(Math, tempFld.page) : tempFld.page;
+	var tempPage = onTemplate || isArray(tempFld.page) ? Math.max.apply(Math, tempFld.page) : tempFld.page;
 	try {
 		tDoc.deletePages(tempPage);
 	} catch (theError) {
@@ -2824,14 +2835,30 @@ async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 			var theDep = DepL[T];
 			var multiDep = TemplatesWithExtras.indexOf(theDep) !== -1;
 			if (!multiDep) {
-				var DepTypeFld = tDoc.getField(BookMarkList[theDep]);
-				if (isArray(DepTypeFld.page)) {
-					return Math.max.apply(Math, DepTypeFld.page) + 1;
+				var pageNum = tDoc.getField(BookMarkList[theDep]).page;
+				if (isArray(pageNum)) {
+					return Math.max.apply(Math, pageNum) + 1;
 				};
 			} else {
 				var depVisible = isTemplVis(theDep, "last");
 				if (depVisible) {
-					return tDoc.getField(depVisible[1] + BookMarkList[theDep]).page + 1;
+					var pageNum = tDoc.getField(depVisible[1] + BookMarkList[theDep]).page;
+					if (isArray(pageNum) && pageNum[0] === -1) {
+						// A bug in Acrobat caused the page to be deleted but not the fields, making the internal form structure corrupted
+						pageNum = pageNum[pageNum.length - 1];
+						var alert = {
+							cTitle : "ERROR: this AcroForm is corrupted",
+							cMsg : "This PDF seems to have been corrupted. Fields from deleted pages haven't been properly removed. This is caused by a bug in Adobe Acrobat and not something MPMB can fix."+
+							"\n\nThis corruption will cause the filesize to keep increasing, the sheet to slow down significantly, and eventually you won't be able to open this PDF at all."+
+							"\n\nIMPORTANT! This was not caused by the thing you just clicked, but your action did make the corruption apparent. Older saves of this PDF could also be corrupted."+
+							"\n\nTo remedy this, please save this sheet and import it into a freshly downloaded version. You can learn how to do this on MPMB's website.",
+							nIcon : 1,
+							oCheckbox : { cMsg : "Open the step-by-step guide on MPMB's website." }
+						};
+						app.alert(alert);
+						if (alert.oCheckbox.bAfterValue) contactMPMB("upgrade to new sheet");
+					}
+					return pageNum + 1;
 				}
 			};
 		};
@@ -3683,7 +3710,7 @@ async function MakeAdvLogMenu_AdvLogOptions() {
 
 //get the parent of the bookmark so we can know which template it is on
 function getBookmarkTemplate(bookmark) {
-	while (bookmark.name !== "Root") {
+	while (bookmark && bookmark.name !== "Root") {
 		if (BookMarkList[bookmark.name + "_template"]) {
 			return [BookMarkList[bookmark.name + "_template"], bookmark.name];
 		};
@@ -4562,13 +4589,12 @@ function UpdateDropdown(type, weapon) {
 	if (minVer || !IsNotUserScript) return;
 	IsSetDropDowns = true;
 	type = type ? type.toLowerCase() : "all";
-	var notAll, forceTT = false;
+	var forceTT = false;
 	calcStop();
 	switch (type) {
 	 case "tooltips" :
 		forceTT = true;
 	 case "resources" :
-		notAll = true;
 	 case "all" :
 		SetRacesdropdown(forceTT);
 		SetBackgrounddropdown(forceTT);
@@ -4579,10 +4605,8 @@ function UpdateDropdown(type, weapon) {
 		SetWildshapeDropdown(forceTT);
 		SetArmordropdown(forceTT);
 		SetAmmosdropdown(forceTT);
-		if (notAll) {
-			SetWeaponsdropdown(forceTT);
-			break;
-		}
+		SetWeaponsdropdown(forceTT);
+		break;
 	 case "attack" :
 	 case "attacks" :
 	 case "weapon" :
@@ -4636,9 +4660,9 @@ function UpdateDropdown(type, weapon) {
 	case "creatures" :
 	case "wildshape" :
 	case "wildshapes" :
+		SetWildshapeDropdown();
 	case "companiononly" :
 		SetCompDropdown();
-		if (type !== "companiononly") SetWildshapeDropdown();
 		break;
 	};
 	IsSetDropDowns = false;
@@ -5245,6 +5269,9 @@ function contactMPMB(medium) {
 		case "website" :
 			app.launchURL("https://www.flapkan.com/", true);
 			break;
+		case "upgrade to new sheet" :
+			app.launchURL("https://www.flapkan.com/how-to/upgrade-to-new-sheet", true);
+			break;
 		case "how to add content" :
 			app.launchURL("https://www.flapkan.com/how-to/add-more-content", true);
 			break;
@@ -5610,19 +5637,21 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 		for (var attr in aWea) theWea[attr] = aWea[attr];
 
 		thermoTxt = thermoM("Applying the weapon's features...", false); //change the progress dialog text
-		var curDescr = What(fldBase + "Description");
-		var curRange = What(fldBase + "Range");
 		fields.Description = theWea.description ? theWea.description : ""; //add description
 		fields.Description_Tooltip = theWea.tooltip ? theWea.tooltip : ""; //add the tooltip for the description
 		fields.Range = theWea.range; //add range
 		fields.Damage_Type = theWea.damage[2]; //add Damage Type
+
+		//add proficiency checkmark
+		fields.Proficiency = !QI ? true : isProficientWithWeapon(WeaponName, theWea);
 
 		//add Weight
 		fields.Weight = isReCalc ? What(fldBaseBT + "Weight") :
 			theWea.weight ? theWea.weight : "";
 
 		//add Damage Die
-		fields.Damage_Die = theWea.damage[0] + (parseFloat(theWea.damage[1]) ? "d" + theWea.damage[1] : "");
+		var weaponDamageDie = theWea.damage[0] + (parseFloat(theWea.damage[1]) ? "d" + theWea.damage[1] : "");
+		fields.Damage_Die = weaponDamageDie;
 
 		//add To Hit Bonus
 		fields.To_Hit_Bonus = isReCalc ? What(fldBaseBT + "To Hit Bonus") :
@@ -5633,14 +5662,9 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 		fields.Damage_Bonus = isReCalc ? What(fldBaseBT + "Damage Bonus") :
 			theWea.modifiers && theWea.modifiers[1] ? theWea.modifiers[1] : 0;
 
-		//add proficiency checkmark
-		fields.Proficiency = !QI ? true : isProficientWithWeapon(WeaponName, theWea);
-
 		//add mod
 		var StrDex = (QI ? wasm_character.get_ability("Str") : What(prefix + "Comp.Use.Ability.Str.Score")) < (QI ? wasm_character.get_ability("Dex") : What(prefix + "Comp.Use.Ability.Dex.Score")) ? 2 : 1;
-		fields.Mod = isReCalc && !theWea.ability ? tDoc.getField(fldBase + "Mod").currentValueIndices :
-			(/finesse/i).test(theWea.description) ? StrDex : theWea.ability;
-
+		var weaponMod = /finesse/i.test(theWea.description) ? StrDex : theWea.ability;
 		//change mod if this is concerning a spell/cantrip
 		var forceUseSpellcastingMod = theWea.useSpellcastingAbility === undefined ? false : theWea.useSpellcastingAbility ? "y" : "n";
 		if ((thisWeapon[3] || forceUseSpellcastingMod == "y") && forceUseSpellcastingMod != "n") {
@@ -5661,10 +5685,11 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 				if (!abiArr[i] || abiDone.indexOf(abiArr[i]) !== -1) continue;
 				abiDone.push(abiArr[i]);
 				var thisMod = What(AbilityScores.abbreviations[abiArr[i] - 1]);
-				if (thisMod > Math.max.apply(Math, abiModArr)) fields.Mod = abiArr[i];
+				if (thisMod > Math.max.apply(Math, abiModArr)) weaponMod = abiArr[i];
 				abiModArr.push(thisMod);
 			}
 		}
+		fields.Mod = weaponMod;
 
 		if (theWea.ammo) fields.Ammo = theWea.ammo; //add ammo
 
@@ -5719,10 +5744,20 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 				}
 			}
 		};
-		// if this is a field recalculation and no custom eval changed the description or range, just use the one from the field so that manual changes are preserved
+		// if this is a field recalculation and no custom eval changed specific parts, just use the one from the field so that manual changes are preserved
 		if (isReCalc && !forceRedo) {
-			if (fields.Description === theWea.description) fields.Description = curDescr;
-			if (fields.Range === theWea.range) fields.Range = curRange;
+			if (fields.Description === theWea.description) {
+				fields.Description = What(fldBase + "Description"); }
+			if (fields.Range === theWea.range) {
+				fields.Range = What(fldBase + "Range"); }
+			if (fields.Damage_Type === theWea.damage[2]) {
+				fields.Damage_Type = What(fldBase + "Damage Type"); }
+			if (fields.Range === theWea.range) {
+				fields.Range = What(fldBase + "Range"); }
+			if (fields.Damage_Die === weaponDamageDie) {
+				fields.Damage_Die = What(fldBaseBT + "Damage Die"); }
+			if (fields.Mod === weaponMod) {
+				fields.Mod = tDoc.getField(fldBase + "Mod").currentValueIndices; }
 		}
 	};
 
@@ -5804,7 +5839,8 @@ function CalcAttackDmgHit(fldName) {
 	var thisWeapon = QI ? CurrentWeapons.known[ArrayNmbr] : CurrentWeapons.compKnown[prefix][ArrayNmbr];
 	var WeaponName = thisWeapon[0];
 	var aWea = QI || isNaN(parseFloat(WeaponName)) ? WeaponsList[WeaponName] : !QI && !isNaN(parseFloat(WeaponName)) && CurrentCompRace[prefix] && CurrentCompRace[prefix].attacks ? CurrentCompRace[prefix].attacks[WeaponName] : false;
-	var WeaponText = QI ? CurrentWeapons.field[ArrayNmbr] : CurrentWeapons.compField[prefix][ArrayNmbr];
+	var WeaponTextName = QI ? CurrentWeapons.field[ArrayNmbr] : CurrentWeapons.compField[prefix][ArrayNmbr];
+	var WeaponText = WeaponText + (fields.Description ? " " + fields.Description : "");
 	var theWea = {};
 	if (aWea && aWea.baseWeapon && WeaponsList[aWea.baseWeapon]) {
 		for (var attr in WeaponsList[aWea.baseWeapon]) theWea[attr] = WeaponsList[aWea.baseWeapon][attr];
@@ -5813,15 +5849,12 @@ function CalcAttackDmgHit(fldName) {
 	var fixedCaster = theWea.useSpellMod && CurrentSpells[theWea.useSpellMod] ? CurrentSpells[theWea.useSpellMod] : false;
 	var aWeaNoAbi = theWea.ability === 0 || (fixedCaster && fixedCaster.fixedDC && fixedCaster.abilityToUse && !fixedCaster.abilityToUse[0]);
 
-	if (!WeaponText || ((/^(| |empty)$/).test(fields.Mod) && !aWeaNoAbi)) {
+	if (!WeaponTextName || ((/^(| |empty)$/).test(fields.Mod) && !aWeaNoAbi)) {
 		Value(fldBase + "Damage", "");
 		Value(fldBase + "To Hit", "");
 		if (QI) CurrentWeapons.offHands[ArrayNmbr] = false;
 		return;
 	};
-
-	// only add the description part now, so we don't test against it above
-	if (fields.Description) WeaponText += " " + fields.Description;
 
 	// get the damage bonuses from the selected modifier, magic, and the blueText field
 	var output = {
@@ -5848,7 +5881,7 @@ function CalcAttackDmgHit(fldName) {
 	var isThrownWeapon = isWeapon && /\bthrown\b/i.test(fields.Description) && /\d ?(ft|m)\.?($|[^)])/i.test(fields.Range);
 
 	// see if this is a off-hand attack and the modToDmg shouldn't be use
-	var isOffHand = isMeleeWeapon && (/^(?!.*(spell|cantrip))(?=.*(off.{0,3}hand|secondary)).*$/i).test(WeaponText);
+	var isOffHand = /^(?!.*(spell|cantrip))(?=.*(off.{0,3}hand|secondary)).*$/i.test(WeaponText);
 	if (isOffHand) output.modToDmg = output.mod < 0;
 	// Add the off-hand attack action (only for attacks on the first page)
 	if (QI && CurrentWeapons.offHands[ArrayNmbr] !== isOffHand) {
@@ -5861,7 +5894,7 @@ function CalcAttackDmgHit(fldName) {
 
 		var gatherVars = {
 			WeaponText : WeaponText,
-			WeaponTextName : WeaponText.replace(" " + fields.Description, ""),
+			WeaponTextName : WeaponTextName,
 			isDC : isDC,
 			isSpell : isSpell,
 			isWeapon : isWeapon,

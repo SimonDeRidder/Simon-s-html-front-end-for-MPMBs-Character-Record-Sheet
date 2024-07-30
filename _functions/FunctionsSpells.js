@@ -4901,7 +4901,7 @@ async function SaveSpellcastingAbility(field) {
 			});
 			if (redosheets === 4) {
 				SetStringifieds("spells");
-				var waitForThisBlurActionToFinish = app.setTimeOut("await GenerateSpellSheet();", 10);
+				var waitForThisBlurActionToFinish = app.setTimeOut("GenerateSpellSheet();", 10);
 				return;
 			}
 		}

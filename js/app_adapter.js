@@ -2030,7 +2030,7 @@ function adapter_helper_load() {
 		}
 
 		// initialise global variables etc.
-		InitializeEverything(noButtons=false, noVars=false);
+		await InitializeEverything(noButtons = false, noVars = false);
 
 		// continue calculations
 		calcCont();

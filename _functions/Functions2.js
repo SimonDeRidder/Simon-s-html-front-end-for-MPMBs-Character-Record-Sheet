@@ -2821,21 +2821,6 @@ function deletePage(fldNm, onTemplate) {
 		}
 		return false;
 	}
-	// Because of a bug, sometimes the page is deleted but the fields aren't, corrupting the AcroForm
-	if (!onTemplate && tDoc.getField(fldNm) && tDoc.getField(fldNm).page === -1) {
-		var alert = {
-			cTitle : "ERROR: this AcroForm is corrupted",
-			cMsg : "The removal of the page caused this PDF to become corrupted. The fields from the deleted page(s) haven't been properly removed because of a bug in Adobe Acrobat (not something MPMB can fix)."+
-			"\n\nThis corruption will cause the filesize to keep increasing, the sheet to slow down significantly, and eventually you won't be able to open this PDF at all."+
-			"\n\nIMPORTANT! To remedy this, either:"+
-			"\n \u2022 Stop what you are doing, close, but don't save this file, and re-open a saved version of it."+
-			"\n \u2022 Save this sheet and import it into a freshly downloaded version. You can learn how to do this on MPMB's website.",
-			nIcon : 1,
-			oCheckbox : { cMsg : "Open the step-by-step \"Upgrade to New Sheet\" guide on MPMB's website." }
-		};
-		app.alert(alert);
-		if (alert.oCheckbox.bAfterValue) contactMPMB("upgrade to new sheet");
-	}
 	return true;
 }
 

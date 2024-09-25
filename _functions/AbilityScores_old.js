@@ -94,13 +94,13 @@ function AbilityScores_Button() {
 			dialog.load({
 				"img1" : allIcons.scores,
 				"oNm0" : "Current Score",
-				"oStr" : ASround(What("Str")),
-				"oDex" : ASround(What("Dex")),
-				"oCon" : ASround(What("Con")),
-				"oInt" : ASround(What("Int")),
-				"oWis" : ASround(What("Wis")),
-				"oCha" : ASround(What("Cha")),
-				"oHoS" : ASround(What("HoS")),
+				"oStr" : ASround(wasm_character.get_ability("Str")),
+				"oDex" : ASround(wasm_character.get_ability("Dex")),
+				"oCon" : ASround(wasm_character.get_ability("Con")),
+				"oInt" : ASround(wasm_character.get_ability("Int")),
+				"oWis" : ASround(wasm_character.get_ability("Wis")),
+				"oCha" : ASround(wasm_character.get_ability("Cha")),
+				"oHoS" : ASround(wasm_character.get_ability("HoS")),
 				"aNm0" : "Ability Name",
 				"aHoS" : popupHoS,
 				"bNm0" : "Score Base",
@@ -1365,8 +1365,7 @@ function AbilityScores_Button() {
 			//set the value of the display field
 			var resultScore = AbilityScores_Dialog["total" + AbiI];
 			resultScore = isNaN(resultScore) || resultScore < 1 ? "" : resultScore;
-			Value(AbiI, resultScore);
-			Value(AbiI + " Mod", Math.round((Number(resultScore) - 10.5) * 0.5));
+			wasm_character.set_ability(AbiI, resultScore);
 		}
 
 		//if Con changed, edit the HPTooltip

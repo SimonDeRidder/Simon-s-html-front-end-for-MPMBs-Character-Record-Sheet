@@ -35,7 +35,7 @@ async function processStats(AddRemove, inType, NameEntity, inScoresA, dialogTxt,
 				- if the score is now 20 or more, add 2 and set the max to 22 (no change)
 			Save this addition to an object and use that object to remove the addition when the time comes.
 			*/
-			var iCurScore = Number(What(AbilityScores.abbreviations[s]));
+			var iCurScore = wasm_character.get_ability(AbilityScores.abbreviations[s]);
 			if (iCurScore + scoresA[s] < alsoHasMax[s]) {
 				alsoHasMax[s] = iCurScore + scoresA[s] > 20 ? iCurScore + scoresA[s] : 0;
 				saveMaximumsLimited = "save";
@@ -484,6 +484,13 @@ async function AbilityScores_Button(onlySetTooltip) {
 				CurrentUpdates.types.push("attacks");
 				// Recalculate wild shapes, if the mental stats changed
 				if (statChange.mental) WildshapeRecalc();
+				// Redo which Ability Save DCs are visible, if any class has an alt
+				for (var sClass in CurrentClasses) {
+					if (CurrentClasses[sClass].abilitySaveAlt) {
+						SetTheAbilitySaveDCs();
+						break;
+					}
+				}
 				thermoM(thermoTxt, true); // Stop progress bar
 			},
 

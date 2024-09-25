@@ -2337,7 +2337,7 @@ MagicItemsList["infused weapon"] = {
 				if (!v.theWea.isMagicWeapon && !v.isSpell && /\binfused\b/i.test(v.WeaponTextName)) {
 					v.theWea.isMagicWeapon = true;
 					fields.Proficiency = true;
-					if (Number(What(AbilityScores.abbreviations[fields.Mod - 1] + ' Mod')) < Number(What("Int Mod"))) fields.Mod = 4;
+					if (wasm_character.get_ability_modifier(AbilityScores.abbreviations[fields.Mod - 1]) < wasm_character.get_ability_modifier("Int")) fields.Mod = 4;
 					switch(fields.Damage_Die) {
 						case "1d4":
 							fields.Damage_Die = "1d6";
@@ -2728,7 +2728,7 @@ KCCCglobal.upgrades.potionsmith = [
 			atkAdd : [
 				function (fields, v) {
 					if ((/^(?=.*infused)(?=.*potion).*$/i).test(v.WeaponTextName) || v.theWea.KCCC_instantReaction) {
-						if (What('Int Mod') > What(AbilityScores.abbreviations[fields.Mod - 1] + ' Mod')) {
+						if (wasm_character.get_ability_modifier('Int') > wasm_character.get_ability_modifier(AbilityScores.abbreviations[fields.Mod - 1])) {
 							fields.Mod = 4;
 						}
 					}
@@ -6253,7 +6253,7 @@ var KCCC_cursesmith = AddSubClass("inventor", "cursesmith", {
 				calcChanges : {
 					atkAdd : [
 						function (fields, v) {
-							if (v.forbiddenWeapon && (fields.Mod === 1 || fields.Mod === 2) && What('Int Mod') > What(AbilityScores.abbreviations[fields.Mod - 1] + ' Mod')) { // MPMB: edited to adhere to the v13.1.9 changes
+							if (v.forbiddenWeapon && (fields.Mod === 1 || fields.Mod === 2) && wasm_character.get_ability_modifier('Int') > wasm_character.get_ability_modifier(AbilityScores.abbreviations[fields.Mod - 1])) { // MPMB: edited to adhere to the v13.1.9 changes
 								fields.Mod = 4;
 							}
 						},

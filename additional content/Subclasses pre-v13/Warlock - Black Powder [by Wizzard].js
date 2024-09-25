@@ -58,7 +58,7 @@ AddSubClass("warlock", "black powder", {
 			minlevel : 1,
 			description : "\n   " + "I gain proficiency with a martial weapon/firearm of my choice, my signature weapon" + "\n   " + "While wielding this weapon and nothing else, I may use Cha for to hit and damage rolls" + "\n   " + "My signature weapon may be used with the Blade of the Pact class feature" + "\n   " + "My signature weapon counts as magical for the purpose of overcoming resistances" + "\n   " + "I may use my signature weapon as a spellcasting focus",
 			calcChanges : {
-				atkAdd : ["if ((/signature/i).test(WeaponText) && What(AbilityScores.abbreviations[fields.Mod - 1] + ' Mod') < What('Cha Mod')) {fields.Mod = 6; }; ", "If a weapon has the word 'signature' in its name or description field, it will use the Charisma modifier for to hit and damage if better than its normal ability modifier."]
+				atkAdd : ["if ((/signature/i).test(WeaponText) && wasm_character.get_ability_modifier(AbilityScores.abbreviations[fields.Mod - 1]) < wasm_character.get_ability_modifier('Cha')) {fields.Mod = 6; }; ", "If a weapon has the word 'signature' in its name or description field, it will use the Charisma modifier for to hit and damage if better than its normal ability modifier."]
 			}
 		},
 		"subclassfeature6" : {
@@ -125,12 +125,12 @@ AddSubClass("warlock", "black powder", {
 			usages : 1,
 			additional : ["", "", "", "", "", "", "", "", "", "", "", "", "", "as 7th-level spell", "as 8th-level spell", "as 8th-level spell", "as 9th-level spell", "as 9th-level spell", "as 9th-level spell", "as 9th-level spell"],
 			recovery : "long rest",
-			action : ["bonus action", ""],
-			spellcastingBonus : {
+			action : [["bonus action", ""]],
+			spellcastingBonus : [{
 				name : "Killing Strike",
 				spells : ["finger of death"],
 				selection : ["finger of death"]
-			}
+			}]
 		}
 	}
 });

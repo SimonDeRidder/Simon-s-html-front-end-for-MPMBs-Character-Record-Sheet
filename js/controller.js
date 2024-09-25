@@ -190,9 +190,7 @@ async function loadAll() {
 		.then(script => loadScript('_variables/ListsSpells.js'))
 		.then(script => makeSaveLoadButtons())
 		.then(script => setSheetVersion())
-		.then(script => loadScript('_functions/Startup.js'))
-		.then(script => loadAdditional("all_WotC_published.js"))
-		.then(script => loadAdditional("Almara.js"));
+		.then(script => loadScript('_functions/Startup.js'));
 }
 
 

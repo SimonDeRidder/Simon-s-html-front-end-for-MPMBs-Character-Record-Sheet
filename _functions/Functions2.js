@@ -2804,33 +2804,42 @@ async function Bookmark_Goto(BookNm) {
 };
 
 // a function to delete a page (and deal with the bug https://acrobat.uservoice.com/forums/590923-acrobat-for-windows-and-mac/suggestions/39561631--bug-report-deleting-a-page-while-the-mini-page-p )
-function deletePage(fldNm, onTemplate) {
+function deletePage(fldNm, onTemplate, ignoreError) {
 	var tempFld = tDoc.getField(fldNm);
-	if (!tempFld) return false;
+	var theReturn = true;
+	if (!tempFld) return theReturn;
 	var tempPage = onTemplate || isArray(tempFld.page) ? Math.max.apply(Math, tempFld.page) : tempFld.page;
 	try {
 		tDoc.deletePages(tempPage);
 	} catch (theError) {
+		theReturn = false;
 		// Because of bug, the fields could be removed, but the page is still there. Test for this
 		// IMPORTANT, the tempFld object will be dead if all fields by its name were removed, so re-initiate it
 		tempFld = tDoc.getField(fldNm);
 		var fldWasRemoved = !tempFld ? true : isArray(tempFld.page) ? false : onTemplate ? tempFld.page != tempPage : false;
 		if (theError.toString().indexOf("One or more pages are in use and could not be deleted") !== -1 && fldWasRemoved) {
-			tDoc.deletePages(tempPage);
-			return true;
+			try {
+				tDoc.deletePages(tempPage);
+				theReturn = true;
+			} catch (error) {
+				var eText = "Error while deleting page. Please contact MPMB and share the following error text:\n Adobe Acrobat version: " + app.viewerVersion + "\n " + error;
+				for (var e in error) eText += "\n " + e + ": " + error[e];
+				console.println(eText);
+				console.show();
+			}
 		}
-		return false;
 	}
-	return true;
+	return theReturn;
 }
 
 // show/hide a template (AddRemove == undefined) or add/remove template with multiple instances (AddRemove == "Add" | "Remove" | "RemoveAll")
 async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 	MakeMobileReady(false); // Undo flatten, if needed
 
+	var pageError = false;
 	//make a function for determining the next page to add the template
-	var whatPage = function(templN) {
-		var DepL = TemplateDep[templN];
+	var whatPage = function(templN, prefix) {
+		var DepL = prefix ? [templN] : TemplateDep[templN];
 		for (var T = 0; T < DepL.length; T++) {
 			var theDep = DepL[T];
 			var multiDep = TemplatesWithExtras.indexOf(theDep) !== -1;
@@ -2840,7 +2849,7 @@ async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 					return Math.max.apply(Math, pageNum) + 1;
 				};
 			} else {
-				var depVisible = isTemplVis(theDep, "last");
+				var depVisible = prefix ? [true, prefix] : isTemplVis(theDep, "last");
 				if (depVisible) {
 					var pageNum = tDoc.getField(depVisible[1] + BookMarkList[theDep]).page;
 					if (isArray(pageNum) && pageNum[0] === -1) {
@@ -2857,6 +2866,7 @@ async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 						};
 						app.alert(alert);
 						if (alert.oCheckbox.bAfterValue) contactMPMB("upgrade to new sheet");
+						pageError = true;
 					}
 					return pageNum + 1;
 				}
@@ -2934,8 +2944,9 @@ async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 			var newTemplList = What("Template.extras." + tempNm).split(",");
 			var removeWhich = (/removeall/i).test(AddRemove) ? "all" : removePrefix ? tempExtras.indexOf(removePrefix) : "last";
 			tempExtras = isNaN(removeWhich) ? tempExtras.splice(removeWhich === "all" ? 1 : -1) : tempExtras.splice(removeWhich, 1);
-			var pageNr = tempExtras.length > 1 ? false : tDoc.getField(tempExtras[0] + BookMarkList[tempNm]).page + 1;
-			var removeTxt = (removeWhich === "all" ? "all " : "") + TemplateNames[tempNm] + (removeWhich === "all" ? "s that are currently in this document" : " (page "+pageNr+")");
+			var removeTxt = (removeWhich === "all" ? "all " : "") +
+				TemplateNames[tempNm] +
+				(removeWhich === "all" ? "s that are currently in this document" : " (page " + whatPage(tempNm, tempExtras[0]) + ")");
 
 			var doGoOn = {
 				cTitle: "Continue with deleting page(s)?",
@@ -2960,7 +2971,7 @@ async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
 					var tempFld = tempExtras[i] + BookMarkList[tempNm];
 					thermoM((i + 1) / tempExtras.length); // Increment the progress bar
 					// delete the page, but beware of bug
-					if (deletePage(tempFld, false) == false) continue;
+					if (deletePage(tempFld, false, pageError) == false) continue;
 					// remove the deleted entry from the newTemplList
 					newTemplList.splice(newTemplList.indexOf(tempExtras[i]), 1);
 				};
@@ -5298,10 +5309,7 @@ function contactMPMB(medium) {
 			app.launchURL("https://www.flapkan.com/how-to/add-more-content", true);
 			break;
 		case "community content" :
-			app.launchURL("https://www.flapkan.com/mpmb/fanforum", true);
-			break;
-		case "mpmb content" :
-			app.launchURL("https://www.flapkan.com/mpmb/extracontent", true);
+			app.launchURL("https://www.flapkan.com/mpmb/index", true);
 			break;
 		case "character sheet" :
 		case "latest version" :
@@ -5564,11 +5572,13 @@ function StringEvals(aType) {
 
 // test if the main character is proficient with a weapon (return true) or not (return false)
 function isProficientWithWeapon(WeaponName, theWea) {
-	if (theWea.isAlwaysProf || (/natural|spell|cantrip|alwaysprof/i).test(theWea.type)) {
+	if (theWea.isAlwaysProf || /natural|spell|cantrip|alwaysprof/i.test(theWea.type)) {
 		return true; // No need to check further for natural weapons, spells, and 'alwaysprof'
+	} else if (theWea.isAlwaysProf === false) {
+		return false; // Always not proficient
 	} else if ((theWea.type.toLowerCase() == "simple" && tDoc.getField("Proficiency Weapon Simple").isBoxChecked(0)) || (theWea.type.toLowerCase() == "martial" && tDoc.getField("Proficiency Weapon Martial").isBoxChecked(0))) {
 		return true; // Proficient with the relevant type (simple/martial)
-	} else if (CurrentProfs.weapon.otherWea && RegExp(";(" + (CurrentProfs.weapon.otherWea.finalProfs.join("s?|")  + "s?").replace(/ss\?(\||$)/g, "s?$1") + ");", "i").test(";" + [WeaponName, theWea.type].concat(theWea.list ? [theWea.list] : []).concat(theWea.baseWeapon ? [theWea.baseWeapon] : []).join(";") + ";")) {
+	} else if (CurrentProfs.weapon.otherWea && RegExp(";(" + (CurrentProfs.weapon.otherWea.finalProfs.join("s?|")  + "s?").replace(/ss\?(\||$)/g, "s?$1") + ");", "i").test(";" + [WeaponName, theWea.type].concat(theWea.list ? [theWea.list] : []).concat(theWea.baseWeapon ? [theWea.baseWeapon] : []).concat(theWea.nameAlt ? theWea.nameAlt : []).join(";") + ";")) {
 		return true; // Proficient with the weapon through an 'other weapons' proficiency
 	}
 	return false;
@@ -5684,48 +5694,82 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 		fields.Damage_Bonus = isReCalc ? What(fldBaseBT + "Damage Bonus") :
 			theWea.modifiers && theWea.modifiers[1] ? theWea.modifiers[1] : 0;
 
-		//add mod
+		// Select the ability score
 		var StrDex = What(QI ? "Str" : prefix + "Comp.Use.Ability.Str.Score") < What(QI ? "Dex" : prefix + "Comp.Use.Ability.Dex.Score") ? 2 : 1;
 		var weaponMod = /finesse/i.test(theWea.description) ? StrDex : theWea.ability;
-		//change mod if this is concerning a spell/cantrip
+
+		// Change the selected ability to that of a spellcaster, if so defined
+		var useSpellModRem = theWea.useSpellMod && CurrentSpells[theWea.useSpellMod] ? theWea.useSpellMod : undefined;
 		var forceUseSpellcastingMod = theWea.useSpellcastingAbility === undefined ? false : theWea.useSpellcastingAbility ? "y" : "n";
-		if ((thisWeapon[3] || forceUseSpellcastingMod == "y") && forceUseSpellcastingMod != "n") {
+		var isDC = /dc/i.test(fields.To_Hit_Bonus);
+		var getCasterSpellAbi = function(sCast, iCurrentAbi, iToBeat) {
+			var oCast = CurrentSpells[sCast];
+			if (!oCast) return iToBeat === undefined ? iCurrentAbi : false;
+			if (!oCast.abilityToUse) oCast.abilityToUse = getSpellcastingAbility(sCast);
+			var iCastAbi = oCast.abilityToUse[0];
+			if (iToBeat === undefined) {
+				return iCastAbi;
+			} else {
+				// Get the DC / Spell attack for the caster to compare, unless it hasn't been calculated or this is not a recognized spell, then just get the ability score
+				var iScore = thisWeapon[4].length && oCast.calcSpellScores ? oCast.calcSpellScores[isDC ? "dc" : "attack"] : getAbiModValue(iCastAbi, false, false, true) - 10; // prefer the calculated value, so -10 for scores
+				return iScore > iToBeat ? { ability : iCastAbi, iToBeat : iScore } : false;
+			}
+		}
+		if (useSpellModRem) {
+			// If the weapon has `useSpellMod`, set the ability to the matching spellcaster
+			weaponMod = getCasterSpellAbi(useSpellModRem, weaponMod);
+		} else if (QI && (thisWeapon[3] || forceUseSpellcastingMod === "y") && forceUseSpellcastingMod !== "n") {
+	// TESTING - new way
+			// Get an array of all the caster classes that can cast the spell (or just all cast classes for non-recognized spells)
+			var aCasters = thisWeapon[4].length ? thisWeapon[4] : Object.keys(CurrentSpells);
+			// Loop through these and get the ability of the caster with the highest bonus
+			var iToBeat = 0;
+			for (var i = 0; i < aCasters.length; i++) {
+				var oTest = getCasterSpellAbi(aCasters[i], weaponMod, iToBeat);
+				if (oTest) {
+					weaponMod = oTest.ability;
+					iToBeat = oTest.iToBeat;
+				}
+			}
+/* TESTING - old way below
+			//change mod if this is concerning a spell/cantrip
 			if (thisWeapon[4].length) {
-				var abiArr = thisWeapon[4].map( function(sClass) {
-					return CurrentSpells[sClass] && CurrentSpells[sClass].ability && !isNaN(CurrentSpells[sClass].ability) ? CurrentSpells[sClass].ability : 0;
+				var abiArr = thisWeapon[4].map( function(sCast) {
+					return getCasterSpellAbi(sCast);
 				});
 			} else {
 				// the spell is not known by any class, so just gather the ability scores from all spellcasting entries so we can select the highest
 				var abiArr = [];
-				for (var aCast in CurrentSpells) {
-					if (!isNaN(CurrentSpells[aCast].ability)) abiArr.push(CurrentSpells[aCast].ability);
+				for (var sCast in CurrentSpells) {
+					abiArr.push(getCasterSpellAbi(sCast));
 				}
 			}
 			var abiDone = [];
 			var abiModArr = [];
 			for (var i = 0; i < abiArr.length; i++) {
-				if (!abiArr[i] || abiDone.indexOf(abiArr[i]) !== -1) continue;
+				if (abiDone.indexOf(abiArr[i]) !== -1) continue;
 				abiDone.push(abiArr[i]);
-				var thisMod = What(AbilityScores.abbreviations[abiArr[i] - 1]);
-				if (thisMod > Math.max.apply(Math, abiModArr)) weaponMod = abiArr[i];
+				var thisMod = !abiArr[i] ? 0 : Number(What(AbilityScores.abbreviations[abiArr[i] - 1]));
+				if (thisMod >= Math.max.apply(Math, abiModArr)) weaponMod = abiArr[i];
 				abiModArr.push(thisMod);
 			}
+*/
 		}
 		fields.Mod = weaponMod;
 
-		if (theWea.ammo) fields.Ammo = theWea.ammo; //add ammo
+		//add ammo
+		if (theWea.ammo) fields.Ammo = theWea.ammo;
 
 		//now run the code that was added by class/race/feat
 		if (QI && CurrentEvals.atkAdd) {
 
 			// define some variables that we can check against later or with the CurrentEvals
 			var WeaponText = inputText + " " + fields.Description;
-			var isDC = (/dc/i).test(fields.To_Hit_Bonus);
-			var isSpell = thisWeapon[3] || (theWea && (/cantrip|spell/i).test(theWea.type)) || (!theWea && (/\b(cantrip|spell)\b/i).test(WeaponText)) ? true : false;
-			var isWeapon = theWea && theWea.isNotWeapon ? false : !isSpell || (isSpell && theWea && !(/cantrip|spell/i).test(theWea.type));
-			var isMeleeWeapon = isWeapon && (/melee/i).test(fields.Range);
-			var isRangedWeapon = isWeapon && (/^(?!.*melee).*\d+.*$/i).test(fields.Range);
-			var isNaturalWeapon = isWeapon && theWea && (/natural/i).test(theWea.type);
+			var isSpell = thisWeapon[3] || (theWea && /cantrip|spell/i.test(theWea.type)) || (!theWea && /\b(cantrip|spell)\b/i.test(WeaponText)) ? true : false;
+			var isWeapon = theWea && theWea.isNotWeapon ? false : !isSpell || (isSpell && theWea && !/cantrip|spell/i.test(theWea.type));
+			var isMeleeWeapon = isWeapon && /melee/i.test(fields.Range);
+			var isRangedWeapon = isWeapon && /^(?!.*melee).*\d+.*$/i.test(fields.Range);
+			var isNaturalWeapon = isWeapon && theWea && /natural/i.test(theWea.type);
 			var isThrownWeapon = isWeapon && /\bthrown\b/i.test(fields.Description) && /\d ?(ft|m)\.?($|[^)])/i.test(fields.Range);
 
 			var gatherVars = {
@@ -5765,7 +5809,13 @@ function ApplyWeapon(inputText, fldName, isReCalc, onlyProf, forceRedo) {
 					i--;
 				}
 			}
+
+			// if the `useSpellMod` was changed, change the ability to match unless something already changed the ability to select
+			if (useSpellModRem !== theWea.useSpellMod && CurrentSpells[theWea.useSpellMod] && fields.Mod === weaponMod) {
+				fields.Mod = getCasterSpellAbi(theWea.useSpellMod, fields.Mod);
+			}
 		};
+
 		// if this is a field recalculation and no custom eval changed specific parts, just use the one from the field so that manual changes are preserved
 		if (isReCalc && !forceRedo) {
 			if (fields.Description === theWea.description) {
@@ -5862,16 +5912,17 @@ function CalcAttackDmgHit(fldName) {
 	var WeaponName = thisWeapon[0];
 	var aWea = QI || isNaN(parseFloat(WeaponName)) ? WeaponsList[WeaponName] : !QI && !isNaN(parseFloat(WeaponName)) && CurrentCompRace[prefix] && CurrentCompRace[prefix].attacks ? CurrentCompRace[prefix].attacks[WeaponName] : false;
 	var WeaponTextName = QI ? CurrentWeapons.field[ArrayNmbr] : CurrentWeapons.compField[prefix][ArrayNmbr];
-	var WeaponText = WeaponText + (fields.Description ? " " + fields.Description : "");
+	var WeaponText = WeaponTextName + " " + fields.Description;
 	var theWea = {};
 	if (aWea && aWea.baseWeapon && WeaponsList[aWea.baseWeapon]) {
 		for (var attr in WeaponsList[aWea.baseWeapon]) theWea[attr] = WeaponsList[aWea.baseWeapon][attr];
 	}
 	if (aWea) for (var attr in aWea) theWea[attr] = aWea[attr];
-	var fixedCaster = theWea.useSpellMod && CurrentSpells[theWea.useSpellMod] ? CurrentSpells[theWea.useSpellMod] : false;
-	var aWeaNoAbi = theWea.ability === 0 || (fixedCaster && fixedCaster.fixedDC && fixedCaster.abilityToUse && !fixedCaster.abilityToUse[0]);
+	var oFixedCaster = theWea.useSpellMod && CurrentSpells[theWea.useSpellMod] ? CurrentSpells[theWea.useSpellMod] : false;
+	if (oFixedCaster && !oFixedCaster.abilityToUse) oFixedCaster.abilityToUse = getSpellcastingAbility(theWea.useSpellMod); // make sure this exists
+	var aWeaNoAbi = theWea.ability === 0 || (oFixedCaster && (oFixedCaster.fixedDC || oFixedCaster.fixedSpAttack !== undefined) && oFixedCaster.abilityToUse[0] === 0);
 
-	if (!WeaponTextName || ((/^(| |empty)$/).test(fields.Mod) && !aWeaNoAbi)) {
+	if (!WeaponTextName || (/^(| |empty)$/.test(fields.Mod) && !aWeaNoAbi)) {
 		Value(fldBase + "Damage", "");
 		Value(fldBase + "To Hit", "");
 		if (QI) CurrentWeapons.offHands[ArrayNmbr] = false;
@@ -5880,7 +5931,7 @@ function CalcAttackDmgHit(fldName) {
 
 	// get the damage bonuses from the selected modifier, magic, and the blueText field
 	var output = {
-		prof : !fields.Proficiency ? 0 : (QI ? (tDoc.getField("Proficiency Bonus Dice").isBoxChecked(0) ? 0 : Number(How("Proficiency Bonus"))) : (tDoc.getField(prefix + "BlueText.Comp.Use.Proficiency Bonus Dice").isBoxChecked(0) ? 0 : What(prefix + "Comp.Use.Proficiency Bonus"))),
+		prof : !fields.Proficiency ? 0 : getProfBonus(false, prefix),
 		die : fields.Damage_Die,
 		modToDmg : thisWeapon[2],
 		mod : getAbiModValue(fields.Mod, prefix),
@@ -5892,14 +5943,16 @@ function CalcAttackDmgHit(fldName) {
 	};
 
 	// define some variables that we can check against later or with the CurrentEvals
-	var isDC = (/dc/i).test(fields.To_Hit_Bonus), spTypeShort = isDC ? "dc" : "atk", spTypeFull = isDC ? "dc" : "attack";
+	var isDC = /dc/i.test(fields.To_Hit_Bonus);
+	var spType = isDC ? "dc" : "attack", spTypeShort = isDC ? "dc" : "atk";
+	var notUseSpellcastingAbility = theWea && theWea.useSpellcastingAbility === false;
 
 	// Gather some information on the weapon
-	var isSpell = thisWeapon[3] || (theWea && (/cantrip|spell/i).test(theWea.type)) || (!theWea && (/\b(cantrip|spell)\b/i).test(WeaponText)) ? true : false;
-	var isWeapon = theWea && theWea.isNotWeapon ? false : !isSpell || (isSpell && theWea && !(/cantrip|spell/i).test(theWea.type));
-	var isMeleeWeapon = isWeapon && (/melee/i).test(fields.Range);
-	var isRangedWeapon = isWeapon && (/^(?!.*melee).*\d+.*$/i).test(fields.Range);
-	var isNaturalWeapon = isWeapon && theWea && (/natural/i).test(theWea.type);
+	var isSpell = thisWeapon[3] || (theWea && /cantrip|spell/i.test(theWea.type)) || (!theWea && /\b(cantrip|spell)\b/i.test(WeaponText)) ? true : false;
+	var isWeapon = theWea && theWea.isNotWeapon ? false : !isSpell || (isSpell && theWea && !/cantrip|spell/i.test(theWea.type));
+	var isMeleeWeapon = isWeapon && /melee/i.test(fields.Range);
+	var isRangedWeapon = isWeapon && /^(?!.*melee).*\d+.*$/i.test(fields.Range);
+	var isNaturalWeapon = isWeapon && theWea && /natural/i.test(theWea.type);
 	var isThrownWeapon = isWeapon && /\bthrown\b/i.test(fields.Description) && /\d ?(ft|m)\.?($|[^)])/i.test(fields.Range);
 
 	// see if this is a off-hand attack and the modToDmg shouldn't be use
@@ -5952,71 +6005,86 @@ function CalcAttackDmgHit(fldName) {
 		}
 
 		// The useSpellMod might've been changed
-		fixedCaster = theWea.useSpellMod && CurrentSpells[theWea.useSpellMod] ? CurrentSpells[theWea.useSpellMod] : false;
+		oFixedCaster = theWea.useSpellMod && CurrentSpells[theWea.useSpellMod] ? CurrentSpells[theWea.useSpellMod] : false;
 	};
 
-	// Add the BlueText field value of the corresponding spellcasting class
-	var spCaster = false;
-	var abiScoreNo = tDoc.getField(fldBase + "Mod").currentValueIndices;
-	if (fixedCaster) {
-		spCaster = [theWea.useSpellMod];
-		if (fixedCaster.blueTxt && fixedCaster.blueTxt[spTypeShort]) {
-			// Add the modifier bonus field for the specific caster
-			output.extraHit += EvalBonus(fixedCaster.blueTxt[spTypeShort], true);
-		}
-		if (fixedCaster && fixedCaster.abilityToUse && fixedCaster.abilityToUse[0] != abiScoreNo) {
-			// Set the ability modifier to use the modifier of the ability score
-			abiScoreNo = fixedCaster.abilityToUse[0];
-			tDoc.getField(fldBase + "Mod").currentValueIndices = abiScoreNo;
-		}
-		if (!abiScoreNo) output.mod = 0; // if ability is 0, set the modifier to 0 as well
-		if (!abiScoreNo && fixedCaster.fixedDC) {
-			// If fixedDC, we need to replace the ability modifier and proficiency bonus with the fixed value
-			// abilityToUse[0] / abiScoreNo is going to be 0, so we will only have to change the Prof
-			output.prof = fixedCaster.fixedDC - 8;
+	// If this is a spell (or weapon with useSpellMod), determine which spellcasting bonus to use
+	var aCasters = [], spType = isDC ? "dc" : "attack";
+	if (oFixedCaster) {
+		// Weapon has a fixed affeliated spellcasting class that exists
+		aCasters.push(theWea.useSpellMod);
+		// If this uses a different ability score, fix the field and output to match
+		if (oFixedCaster.abilityToUse[0] !== fields.Mod) {
+			fields.Mod = oFixedCaster.abilityToUse[0];
+			tDoc.getField(fldBase + "Mod").currentValueIndices = fields.Mod;
+			output.mod = getAbiModValue(fields.Mod); // of the main character
 		} else if (!QI) {
 			// If on the companion page, use the ability modifier and proficiency bonus from the main character
-			if (abiScoreNo) output.mod = Number( What( ["", "Str", "Dex", "Con", "Int", "Wis", "Cha", "HoS"][abiScoreNo] + " Mod" ) );
-			output.prof = tDoc.getField("Proficiency Bonus Dice").isBoxChecked(0) ? 0 : Number(How("Proficiency Bonus"));
+			output.mod = getAbiModValue(fields.Mod);
 		}
-	} else if (QI && thisWeapon[3] && thisWeapon[4].length) {
-		var abiBonArr = thisWeapon[4].map( function(sClass) {
-			var ExtraBonus = CurrentSpells[sClass] && CurrentSpells[sClass].abilityToUse && CurrentSpells[sClass].abilityToUse[0] == abiScoreNo && CurrentSpells[sClass].blueTxt && CurrentSpells[sClass].blueTxt[spTypeShort] ? CurrentSpells[sClass].blueTxt[spTypeShort] : 0;
-			return EvalBonus(ExtraBonus, true);
-		});
-		var highestBon = Math.max.apply(Math, abiBonArr);
-		if (highestBon) {
-			spCaster = [];
-			for (var i = 0; i < abiBonArr.length; i++) {
-				if (abiBonArr[i] == highestBon) spCaster.push(thisWeapon[4][i]);
+		// Always considered proficient and using the main character's proficiency bonus
+		output.prof = getProfBonus();
+	} else if (QI && thisWeapon[3] && thisWeapon[4].length && !notUseSpellcastingAbility) {
+		// Weapon is recognized as a cantrip/spell that the character can cast, loop over all found matches and keep only those with the same spellcasting ability
+		for (var i = 0; i < thisWeapon[4].length; i++) {
+			var sCast = thisWeapon[4][i];
+			var oCast = CurrentSpells[sCast];
+			if (!oCast) continue;
+			if (!oCast.abilityToUse) oCast.abilityToUse = getSpellcastingAbility(sCast);
+			if ( (oCast.abilityToUse[0] === fields.Mod) ||
+				 (oCast.abilityToUse[0] === 0 && (oCast.fixedDC || oCast.fixedSpAttack !== undefined)) ) {
+				aCasters.push(sCast);
 			}
-			output.extraHit += highestBon;
 		}
-	};
-	// Now the spellCalc custom functions
-	if ( CurrentEvals.spellCalc && (!theWea || theWea.useSpellcastingAbility !== false) &&
-		( (fixedCaster && !fixedCaster.fixedDC) || (QI && isSpell && !fixedCaster) )
-	) {
-		// get the variables we need to pass to the function
-		var spCasters = spCaster ? spCaster : !thisWeapon[4].length ? [] : thisWeapon[4].map( function(sClass) {
-			return CurrentSpells[sClass] && CurrentSpells[sClass].ability == abiScoreNo ? sClass : "";
-		});
-
-		for (var i = 0; i < CurrentEvals.spellCalcOrder.length; i++) {
-			var evalName = CurrentEvals.spellCalcOrder[i][1];
-			var evalThing = CurrentEvals.spellCalc[evalName];
-			if (!evalThing || typeof evalThing !== 'function') continue;
-			try {
-				var addSpellNo = evalThing(spTypeFull, spCasters, abiScoreNo, thisWeapon[3]);
-				if (!isNaN(addSpellNo)) output.extraHit += Number(addSpellNo);
-			} catch (error) {
-				var eText = "The custom spell attack/DC (spellCalc) script '" + evalName + "' produced an error! It will be removed from the sheet for now, but please contact the author of the feature to have this issue corrected:\n " + error;
-				for (var e in error) eText += "\n " + e + ": " + error[e];
-				console.println(eText);
-				console.show();
-				delete CurrentEvals.spellCalc[evalName];
-				CurrentEvals.spellCalcOrder.splice(i, 1);
-				i--;
+	}
+	// If this is a spell, but not one with a recognized caster, make sure the array has an entry so we do process CurrentEvals.spellCalc
+	if (!aCasters.length && QI && isSpell && !notUseSpellcastingAbility) {
+		aCasters.push("Pl@c3h0ld3r");
+	}
+	// Now loop over the caster options, if any, to see which produces the highest total
+	if (aCasters.length) {
+		var oCasterRef = { highestTotal : false, currentHighest : "" };
+		for (var i = 0; i < aCasters.length; i++) {
+			var sCast = aCasters[i];
+			var oCast = CurrentSpells[sCast];
+			oCasterRef[sCast] = {
+				// If a fixed total DC or spell attack
+				bFixed : oCast && oCast.abilityToUse[0] === 0 && (oCast.fixedDC || oCast.fixedSpAttack !== undefined),
+				// Get bluetext modifiers from the spell sheets
+				blueTxt : oCast && oCast.blueTxt && oCast.blueTxt[spTypeShort] ? EvalBonus(oCast.blueTxt[spTypeShort], true) : 0,
+				spellCalc : 0, total : 0
+			};
+			// Get spellCalc bonus, if appropriate
+			if (!oCasterRef[sCast].bFixed && CurrentEvals.spellCalc) {
+				var sCaster = oCast ? sCast : false;
+				oCasterRef[sCast].spellCalc += runSpellCalc(spType, sCaster, fields.Mod, thisWeapon[3]);
+			}
+			// Set the total
+			if (oCasterRef[sCast].bFixed) {
+				var fixedDC = !isNaN(oCast.fixedDC) ? Number(oCast.fixedDC) - 8 : 0;
+				var fixedSpAttack = !isNaN(oCast.fixedSpAttack) ? Number(oCast.fixedSpAttack) : 0;
+				if (isDC) {
+					oCasterRef[sCast].prof = fixedDC ? fixedDC : fixedSpAttack;
+				} else {
+					oCasterRef[sCast].prof = fixedSpAttack ? fixedSpAttack : fixedDC;
+				}
+				oCasterRef[sCast].total = oCasterRef[sCast].blueTxt + oCasterRef[sCast].prof;
+			} else {
+				oCasterRef[sCast].total = oCasterRef[sCast].blueTxt + output.prof + output.mod + oCasterRef[sCast].spellCalc;
+			}
+			if (oCasterRef.highestTotal === false || oCasterRef[sCast].total > oCasterRef.highestTotal) {
+				oCasterRef.highestTotal = oCasterRef[sCast].total;
+				oCasterRef.currentHighest = sCast;
+			}
+		}
+		// Now we know which one gives the highest bonus, so apply those bonuses
+		if (oCasterRef.currentHighest) {
+			var oCastRef = oCasterRef[oCasterRef.currentHighest];
+			output.extraHit += oCastRef.blueTxt;
+			if (oCastRef.bFixed) {
+				output.prof = oCastRef.prof;
+			} else {
+				output.extraHit += oCastRef.spellCalc;
 			}
 		}
 	}
@@ -6028,8 +6096,8 @@ function CalcAttackDmgHit(fldName) {
 	var addNum = function(inP, DmgHit) {
 		inP = Number(inP);
 		if (isNaN(inP)) inP = 0;
-		if (!DmgHit || (/dmg/i).test(DmgHit)) dmgNum += inP;
-		if (!DmgHit || (/hit/i).test(DmgHit)) hitNum += inP;
+		if (!DmgHit || /dmg/i.test(DmgHit)) dmgNum += inP;
+		if (!DmgHit || /hit/i.test(DmgHit)) hitNum += inP;
 	};
 
 	// no longer consider it a DC if Players Make All Rolls is enabled
@@ -6079,7 +6147,7 @@ function CalcAttackDmgHit(fldName) {
 
 	// Set the values to the sheet
 	Value(fldBase + "Damage", dmgTot == 0 ? "" : dmgTot);
-	if (fldName && (/.*Attack.*To Hit/).test(fldName)) {
+	if (fldName && /.*Attack.*To Hit/.test(fldName)) {
 		return fields.Range === "With melee wea" ? "" : hitTot;
 	} else {
 		Value(fldBase + "To Hit", fields.Range === "With melee wea" ? "" : hitTot);
@@ -6206,16 +6274,17 @@ function FunctionIsNotAvailable() {
 // this can be based on index number Str = 1, Dex = 2, etc.
 // or on the abbreviation string "Str", "Dex", etc.
 // wildshapeNo is the index of the monser on wild shape page, starting with 1
-function getAbiModValue(ability, prefix, wildshapeNo) {
+function getAbiModValue(ability, prefix, wildshapeNo, bReturnScore) {
 	var mod = 0;
 	var abi = !isNaN(ability) && ability > 0 && ability <= AbilityScores.abbreviations.length ?  AbilityScores.abbreviations[ability - 1] : AbilityScores.abbreviations.indexOf(ability) !== -1 ? ability : "error";
 	if (abi === "error") return mod;
+	var suffix = bReturnScore ? (prefix ? ".Score" : "") : (prefix ? ".Mod" : " Mod");
 	if (!prefix) {
-		mod = Number(What(abi + " Mod"));
+		mod = Number(What(abi + suffix));
 	} else if (wildshapeNo) {
-		mod = Number(What(prefix + "Wildshape." + wildshapeNo + ".Ability." + abi + ".Mod"));
+		mod = Number(What(prefix + "Wildshape." + wildshapeNo + ".Ability." + abi + suffix));
 	} else {
-		mod = Number(What(prefix + "Comp.Use.Ability." + abi + ".Mod"));
+		mod = Number(What(prefix + "Comp.Use.Ability." + abi + suffix));
 	}
 	return mod;
 }
@@ -7248,7 +7317,7 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 				if (AddRemove) { // add
 					if (!set.toolSkill) {
 						set.toolSkill = [theTooTxt];
-					} else if (set.toolSkill.indexOf(ProfSrc) === -1) {
+					} else if (set.toolSkill.indexOf(theTooTxt) === -1) {
 						set.toolSkill.push(theTooTxt);
 					};
 				} else if (!set[ProfObjLC] && set.toolSkill && set.toolSkill.indexOf(theTooTxt) !== -1) { // remove
@@ -7256,12 +7325,14 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 					if (set.toolSkill.length === 0) delete set.toolSkill;
 				};
 				// now update the skill proficiency entry
-				var curToolTxt = What("Too Text");
-				if (theTooTxt.toLowerCase().indexOf(curToolTxt.toLowerCase()) !== -1 && set.toolSkill && set.toolSkill.indexOf(curToolTxt) === -1) {
+				var toolField = tDoc.getField("Too Text");
+				var toolFieldDefault = toolField.defaultValue == toolField.value;
+				var curToolTxt = toolField.value.toLowerCase();
+				if (set.toolSkill && (toolFieldDefault || set.toolSkill.indexOf(curToolTxt) === -1)) {
 					Value("Too Text", set.toolSkill[0]);
 					Checkbox("Too Prof", true);
 					Checkbox("Too Exp", false);
-				} else if (!set.toolSkill && theTooTxt.toLowerCase().indexOf(curToolTxt.toLowerCase()) !== -1) {
+				} else if (!set.toolSkill && curToolTxt.indexOf(theTooTxt.toLowerCase()) !== -1) {
 					tDoc.resetForm(["Too Text"]);
 					Checkbox("Too Prof", false);
 					Checkbox("Too Exp", false);
@@ -7467,23 +7538,28 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 		var fldEnc = "Speed encumbered";
 		var fldEncdW = What(fldEnc).replace(/\n|\r/g, "").replace(/,/g, ".");
 		var spdTypes = ["walk", "burrow", "climb", "fly", "swim"];
-		//create the set object if it doesn't exist already
+		// Backwards compatibility, when `speed` was still an array
+		if (isArray(ProfObj)) ProfObj = { walk : {spd : parseFloat(ProfObj[0]), enc : parseFloat(ProfObj[1])} };
+		// Create the set object if it doesn't already have any content
 		var setKeys = function() {
-			for (var e in set) {return true;};
+			for (var e in set) { return true; };
 			CurrentProfs.speed = { allModes : {} };
 			for (var i = 0; i < spdTypes.length; i++) CurrentProfs.speed[spdTypes[i]] = {spd : {}, enc : {}};
 			set = CurrentProfs.speed;
-		}();
-		// a function to get the correct value of the speed
+		};
+		setKeys();
+		// A function to get the correct value of the speed
 		var parseSpeed = function(type, inpObj, fullString, replaceWalk, extra) {
 			if (ObjLength(inpObj) || extra) {
-				if (extra < 0) {
-					inpObj.extra = extra;
-				} else if (!isNaN(extra) && extra > 0) {
-					inpObj.extra = "+" + extra;
-					inpObj.extraFixed = "fixed " + extra;
+				if (extra) {
+					if (extra < 0) {
+						inpObj.extra = extra;
+					} else if (!isNaN(extra) && extra > 0) {
+						inpObj.extra = "+" + extra;
+						inpObj.extraFixed = "fixed " + extra;
+					}
 				}
-				var total = getHighestTotal(inpObj, true, replaceWalk, CurrentProfs.speed.allModes, type == "walk" ? false : type, true);
+				var total = getHighestTotal(inpObj, true, replaceWalk, CurrentProfs.speed.allModes, type, true);
 				if (inpObj.extra !== undefined) delete inpObj.extra;
 				if (inpObj.extraFixed !== undefined) delete inpObj.extraFixed;
 			} else {
@@ -7491,24 +7567,31 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 			}
 			return fullString == "both" ? total : fullString ? total[0] : total[1];
 		};
-		// get the totals before we change anything
-		var oldTotals = {
-			walkSpd : parseSpeed("walk", set.walk.spd, false, 0),
-			walkEnc : parseSpeed("walk", set.walk.enc, false, 0)
-		};
-		for (var i = 0; i < spdTypes.length; i++) {
-			var sT = spdTypes[i];
-			if (sT === "walk") continue;
-			oldTotals[sT + "Spd"] = parseSpeed(sT, set[sT].spd, false, oldTotals.walkSpd);
-			oldTotals[sT + "Enc"] = parseSpeed(sT, set[sT].enc, false, oldTotals.walkEnc);
-		};
-		// make an object of all the differences between the values of the field and the oldTotals
-		var deltaSpds = {};
+		// A function to get the totals at the current state
+		var getTotals = function(oDeltaSpds) {
+			if (!oDeltaSpds) oDeltaSpds = {};
+			var oBaseWalk = { 
+				spd : parseSpeed("walk", set.walk.spd, "both", 0, oDeltaSpds.walkSpd),
+				enc : parseSpeed("walk", set.walk.enc, "both", 0, oDeltaSpds.walkEnc)
+			};
+			var oTotals = { walkSpd : oBaseWalk.spd[0], walkEnc : oBaseWalk.enc[0] };
+			for (var i = 0; i < spdTypes.length; i++) {
+				var sT = spdTypes[i];
+				if (sT === "walk") continue;
+				oTotals[sT + "Spd"] = parseSpeed(sT, set[sT].spd, true, oBaseWalk.spd[2], oDeltaSpds[sT + "Spd"]);
+				oTotals[sT + "Enc"] = parseSpeed(sT, set[sT].enc, true, oBaseWalk.enc[2], oDeltaSpds[sT + "Enc"]);
+			};
+			return oTotals;
+		}
+		// Get the current expected totals before we change anything
+		var oldTotals = getTotals();
+		// Get the manual changed by comparing the values of the field and the oldTotals
+		var oDeltaSpds = {};
 		var splitSpdString = function(type, str) {
 			for (var i = 0; i < spdTypes.length; i++) {
 				var sT = spdTypes[i];
 				if (!str) {
-					deltaSpds[sT + type] = 0;
+					oDeltaSpds[sT + type] = 0;
 					continue;
 				};
 				var strParse = oldTotals[sT + type];
@@ -7518,17 +7601,16 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 					if (metric) strParse = RoundTo(strParse / 0.3, 5, false, false);
 				}
 				var total = strParse - oldTotals[sT + type];
-				deltaSpds[sT + type] = isNaN(total) ? 0 : total;
+				oDeltaSpds[sT + type] = isNaN(total) ? 0 : total;
 			}
 		};
 		splitSpdString("Spd", fldSpdW);
 		splitSpdString("Enc", fldEncdW);
-		if (isArray(ProfObj)) ProfObj = { walk : {spd : parseFloat(ProfObj[0]), enc : parseFloat(ProfObj[1])} };
-		// add or remove the ProfObj from the current object
+		// Process the passed `speed` object, ProfObj. Modify CurrentProfs.speed with it
 		for (var spdType in ProfObj) {
-			if (!CurrentProfs.speed[spdType]) continue;
+			var theSet = set[spdType];
+			if (!theSet) continue;
 			var theInp = ProfObj[spdType];
-			var theSet = CurrentProfs.speed[spdType];
 			if (AddRemove) { // add
 				if (spdType === "allModes") {
 					theSet[ProfSrc] = theInp;
@@ -7548,19 +7630,9 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 				};
 			};
 		};
-		// get the new totals
-		var theWalks = {
-			spd : parseSpeed("walk", set.walk.spd, "both", 0, deltaSpds.walkSpd),
-			enc : parseSpeed("walk", set.walk.enc, "both", 0, deltaSpds.walkEnc)
-		};
-		var newTotals = { walkSpd : theWalks.spd[0], walkEnc : theWalks.enc[0] };
-		for (var i = 0; i < spdTypes.length; i++) {
-			var sT = spdTypes[i];
-			if (sT === "walk") continue;
-			newTotals[sT + "Spd"] = parseSpeed(sT, set[sT].spd, true, theWalks.spd[1], deltaSpds[sT + "Spd"]);
-			newTotals[sT + "Enc"] = parseSpeed(sT, set[sT].enc, true, theWalks.enc[1], deltaSpds[sT + "Enc"]);
-		};
-		// create the strings
+		// Get the new totals
+		var newTotals = getTotals(oDeltaSpds);
+		// Create the strings
 		var spdString = "";
 		var encString = "";
 		for (var i = 0; i < spdTypes.length; i++) {
@@ -7570,29 +7642,39 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 			var eSpd = newTotals[sT + "Enc"];
 			if (eSpd) encString += (!encString ? "" : typePF ? ", " : ",\n") + eSpd;
 		};
-		// create the tooltips
+		// Create the tooltips
 		var ttips = {spd : "", enc : ""};
-		var modArray = [];
-		for (var spMod in set.allModes) {
-			var theVal = set.allModes[spMod];
-			if (!theVal) continue;
-			if (!isNaN(theVal) || !(/[xX\*\xD7\/:]/).test(theVal[0])) theVal += " ft";
-			if (metric) theVal = ConvertToMetric(theVal, 0.5);
-			modArray.push(spMod + " [" + theVal + "]");
-		};
 		for (var i = 0; i < spdTypes.length; i++) {
 			var sT = spdTypes[i];
+			// Create a string for the allModes of this speed
+			var modArray = [];
+			for (var spMod in set.allModes) {
+				var oAllMode = set.allModes[spMod];
+				if (typeof oAllMode == "object") {
+					if (oAllMode.exclude && oAllMode.exclude.indexOf(sT) !== -1) continue; // don't add to this speed type
+					var theVal = oAllMode.bonus;
+				} else {
+					// backwards compatible, just a string/number
+					var theVal = oAllMode;
+				}
+				if (!theVal) continue;
+				if (!isNaN(theVal) || !/[xX\*\xD7\/:]/.test(theVal[0])) theVal += " ft";
+				if (metric) theVal = ConvertToMetric(theVal, 0.5);
+				modArray.push(spMod + " [" + theVal + "]");
+			};
+			// The strings for full speed and encumbered speed
 			var arrs = {spd : [], enc : []};
 			for (var n = 0; n <= 1; n++) {
 				var sV = n ? "enc" : "spd";
 				var theSpeeds = set[sT][sV];
 				var goOn = false;
+				// Make a string of the speeds
 				for (var aSpeed in theSpeeds) {
 					var theVal = theSpeeds[aSpeed];
 					if (!theVal) continue;
 					if (theVal === "walk") {
 						theVal = "as walking speed";
-					} else if (!isNaN(theVal) || !(/[xX\*\xD7\/:]/).test(theVal[0])) {
+					} else if (!isNaN(theVal) || !/[xX\*\xD7\/:]/.test(theVal[0])) {
 						theVal += " ft";
 					};
 					if (metric) theVal = ConvertToMetric(theVal, 0.5);
@@ -7605,7 +7687,7 @@ async function SetProf(ProfType, AddRemove, ProfObj, ProfSrc, Extra) {
 				};
 			};
 		};
-		// set them to the fields
+		// Set the values and tooltips to the fields
 		if (metric) {
 			spdString = ConvertToMetric(spdString, 0.5);
 			encString = ConvertToMetric(encString, 0.5);
@@ -7827,13 +7909,13 @@ function processModifiers(iTot, aMods) {
 };
 
 //a way to condense an array of numbers down to the highest and modifiers
-function getHighestTotal(nmbrObj, notRound, replaceWalk, extraMods, prefix, withCleanValue) {
+function getHighestTotal(nmbrObj, notRound, replaceWalk, extraMods, type, withCleanValue) {
 	var values = [0];
 	var modifications = [];
 	var fixedVals = [0];
 	var noModsIfWalks = false;
 	var prsVal = function(val) {
-		if (isNaN(val) && (/unlimited|\u221E/i).test(val)){
+		if (isNaN(val) && /unlimited|\u221E/i.test(val)){
 			values.push(9999);
 		} else if (!val) {
 			return;
@@ -7843,16 +7925,20 @@ function getHighestTotal(nmbrObj, notRound, replaceWalk, extraMods, prefix, with
 			values.push(val);
 		} else if (replaceWalk !== undefined && replaceWalk !== "walk" && val === "walk") {
 			prsVal(replaceWalk);
-			noModsIfWalks = true;
-		} else if ((/fixed/i).test(val) && (/\d+/).test(val)) { // for Magic Items granting a speed, no modifiers at all
+			// noModsIfWalks = true;
+		} else if (/fixed/i.test(val) && /\d+/.test(val)) { // for Magic Items granting a speed, no modifiers at all
 			fixedVals.push(Number(val.match(/\d+/)[0]));
 		};
 	};
-	var recurProcess = function(input) {
+	var recurProcess = function(input, isAllModes) {
 		if (isArray(input)) {
-			for (var i = 0; i < input.length; i++) { recurProcess(input[i]); };
+			for (var i = 0; i < input.length; i++) { recurProcess(input[i], isAllModes); };
 		} else if (typeof input == "object") {
-			for (var i in input) { recurProcess(input[i]); };
+			if (isAllModes && input.bonus) {
+				if (!input.exclude || input.exclude.indexOf(type) === -1) recurProcess(input.bonus, isAllModes);
+			} else {
+				for (var i in input) { recurProcess(input[i], isAllModes); };
+			}
 		} else {
 			prsVal(input);
 		};
@@ -7861,24 +7947,26 @@ function getHighestTotal(nmbrObj, notRound, replaceWalk, extraMods, prefix, with
 	//process the values
 	var tValue = Math.max.apply(Math, values);
 	if (tValue && modifications.length) tValue = processModifiers(tValue, modifications);
+	var tValBeforeExtra = tValue;
 	if (tValue && extraMods && !(replaceWalk && noModsIfWalks && tValue === replaceWalk)) {
 		modifications = [];
-		recurProcess(extraMods);
+		recurProcess(extraMods, true);
 		if (modifications.length) tValue = processModifiers(tValue, modifications);
 	};
 	if (fixedVals.length > 1) {
 		tValue = Math.max.apply(Math, fixedVals.concat([tValue]));
 	};
-	prefix = prefix ? prefix + " " : prefix === false ? "" : " ";
+	var prefix = type === false || type === "walk" ? "" : type ? type + " " : " ";
 	if (!tValue) {
-		return withCleanValue ? ["", 0] : "";
+		return withCleanValue ? ["", 0, 0] : "";
 	} else if (tValue >= 9999) {
-		return prefix + "(unlimited)";
+		var returnStr = prefix + "(unlimited)";
+		return withCleanValue ? [returnStr, 0, 0] : returnStr;
 	} else {
 		if (!notRound) tValue = Math.round(tValue);
 		var metric = What("Unit System") !== "imperial";
 		var returnStr = prefix + RoundTo(tValue * (metric ? 0.3 : 1), 0.5, false, true) + (metric ? " m" : " ft");
-		return withCleanValue ? [returnStr, tValue] : returnStr;
+		return withCleanValue ? [returnStr, tValue, tValBeforeExtra] : returnStr;
 	}
 };
 

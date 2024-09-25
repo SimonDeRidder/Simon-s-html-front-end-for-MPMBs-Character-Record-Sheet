@@ -305,7 +305,7 @@ AdapterParsePopUpMenu = function (aParams, resolve) {
 
 this.info = {
 	SheetType: "printer friendly",
-	SheetVersion: "v13.1.14",
+	SheetVersion: "v13.2.1",
 	SpellsOnly: false,
 };
 this.path = "./index.html";

@@ -74,7 +74,7 @@ AddSubClass("fighter", "black lion knight", {
 			calcChanges : {
 				atkCalc : [
 					function (fields, v, output) {
-						if (!v.isSpell && !v.isDC) output.extraDmg += What("Wis Mod");
+						if (!v.isSpell && !v.isDC) output.extraDmg += wasm_character.get_ability_modifier('Wis');
 					},
 					"I add my Wisdom modifier to the damage of my weapon attacks."
 				]

@@ -44,7 +44,7 @@ AddSubClass("rogue", "shadowdancer", {
 			]),
 			action : [["action", ""]],
 			usages : "Charisma modifier per ",
-			usagescalc : "event.value = Math.max(1, What('Cha Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 			recovery : "short rest",
 			spellcastingBonus : [{
 				name : "Shadow Puppeteer",

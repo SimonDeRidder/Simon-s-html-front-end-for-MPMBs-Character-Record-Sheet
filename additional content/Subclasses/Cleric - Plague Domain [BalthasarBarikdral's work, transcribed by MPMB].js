@@ -107,16 +107,16 @@ AddSubClass("cleric", "plague domain", {
 				atkCalc : [
 					function (fields, v, output) {
 						if (classes.known.cleric && classes.known.cleric.level > 7 && v.thisWeapon[3] && v.thisWeapon[4].indexOf('cleric') !== -1 && SpellsList[v.thisWeapon[3]].level === 0) {
-							output.extraDmg += What('Wis Mod');
+							output.extraDmg += wasm_character.get_ability_modifier('Wis');
 						};
 					},
 					"My cleric cantrips get my Wisdom modifier added to their damage."
 				],
 				spellAdd : [
 					function (spellKey, spellObj, spName) {
-						if (spName != "cleric" || !What("Wis Mod") || Number(What("Wis Mod")) <= 0 || spellObj.psionic || spellObj.level !== 0) return;
+						if (spName != "cleric" || Number(wasm_character.get_ability_modifier('Wis')) <= 0 || spellObj.psionic || spellObj.level !== 0) return;
 						if (spellKey == "shillelagh") {
-							spellObj.description = spellObj.description.replace("1d8", "1d8+" + What("Wis Mod"));
+							spellObj.description = spellObj.description.replace("1d8", "1d8+" + wasm_character.get_ability_modifier('Wis'));
 							return true;
 						}
 						return genericSpellDmgEdit(spellKey, spellObj, "\\w+\\.?", "Wis", true);
@@ -137,7 +137,7 @@ AddSubClass("cleric", "plague domain", {
 				"An affected creature can make another save to end this at the end of each turn"
 			]),
 			usages : "Wisdom modifier per ",
-			usagescalc : "event.value = Math.max(1, What('Wis Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Wis'));",
 			recovery : "long rest"
 		}
 	}

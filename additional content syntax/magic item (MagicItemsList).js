@@ -310,7 +310,7 @@ MagicItemsList["staff of purple"] = {
 	Common usage examples:
 		"return CurrentRace.known.indexOf('dwarf') !== -1;" // Test if race is a dwarf
 		"return classes.known.cleric ? true : false;" // Test if character has any levels in the cleric class
-		"return What('Dex') >= 13;" // Test if character has a Dexterity score of 13 or more
+		"return wasm_character.get_ability('Dex') >= 13;" // Test if character has a Dexterity score of 13 or more
 */
 	allowDuplicates : true,
 /*	allowDuplicates // OPTIONAL //
@@ -365,7 +365,7 @@ MagicItemsList["staff of purple"] = {
 	There is no limit to how big this description can be,
 	but very long descriptions will not always display correctly.
 */
-	calculate : "event.value = 'I can spend 10 minutes inspiring up to 6 friendly creatures within 30 feet who can see or hear and can understand me. Each gains lvl (' + What('Character Level') + ') + Cha mod (' + What('Cha Mod') + \") temporary hit points. One can't gain temporary hit points from this item again until after a short rest.\";",
+	calculate : "event.value = 'I can spend 10 minutes inspiring up to 6 friendly creatures within 30 feet who can see or hear and can understand me. Each gains lvl (' + What('Character Level') + ') + Cha mod (' + wasm_character.get_ability_modifier('Cha') + \") temporary hit points. One can't gain temporary hit points from this item again until after a short rest.\";",
 /*	calculate // OPTIONAL //
 	TYPE:	string
 	USE:	this string is set as the field calculation method for the description field of the magic item

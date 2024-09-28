@@ -334,7 +334,7 @@ AddSubClass("monk", "way of the cobalt soul-tdcs", {
 				"I need to spend 1 ki point for each reaction beyond the first per round"
 			]),
 			usages : "Int mod per ",
-			usagescalc : "event.value = Math.max(1, What('Int Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 			recovery : "round",
 			additional : "1 ki point",
 			extraname : "Way of the Cobalt Soul 6",

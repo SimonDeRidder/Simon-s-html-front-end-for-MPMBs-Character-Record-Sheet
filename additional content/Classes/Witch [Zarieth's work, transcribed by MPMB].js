@@ -126,7 +126,7 @@ ClassList["witch-zarieth"] = {
 			]),
 			action : [["action", ""]],
 			usages : "Charisma modifier per ",
-			usagescalc : "event.value = Math.max(1, What('Cha Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 			recovery : "long rest"
 		},
 		"subclassfeature2" : {
@@ -476,7 +476,7 @@ AddSubClass("witch-zarieth", "covenant of unity", {
 				"I can retain control of a spirit when it is released, keeping it bound instead"
 			]),
 			usages : "Charisma modifier per ",
-			usagescalc : "event.value = Math.max(1, What('Cha Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 			recovery : "long rest"
 		},
 		"subclassfeature10" : {

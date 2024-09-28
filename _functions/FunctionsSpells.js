@@ -1,3 +1,9 @@
+// a function to round a number to no decimals and return it as a string
+function ASround(input) {
+	input = parseFloat(input.replace(",", "."));
+	return isNaN(input) ? "0" : Math.round(input).toFixed(0);
+}
+
 // Get the template prefix of a spellsheet page
 function ReturnSpellFieldPrefixSuffix(fldNm) {
 	var a = fldNm.match(/(P\d+\.SS(front|more)\.).*?\.(\d+$)/);

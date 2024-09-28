@@ -8,26 +8,16 @@ jobs:
     name: Rust unit tests
     runs-on: [self-hosted, linux, x64]
     container:
-      image: rust:1.77.0-alpine
+      image: rust:1.85.0-alpine
     steps:
       - uses: actions/checkout@v4
       - run: apk add musl-dev
       - run: cargo test
-  # tarpaulin:
-  #   name: Tarpaulin coverage
-  #   runs-on: [self-hosted, linux, x64]
-  #   container:
-  #     image: rust:1.77.0-alpine
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: apk add musl-dev pkgconfig openssl-dev
-  #     - run: cargo install cargo-tarpaulin --features vendored-openssl
-  #     - run: cargo tarpaulin --ignore-tests
   clippy:
     name: Clippy
     runs-on: [self-hosted, linux, x64]
     container:
-      image: rust:1.77.0-alpine
+      image: rust:1.85.0-alpine
     steps:
       - uses: actions/checkout@v4
       - run: apk add musl-dev
@@ -38,7 +28,7 @@ jobs:
     name: rustfmt
     runs-on: [self-hosted, linux, x64]
     container:
-      image: rust:1.77.0-alpine
+      image: rust:1.85.0-alpine
     steps:
       - uses: actions/checkout@v4
       - run: rustup component add rustfmt
@@ -47,7 +37,7 @@ jobs:
     name: Cargo audit
     runs-on: [self-hosted, linux, x64]
     container:
-      image: rust:1.77.0-alpine
+      image: rust:1.85.0-alpine
     steps:
       - uses: actions/checkout@v4
       - run: apk add musl-dev

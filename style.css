@@ -267,6 +267,50 @@ input[type=number] {
 	background-color: transparent;
 }
 
+.pane .checkbox-normal {
+	position: absolute;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.pane .checkbox-normal input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+.pane .checkmark {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-color: var(--background);
+}
+
+.pane .checkbox-normal:hover input ~ .checkmark {
+	background-color: #ddd;
+}
+
+.pane .checkmark:after {
+	position: absolute;
+	display: none;
+}
+
+.pane .checkbox-normal input:checked ~ .checkmark:after {
+	display: block;
+}
+
+.pane .checkbox-normal .checkmark:after {
+	width: 100%;
+	height: 100%;
+	content: "✓";
+	text-align: center;
+}
+
 .pane .ammunition-arrow {
 	width: 10px;
 	height: 30px;
@@ -413,7 +457,7 @@ input[type=number] {
 	width: 100%;
 	height: 100%;
 	background-color: rgba(255, 255, 255, 0.8);
-	z-index: 100;
+	z-index: 40;
 }
 
 .modalDialog {
@@ -422,7 +466,7 @@ input[type=number] {
 	left: 50%;
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
-	z-index: 101;
+	z-index: 41;
 	background-color: white;
 	border: 2px solid black;
 }
@@ -534,7 +578,6 @@ div.grey-bg-tb-fancy::after {
 /******************/
 
 div.display-field {
-	position: absolute;
 	border: none;
 	padding: 0;
 	font-family: SegoeUI;
@@ -547,12 +590,25 @@ div.display-field {
 	align-items: center;
 }
 
+table {
+	border-collapse: collapse;
+}
+tr.table-total {
+	font-weight: bold;
+}
+tr.table-total > th, tr.table-total > td {
+	border-top: 1px solid black;
+}
+tr.empty-row {
+	height: 1em;
+}
+
 /****************/
 /* input styles */
 /****************/
 
 .inputfield-regular {
-	position: absolute;
+	position: relative;
 	background-color: var(--input-background);
 	border: none;
 	border-width: 0px;
@@ -566,6 +622,13 @@ div.display-field {
 	justify-content: center;
 	align-items: center;
 }
+
+
+.inputfield-disabled {
+	background-color: transparent;
+	pointer-events: none;
+}
+
 
 /*********************/
 /* element positions */
@@ -581,6 +644,7 @@ div.display-field {
 	justify-content: space-evenly;
 	padding-top: 1%;
 	padding-bottom: 1%;
+	cursor: pointer;
 }
 
 #CSfront div.abilities-6 {
@@ -610,20 +674,79 @@ div.display-field {
 }
 
 #CSfront div.abilities div.ability div.ability-mod {
+	position: absolute;
 	top: 16%;
 	width: 100%;
 	height: 48%;
-	font-size: 38px;
+	font-size: 360%;
 }
 
-#CSfront div.abilities div.ability input.ability-value {
+#CSfront div.abilities div.ability div.ability-value {
+	position: absolute;
 	width: 44%;
 	height: 25%;
-	bottom: 2%;
+	bottom: 4%;
 	left: 28%;
-	font-size: 20px;
+	font-size: 220%;
 }
 
+
+/******************/
+/* Modals */
+/******************/
+
+.modal-canvas {
+	position: absolute;
+	z-index: 52;
+	left: 0%;
+	top: 0%;
+	width: 100%;
+	height: 100%;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	background-color: rgba(0.5, 0.5, 0.5, 0.5);
+}
+
+.modal-window {
+	position: absolute;
+	visibility: visible;
+	max-width: 75%;
+}
+
+.modal-title {
+	background-color: #a0a0a0;
+	text-align: center;
+	font-size: 22px;
+	font-weight: bold;
+	border: solid var(--black) 2px;
+}
+
+.modal-content {
+	display: flex;
+	justify-content: center;
+	background-color: var(--background);
+	border-left: solid var(--black) 2px;
+	border-right: solid var(--black) 2px;
+	border-bottom: solid var(--black) 2px;
+	padding: 5px;
+}
+
+.modal-buttons {
+	display: flex;
+	justify-content: center;
+	background-color: var(--background);
+	border-left: solid var(--black) 2px;
+	border-right: solid var(--black) 2px;
+	border-bottom: solid var(--black) 2px;
+}
+
+.modal-buttons button {
+	position: relative;
+	font-size: 12px;
+	padding: 4px;
+	margin: 4px;
+}
 
 /******************/
 /* Print settings */

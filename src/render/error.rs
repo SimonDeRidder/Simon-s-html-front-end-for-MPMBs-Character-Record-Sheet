@@ -1,7 +1,7 @@
 use wasm_bindgen::JsValue;
 use web_sys::Element;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct RenderError {
 	pub message: String,
 }

@@ -29,6 +29,9 @@ var Base_RaceList = {
 		heightMetric : " stand well over 1,8 metres tall (170 + 5d8 cm)",
 		weightMetric : " weigh around 110 kg (80 + 5d8 \xD7 4d6 / 10 kg)",
 		scores : [2, 0, 0, 0, 0, 1],
+		scorestxt: "+2 Strength, +1 Charisma",
+		abilityChecksum: 3,
+		abilitySubset: [],
 		trait : "Dragonborn (+2 Strength, +1 Charisma)\nDraconic Ancestry: Choose one type of dragon using the \"Racial Options\" button. I gain a breath weapon and damage resistance as determined by the dragon type chosen.\nBreath Weapon: Exhale destructive energy as an action with a size, shape, saving throw type, and damage type as found in the table. All in the area must make a saving throw with DC 8 + Con modifier + Prof Bonus. It does 2d6 (+1d6 at level 6, 11, 16) damage, half as much damage on a successful save. I can use it again after a short rest.",
 		features : {
 			"draconic ancestry" : {
@@ -83,6 +86,9 @@ var Base_RaceList = {
 		heightMetric : " stand between 1,2 and 1,5 metres tall (110 + 5d4 cm)",
 		weightMetric : " weigh around 70 kg (55 + 5d4 \xD7 4d6 / 10 kg)",
 		scores : [0, 0, 2, 0, 1, 0],
+		scorestxt: "+2 Constitution, +1 Wisdom",
+		abilityChecksum: 3,
+		abilitySubset: [],
 		trait : "Hill Dwarf (+2 Constitution, +1 Wisdom)\n\nStonecunning: Whenever I make an Intelligence (History) check related to the origin of stonework, I am considered proficient in the History skill and add double my proficiency bonus to the check, instead of my normal proficiency bonus.\n\nDwarven Toughness: My hit point maximum increases by 1 for every level I have.",
 		calcChanges : {
 			hp : function (totalHD) { return [totalHD, "Dwarven Toughness"]; }
@@ -112,6 +118,9 @@ var Base_RaceList = {
 		heightMetric : " range from under 1,5 to over 1,8 metres tall (140 + 5d10 cm)",
 		weightMetric : " weigh around 55 kg (40 + 5d10 \xD7 2d4 / 10 kg)",
 		scores : [0, 2, 0, 1, 0, 0],
+		scorestxt: "+2 Dexterity, +1 Intelligence",
+		abilityChecksum: 3,
+		abilitySubset: [],
 		trait : "High Elf (+2 Dexterity, +1 Intelligence)\nTrance: Elves don't need to sleep, but meditate semiconsciously, for 4 hours a day. While meditating, I can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, I gain the same benefit that a human does from 8 hours of sleep, thus needing only 4 hours for a long rest.\nCantrip: I know one cantrip of my choice from the wizard spell list. Intelligence is my spellcasting ability for it.",
 		spellcastingAbility : 4,
 		spellcastingBonus : [{
@@ -141,6 +150,9 @@ var Base_RaceList = {
 		heightMetric : " are 90 to 120 cm tall (2'11\" + 5d4)",
 		weightMetric : " weigh around 18 kg (16 + 5d4 / 10 kg)",
 		scores : [0, 0, 1, 2, 0, 0],
+		scorestxt: "+1 Constitution, +2 Intelligence",
+		abilityChecksum: 3,
+		abilitySubset: [],
 		trait : "Rock Gnome (+1 Constitution, +2 Intelligence)" + (typePF ? "\n" : " ") + "Artificer's Lore: Add twice my proficiency bonus to Intelligence (History) checks with magic, alchemical, and technological items.\nTinker: Construct a Tiny clockwork device (AC 5, 1 HP) using tinker's tools, 1 hour, and 10 gp of material components, that functions for 24 hours. I can have up to 3 active." + (typePF ? "\n - " : " -") + "Clockwork Toy: animal, monster, or person that can move 5 ft per turn in a random direction, making appropriate noises;" + (typePF ? "\n - " : " -") + "Fire Starter: 1 action to produce miniature flame to light things;" + (typePF ? "\n - " : " -") + "Music Box: plays single song at a moderate volume."
 	},
 	"lightfoot halfling" : {
@@ -161,6 +173,9 @@ var Base_RaceList = {
 		heightMetric : " average about 90 cm tall (80 + 5d4)",
 		weightMetric : " weigh around 18 kg (16 + 5d4 / 10 kg)",
 		scores : [0, 2, 0, 0, 0, 1],
+		scorestxt: "+2 Dexterity, +1 Charisma",
+		abilityChecksum: 3,
+		abilitySubset: [],
 		trait : "Lightfoot Halfling (+2 Dexterity, +1 Charisma)" + (typePF ? "\n" : "") + "\nLucky: When I roll a 1 on an attack roll, ability check, or saving throw, I can reroll the die and must use the new roll." + (typePF ? "\n" : "") + "\nHalfling Nimbleness: I can move through the space of any creature that is of a size larger than me." + (typePF ? "\n" : "") + "\nNaturally Stealthy: I can attempt to hide even when I am obscured only by a creature that is at least one size larger than me."
 	},
 	"half-elf" : {
@@ -186,6 +201,8 @@ var Base_RaceList = {
 		weightMetric : " weigh around 70 kg (50 + 5d8 \xD7 4d4 / 10 kg)",
 		scorestxt : "+2 Charisma and +1 to two other ability scores of my choice",
 		scores : [0, 0, 0, 0, 0, 2],
+		abilityChecksum: 4,
+		abilitySubset: null,
 		trait : "Half-Elf (+2 Charisma and +1 to two other ability scores of my choice)\n\nSkill Versatility: I gain proficiency in two skills of my choice."
 	},
 	"half-orc" : {
@@ -206,6 +223,9 @@ var Base_RaceList = {
 		heightMetric : " range from 1,5 to well over 1,8 metres tall (150 + 5d10 cm)",
 		weightMetric : " weigh around 100 kg (65 + 5d10 \xD7 4d6 / 10 kg)",
 		scores : [2, 0, 1, 0, 0, 0],
+		scorestxt : "+2 Strength, +1 Constitution",
+		abilityChecksum: 3,
+		abilitySubset: [],
 		features : {
 			"relentless endurance" : {
 				name : "Relentless Endurance",
@@ -255,6 +275,8 @@ var Base_RaceList = {
 		weightMetric : " weigh around 75 kg (50 + 5d10 \xD7 4d4 / 10 kg)",
 		scorestxt : "+1 to all ability scores",
 		scores : [1, 1, 1, 1, 1, 1, 1],
+		abilityChecksum: null,
+		abilitySubset: [],
 		trait : "Human (+1 to all ability scores)"
 	},
 	"tiefling" : {
@@ -275,6 +297,9 @@ var Base_RaceList = {
 		heightMetric : " range from 1,5 to over 1,8 metres tall (145 + 5d8 cm)",
 		weightMetric : " weigh around 70 kg (50 + 5d8 \xD7 4d4 / 10 kg)",
 		scores : [0, 0, 0, 1, 0, 2],
+		scorestxt : "+1 Intelligence, +2 Charisma",
+		abilityChecksum: 3,
+		abilitySubset: [],
 		trait : "Tiefling (+1 Intelligence, +2 Charisma)\n\nInfernal Legacy:\n   I know the Thaumaturgy cantrip.\n   At 3rd level, I can cast Hellish Rebuke once per long rest as a 2nd-level spell.\n   At 5th level, I can also cast Darkness once per long rest.\n   Charisma is my spellcasting ability for these spells.",
 		spellcastingAbility : 6,
 		spellcastingBonus : [{

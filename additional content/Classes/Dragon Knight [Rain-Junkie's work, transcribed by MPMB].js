@@ -1984,7 +1984,7 @@ AddSubClass('dragon knight', 'shadow', {
 			]),
 			action : [["bonus action", ""]],
 			usages : "Charisma modifier per ",
-			usagescalc : "event.value = What('Cha Mod');",
+			usagescalc : "event.value = wasm_character.get_ability_modifier('Cha');",
 			recovery : "long rest",
 			"withering breath" : { // affects just companion, so banished to third page
 				name : "Withering Breath",

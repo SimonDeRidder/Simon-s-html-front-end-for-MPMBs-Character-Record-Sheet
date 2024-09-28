@@ -148,7 +148,7 @@ AddSubClass("fighter", "pact knight", {
 				description : "\n   " + "My pact weapon does extra necrotic damage equal to my Charisma modifier",
 				source : ["P", 111],
 				calcChanges : {
-					atkCalc : ["if (isMeleeWeapon && (/\\bpact\\b/i).test(WeaponText)) { output.extraDmg += What('Cha Mod'); }; ", "If I include the word 'Pact' in a melee weapon's name or description, the calculation will add my Charisma modifier to its damage. However, it won't say that this added damage is of the necrotic type, as it can only display a single damage type."]
+					atkCalc : ["if (isMeleeWeapon && (/\\bpact\\b/i).test(WeaponText)) { output.extraDmg += wasm_character.get_ability_modifier('Cha'); }; ", "If I include the word 'Pact' in a melee weapon's name or description, the calculation will add my Charisma modifier to its damage. However, it won't say that this added damage is of the necrotic type, as it can only display a single damage type."]
 				}
 			},
 			"mask of many faces" : {

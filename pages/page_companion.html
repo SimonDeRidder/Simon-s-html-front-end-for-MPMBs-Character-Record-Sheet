@@ -833,6 +833,7 @@
 					eventManager.add_listener(
 						event_type,
 						function () {
+							SetHPTooltip(false, true, prefix);
 							calcHP(prefix);
 						}
 					)

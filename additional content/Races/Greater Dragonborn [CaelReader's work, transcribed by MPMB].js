@@ -92,7 +92,7 @@ RaceList["greater dragonborn"] = {
 							var dbBreathWeaponDie = CurrentRace.level < 11 ? 3 : CurrentRace.level < 17 ? 4 : 5;
 							if (CurrentRace.variant && classes.known.sorcerer && classes.known.sorcerer.subclass == "sorcerer-draconic bloodline" && GetFeatureChoice('class', 'sorcerer', 'subclassfeature1').indexOf(CurrentRace.variant) != -1) dbBreathWeaponDie += 1;
 							output.die = output.die.replace('2d6', dbBreathWeaponDie + 'd6');
-							if (CurrentRace.variant == "black") output.extraDmg += What('Con Mod');
+							if (CurrentRace.variant == "black") output.extraDmg += wasm_character.get_ability_modifier('Con');
 						};
 					}
 				]

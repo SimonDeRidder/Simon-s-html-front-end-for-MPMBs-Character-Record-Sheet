@@ -174,8 +174,8 @@ altResource : ["", "", "SS 2+", "SS 2+", "SS 1+", "SS 1+", "SS 1+", "SS 1+", "SS
 		"5 SP"			// 3 sorcery points
 */
 
-usagescalc : "event.value = Math.max(1, What('Wis Mod'));",
-usagescalc : ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "event.value = What('Wis Mod') + 5;", "event.value = What('Wis Mod') + 5;", "event.value = What('Wis Mod') + 5;", "event.value = What('Wis Mod') + 6;", "event.value = What('Wis Mod') + 6;", "event.value = What('Wis Mod') + 6;"],
+usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Wis'));",
+usagescalc : ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "event.value = wasm_character.get_ability_modifier('Wis') + 5;", "event.value = wasm_character.get_ability_modifier('Wis') + 5;", "event.value = wasm_character.get_ability_modifier('Wis') + 5;", "event.value = wasm_character.get_ability_modifier('Wis') + 6;", "event.value = wasm_character.get_ability_modifier('Wis') + 6;", "event.value = wasm_character.get_ability_modifier('Wis') + 6;"],
 /*	usagescalc // OPTIONAL //
 	TYPE:	string, or array with 20 strings
 	USE:	this string is set as the field calculation method for the "Usages" field in the "Limited Features" section
@@ -257,7 +257,7 @@ extraLimitedFeatures : [{
 	name : "Another Limited Feature", // REQUIRED //
 	usages : 8, // REQUIRED //
 	recovery : "long rest", // REQUIRED //
-	usagescalc : "event.value = Math.max(1, What('Cha Mod'));", // OPTIONAL //
+	usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));", // OPTIONAL //
 	additional : "2d8", // OPTIONAL //
 	altResource : "SS 5+", // OPTIONAL //
 	addToExisting : true // OPTIONAL // ADDED v13.0.6
@@ -926,7 +926,7 @@ scoresOverride : [0, 0, 0, 19, 0, 0],
 	but only if the attribute 'scorestxt' is not present in the same feature.
 */
 
-scoresMaximum : [24, 0, 24, 0, "+2", 0],
+scoresMaximum : [24, 0, 24, 0, 22, 0],
 /*	scores // OPTIONAL //
 	TYPE:	array of six numbers or strings
 	USE:	change ability score maximum in the Ability Scores dialog
@@ -942,11 +942,6 @@ scoresMaximum : [24, 0, 24, 0, "+2", 0],
 
 	You can enter a lower maximum (1-19), the default of 20 will only be used if nothing sets a maximum.
 	If multiple things change the maximum, the highest of those will be used.
-
-	Alternatively, you can enter a string that reads as a mathematical modifier that adds "+X" or
-	subtracts "-Y". For example, you could set it to "+2" to increase the maximum by 2.
-	These modifiers will be applied to the highest maximum for the score set by other features, or 20,
-	if no other features set a maximum. (e.g. the "+2" will result in a maximum of 22).
 
 	If the maximum has a requirement, because the feature only increases the maximum if the total
 	goes over 20, then take a look at the `scoresMaxLimited` attribute below.
@@ -975,10 +970,6 @@ scoresMaxLimited : true,
 		scores : [0, 0, 2, 0, 0, 0],
 		scoresMaximum : [0, 0, 22, 0, 0, 0],
 		scoresMaxLimited : true
-
-	// IMPORTANT //
-	When setting this attribute to `true`, the `scoresMaximum` can't have modifiers (e.g. "+2"), but can
-	only exists of numbers.
 
 	Setting this attribute to false is the same as not including this attribute.
 */
@@ -1783,13 +1774,13 @@ calcChanges : {
 	atkCalc : [
 		function (fields, v, output) {
 			if (classes.known.sorcerer && classes.known.sorcerer.level > 5 && v.isSpell && (/acid/i).test(fields.Damage_Type)) {
-				output.extraDmg += What('Cha Mod');
+				output.extraDmg += wasm_character.get_ability_modifier('Cha');
 			};
 		},
 		"Cantrips and spell that deal acid damage get my Charisma modifier added to their Damage."
 	],
 	atkCalc : [
-		"if (classes.known.sorcerer && classes.known.sorcerer.level > 5 && isSpell && (/acid/i).test(fields.Damage_Type)) { output.extraDmg += What('Cha Mod'); };",
+		"if (classes.known.sorcerer && classes.known.sorcerer.level > 5 && isSpell && (/acid/i).test(fields.Damage_Type)) { output.extraDmg += wasm_character.get_ability_modifier('Cha'); };",
 		"Cantrips and spell that deal acid damage get my Charisma modifier added to their Damage."
 	],
 	/*	atkCalc // OPTIONAL //

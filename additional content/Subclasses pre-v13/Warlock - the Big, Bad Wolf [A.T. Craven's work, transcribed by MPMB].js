@@ -214,7 +214,7 @@ AddWarlockInvocation("Wisdom of the Wolf (prereq: level 15 warlock, the Big, Bad
 	]),
 	source : ["ATC:BBW", 3],
 	usages : "Charisma modifier per ",
-	usagescalc : "event.value = What('Cha Mod');",
+	usagescalc : "event.value = wasm_character.get_ability_modifier('Cha');",
 	recovery : "short rest",
 	spellcastingBonus : [{
 		name : "Wisdom of the Wolf",

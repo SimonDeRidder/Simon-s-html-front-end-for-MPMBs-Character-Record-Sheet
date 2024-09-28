@@ -74,7 +74,7 @@ ClassList["warlord"] = {
 				"This addition can be done after seeing the d20 roll, but before knowing the outcome"
 			]),
 			usages : "Charisma modifier per ",
-			usagescalc : "event.value = Math.max(1, What('Cha Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 			recovery : "short rest",
 			action : [["bonus action", ""]],
 			additional : levels.map(function (n) {

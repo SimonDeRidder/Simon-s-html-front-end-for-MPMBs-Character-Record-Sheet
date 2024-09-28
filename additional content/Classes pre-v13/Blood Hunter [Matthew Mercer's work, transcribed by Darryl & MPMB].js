@@ -338,7 +338,7 @@ ClassSubList["blood hunter-order of the ghostslayer"] = {
 				"If I end my turn inside an object, I take 1d10 force damage; more if my form ends"
 			]),
 			usages : "Wisdom mod per ",
-			usagescalc : "event.value = Math.max(1, tDoc.getField('Wis Mod').value);",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Wis'));",
 			recovery : "short rest",
 			action : [["bonus action", ""]]
 		},

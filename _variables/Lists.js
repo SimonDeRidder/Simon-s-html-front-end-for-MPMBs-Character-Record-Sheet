@@ -192,9 +192,6 @@ var Menus = {
 		}, {
 			cName : "-"
 		}, {
-			cName : "Import a character directly from another MPMB's Character Sheet PDF",
-			cReturn : "go#direct"
-		}, {
 			cName : "-"
 		}, {
 			cName : "Import/Export using files (depreciated, no longer support)",
@@ -305,7 +302,6 @@ var CurrentScriptFiles = {};
 var CurrentVars = { manual : {}, vislayers : ["rules", "equipment"] };
 var UpdateSpellSheets = {};
 var CurrentFeatureChoices = {};
-var CurrentStats = {};
 var CurrentAbilitySaveDCs = {};
 
 var CurrentArmour = {

@@ -80,14 +80,14 @@ var GenericClassFeatures = {
 			atkCalc : [
 				function (fields, v, output) {
 					if (v.thisWeapon[3] && /\bcleric\b/.test(v.thisWeapon[4]) && SpellsList[v.thisWeapon[3]].level === 0 && /\d/.test(fields.Damage_Die)) {
-						output.extraDmg += What('Wis Mod');
+						output.extraDmg += wasm_character.get_ability_modifier('Wis');
 					};
 				},
 				"My cleric cantrips get my Wisdom modifier added to their damage."
 			],
 			spellAdd : [
 				function (spellKey, spellObj, spName) {
-					if (spellObj.psionic || spellObj.level !== 0 || spName.indexOf("cleric") == -1 || !What("Wis Mod") || Number(What("Wis Mod")) <= 0) return;
+					if (spellObj.psionic || spellObj.level !== 0 || spName.indexOf("cleric") == -1 || Number(wasm_character.get_ability_modifier("Wis")) <= 0) return;
 					return genericSpellDmgEdit(spellKey, spellObj, "\\w+\\.?", "Wis");
 				},
 				"My cleric cantrips get my Wisdom modifier added to their damage."
@@ -260,7 +260,9 @@ var Base_ClassList = {
 				minlevel : 20,
 				description : desc("I add +4 to both my Strength and Constitution, and their maximums increase to 24"),
 				scores : [4,0,4,0,0,0],
-				scoresMaximum : [24,0,24,0,0,0]
+				scoresMaximum : [24,0,24,0,0,0],
+				abilityChecksum: null,
+				abilitySubset: [],
 			}
 		}
 	},
@@ -330,7 +332,7 @@ var Base_ClassList = {
 				]),
 				additional : ["d6", "d6", "d6", "d6", "d8", "d8", "d8", "d8", "d8", "d10", "d10", "d10", "d10", "d10", "d12", "d12", "d12", "d12", "d12", "d12"],
 				usages : "Charisma modifier per ",
-				usagescalc : "event.value = Math.max(1, What('Cha Mod'));",
+				usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 				recovery : levels.map(function (n) {
 					return n < 5 ? "long rest" : "short rest";
 				}),
@@ -1045,7 +1047,7 @@ var Base_ClassList = {
 					"Until the end of my next turn, I sense the type/location if it is not behind total cover"
 				]),
 				usages : "1 + Charisma modifier per ",
-				usagescalc : "event.value = 1 + What('Cha Mod');",
+				usagescalc : "event.value = 1 + wasm_character.get_ability_modifier('Cha');",
 				recovery : "long rest",
 				action : [["action", ""]]
 			},
@@ -1147,7 +1149,7 @@ var Base_ClassList = {
 				minlevel : 14,
 				description : desc("As an action, I can end one spell on me or another willing creature by touch"),
 				usages : "Charisma modifier per ",
-				usagescalc : "event.value = Math.max(1, What('Cha Mod'));",
+				usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 				recovery : "long rest",
 				action : [["action", ""]]
 			}
@@ -1844,14 +1846,14 @@ var Base_ClassList = {
 					calcChanges : {
 						atkCalc : [
 							function (fields, v, output) {
-								if (v.baseWeaponName == 'eldritch blast') output.extraDmg += What('Cha Mod');
+								if (v.baseWeaponName == 'eldritch blast') output.extraDmg += wasm_character.get_ability_modifier('Cha');
 							},
 							"I add my Charisma modifier to the damage of every beam of my Eldritch Blast cantrip."
 						],
 						spellAdd : [
 							function (spellKey, spellObj, spName) {
 								if (spellKey == "eldritch blast") {
-									spellObj.description = spellObj.description.replace("1d10 Force damage", "1d10+" + What("Cha Mod") + " Force dmg");
+									spellObj.description = spellObj.description.replace("1d10 Force damage", "1d10+" + wasm_character.get_ability_modifier("Cha") + " Force dmg");
 									return true;
 								};
 							},
@@ -2110,7 +2112,7 @@ var Base_ClassList = {
 						],
 						atkCalc : [
 							function (fields, v, output) {
-								if (v.pactWeapon) output.extraDmg += What('Cha Mod');
+								if (v.pactWeapon) output.extraDmg += wasm_character.get_ability_modifier('Cha');
 							}, ""
 						]
 					},
@@ -3033,7 +3035,7 @@ var Base_ClassSubList = {
 					atkCalc : [
 						function (fields, v, output) {
 							if (classes.known.paladin && classes.known.paladin.level > 2 && !v.isSpell && (/^(?=.*sacred)(?=.*weapon).*$/i).test(v.WeaponTextName)) {
-								output.extraHit += What('Cha Mod');
+								output.extraHit += wasm_character.get_ability_modifier('Cha');
 							};
 						},
 						"If I include the words 'Sacred Weapon' in the name of a weapon, it gets my Charisma modifier added to its To Hit."
@@ -3366,7 +3368,7 @@ var Base_ClassSubList = {
 						atkCalc : [
 							function (fields, v, output) {
 								if (classes.known.sorcerer && classes.known.sorcerer.level > 5 && v.isSpell && (/acid/i).test(fields.Damage_Type)) {
-									output.extraDmg += What('Cha Mod');
+									output.extraDmg += wasm_character.get_ability_modifier('Cha');
 								};
 							},
 							"Cantrips and spells that deal acid damage get my Charisma modifier added to their damage."
@@ -3389,7 +3391,7 @@ var Base_ClassSubList = {
 						atkCalc : [
 							function (fields, v, output) {
 								if (classes.known.sorcerer && classes.known.sorcerer.level > 5 && v.isSpell && (/cold/i).test(fields.Damage_Type)) {
-									output.extraDmg += What('Cha Mod');
+									output.extraDmg += wasm_character.get_ability_modifier('Cha');
 								};
 							},
 							"Cantrips and spells that deal cold damage get my Charisma modifier added to their damage."
@@ -3412,7 +3414,7 @@ var Base_ClassSubList = {
 						atkCalc : [
 							function (fields, v, output) {
 								if (classes.known.sorcerer && classes.known.sorcerer.level > 5 && v.isSpell && (/fire/i).test(fields.Damage_Type)) {
-									output.extraDmg += What('Cha Mod');
+									output.extraDmg += wasm_character.get_ability_modifier('Cha');
 								};
 							},
 							"Cantrips and spells that deal fire damage get my Charisma modifier added to their damage."
@@ -3435,7 +3437,7 @@ var Base_ClassSubList = {
 						atkCalc : [
 							function (fields, v, output) {
 								if (classes.known.sorcerer && classes.known.sorcerer.level > 5 && v.isSpell && (/lightning/i).test(fields.Damage_Type)) {
-									output.extraDmg += What('Cha Mod');
+									output.extraDmg += wasm_character.get_ability_modifier('Cha');
 								};
 							},
 							"Cantrips and spells that deal lightning damage get my Charisma modifier added to their damage."
@@ -3458,7 +3460,7 @@ var Base_ClassSubList = {
 						atkCalc : [
 							function (fields, v, output) {
 								if (classes.known.sorcerer && classes.known.sorcerer.level > 5 && v.isSpell && (/poison/i).test(fields.Damage_Type)) {
-									output.extraDmg += What('Cha Mod');
+									output.extraDmg += wasm_character.get_ability_modifier('Cha');
 								};
 							},
 							"Cantrips and spells that deal poison damage get my Charisma modifier added to their damage."
@@ -3604,7 +3606,7 @@ var Base_ClassSubList = {
 					atkCalc : [
 						function (fields, v, output) {
 							if (v.thisWeapon[4].indexOf("wizard") !== -1 && SpellsList[v.thisWeapon[3]] && SpellsList[v.thisWeapon[3]].school === "Evoc") {
-								output.extraDmg += What('Int Mod');
+								output.extraDmg += wasm_character.get_ability_modifier('Int');
 							};
 						},
 						"I add my Intelligence modifier to a single damage roll of any wizard evocation spell I cast."

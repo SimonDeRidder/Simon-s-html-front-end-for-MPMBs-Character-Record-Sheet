@@ -401,7 +401,7 @@ ClassList["warmage"] = {
 				]),
 				prereqeval : function(v) { return classes.known.warmage.level >= 5 && (isSpellUsed('shocking grasp', true) || isSpellUsed('storming blade', true)); },
 				usages : "Intelligence modifier per ",
-				usagescalc : "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery : "long rest"
 			},
 			"entropic cantrip (prereq: level 5 warmage, chill touch cantrip)" : {
@@ -488,7 +488,7 @@ ClassList["warmage"] = {
 				]),
 				prereqeval : function(v) { return classes.known.warmage.level >= 5 && isSpellUsed('poison spray', true); },
 				usages : "Intelligence modifier per ",
-				usagescalc : "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery : "long rest"
 			},
 			"flurry of daggers (prereq: level 10 warmage, magic daggers cantrip)" : {

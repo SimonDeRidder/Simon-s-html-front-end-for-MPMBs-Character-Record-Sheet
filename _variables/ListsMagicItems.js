@@ -490,7 +490,10 @@ var Base_MagicItemsList = {
 		vision : [["Darkvision", 60]],
 		savetxt : { adv_vs : ["poison"] },
 		dmgres : ["Poison"],
-		scores : [0, 0, 2, 0, 0, 0]
+		scores : [0, 0, 2, 0, 0, 0],
+		scorestxt: "While wearing this belt, my Con increases by 2 (to max 20)",
+		abilityChecksum: 2,
+		abilitySubset: [],
 	},
 	"belt of giant strength" : {
 		name : "Belt of Giant Strength",
@@ -2348,7 +2351,7 @@ var Base_MagicItemsList = {
 		type : "wondrous item",
 		rarity : "uncommon",
 		magicItemTable : "F",
-		calculate : 'event.value = "As a reaction when a ranged weapon attack hits me while I\'m wearing these gloves, I can reduce the damage by 1d10 + " + Number(What("Dex Mod")) + " (my Dexterity modifier). This only works if I have a free hand. If I reduce the damage to 0, I can catch the missile if it is small enough for me to hold in that hand.";',
+		calculate : 'event.value = "As a reaction when a ranged weapon attack hits me while I\'m wearing these gloves, I can reduce the damage by 1d10 + " + Number(wasm_character.get_ability_modifier("Dex")) + " (my Dexterity modifier). This only works if I have a free hand. If I reduce the damage to 0, I can catch the missile if it is small enough for me to hold in that hand.";',
 		description : "",
 		descriptionFull : "These gloves seem to almost meld into your hands when you don them. When a ranged weapon attack hits you while you're wearing them, you can use your reaction to reduce the damage by 1d10 + your Dexterity modifier, provided that you have a free hand. If you reduce the damage to 0, you can catch the missile if it is small enough for you to hold in that hand.",
 		attunement : true,
@@ -2413,6 +2416,9 @@ var Base_MagicItemsList = {
 			additional : "regains 1d4+1",
 			scores : [4, 0, 0, 0, 0, 0],
 			scoresMaximum : [30, 0, 0, 0, 0, 0],
+			scorestxt: "This magical maul gives me +4 Strength (max 30)",
+			abilityChecksum: 4,
+			abilitySubset: [],
 			weaponOptions : [{
 				baseWeapon : "maul",
 				regExpSearch : /^(?=.*hammer)(?=.*thunderbolts).*$/i,
@@ -2813,7 +2819,10 @@ var Base_MagicItemsList = {
 			magicItemTable : "H",
 			description : "As an action, I can make this deep red sphere orbit my head at 1d3 ft or retrieve it. Others can catch it as an action with an attack or Acrobatics check (AC/DC 24). It has 10 HP and resistance to all damage. While it orbits my head, my Dexterity score increases by 2, to a maximum of 20.",
 			descriptionFull : "An Ioun stone is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of Ioun stone exist, each type a distinct combination of shape and color.\n   When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of 1d3 feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity (Acrobatics) check. You can use an action to seize and stow the stone, ending its effect.\n   A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.\n   Your Dexterity score increases by 2, to a maximum of 20, while this deep red sphere orbits your head.",
-			scores : [0, 2, 0, 0, 0, 0]
+			scores : [0, 2, 0, 0, 0, 0],
+			scorestxt: "While it orbits my head, my Dexterity score increases by 2, to a maximum of 20.",
+			abilityChecksum: 2,
+			abilitySubset: []
 		},
 		"awareness" : {
 			rarity : "rare",
@@ -2827,7 +2836,10 @@ var Base_MagicItemsList = {
 			magicItemTable : "H",
 			description : "As an action, I can make this pink rhomboid orbit my head at 1d3 ft or retrieve it. Others can catch it as an action with an attack or Acrobatics check (AC/DC 24). It has 10 HP and resistance to all damage. While it orbits my head, my Constitution score increases by 2, to a maximum of 20.",
 			descriptionFull : "An Ioun stone is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of Ioun stone exist, each type a distinct combination of shape and color.\n   When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of 1d3 feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity (Acrobatics) check. You can use an action to seize and stow the stone, ending its effect.\n   A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.\n   Your Constitution score increases by 2, to a maximum of 20, while this pink rhomboid orbits your head.",
-			scores : [0, 0, 2, 0, 0, 0]
+			scores : [0, 0, 2, 0, 0, 0],
+			scorestxt: "While it orbits my head, my Constitution score increases by 2, to a maximum of 20.",
+			abilityChecksum: 2,
+			abilitySubset: []
 		},
 		"greater absorption" : {
 			rarity : "legendary",
@@ -2845,21 +2857,30 @@ var Base_MagicItemsList = {
 			magicItemTable : "H",
 			description : "As an action, I can make this incandescent blue sphere orbit my head at 1d3 ft or retrieve it. Others can catch it as an action with an attack or Acrobatics check (AC/DC 24). It has 10 HP and resistance to all damage. While it orbits my head, my Wisdom score increases by 2, to a maximum of 20.",
 			descriptionFull : "An Ioun stone is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of Ioun stone exist, each type a distinct combination of shape and color.\n   When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of 1d3 feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity (Acrobatics) check. You can use an action to seize and stow the stone, ending its effect.\n   A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.\n   Your Wisdom score increases by 2, to a maximum of 20, while this incandescent blue sphere orbits your head.",
-			scores : [0, 0, 0, 0, 2, 0]
+			scores : [0, 0, 0, 0, 2, 0],
+			scorestxt: "While it orbits my head, my Wisdom score increases by 2, to a maximum of 20.",
+			abilityChecksum: 2,
+			abilitySubset: []
 		},
 		"intellect" : {
 			rarity : "very rare",
 			magicItemTable : "H",
 			description : "As an action, I can make this marbled scarlet and blue sphere orbit my head at 1d3 ft or retrieve it. Others can catch it as an action with an attack or Acrobatics check (AC/DC 24). It has 10 HP and resistance to all damage. While it orbits my head, my Intelligence score increases by 2, to a maximum of 20.",
 			descriptionFull : "An Ioun stone is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of Ioun stone exist, each type a distinct combination of shape and color.\n   When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of 1d3 feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity (Acrobatics) check. You can use an action to seize and stow the stone, ending its effect.\n   A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.\n   Your Intelligence score increases by 2, to a maximum of 20, while this marbled scarlet and blue sphere orbits your head.",
-			scores : [0, 0, 0, 2, 0, 0]
+			scores : [0, 0, 0, 2, 0, 0],
+			scorestxt: "While it orbits my head, my Intelligence score increases by 2, to a maximum of 20.",
+			abilityChecksum: 2,
+			abilitySubset: []
 		},
 		"leadership" : {
 			rarity : "very rare",
 			magicItemTable : "H",
 			description : "As an action, I can make this marbled pink and green sphere orbit my head at 1d3 ft or retrieve it. Others can catch it as an action with an attack or Acrobatics check (AC/DC 24). It has 10 HP and resistance to all damage. While it orbits my head, my Charisma score increases by 2, to a maximum of 20.",
 			descriptionFull : "An Ioun stone is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of Ioun stone exist, each type a distinct combination of shape and color.\n   When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of 1d3 feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity (Acrobatics) check. You can use an action to seize and stow the stone, ending its effect.\n   A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.\n   Your Charisma score increases by 2, to a maximum of 20, while this marbled pink and green sphere orbits your head.",
-			scores : [0, 0, 0, 0, 0, 2]
+			scores : [0, 0, 0, 0, 0, 2],
+			scorestxt: "While it orbits my head, my Charisma score increases by 2, to a maximum of 20.",
+			abilityChecksum: 2,
+			abilitySubset: []
 		},
 		"mastery" : {
 			rarity : "legendary",
@@ -2893,7 +2914,10 @@ var Base_MagicItemsList = {
 			magicItemTable : "H",
 			description : "As an action, I can make this pale blue rhomboid orbit my head at 1d3 ft or retrieve it. Others can catch it as an action with an attack or Acrobatics check (AC/DC 24). It has 10 HP and resistance to all damage. While it orbits my head, my Strength score increases by 2, to a maximum of 20.",
 			descriptionFull : "An Ioun stone is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of Ioun stone exist, each type a distinct combination of shape and color.\n   When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of 1d3 feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity (Acrobatics) check. You can use an action to seize and stow the stone, ending its effect.\n   A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.\n   Your Strength score increases by 2, to a maximum of 20, while this pale blue rhomboid orbits your head.",
-			scores : [2, 0, 0, 0, 0, 0]
+			scores : [2, 0, 0, 0, 0, 0],
+			scorestxt: "While it orbits my head, my Strength score increases by 2, to a maximum of 20.",
+			abilityChecksum: 2,
+			abilitySubset: []
 		},
 		"sustenance" : {
 			rarity : "rare",
@@ -3116,14 +3140,13 @@ var Base_MagicItemsList = {
 		applyStatBonus : async function(itemName, statName, statBonus) {
 			// a function for all the manuals/tomes
 			if (!IsNotReset) return;
-			initiateCurrentStats();
 			var statIndx = AbilityScores.names.indexOf(statName);
-			var alreadyAppliedBefore = CurrentStats.maximumsLinked[itemName];
+			var alreadyAppliedBefore = wasm_character.has_ability_source(itemName);
 			var applyChange = app.alert({
 				nIcon : 2,
 				nType : 2,
 				nTitle : "Apply " + itemName + "?",
-				cMsg : "Do you want to apply the +" + statBonus + " bonus to the " + statName + " score and maximum from the " + itemName + " permanently? This increase will stay even after you remove this magic item.\nIf you select 'No' below, this increase will not be applied, even if you keep the magic item selected.\n\n" + (alreadyAppliedBefore ? "It seems you have applied this item before. If you click 'No', you will be prompted to remove all ability score increases from " + itemName : "If you want to remove this ability score increase at a later time, just add the item again and you will be prompted to remove the ability score increase then.")
+				cMsg : "Do you want to apply the +" + statBonus + " bonus to the " + statName + " score and maximum from the " + itemName + " permanently? This increase will stay even after you remove this magic item.\nIf you select 'Cancel' below, this increase will not be applied, even if you keep the magic item selected.\n\n" + (alreadyAppliedBefore ? "It seems you have applied this item before. If you click 'Cancel', you will be prompted to remove all ability score increases from " + itemName : "If you want to remove this ability score increase at a later time, just add the item again and you will be prompted to remove the ability score increase then.")
 			});
 			if (applyChange == 3) {
 				if (alreadyAppliedBefore) {
@@ -3138,25 +3161,16 @@ var Base_MagicItemsList = {
 					return;
 				}
 			}
-			var baseAdd = [0,0,0,0,0,0];
-			baseAdd[statIndx] = statBonus;
-			var maxAdd = [0,0,0,0,0,0];
-			maxAdd[statIndx] = "+" + baseAdd[statIndx];
-			if (alreadyAppliedBefore) {
-				baseAdd = [].concat(CurrentStats.maximumsLinked[itemName]);
-				// remove the old version
-				await processStats(false, "magic", itemName, baseAdd, false, false, maxAdd);
-				if (removeAll) {
-					// also remove the maximum
-					await processStats(false, "magic", itemName, maxAdd, false, "maximums");
-					return;
-				}
-				// now increase the gains to include the item again
-				baseAdd[statIndx] += statBonus;
-				maxAdd[statIndx] = "+" + baseAdd[statIndx];
+			if (removeAll) {
+				wasm_character.remove_ability_source(itemName);
+				wasm_character.remove_ability_source_limit(itemName, true);
+			} else {
+				let abbreviation = AbilityScores.abbreviations[statIndx];
+				let max = 20 + statBonus;
+				let description = statName + " score increases by " + statBonus + ", to a maximum of " + max + ".";
+				wasm_character.add_ability_source(itemName, description, [abbreviation], [statBonus], statBonus, [abbreviation]);
+				wasm_character.add_ability_source_limit(itemName, description, [abbreviation], [max], true);
 			}
-			await processStats(true, "magic", itemName, baseAdd, false, false, maxAdd);
-			await processStats(true, "magic", itemName, maxAdd, false, "maximums");
 		},
 		eval : async function() {
 			await MagicItemsList["manual of bodily health"].applyStatBonus("Manual of Bodily Health", "Constitution", 2);

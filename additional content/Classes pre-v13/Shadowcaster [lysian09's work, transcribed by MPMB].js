@@ -294,7 +294,7 @@ AddSubClass("shadowcaster", "shadowmaster", {
 				"It can do these special attacks a number of times equal to my Int mod per short rest"
 			]),
 			usages : "Intelligence modifier per ",
-			usagescalc : "event.value = What('Int Mod');",
+			usagescalc : "event.value = wasm_character.get_ability_modifier('Int');",
 			recovery : "short rest"
 		},
 		"subclassfeature10" : {
@@ -439,7 +439,7 @@ AddSubClass("shadowcaster", "skiamancer", {
 				"Use the \"Choose Feature\" button above to add a secrets to the third page"
 			]),
 			calcChanges : {
-				atkCalc : ["if (thisWeapon[4].indexOf('shadowcaster') !== -1 && thisWeapon[3] && (/^(0|1)$/).test(SpellsList[thisWeapon[3]].level)) { output.extraDmg += What('Int Mod'); }; ", "My shadowcaster fundamentals and initiate mysteries get my Intelligence modifier added to their damage."]
+				atkCalc : ["if (thisWeapon[4].indexOf('shadowcaster') !== -1 && thisWeapon[3] && (/^(0|1)$/).test(SpellsList[thisWeapon[3]].level)) { output.extraDmg += wasm_character.get_ability_modifier('Int'); }; ", "My shadowcaster fundamentals and initiate mysteries get my Intelligence modifier added to their damage."]
 			},
 			additional : levels.map(function (n) {
 				return n < 2 ? '' : (n < 6 ? 2 : n < 14 ? 3 : 4) + " secrets known";

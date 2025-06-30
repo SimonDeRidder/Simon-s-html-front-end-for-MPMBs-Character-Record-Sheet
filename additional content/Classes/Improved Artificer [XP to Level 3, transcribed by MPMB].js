@@ -423,7 +423,7 @@ ClassList["improved artificer"] = {
 				description : "\n   As an action, I can fire my dual pistols each 2 times, for a total of 4 attacks",
 				additional : "3 points",
 				usages: "Int mod per ",
-				usagescalc: "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc: "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery: "long rest",
 				action : [["action", ""]],
 				prereqeval : function(v) { return GetFeatureChoice('class', 'improved artificer', 'inventions: arcanic firearms', true).indexOf('dual pistols (2 invention points)') != -1; }
@@ -547,7 +547,7 @@ ClassList["improved artificer"] = {
 				description : "\n   When I hit with my blunderbuss, I can have the target take a Dex save or be knocked prone",
 				additional : "2 points",
 				usages: "Int mod per ",
-				usagescalc: "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc: "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery: "long rest",
 				prereqeval : function(v) { return GetFeatureChoice('class', 'improved artificer', 'inventions: arcanic firearms', true).indexOf('blunderbuss (2 invention points)') != -1; }
 			},
@@ -665,7 +665,7 @@ ClassList["improved artificer"] = {
 				description : "\n   When I hit with my sniper rifle, I can have the attack be an automatic critical hit",
 				additional : "4 points",
 				usages: "Int mod per ",
-				usagescalc: "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc: "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery: "long rest",
 				prereqeval : function(v) { return GetFeatureChoice('class', 'improved artificer', 'inventions: arcanic firearms', true).indexOf('sniper rifle (2 invention points)') != -1; }
 			}
@@ -730,7 +730,7 @@ ClassList["improved artificer"] = {
 				source : ["XPtL3:IA", 7],
 				description : "",
 				usages: "Int mod per ",
-				usagescalc: "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc: "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery: "long rest",
 				eval : "improvedArtificerClockworkConstructsFunctions.text('Clockwork Drone', true, [['Comp.Use.Traits', '\\u25C6 Lockpick: The drone has built-in lockpicking tools with which it can open any nonmagical lock automatically. It can do this as many times as its master\\'s Int mod per long rest.'], ['Cnote.Left', ' \\u2022 Lockpick: it can open any nonmagical lock; But only my Intelligence modifier per my long rests']]); ",
 				removeeval : "improvedArtificerClockworkConstructsFunctions.text('Clockwork Drone', false, [['Comp.Use.Traits', '\\u25C6 Lockpick: The drone has built-in lockpicking tools with which it can open any nonmagical lock automatically. It can do this as many times as its master\\'s Int mod per long rest.'], ['Cnote.Left', ' \\u2022 Lockpick: it can open any nonmagical lock; But only my Intelligence modifier per my long rests']]); ",
@@ -757,7 +757,7 @@ ClassList["improved artificer"] = {
 				source : ["XPtL3:IA", 7],
 				description : "",
 				usages: "\u00BD Int mod / ",
-				usagescalc: "event.value = Math.max(1, Math.floor(What('Int Mod')/2));",
+				usagescalc: "event.value = Math.max(1, Math.floor(wasm_character.get_ability_modifier('Int')/2));",
 				recovery: "long rest",
 				eval : "improvedArtificerClockworkConstructsFunctions.text('Clockwork Drone', true, [['Comp.Use.Traits', '\\u25C6 Stealth Field: As an action, the drone can turn invisible for 1 hour. The drone can use this feature as many times as half its master\\'s Intelligence modifier rounded down per long rest.'], ['Cnote.Left', ' \\u2022 Stealth Field: it can turn invisible as an action; But only half my Int mod per my long rests']]); ",
 				removeeval : "improvedArtificerClockworkConstructsFunctions.text('Clockwork Drone', false, [['Comp.Use.Traits', '\\u25C6 Stealth Field: As an action, the drone can turn invisible for 1 hour. The drone can use this feature as many times as half its master\\'s Intelligence modifier rounded down per long rest.'], ['Cnote.Left', ' \\u2022 Stealth Field: it can turn invisible as an action; But only half my Int mod per my long rests']]); ",
@@ -967,7 +967,7 @@ ClassList["improved artificer"] = {
 				action : [["bonus action", ""]],
 				additional : "3 p",
 				usages: "Int mod/",
-				usagescalc: "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc: "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery: "long rest",
 				prereqeval : function(v) { return GetFeatureChoice('class', 'improved artificer', 'inventions: mechanical limbs', true).indexOf('mechanical sense (1 invention point)') != -1; }
 			},
@@ -999,7 +999,7 @@ ClassList["improved artificer"] = {
 				action : [["bonus action", ""]], // added bonus action as no activation method was given
 				additional : "3 points",
 				usages: "Int mod per ",
-				usagescalc: "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc: "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery: "long rest",
 				prereqeval : function(v) { return GetFeatureChoice('class', 'improved artificer', 'inventions: mechanical limbs', true).indexOf('robotic eye (1 invention point)') != -1; }
 			},
@@ -1109,7 +1109,7 @@ ClassList["improved artificer"] = {
 				action : [["bonus action", ""]],
 				additional : "3 pnts",
 				usages: "Int mod per ",
-				usagescalc: "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc: "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery: "long rest",
 				prereqeval : function(v) { return GetFeatureChoice('class', 'improved artificer', 'inventions: mechanical limbs', true).indexOf('calibrated legs (2 invention points)') != -1; }
 			},

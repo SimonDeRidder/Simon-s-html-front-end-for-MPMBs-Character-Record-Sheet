@@ -1412,7 +1412,7 @@ async function ApplyWildshape(fldName, value, oldValue) {
 	var newCrea = ParseCreature(newForm);
 
 	var oldCrea = ParseCreature(oldValue);
-	if (newCrea === oldCrea || !newCrea || !What("Character Level") || !What("Int")|| !What("Wis")|| !What("Cha")) { //If this returns true, it means that no (new) race was found; or that the character has not been defined enough yet so the function can be stopped
+	if (newCrea === oldCrea || !newCrea || !What("Character Level") || !wasm_character.get_ability("Int")|| !wasm_character.get_ability("Wis")|| !wasm_character.get_ability("Cha")) { //If this returns true, it means that no (new) race was found; or that the character has not been defined enough yet so the function can be stopped
 		thermoM(thermoTxt, true); // Stop progress bar
 		return; //don't do the rest of the function
 	}
@@ -1832,7 +1832,7 @@ function RemoveWildshape(input) {
 function MakeWildshapeMenu(fldName) {
 	var prefix = getTemplPre(fldName, "WSfront", true);
 
-	if (!What("Character Level") || !What("Int")|| !What("Wis")|| !What("Cha")) { //If the character has not been defined enough, the function can be stopped after making a warning-menu
+	if (!What("Character Level") || !wasm_character.get_ability("Int")|| !wasm_character.get_ability("Wis")|| !wasm_character.get_ability("Cha")) { //If the character has not been defined enough, the function can be stopped after making a warning-menu
 		Menus.wildshape = [{cName : "Please create a character on the 1st page before trying a Wild Shape", cReturn : "nothing#toreport", bEnabled : false}];
 		return; //don't do the rest of the function
 	}
@@ -3339,7 +3339,7 @@ async function PagesOptions() {
 			break;
 		case "scores" :
 			if (MenuSelection[1] === "dialog") {
-				await AbilityScores_Button();
+				await wasm_character.show_abilities_dialog();
 				break;
 			};
 			ShowHonorSanity(MenuSelection[1].capitalize());
@@ -3962,7 +3962,6 @@ function GetStringifieds(notSources) {
 	CurrentProfs = eval(What("CurrentProfs.Stringified"));
 	CurrentVars = eval(What("CurrentVars.Stringified"));
 	CurrentFeatureChoices = eval(What("CurrentFeatureChoices.Stringified"));
-	CurrentStats = eval(What("CurrentStats.Stringified"));
 }
 
 //set all stringified variables into their fields
@@ -3980,7 +3979,6 @@ function SetStringifieds(type) {
 	if (!type || type === "profs") Value("CurrentProfs.Stringified", CurrentProfs.toSource());
 	if (!type || type === "vars") Value("CurrentVars.Stringified", CurrentVars.toSource());
 	if (!type || type === "choices") Value("CurrentFeatureChoices.Stringified", CurrentFeatureChoices.toSource());
-	if (!type || type === "stats") Value("CurrentStats.Stringified", CurrentStats.toSource());
 	if (type === "scriptfiles") Value("User_Imported_Files.Stringified", CurrentScriptFiles.toSource());
 };
 
@@ -8565,7 +8563,6 @@ async function setUnicodeUse(enable, force) {
 		};
 		// update the tooltips that use unicode
 		UpdateDropdown("tooltips");
-		await AbilityScores_Button(true);
 		setSkillTooltips(true);
 		await MakeSkillsMenu_SkillsOptions(true, true);
 		SetHPTooltip();

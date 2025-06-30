@@ -72,7 +72,7 @@ AddSubClass("paladin", "paladin-weave", {
 				"If the attack triggers a concentration save, the DC is that of my paladin spell DC"
 			]),
 			usages : "Charisma modifier per ",
-			usagescalc : "event.value = Math.max(1, tDoc.getField('Cha Mod').value);",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 			recovery : "long rest",
 			action : [["bonus action", ""]]
 		},

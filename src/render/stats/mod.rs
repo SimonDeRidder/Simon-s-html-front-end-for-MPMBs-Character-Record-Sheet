@@ -7,7 +7,7 @@ use self::abilities::render_abilities;
 
 use super::error::RenderError;
 
-mod abilities;
+pub mod abilities;
 
 pub fn render_stats_page(character: &Character, document: &Document) -> Result<(), RenderError> {
 	// try to render all, only propagate errors at the end
@@ -18,7 +18,7 @@ pub fn render_stats_page(character: &Character, document: &Document) -> Result<(
 		None => Err(RenderError::new("Could not find stats page CSfront!")),
 	}?
 	.dyn_into::<web_sys::HtmlElement>()?;
-	let results: Vec<Result<(), RenderError>> = vec![render_abilities(character, &stats_page)];
+	let results: Vec<Result<(), RenderError>> = vec![render_abilities(character, stats_page)];
 
 	for res in results {
 		res?;

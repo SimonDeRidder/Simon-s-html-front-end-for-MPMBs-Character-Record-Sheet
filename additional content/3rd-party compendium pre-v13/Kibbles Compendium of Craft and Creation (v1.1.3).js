@@ -902,7 +902,7 @@ var KCCC_gadgetsmith = AddSubClass("inventor", "gadgetsmith", {
 					atkAdd : [
 						function (fields, v) {
 							if (v.baseWeaponName == "shocking grasp") {
-								if (What('Dex Mod') > What('Int Mod')) {
+								if (wasm_character.get_ability_modifier('Dex') > wasm_character.get_ability_modifier('Int')) {
 									fields.Mod = 2;
 								}
 							}
@@ -1066,15 +1066,15 @@ KCCCglobal.upgrades.gadgetsmith = [
 	calcChanges : {
 		atkCalc : [
 			function (fields, v, output) {
-				if (v.baseWeaponName === "shocking grasp" && What("Int Mod") && Number(What("Int Mod")) > 0) {
-					output.extraDmg += Number(What('Int Mod'));
+				if (v.baseWeaponName === "shocking grasp" && wasm_character.get_ability_modifier('Int') && wasm_character.get_ability_modifier('Int') > 0) {
+					output.extraDmg += wasm_character.get_ability_modifier('Int');
 				}
 			},
 			"I can add my Intelligence modifier to the damage dealt to my Shocking Grasp cantrip from my Shock Generator."
 		],
 		spellAdd : [
 			function (spellKey, spellObj, spName) {
-				if (spellKey == "shocking grasp" && spName === "inventor" && What("Int Mod") && Number(What("Int Mod")) > 0) {
+				if (spellKey == "shocking grasp" && spName === "inventor" && wasm_character.get_ability_modifier('Int') && wasm_character.get_ability_modifier('Int') > 0) {
 					return genericSpellDmgEdit(spellKey, spellObj, "\\w+\\.?", "Int");
 				}
 			},
@@ -1450,15 +1450,15 @@ KCCCglobal.upgrades.gadgetsmith = [
 	calcChanges : {
 		atkCalc : [
 			function (fields, v, output) {
-				if (v.isSpell && /lightn(\.|ing)/i.test(fields.Damage_Type) && What("Int Mod") && Number(What("Int Mod")) > 0) {
-					output.extraDmg += Number(What('Int Mod'));
+				if (v.isSpell && /lightn(\.|ing)/i.test(fields.Damage_Type) && wasm_character.get_ability_modifier('Int') && wasm_character.get_ability_modifier('Int') > 0) {
+					output.extraDmg += wasm_character.get_ability_modifier('Int');
 				}; // This is intended to stack with Jumper Cables
 			},
 			"Once per turn when I deal lightning damage with a spell, I can add my Intelligence modifier to the damage."
 		],
 		spellAdd : [
 			function (spellKey, spellObj, spName) {
-				if (!spellObj.psionic && What("Int Mod") && Number(What("Int Mod")) > 0) {
+				if (!spellObj.psionic && wasm_character.get_ability_modifier('Int') && wasm_character.get_ability_modifier('Int') > 0) {
 					return genericSpellDmgEdit(spellKey, spellObj, "lightning|lightn\\.?", "Int", true);
 				}
 			},
@@ -1814,7 +1814,7 @@ KCCCglobal.upgrades.infusionsmith = [
 		text : "While under the effect of Mage Armor, I can add my Intelligence modifier to my AC, instead of my Dexterity modifier.",
 		stopeval : function (v) {
 			// return `true` to stop adding `mod`
-			return CurrentArmour.known !== 'mage armor' || Number(What("Dex Mod")) > Number(What("Int Mod"));
+			return CurrentArmour.known !== 'mage armor' || wasm_character.get_ability_modifier('Dex') > wasm_character.get_ability_modifier('Int');
 		}
 	}],
 	spellcastingBonus : [{
@@ -2298,7 +2298,7 @@ MagicItemsList["blasting rod"] = {
 		atkCalc : [
 			function (fields, v, output) {
 				if (v.isSpell && SpellsList[v.WeaponName] && SpellsList[v.WeaponName].school == "Evoc" && /\bblasting\b/i.test(v.WeaponTextName)) {
-					output.extraDmg += What('Int Mod');
+					output.extraDmg += wasm_character.get_ability_modifier('Int');
 				}
 			},
 			'If I include the word "Blasting" in the name of a cantrip, it will be treated as the cantrip from Blasting Rod.'
@@ -2307,7 +2307,7 @@ MagicItemsList["blasting rod"] = {
 			function (spellKey, spellObj, spName) {
 				if (spName === 'blasting rod') {
 					spellObj.firstCol = "checkbox";
-					if (What("Int Mod") && Number(What("Int Mod")) > 0) {
+					if (wasm_character.get_ability_modifier('Int') && wasm_character.get_ability_modifier('Int') > 0) {
 						return genericSpellDmgEdit(spellKey, spellObj, "\\w+\\.?", "Int", true);
 					}
 				}
@@ -2632,7 +2632,7 @@ var KCCC_potionsmith = AddSubClass("inventor", "potionsmith", {
 					function (spellKey, spellObj, spName, isDuplicate) {
 						if (spName === 'inventor-alchemical infusions' && /conc(entration),/i.test(spellObj.duration)) {
 							// concentration spells get a fixed duration
-							var intMod = Math.max(1, Number(What("Int Mod")));
+							var intMod = Math.max(1, wasm_character.get_ability_modifier('Int'));
 							spellObj.duration = intMod + " (Int) rnds";
 							return true;
 						}
@@ -2652,17 +2652,17 @@ var KCCC_potionsmith = AddSubClass("inventor", "potionsmith", {
 				atkCalc : [
 					function (fields, v, output) {
 						if (v.theWea.KCCC_instantReaction) {
-							output.extraDmg += Math.max(0, Number(What('Int Mod')));
+							output.extraDmg += Math.max(0, wasm_character.get_ability_modifier('Int'));
 						}
 					},
 					'I can add my Intelligence modifier to the damage from an instant reaction.'
 				],
 				spellAdd : [
 					function (spellKey, spellObj, spName) {
-						if (spName === 'inventor-alchemical infusions' && What("Int Mod") && Number(What("Int Mod")) > 0) {
+						if (spName === 'inventor-alchemical infusions' && Number(wasm_character.get_ability_modifier('Int')) > 0) {
 							if (spellKey === "heroism") {
 								// only spell that grants temp HP, which is now doubled
-								spellObj.description = "1+1/SL crea immune to fear, gain (2\xD7 Int mod) " + (Number(What("Int Mod"))*2) + " temp. HP start of each turn while spell lasts";
+								spellObj.description = "1+1/SL crea immune to fear, gain (2\xD7 Int mod) " + (Number(wasm_character.get_ability_modifier('Int'))*2) + " temp. HP start of each turn while spell lasts";
 								return true;
 							} else if (genericSpellDmgEdit(spellKey, spellObj, "heal", "Int") || genericSpellDmgEdit(spellKey, spellObj, "\\w+\\.?", "Int")) {
 								return true;
@@ -2965,9 +2965,9 @@ KCCCglobal.upgrades.potionsmith = [
 			atkCalc : [
 				function (fields, v, output) {
 					if (/adrenaline/i.test(v.WeaponTextName) && (fields.Mod === 1 || fields.Mod === 2)) { // MPMB: edited to adhere to the v13.1.9 changes
-						output.extraHit += Math.min(What('Int Mod'), 5);
+						output.extraHit += Math.min(wasm_character.get_ability_modifier('Int'), 5);
 						if (!('abilitytodamage' in v.theWea) || v.theWea.abilitytodamage) {
-							output.extraDmg += Math.min(What('Int Mod'), 5);
+							output.extraDmg += Math.min(wasm_character.get_ability_modifier('Int'), 5);
 						}
 					}
 				},
@@ -3561,7 +3561,7 @@ KCCCglobal.upgrades.thundersmith = [
 		]),
 		action : [["bonus action", ""]],
 		usages : "Intelligence modifier per ",
-		usagescalc : "event.value = Math.max(1, What('Int Mod'));",
+		usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 		recovery : "long rest"
 	}, {
 		KCCClevel : 11,
@@ -4272,7 +4272,7 @@ KCCCglobal.upgrades.warsmith = [
 		"telepathically with my armor, and my armor can understand and speak my languages"
 	]),
 	scores : [0, 0, 0, 2, 0, 0],
-	scoresMaximum : [0, 0, 0, "+2", 0, 0]
+	scoresMaximum : [0, 0, 0, 22, 0, 0]
 }, {
 	listname : "Wire Acrobatics (prereq: Grappling Hook)",
 	prereqKCCC : {
@@ -5290,7 +5290,7 @@ var KCCC_fleshsmith = AddSubClass("inventor", "fleshsmith", {
 					"I can resuscitate it at the end of a rest without using a spell slot or materials"
 				]),
 				usages : "Intelligence modifier per ",
-				usagescalc : "event.value = Math.max(1, What('Int Mod'));",
+				usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 				recovery : "short rest",
 				spellcastingBonus : [{
 					name : "Adorable Critter",
@@ -5643,7 +5643,7 @@ KCCCglobal.upgrades.fleshsmith = [
 		calcChanges : {
 			spellAdd : [
 				function (spellKey, spellObj, spName) {
-					if (spellKey === "cure wounds" && What("Int Mod") && Number(What("Int Mod")) > 0) {
+					if (spellKey === "cure wounds" && Number(wasm_character.get_ability_modifier('Int')) > 0) {
 						return genericSpellDmgEdit(spellKey, spellObj, "heal", "Int");
 					}
 				},
@@ -5718,7 +5718,7 @@ KCCCglobal.upgrades.fleshsmith = [
 		]),
 		action : [["bonus action", " (start/end)"]],
 		usages : "Con mod + Int mod rnds per ",
-		usagescalc : 'event.value = Math.max(1, (Number(What("Con Mod")) + Number(What("Int Mod")))',
+		usagescalc : 'event.value = Math.max(1, (Number(wasm_character.get_ability_modifier("Con")) + Number(wasm_character.get_ability_modifier("Int")))',
 		recovery : "short rest"
 	}, {
 		name : "Mutating Mastery",
@@ -6108,7 +6108,7 @@ KCCCglobal.upgrades.fleshsmith = [
 	}, {
 		KCCClevel : 15,
 		listname : "Uncanny Strength (prereq: Strength 18 or higher)",
-		prereqeval : function(v) { return Number(What('Str')) > 17 && KCCCglobal.fn.prereqeval(v); },
+		prereqeval : function(v) { return Number(wasm_character.get_ability('Str')) > 17 && KCCCglobal.fn.prereqeval(v); },
 		name : "Uncanny Strength",
 		source : [["KCCC", 47]],
 		description : desc([

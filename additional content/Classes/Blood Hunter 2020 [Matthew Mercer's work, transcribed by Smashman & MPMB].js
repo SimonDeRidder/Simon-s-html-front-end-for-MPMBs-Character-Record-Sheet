@@ -1039,7 +1039,7 @@ AddSubClass("blood hunter", "mutant", {
 			]),
 			action : [['bonus action', ""]],
 			usages : "Int mod per ",
-			usagescalc : "event.value = Math.max(1, What('Int Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 			recovery : "long rest"
 		}
 	}

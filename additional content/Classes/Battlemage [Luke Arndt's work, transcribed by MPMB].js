@@ -274,7 +274,7 @@ ClassList["battlemage"] = {
 				calcChanges : {
 					atkCalc : [
 						function (fields, v, output) {
-							if (v.baseWeaponName == "unarmed strike") output.extraDmg += What('Int Mod');
+							if (v.baseWeaponName == "unarmed strike") output.extraDmg += wasm_character.get_ability_modifier('Int');
 						}, ""
 					],
 					atkAdd : [
@@ -413,7 +413,7 @@ ClassList["battlemage"] = {
 					function (fields, v, output) {
 						if (classes.known.battlemage && classes.known.battlemage.level > 19 && v.isSpell) {
 							var nrgType = GetFeatureChoice('class', 'battlemage', 'energy specialization');
-							if (nrgType && fields.Damage_Type.toLowerCase().indexOf(nrgType) != -1) output.extraDmg += What('Int Mod');
+							if (nrgType && fields.Damage_Type.toLowerCase().indexOf(nrgType) != -1) output.extraDmg += wasm_character.get_ability_modifier('Int');
 						};
 					},
 					"Cantrips and spells that deal my energy specialization type of damage get my Intelligence modifier added to their damage."
@@ -816,7 +816,7 @@ AddSubClass("battlemage", "runic bulwark", {
 				atkCalc : [
 					function (fields, v, output) {
 						if ((/^(?=.*runic)(?=.*weapon).*$/i).test(v.WeaponTextName)) {
-							output.extraDmg += What('Int Mod');
+							output.extraDmg += wasm_character.get_ability_modifier('Int');
 						}
 					},
 					'If I include the words "Runic Weapon" in a the name of a weapon, it will be treated as a weapon I inscribed with runes and adds my Intelligence modifier to its damage.'

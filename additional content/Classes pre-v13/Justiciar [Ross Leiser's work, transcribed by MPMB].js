@@ -344,7 +344,7 @@ AddSubClass("justiciar", "division of defense", {
 				"I can substitute my save result for the creature's result"
 			]),
 			usages : "Intelligence modifier per ",
-			usagescalc : "event.value = Math.max(1, What('Int Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Int'));",
 			recovery : "long rest",
 			action : [["reaction", ""]]
 		},

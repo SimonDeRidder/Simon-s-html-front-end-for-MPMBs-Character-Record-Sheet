@@ -7,6 +7,7 @@ async function InitializeEverything(noButtons, noVars) {
 	// Define some document level variables before and after running the user scripts
 	if (!noVars) {
 		InitiateLists();
+		await fetchFixedAdditionalScripts();
 		RunUserScript(true);
 		spellsAfterUserScripts();
 	};

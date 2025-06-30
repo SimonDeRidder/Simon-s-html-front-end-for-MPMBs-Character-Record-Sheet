@@ -58,7 +58,7 @@ AddSubClass("fighter", "gunslinger", {
 			]),
 			recovery : "short rest",
 			usages : "Wisdom modifier per ",
-			usagescalc : "event.value = Math.max(1, What('Wis Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Wis'));",
 			extraname : "Grit Shot",
 			"deadeye shot" : {
 				name : "Deadeye Shot",

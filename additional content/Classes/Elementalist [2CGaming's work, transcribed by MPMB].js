@@ -131,7 +131,7 @@ ClassList["elementalist"] = {
 					function (spellKey, spellObj, spName, isDuplicate) {
 						if (spellObj.rangeInfluence && classes.known.elementalist) {
 							// Set the range of a shape (unless it is a sub-shape)
-							var conMod = Number(What("Con Mod"));
+							var conMod = Number(wasm_character.get_ability_modifier('Con'));
 							var elemLvl = classes.known.elementalist.level;
 							var bonusRange = Math.floor(elemLvl * 2 / 10) * 10 + 10;
 							var shapeRange = (30 + bonusRange * conMod) + " ft";
@@ -428,7 +428,7 @@ AddSubClass("elementalist", "air", {
 						if (v.theWea.isGuidingWindBlast && classes.known.elementalist) {
 							var lvl = classes.known.elementalist.level;
 							fields.Damage_Die = (lvl < 6 ? 1 : lvl < 10 ? 2 : lvl < 14 ? 3 : lvl < 18 ? 4 : 5) + 'd6';
-							var conMod = Number(What("Con Mod"));
+							var conMod = Number(wasm_character.get_ability_modifier('Con'));
 							var bonusRange = Math.floor(lvl * 2 / 10) * 10 + 10;
 							var shapeRange = (30 + bonusRange * conMod) + " ft";
 							fields.Range = What("Unit System") != "metric" ? shapeRange : ConvertToMetric(shapeRange, 0.5);

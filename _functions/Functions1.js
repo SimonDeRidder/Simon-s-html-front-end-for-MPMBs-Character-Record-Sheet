@@ -81,14 +81,6 @@ function MakeButtons() {
 				cLabel : "Weight"
 			});
 			app.addToolButton({
-				cName : "AbilityScoresButton",
-				cExec : "AbilityScores_Button();",
-				oIcon : allIcons.scores,
-				cTooltext : toUni("Ability Scores") + "\nOpen the Ability Scores dialog where you can set them using their separate parts, see the Point Buy value, and apply a magic item that overrides.\n\nThis dialog also gives the option to add Honor/Sanity.",
-				nPos : 8,
-				cLabel : "Scores"
-			});
-			app.addToolButton({
 				cName : "BlueTextButton",
 				cExec : "ToggleBlueText();",
 				oIcon : allIcons.modifiers,
@@ -2503,6 +2495,8 @@ async function FindRace(inputracetxt, novardialog, aOldRace) {
 			if (!CurrentRace.scores && !CurrentRace.scorestxt) {
 				// No fixed stat increases, so list the generic one
 				CurrentRace.scorestxt = "+2 to one ability score and +1 to a different score, -or- +1 to three different scores";
+				CurrentRace.abilityChecksum = 3;
+				CurrentRace.abilitySubset = null;
 			}
 			var genericHeightWeight = " vary in size. If you'd like to determine your character's height or weight randomly, consult the Random Height and Weight table in the PHB, and choose the row in the table that best represents the build you imagine for your character.";
 			if (!CurrentRace.height) CurrentRace.height = genericHeightWeight;

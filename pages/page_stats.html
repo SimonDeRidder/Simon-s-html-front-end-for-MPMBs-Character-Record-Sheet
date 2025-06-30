@@ -844,6 +844,7 @@
 				eventManager.add_listener(
 					event_type,
 					function () {
+						SetHPTooltip(false, false);
 						if (event_type == EventType.Con_change) {
 							// Also recalculate HD fields to make sure Con modifier on die is correct
 							for (let i=1; i<=3; i++) {
@@ -1115,12 +1116,14 @@
 
 		<span class="textlabel-bold" style="top: 21.3px;left: 53.4px;width: 177px">INSPIRATION</span>
 
-		<input
-			id="Inspiration"
-			class="field inputfield"
-			style="top: 10.4px;left: 15px;font-size: 22px;width: 28px;height: 28px;text-align: center"
-			type="number"
-		/><!--Is a check-box in pdf TODO: revert to checkbox for publication-->
+		<label class="checkbox-normal" style="font-size: 28px;top: 10.5px;left: 16px;width: 29.6px;height: 29.6px;">
+			<input
+				id="Inspiration"
+				class="field"
+				type="checkbox"
+			/>
+			<span class="checkmark"></span>
+		</label>
 	</div>
 
 
@@ -1262,6 +1265,8 @@
 								element.value = newVal;
 								element.dispatchEvent(new Event('change'));
 							}
+							if (CurrentUpdates.types.indexOf("attacks") !== -1) ReCalcWeapons();
+							if (CurrentUpdates.types.indexOf("hp") !== -1) SetHPTooltip(false, false);
 						}
 					);
 				});

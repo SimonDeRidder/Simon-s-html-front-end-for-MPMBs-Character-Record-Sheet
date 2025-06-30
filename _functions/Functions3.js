@@ -206,14 +206,38 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		if (uObj.carryingCapacity) await SetProf("carryingcapacity", addIt, uObj.carryingCapacity, tipNmF);
 		if (uObj.advantages) await processAdvantages(addIt, tipNmF, uObj.advantages);
 
-		// --- backwards compatibility --- //
-		var abiScoresTxt = uObj.scorestxt ? uObj.scorestxt : uObj.improvements ? uObj.improvements : false;
-		if (uObj.scores || abiScoresTxt) {
-			await processStats(addIt, type, tipNm, uObj.scores, abiScoresTxt, false, uObj.scoresMaximum, uObj.scoresMaxLimited);
-		} else if (uObj.scoresMaximum) {
-			await processStats(addIt, type, tipNm, uObj.scoresMaximum, abiScoresTxt, "maximums");
+		var abiScoresTxt = uObj.scorestxt ? uObj.scorestxt : uObj.description? uObj.description : uObj.improvements ? uObj.improvements : false;
+		if (uObj.scores || uObj.scorestxt) {
+			if (addIt) {
+				if (uObj.scores) {
+					wasm_character.add_ability_source(tipNm, abiScoresTxt, AbilityScores.abbreviations.slice(0, uObj.scores.length), uObj.scores, uObj.abilityChecksum, uObj.abilitySubset);
+					if (uObj.abilityChecksum && (uObj.scores.reduce((partialSum, a) => partialSum + a, 0) != uObj.abilityChecksum)) {
+						await wasm_character.show_abilities_dialog();
+					}
+				} else {
+					wasm_character.add_ability_source(tipNm, abiScoresTxt, [], [], uObj.abilityChecksum, uObj.abilitySubset);
+					await wasm_character.show_abilities_dialog();
+				}
+			} else {
+				wasm_character.remove_ability_source(tipNm);
+			}
 		}
-		if (uObj.scoresOverride) await processStats(addIt, type, tipNm, uObj.scoresOverride, abiScoresTxt, "overrides");
+		if (uObj.scoresMaximum) {
+			if (addIt) {
+				wasm_character.add_ability_source_limit(tipNm, abiScoresTxt, AbilityScores.abbreviations.slice(0, uObj.scoresMaximum.length), uObj.scoresMaximum, true);
+			} else {
+				wasm_character.remove_ability_source_limit(tipNm, true);
+			}
+		}
+		if (uObj.scoresOverride) {
+			if (addIt) {
+				wasm_character.add_ability_source_limit(tipNm, abiScoresTxt, AbilityScores.abbreviations.slice(0, uObj.scoresOverride.length), uObj.scoresOverride, false);
+				wasm_character.add_ability_source_limit(tipNm, abiScoresTxt, AbilityScores.abbreviations.slice(0, uObj.scoresOverride.length), uObj.scoresOverride, true);
+			} else {
+				wasm_character.remove_ability_source_limit(tipNm, false);
+				wasm_character.remove_ability_source_limit(tipNm, true);
+			}
+		}
 
 		// spellcasting
 		if (uObj.spellcastingBonus) await processSpBonus(addIt, uniqueObjNm, uObj.spellcastingBonus, type, aParent, objNm, forceNonCurrent ? true : false);
@@ -1690,95 +1714,119 @@ async function UpdateSheetDisplay() {
 	// possible options for stats: statsoverride, statsclasses, statsrace, statsfeats, statsitems
 	if (CUflat.indexOf("stats") !== -1 || CurrentUpdates.types.indexOf("testasi") !== -1) {
 		Changes_Dialog.oldStats = wasm_character.get_abilities_tooltip();
-		if (await AbilityScores_Button(true)) { // sets tooltip for stats and returns true if anything changed
-			var strStats = "";
-			// ability score improvements
-			if (CurrentUpdates.types.indexOf("testasi") !== -1) {
-				var newASI = 0;
-				for (var nClass in classes.known) {
-					var clLvl = Math.min(CurrentClasses[nClass].improvements.length, classes.known[nClass].level);
-					newASI += clLvl ? CurrentClasses[nClass].improvements[clLvl - 1] : 0;
+		var strStats = "";
+		// ability score improvements
+		if (CurrentUpdates.types.indexOf("testasi") !== -1) {
+
+			function get_class_improvements(classObj, classLevel) {
+				// calculate a list of Class+level transitions that grant an ability improvement
+				let improvements = [];
+				let currentImprovementCount = 0;
+				let improvementString = "";
+				for (let level = 1; level <= Math.min(classObj.improvements.length, classLevel); level++) {
+					if (classObj.improvements[level - 1] > currentImprovementCount) {
+						improvementString = `${classObj.fullname} (lvl. ${level})`;
+						if ((classObj.improvements[level - 1] - currentImprovementCount) > 1) {
+							for (let improvementIndex=1; improvementIndex <= (classObj.improvements[level - 1] - currentImprovementCount); improvementIndex ++) {
+								improvements.push(improvementString + " [" + improvementIndex + "]");
+							}
+						} else {
+							improvements.push(improvementString);
+						}
+						currentImprovementCount = classObj.improvements[level - 1];
+					}
 				}
-				var oldASI = 0;
-				for (var oClass in classes.old) {
-					var useObj = CurrentClasses[oClass] ? CurrentClasses[oClass] : ClassList[oClass];
-					clLvl = Math.min(useObj.improvements.length, classes.old[oClass].classlevel);
-					oldASI += clLvl ? useObj.improvements[clLvl - 1] : 0;
-				}
-				if (newASI !== oldASI) {
-					var totalASI = newASI - oldASI;
-					var ASItxt = " Ability Score Improvement" + (Math.abs(totalASI) != 1 ? "s" : "");
-					strStats += "\nThe change in level has granted " + toUni(totalASI) + " new" + ASItxt + ".\nThis bring the new total to " + toUni(newASI) + ".";
-				}
+				return improvements;
 			}
-			// other stat changes
-			if (CUflat.indexOf("stats") !== -1) {
-				var statChanges = [];
-				if (CurrentUpdates.types.indexOf("statsrace") !== -1) statChanges.push(toUni("Race"));
-				if (CurrentUpdates.types.indexOf("statsclasses") !== -1) statChanges.push(toUni("Class Feature(s)"));
-				if (CurrentUpdates.types.indexOf("statsfeats") !== -1) statChanges.push(toUni("Feat(s)"));
-				if (CurrentUpdates.types.indexOf("statsoverride") !== -1 || CurrentUpdates.types.indexOf("statsitems") !== -1 || CurrentUpdates.types.indexOf("statsmagic") !== -1) statChanges.push(toUni("Magic Item(s)"));
-				strStats += formatLineList("\nThe following changed one or more ability score:", statChanges);
+
+			let improvementStrings = [];
+			for (var nClass in classes.known) {
+				var clLvl = Math.min(CurrentClasses[nClass].improvements.length, classes.known[nClass].level);
+				improvementStrings = improvementStrings.concat(get_class_improvements(CurrentClasses[nClass], clLvl));
 			}
-			if (strStats) {
-				// make the Stats dialog insert
-				dialogParts.push({
-					skipType : "chAS",
-					type : "cluster",
-					align_children : "align_left",
+			// update ability description, or add if it doesn't exist yet, let user increase actual value
+			wasm_character.update_ability_source_improvements(improvementStrings);
+			let oldImprovementStrings = [];
+			for (var oClass in classes.old) {
+				var useObj = CurrentClasses[oClass] ? CurrentClasses[oClass] : ClassList[oClass];
+				clLvl = Math.min(useObj.improvements.length, classes.old[oClass].classlevel);
+				oldImprovementStrings = oldImprovementStrings.concat(get_class_improvements(useObj, clLvl));
+			}
+			if (((improvementStrings.length > 0) || (oldImprovementStrings.length > 0)) && (improvementStrings != oldImprovementStrings)) {
+				let removed = oldImprovementStrings.filter(x => !improvementStrings.includes(x));
+				let added = improvementStrings.filter(x => !oldImprovementStrings.includes(x));
+				let ASItxt = " Ability Score Improvement" + ((removed.length + added.length) > 1 ? "s" : "");
+				strStats += (
+					"\nThe change in level has granted " + toUni(added.length) + " new" + ASItxt
+					+ ((removed.lenght > 0) ? (" (" + toUni(removed.length) + (removed.length > 1 ? " were": " was") + " removed).") : ".")
+					+ "\nThis bring the new total to " + toUni(improvementStrings.length) + "."
+				);
+			}
+		}
+		// other stat changes
+		if (CUflat.indexOf("stats") !== -1) {
+			var statChanges = [];
+			if (CurrentUpdates.types.indexOf("statsrace") !== -1) statChanges.push(toUni("Race"));
+			if (CurrentUpdates.types.indexOf("statsclasses") !== -1) statChanges.push(toUni("Class Feature(s)"));
+			if (CurrentUpdates.types.indexOf("statsfeats") !== -1) statChanges.push(toUni("Feat(s)"));
+			if (CurrentUpdates.types.indexOf("statsoverride") !== -1 || CurrentUpdates.types.indexOf("statsitems") !== -1 || CurrentUpdates.types.indexOf("statsmagic") !== -1) statChanges.push(toUni("Magic Item(s)"));
+			strStats += formatLineList("\nThe following changed one or more ability score:", statChanges);
+		}
+		if (strStats) {
+			// make the Stats dialog insert
+			dialogParts.push({
+				skipType : "chAS",
+				type : "cluster",
+				align_children : "align_left",
+				alignment : "align_fill",
+				width : 500,
+				font : "heading",
+				name : "Ability Scores",
+				elements : [{
+					type : "view",
+					align_children : "align_row",
 					alignment : "align_fill",
-					width : 500,
-					font : "heading",
-					name : "Ability Scores",
 					elements : [{
-						type : "view",
-						align_children : "align_row",
+						type : "static_text",
+						width : 375,
 						alignment : "align_fill",
-						elements : [{
-							type : "static_text",
-							width : 375,
-							alignment : "align_fill",
-							font : "dialog",
-							wrap_name : true,
-							name : "A change to ability scores has been detected. This is not applied automatically, but you can use the Ability Scores Dialog for that." + strStats
-						}, {
-							type : "view",
-							align_children : "align_right",
-							elements : [{
-								type : "button",
-								item_id : "bSTc",
-								name : "See Changes"
-							}, {
-								type : "button",
-								item_id : "bSTo",
-								name : "Open Ability Scores Dialog"
-							}]
-						}]
+						font : "dialog",
+						wrap_name : true,
+						name : "A change to ability scores has been detected. This is not applied automatically, but you can use the Ability Scores Dialog for that." + strStats
 					}, {
-						type : "check_box",
-						item_id : "chAS",
-						alignment : "align_fill",
-						font : "palette",
-						name : checkboxTxt
+						type : "view",
+						align_children : "align_right",
+						elements : [{
+							type : "button",
+							item_id : "bSTc",
+							name : "See Changes"
+						}, {
+							type : "button",
+							item_id : "bSTo",
+							name : "Open Ability Scores Dialog"
+						}]
 					}]
-				});
-				Changes_Dialog.bSTc = async function (dialog) {
-					await ShowCompareDialog(
-						["Ability Score changes", "The text above is part of the 'Ability Scores Dialog' and the tooltip (mouseover text) of the ability score fields.\nYou can always open the 'Ability Scores Dialog' using the 'Scores' button in the 'JavaScript Window'-toolbar or the 'Ability Scores' bookmark."],
-						[
-							["Old ability score modifiers", this.oldStats],
-							["New ability score modifiers", wasm_character.get_abilities_tooltip()]
-						],
-						true
-					);
-				};
-				Changes_Dialog.bSTo = async function (dialog) {
-					await AbilityScores_Button();
-					// this dialog might have just updated the stats, prompting for some other updates
-					if (CurrentUpdates.types.indexOf("attacks") !== -1) ReCalcWeapons();
-					if (CurrentUpdates.types.indexOf("hp") !== -1) SetHPTooltip(false, false);
-				};
-			}
+				}, {
+					type : "check_box",
+					item_id : "chAS",
+					alignment : "align_fill",
+					font : "palette",
+					name : checkboxTxt
+				}]
+			});
+			Changes_Dialog.bSTc = async function (dialog) {
+				await ShowCompareDialog(
+					["Ability Score changes", "The text above is part of the 'Ability Scores Dialog' and the tooltip (mouseover text) of the ability score fields.\nYou can always open the 'Ability Scores Dialog' using the 'Scores' button in the 'JavaScript Window'-toolbar or the 'Ability Scores' bookmark."],
+					[
+						["Old ability score modifiers", this.oldStats],
+						["New ability score modifiers", wasm_character.get_abilities_tooltip()]
+					],
+					true
+				);
+			};
+			Changes_Dialog.bSTo = async function (dialog) {
+				await wasm_character.show_abilities_dialog();
+			};
 		}
 	}
 

@@ -195,7 +195,7 @@ ClassList["shaman"] = {
 				description : "\n   " + "When dealing damage with a shaman cantrip, I add my Charisma modifier to the damage" + "\n   " + "In addition, I may spend 1 spirit point to add my shaman level to the damage",
 				source : ["MW:SC", 14],
 				calcChanges : {
-					atkCalc : ["if (thisWeapon[4].indexOf('shaman') !== -1 && thisWeapon[3] && SpellsList[thisWeapon[3]].level === 0) { output.extraDmg += What('Cha Mod'); }; ", "My shaman cantrips get my Charima modifier added to their damage. In addition, I may spend 1 spirit point to add my shaman level to the damage whenever I hit with a shaman cantrip."]
+					atkCalc : ["if (thisWeapon[4].indexOf('shaman') !== -1 && thisWeapon[3] && SpellsList[thisWeapon[3]].level === 0) { output.extraDmg += wasm_character.get_ability_modifier('Cha'); }; ", "My shaman cantrips get my Charima modifier added to their damage. In addition, I may spend 1 spirit point to add my shaman level to the damage whenever I hit with a shaman cantrip."]
 				}
 			},
 			"glimpse the path (prereq: level 5 shaman, gift of sight)" : {

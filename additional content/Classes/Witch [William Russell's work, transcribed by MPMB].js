@@ -353,7 +353,7 @@ AddSubClass("witch-wr", "fey tradition", {
 				"As an action, I can open a portal to the Feywild, to which I'm allowed to freely travel"
 			]),
 			usages : "Charisma modifier per ",
-			usagescalc : "event.value = Math.max(1, What('Cha Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 			recovery : "week"
 		},
 		"subclassfeature11" : {
@@ -424,7 +424,7 @@ AddSubClass("witch-wr", "hedge tradition", {
 				spellAdd : [
 					// Add Int modifier to any spell that already adds the spellcasting ability modifier
 					function (spellKey, spellObj, spName) {
-						var iIntMod = Number(What('Int Mod'));
+						var iIntMod = Number(wasm_character.get_ability_modifier('Int'));
 						if (spellObj.psionic || iIntMod < 1 || !/spell(casting)? (ability )?mod(ifier)? hp/i.test(SpellsList[spellKey].description)) return false;
 						return genericSpellDmgEdit(spellKey, spellObj, "heal", 'Int');
 					},
@@ -641,7 +641,7 @@ AddSubClass("witch-wr", "shadow tradition", {
 				"The bonus only applies on a single roll, to one target; I can used it after the spell hits"
 			]),
 			usages : "Cha mod per ",
-			usagescalc : "event.value = Math.max(1, What('Cha Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 			recovery : "long rest",
 			additional : levels.map(function (n) {
 				return n < 9 ? "" : "+" + n + " damage";
@@ -689,7 +689,7 @@ AddSubClass("witch-wr", "shadow tradition", {
 				"This works only with single-target spells; I can distinguish between overlapping shadows"
 			]),
 			usages : "Charisma modifier per ",
-			usagescalc : "event.value = Math.max(1, What('Cha Mod'));",
+			usagescalc : "event.value = Math.max(1, wasm_character.get_ability_modifier('Cha'));",
 			recovery : "day"
 		}
 	}

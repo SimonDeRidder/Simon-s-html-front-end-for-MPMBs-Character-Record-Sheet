@@ -104,7 +104,7 @@ FeatsList["ghostly magic-au"] = {
 		selection : ["invisibility"]
 	}],
 	eval : function() {
-		FeatsList['ghostly magic-au'].spellcastingBonus[0].spellcastingAbility = Number(What('Wis')) > Number(What('Cha')) ? 5 : 6;
+		FeatsList['ghostly magic-au'].spellcastingBonus[0].spellcastingAbility = Number(wasm_character.get_ability('Wis')) > Number(wasm_character.get_ability('Cha')) ? 5 : 6;
 	}
 };
 
@@ -244,7 +244,7 @@ FeatsList["tomb magic-au"] = {
 		firstCol : 'oncelr'
 	}],
 	eval : function() {
-		FeatsList['tomb magic-au'].spellcastingBonus[0].spellcastingAbility = Number(What('Wis')) > Number(What('Cha')) ? 5 : 6;
+		FeatsList['tomb magic-au'].spellcastingBonus[0].spellcastingAbility = Number(wasm_character.get_ability('Wis')) > Number(wasm_character.get_ability('Cha')) ? 5 : 6;
 	}
 };
 

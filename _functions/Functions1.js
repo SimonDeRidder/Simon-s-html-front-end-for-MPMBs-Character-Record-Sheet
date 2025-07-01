@@ -1312,7 +1312,26 @@ async function ApplyArmor(input) {
 
 	if (CurrentArmour.known !== undefined && ArmourList[CurrentArmour.known] !== undefined) {
 		var ArmorType = ArmourList[CurrentArmour.known].type ? ArmourList[CurrentArmour.known].type.toLowerCase() : "";
-		var ArmorStealth = (ArmorType === "medium" && What("Medium Armor Max Mod") === 3) || (/mithral|vind rune/i).test(CurrentArmour.field) ? false : ArmourList[CurrentArmour.known].stealthdis ? ArmourList[CurrentArmour.known].stealthdis : false;
+		var ArmorStealth = (ArmorType === "medium" && What("Medium Armor Max Mod") === 3) ? false : ArmourList[CurrentArmour.known].stealthdis ? ArmourList[CurrentArmour.known].stealthdis : false;
+		// See if something magic is overwritting the Stealth disadvantage for the armour
+		if (ArmorStealth && CurrentVars.armour_noStealthDis) {
+			for (var key in CurrentVars.armour_noStealthDis) {
+				var exception = CurrentVars.armour_noStealthDis[key];
+				if (exception.test(CurrentArmour.field)) {
+					ArmorStealth = false;
+					break;
+				}
+			}
+		}
+		if (!ArmorStealth && CurrentVars.armour_forceStealthDis) {
+			for (var key in CurrentVars.armour_forceStealthDis) {
+				var exception = CurrentVars.armour_forceStealthDis[key];
+				if (exception.test(CurrentArmour.field)) {
+					ArmorStealth = true;
+					break;
+				}
+			}
+		}
 		Checkbox(ArmorFields[3], ArmorStealth);
 		Checkbox(ArmorFields[1], ArmorType === "medium");
 		Checkbox(ArmorFields[2], ArmorType === "heavy");
@@ -1597,22 +1616,19 @@ async function classesFieldVal(value, remVal) {
 
 // search the string for possible class and subclass
 function ParseClass(input) {
-	var classFound = "", classFoundLen = 0, classFoundDat = 0;
+	if (!input) return false;
+	var mainFound = "", mainFoundLen = 0, mainFoundDat = 0;
 	var subFound = "", subFoundLen = 0, subFoundDat = 0;
 	input = removeDiacritics(input);
 
 	// Loop through all the classes and see if any of them match and then look for its subclasses
 	// If that doesn't yield anything, look if any of the subclasses match regardless of class' names
 	for (var i = 1; i <= 2; i++) {
-		if (i == 2 && classFound) break; // something was already found in round 1, so no need for round 2
-		for (var key in ClassList) { //scan string for all classes, choosing subclasses over classes
+		if (i == 2 && mainFound) break; // something was already found in round 1, so no need for round 2
+		for (var key in ClassList) {
 			var kObj = ClassList[key];
-			if (i == 1) { // reset the subs for every class we look through if still looking at classes mainly
-				subFoundLen = 0;
-				subFoundDat = 0;
-			}
 
-			if ((i == 1 && !(kObj.regExpSearch).test(input)) // see if the class regex matches (round 1 only)
+			if ((i == 1 && !kObj.regExpSearch.test(input)) // see if the class regex matches (round 1 only)
 				|| testSource(key, kObj, "classExcl") // test if the class or its source isn't excluded
 				|| (key === "ranger" && !testSource("rangerua", ClassList.rangerua, "classExcl")) // ignore the PHB ranger if the UA ranger is present
 			) continue;
@@ -1621,12 +1637,12 @@ function ParseClass(input) {
 			// we are using the search length (default) and this entry has a longer name or this entry has an equal length name but has a newer source
 			// or if we are not using the search length, just look at the newest source date
 			var tempDate = sourceDate(kObj.source);
-			if (i == 1 && ((!ignoreSearchLength && kObj.name.length < classFoundLen) || (!ignoreSearchLength && kObj.name.length == classFoundLen && tempDate < classFoundDat) || (ignoreSearchLength && tempDate <= classFoundDat))) continue;
+			if (i == 1 && ((!ignoreSearchLength && kObj.name.length < mainFoundLen) || (!ignoreSearchLength && kObj.name.length == mainFoundLen && tempDate < mainFoundDat) || (ignoreSearchLength && tempDate <= mainFoundDat))) continue;
 
-			if (i == 1) { // we have a matching class! (round 1 only)
-				classFound = key;
-				classFoundLen = kObj.name.length;
-				classFoundDat = tempDate;
+			if (i == 1) { // we have a (better) matching class! (round 1 only)
+				mainFound = key;
+				mainFoundLen = kObj.name.length;
+				mainFoundDat = tempDate;
 				subFound = "";
 				subFoundLen = 0;
 				subFoundDat = 0;
@@ -1638,7 +1654,7 @@ function ParseClass(input) {
 				var sObj = ClassSubList[subKey];
 
 				if (!sObj // skip if the subclass isn't known in the ClassSubList object
-					|| !(sObj.regExpSearch).test(input) // see if the subclass regex matches (round 1 only)
+					|| !sObj.regExpSearch.test(input) // see if the subclass regex matches (round 1 only)
 					|| testSource(subKey, sObj, "classExcl") // test if the subclass or its source isn't excluded
 				) continue;
 
@@ -1649,16 +1665,16 @@ function ParseClass(input) {
 				if ((!ignoreSearchLength && sObj.subname.length < subFoundLen) || (!ignoreSearchLength && sObj.subname.length == subFoundLen && tempSubDate < subFoundDat) || (ignoreSearchLength && tempSubDate <= subFoundDat)) continue;
 
 				// we have a match for both the class and the subclass!
-				classFound = key;
-				classFoundLen = kObj.name.length;
-				classFoundDat = tempDate;
+				mainFound = key;
+				mainFoundLen = kObj.name.length;
+				mainFoundDat = tempDate;
 				subFound = subKey;
 				subFoundLen = sObj.subname.length;
 				subFoundDat = tempSubDate;
 			}
 		}
 	}
-	return classFound ? [classFound, subFound] : false;
+	return mainFound ? [mainFound, subFound] : false;
 };
 
 // detects classes entered and parses information to global classes variable
@@ -2335,6 +2351,18 @@ function AddExperiencePoints() {
 	CalcExperienceLevel(true);
 };
 
+// apply the Race field change (field validation)
+async function raceFieldVal(field) {
+	if (field.remVal === undefined) {
+		await ApplyRace(field.value);
+	}
+	// Now check if it is still undefined, as the previous could have changed that
+	if (field.remVal !== undefined) {
+		field.value = field.remVal;
+		field.deleteRemVal();
+	}
+}
+
 function ParseRace(input) {
 	var resultArray = ["", "", []];
 	if (!input) return resultArray;
@@ -2452,29 +2480,58 @@ async function FindRace(inputracetxt, novardialog, aOldRace) {
 			for (var i = 0; i < tempFound[2].length; i++) {
 				var varR = tempFound[2][i];
 				var varRobj = RaceSubList[tempFound[0] + "-" + varR];
-				var varRname = varR.capitalize() + " " + aRace.name.toLowerCase();
+				var varRname = varRobj.sortname ? varRobj.sortname : varRobj.name ? varRobj.name : varR.capitalize() + " " + aRace.name.toLowerCase();
 				var varRsrc = varRobj && varRobj.source ? stringSource(varRobj, 'first,abbr', "    [", "]") : rSource;
 				rVarNames.push(varRname + varRsrc);
 				rVarObj[varRname + varRsrc] = varR;
 			}
-			var aResp = await AskUserOptions("Select Racial Variant", "The '" + aRace.name + "' race offers a choice of variants. Note that variants are not the same as subraces. If you want to select a different subrace, use the drop-down box in the Race field.\n\nYou can change the selected variant by typing the full name of another variant into the Race field, or with the Racial Options button in the Racial Traits section on the second page.", rVarNames, "radio", true);
-			if (rVarObj[aResp]) CurrentRace.variant = rVarObj[aResp];
+			var aResp = await AskUserOptions("Select Racial Variant", "The '" + aRace.name + "' race offers a choice of variants. Note that variants are not the same as subraces. If you want to select a different subrace, use the drop-down box in the Race field.\n\nYou can change the selected variant by typing the full name of another variant into the Race field, or with the Racial Options button in the Racial Traits section on the second page.\n\nThe name on the first page will be changed to the selected variant's name.", rVarNames, "radio", true);
+			if (rVarObj[aResp]) {
+				CurrentRace.variant = rVarObj[aResp];
+				// Change the Race field on the 1st page to the selected variant's name (if any)
+				varRobj = RaceSubList[tempFound[0] + "-" + CurrentRace.variant];
+				if (varRobj.name) {
+					tDoc.getField("Race").remVal = varRobj.name;
+				}
+			}
 		}
 	}
 
 	// set the properties of the CurrentRace object
 	if (CurrentRace.known) {
+		var rxIgnoreProps = /^(known(Old)?|variants?(Old)?|level|features)$/i;
 		// the properties of the main race
 		for (var prop in RaceList[CurrentRace.known]) {
-			if ((/^(known(Old)?|variants?(Old)?|level)$/i).test(prop)) continue;
+			if (rxIgnoreProps.test(prop)) continue;
 			CurrentRace[prop] = RaceList[CurrentRace.known][prop];
+		}
+		// Do the features separately, so we don't merge them with the subrace later
+		if (RaceList[CurrentRace.known].features) {
+			CurrentRace.features = {};
+			for (var feature in RaceList[CurrentRace.known].features) {
+				CurrentRace.features[feature] = RaceList[CurrentRace.known].features[feature];
+			}
 		}
 		// the properties of the variant (overriding anything from the main)
 		if (CurrentRace.variant) {
 			var subrace = CurrentRace.known + "-" + CurrentRace.variant;
 			for (var prop in RaceSubList[subrace]) {
-				if ((/^(known(Old)?|variants?(Old)?|level)$/i).test(prop)) continue;
+				if (rxIgnoreProps.test(prop)) continue;
 				CurrentRace[prop] = RaceSubList[subrace][prop];
+			}
+			// merge features, if any
+			if (RaceSubList[subrace].features) {
+				if (!CurrentRace.features) {
+					CurrentRace.features = RaceSubList[subrace].features;
+				} else {
+					for (var feature in RaceSubList[subrace].features) {
+						CurrentRace.features[feature] = RaceSubList[subrace].features[feature];
+						if (!CurrentRace.features[feature]) {
+							// This feature is not valid, possibly because it is set to `null` to deliberately invalidate a feature from the parent RaceList. Thus, delete this entry from the CurrentRace.features
+							delete CurrentRace.features[feature];
+						} 
+					}
+				}
 			}
 			// --- backwards compatibility --- //
 			// if an old attribute exists in the racial variant, but the RaceList object uses the new attribute name, make sure the variant's version is used
@@ -4229,7 +4286,7 @@ async function ApplyBackground(input) {
 			);
 
 			// reset the background feature
-			if (CurrentBackground.feature) Value("Background Feature", "");
+			if (CurrentBackground.feature && What("Background Feature") === CurrentBackground.feature) Value("Background Feature", "");
 
 			// reset the background extra field
 			xtrFld.clearItems();
@@ -5551,6 +5608,43 @@ function FeatClear(itemNmbr, doAutomation) {
 		AddTooltip(Fflds[2], "", "");
 		tDoc.getField(Fflds[2]).setAction("Calculate", "");
 		if (IsNotReset) tDoc.resetForm(Fflds);
+	}
+}
+
+// Processing the generic `featsAdd` attribute
+async function processAddFeats(bAddRemove, featsAdd) {
+	if (!featsAdd) return;
+	if (!isArray(featsAdd)) featsAdd = [featsAdd];
+
+	var sFeatName;
+	// loop through all the entries
+	for (var i = 0; i < featsAdd.length; i++) {
+		// reset variable
+		sFeatName = false;
+		// each entry can be a string or an object
+		if (typeof featsAdd[i] === "string") {
+			sFeatName = featsAdd[i];
+		} else if (featsAdd[i].name || featsAdd[i].select) {
+			sFeatName = featsAdd[i].name ? featsAdd[i].name : featsAdd[i].select;
+		} else if (featsAdd[i].key && FeatsList[featsAdd[i].key]) {
+			var oFeat = FeatsList[featsAdd[i].key];
+			sFeatName = oFeat.name;
+			if (featsAdd[i].choice && oFeat.choices && oFeat[featsAdd[i].choice]) {
+				var sChoice = oFeat.choices.filter(function (n) { return n.toLowerCase() === featsAdd[i].choice; });
+				var oChoice = oFeat[featsAdd[i].choice];
+				if (typeof oChoice === "object" && sChoice.length) {
+					sFeatsName = oChoice.name ? oChoice.name : sFeatName + " [" + sChoice.toString() + "]";
+				}
+			}
+		}
+		// If a feat name was detected, add or remove it
+		if (sFeatname) {
+			if (bAddRemove) {
+				await AddFeat(sFeatname);
+			} else {
+				RemoveFeat(sFeatname);
+			}
+		}
 	}
 }
 
@@ -7649,7 +7743,7 @@ function ParseAmmo(input, onlyInv, bReturnLength) {
 		// now see if the parent is a (better) match
 		if (found == key // stop if one of the alternatives already matched
 			|| key.length < foundLen || (key == foundLen && tempDate < foundDat) // only go on with if this entry is a better match (longer name) or is at least an equal match but with a newer source. This differs from the regExpSearch objects
-			|| input.indexOf(key) === -1 // see if string matches
+			|| (input.indexOf(key) === -1 && input.indexOf(AmmoList[key].name.toLowerCase()) === -1) // see if string matches
 		) continue;
 
 		// we have a match, set the values
@@ -8677,7 +8771,15 @@ async function RaceFeatureOptions() {
 	var MenuSelection = await getMenu("raceoptions");
 
 	if (MenuSelection && MenuSelection[0] !== "nothing") {
-		await ApplyRace(MenuSelection.toString(), true);
+		var key = MenuSelection.join("-");
+		if (RaceSubList[key]) {
+			var varName = RaceSubList[key].name ? RaceSubList[key].name : MenuSelection[1].capitalize() + " " + RaceList[MenuSelection[0]].name.toLowerCase();
+			if (What("Race") !== varName) {
+				Value("Race", varName);
+			} else {
+				await ApplyRace(MenuSelection.toString(), true);
+			}
+		}
 	}
 }
 
@@ -8703,11 +8805,24 @@ function ConvertToMetric(inputString, rounded, exact) {
 			total = amount * UnitsList[ratio].lengthInch;
 			unit = "cm";
 			break;
-		 case "cu ft" : case "cubic foot" : case "cubic feet" :
+		 case "cu ft" : case "cubic foot" : case "cubic feet" : case "cu foot" : case "cu feet" : case "cubic ft" :
 			total = amount * UnitsList[ratio].volume;
 			unit = "m3";
+			if (total < 0.25) {
+				// for very small volumes, we are going to use dm3
+				total *= 1000;
+				unit = 'dm3';
+			} else if (total < 1 && rounding > 0.03) {
+				// for relatively small volumes, we are going to round to 0.03 accuracy
+				total = RoundTo(total, 0.03, false, true);
+				isRounded = true;
+			} else if (rounding > 0.3) {
+				// for higer volumes we are going to round to 0.3 accuracy, to avoid issues when converting them back to cubic feet
+				total = RoundTo(total, 0.3, false, true);
+				isRounded = true;
+			}
 			break;
-		 case "sq ft" : case "square foot" : case "square feet" :
+		 case "sq ft" : case "square foot" : case "square feet" : case "sq feet" : case "sq foot" : case "square ft" :
 			total = amount * UnitsList[ratio].surface;
 			unit = "m2";
 			break;
@@ -8733,7 +8848,7 @@ function ConvertToMetric(inputString, rounded, exact) {
 	}
 
 	// find all labeled measurements in string
-	var measurements = inputString.match(/(\b|-)\d+[,./]?\d*\/?(-?\d+?[,./]?\d*)?\s?-?('\d+\w?"($|\W)|'($|\W)|"($|\W)|(in|inch|inches|miles?|ft|foot|feet|sq ft|square foot|square feet|cu ft|cubic foot|cubic feet|lbs?|pounds?|gal|gallons?|qts?|quarts?|\u00B0 ?f|degrees? fahrenheit|fahrenheit)\b)/ig);
+	var measurements = inputString.match(/(\b|-)\d+[,./]?\d*\/?(-?\d+?[,./]?\d*)?\s?-?('\d+\w?"($|\W)|'($|\W)|"($|\W)|(in|inch|inches|miles?|(?:cubic|cu|square|sq)? ?f(?:oo|ee)?t|lbs?|pounds?|gal(?:lons?)?|q(?:uar)ts?|\u00B0 ?f|(?:degrees? )?fahrenheit)\b)/ig);
 
 	if (measurements) {
 		for (var i = 0; i < measurements.length; i++) {
@@ -8777,9 +8892,6 @@ function ConvertToImperial(inputString, rounded, exact, toshorthand) {
 	var ratio = exact ? "metricExact" : "metric";
 	var rounding = rounded ? rounded : 1;
 	var fraction;
-	var INofCM = function (unit) {
-		return unit;
-	}
 
 	var theConvert = function (amount, units) {
 		amount = Number(amount);
@@ -8800,9 +8912,15 @@ function ConvertToImperial(inputString, rounded, exact, toshorthand) {
 			total = amount / UnitsList[ratio].distance;
 			unit = total === 1 ? "mile" : "miles";
 			break;
+		 case "dm3" : case "cubic decimeter" : case "cubic decimeters" : case "cubic decimetre" : case "cubic decimetres" :
+			amount /= 1000;
 		 case "m3" : case "cubic meter" : case "cubic meters" : case "cubic metre" : case "cubic metres" :
 			total = amount / UnitsList[ratio].volume;
 			unit = "cu ft";
+			if (total > 41 && rounding < 2) {
+				// make it a nice whole number of cubic feet
+				rounding = 10;
+			}
 			break;
 		 case "m2" : case "square metre" : case "square metres" : case "square meter" : case "square meters" :
 			total = amount / UnitsList[ratio].surface;
@@ -8823,7 +8941,7 @@ function ConvertToImperial(inputString, rounded, exact, toshorthand) {
 			total = amount / UnitsList[ratio].liquid;
 			unit = "gal";
 			break;
-		 case "\u00B0 c" : case "\u00B0c" : case "degree celcius" : case "degrees celcius" : case "celcius" :
+		 case "\u00B0 c" : case "\u00B0c" : case "degree celsius" : case "degrees celsius" : case "celsius" :
 			total = RoundTo((amount * 9/5) + 32, exact ? 0.01 : 1, false, true);
 			unit = "\u00B0F";
 			isRounded = true;
@@ -8833,12 +8951,12 @@ function ConvertToImperial(inputString, rounded, exact, toshorthand) {
 	}
 
 	// find all labeled measurements in string
-	var measurements = inputString.match(/(\b|-)\d+[,./]?\d*\/?(-?\d+?[,./]?\d*)?\s?-?(m2|square meters?|square metres?|m3|cubic meters?|cubic metres?|cm|km|m|meters?|metres?|l|liters?|litres?|kg|g|kilos?|\u00B0 ?c|degrees? celcius|celcius)\b/ig);
+	var measurements = inputString.match(/(\b|-)\d+[,./]?\d*\/?(-?\d+?[,./]?\d*)?\s?-?(m2|d?m3|(?:square )?met(?:re|er)s?|cubic (?:deci)?met(?:re|er)s?|(?:c|k)?m|l|lit(?:er|re)s?|k?g|kilo(?:gram)?s?|\u00B0 ?c|(?:degrees? )?celsius)\b/ig);
 
 	if (measurements) {
 		for (var i = 0; i < measurements.length; i++) {
 			var org = measurements[i].replace(/,/g, ".");
-			var orgUnit = org.match(/[-\s]*([\u00B0 A-z']+)$/)[1].toLowerCase();
+			var orgUnit = org.match(/[-\s]*([\u00B0 A-z']+[23]?)$/)[1].toLowerCase();
 			var fraction;
 
 			if (fraction = org.match(/(-?\d+\.?\d*)\/(-?\d+\.?\d*)/)){

@@ -303,7 +303,7 @@ AdapterParsePopUpMenu = function (aParams, resolve) {
 
 this.info = {
 	SheetType: "printer friendly",
-	SheetVersion: "v13.2.1",
+	SheetVersion: "v13.3.0",
 	SpellsOnly: false,
 };
 this.path = "./index.html";
@@ -961,6 +961,18 @@ class AdapterClassFieldReference {
 
 	set setValPrepared(new_setValPrepared /*String*/) {
 		this.html_elements[0].dataset.setValPrepared = new_setValPrepared;
+	}
+
+	get remVal() /*String*/ {
+		let remVal_ = this.html_elements[0].dataset.remVal;
+		if (remVal_ == undefined) {
+			return "";
+		}
+		return remVal_;
+	}
+
+	set remVal(new_remVal /*String*/) {
+		this.html_elements[0].dataset.remVal = new_remVal;
 	}
 
 	toSource() /*str*/ {

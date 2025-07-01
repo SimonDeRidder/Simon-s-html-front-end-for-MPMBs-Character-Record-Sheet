@@ -49,7 +49,7 @@
 				Magic Item main attributes
 				Magic Item choices
 
-	Sheet:		v13.2.0 and newer
+	Sheet:		v13.3.0 and newer
 */
 "example feature name" = { // you can ignore this, it is just here to make this file valid JavaScript
 
@@ -64,17 +64,29 @@ action : [
 /*	action // OPTIONAL //
 	TYPE:	array (variable length)
 	USE:	add entry to the "Actions", "Bonus Actions", or "Reactions" section on the 1st page
+	CHANGE:	v13.2.3 (clarification of what will be amended and not)
 
 	The entries in this array must always be arrays with 2 strings each:
 	1. The first string in each sub-array is the type of action, written in lowercase.
 		The options are "action", "bonus action", or "reaction".
 	2. The second string can be one of two things:
-		2.1	When the first character of the string is non-alphabetic (e.g. a space or a hyphen), it is amended to the name of the feature.
+		2.1	When the first character of the string is one of these: ` /,;:'+-` (most commonly
+		a space, hyphen, or apostrophe), it is amended as a suffix to the name of the feature.
 			This amended total is then added as an action.
 			If you are also using the 'limfeaname' attribute, that string will be used instead of the feature's name.
 			So this entry will be added to 'limfeaname' string.
-		2.2 When the first character of the string is an alphabetic character (e.g. everything from a-Z), it is not amended to the name of the feature.
+
+			For example,
+				name : "Thing", action : [["action", " (start)"]]
+			will result in "Thing (start)" in the actions section.
+
+		2.2 When the first character of the string is NOT one of the above (e.g. a letter or
+		a number), it is not amended to the name of the feature.
 			The string is taken as-is and added as an action.
+
+			For example,
+				name : "Thing", action : [["action", "Shove"]]
+			will result in "Shove" in the actions section.
 */
 
 usages : 1,
@@ -484,18 +496,21 @@ weaponsAdd : {
 armorAdd : "Natural Armor", // legacy, before v13.1.14
 armorAdd : {
 	select : "Breastplate +1",
-	options : ["Glamoured Studded Leather", "Unarmored Defense (Con)"]
+	options : ["Glamoured Studded Leather", "Unarmored Defense (Con)"],
+	noStealthDis : /mithral/i,
+	forceStealthDis : /oversized/i
 },
 /*	armorAdd // OPTIONAL //
 	TYPE:	object
 	USE:	select armor as current and/or edit the available options in the drop-down
 	CHANGE:	v13.1.14 (changed from string to object)
+	CHANGE:	v13.2.2 (add `noStealthDis` and `forceStealthDis` attributes)
 
 	This does not add automation for the added armour selection or options.
 	If you want to add automation for an armour option, then don't use this attribute,
 	but use `armorOptions` (see below). That can also add it to the current selection.
 
-	This is an object with two possible attributes, each is optional.
+	This is an object with a couple possible attributes, each being optional.
 	`select`
 		OPTIONAL
 		TYPE: string
@@ -521,6 +536,32 @@ armorAdd : {
 
 		If no options have to be added to the list in the drop-down box, then
 		don't include this attribute.
+
+	`noStealthDis`
+		OPTIONAL
+		TYPE: regular expression
+		USE: make an armour never impose disadvantage to stealth checks
+
+		If the content entered into the armour field matches the provided regular expression,
+		the checkbox for the armour granting disadvantage will always be unchecked.
+		N.B. this checkbox is a "modifier field" on the printer friendly sheets, and thus
+		only visible when the modifier fields are toggled to be shown.
+
+		Use this if you are adding an armour that normally imposes disadvantage on stealth,
+		but the variation added by the feature doesn't.
+
+	`forceStealthDis`
+		OPTIONAL
+		TYPE: regular expression
+		USE: make an armour always impose disadvantage to stealth checks
+
+		If the content entered into the armour field matches the provided regular expression,
+		the checkbox for the armour granting disadvantage will always be checked.
+		N.B. this checkbox is a "modifier field" on the printer friendly sheets, and thus
+		only visible when the modifier fields are toggled to be shown.
+
+		Use this if you are adding an armour that normally doesn't impose disadvantage on
+		stealth, but the variation added by the feature does.
 
 	If a feature with this attribute is removed, the selection/options
 	will be removed as well.
@@ -1321,7 +1362,7 @@ spellFirstColTitle : "Ki",
 spellChanges : {
 	"spare the dying" : {
 		time : "1 bns",
-		range : "Touch",
+		range : "30 ft",
 		changes : "I can cast spare the dying as a bonus action instead of an action, and it has a range of 30 ft instead of touch." // REQUIRED // string
 	}
 },
@@ -2634,6 +2675,42 @@ magicitemsAdd : [ "Hat of Disguise", ["Staff of Power", true] ],
 	The strings will be added exactly as you write them here, capitalisation and all.
 
 	If a feature with this attribute is removed, these magic items will be removed as well.
+*/
+
+featsAdd : [
+	"Grappler",
+	{ key: "lucky" },
+	{ key: "magic initiate", choice: "wizard" }
+],
+/*	featsAdd // OPTIONAL //
+	TYPE:	array (variable length) of strings or objects
+	USE:	adds each entry in the array to one of the feat drop-downs
+	ADDED:	v13.3.0
+
+	Each entry in the array is to add a single feat. Each entry must consist of either:
+	1) String with the name of the feat
+		The string is added to the feat selection, regardless if this matches a feat.
+		The strings will be added exactly as written, capitalisation and all.
+
+	2) Object with `key` attribute
+		If the provided `key` attribute is present in the FeatsList, that feat's name
+		will be added, i.e. `FeatsList[key].name`.
+
+	3) Object with `key` and `choice` attributes
+		This works the same as 2) above, except that the sheet then tries to luck for
+		the `choice` inside the feat (i.e. `FeatsList[key][choice]`).
+
+		If that `choice` is viable, the choice's name will be added,
+		i.e. `FeatsList[key][choice].name` or if not present, its auto-generated name:
+		the parent feat's name and the choice in square brackets.
+
+		If that `choice` is not viable, the parent feat's name will be added just like
+		with 2), i.e. `FeatsList[key].name`.
+
+
+	An entry will only be added if there is space left in the feat section and the feat isn't already present.
+
+	If a feature with this attribute is removed, these feats will be removed as well.
 */
 
 // >>>>>>>>>>>>>>>>>>>>>>> //

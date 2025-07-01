@@ -1,6 +1,6 @@
 # Simon's HTML front end for MPMB's D&D 5e Character Record Sheet
 
-This repository contains a webapplication to host an interactive character sheet for D&D 5e.
+This repository contains a webapplication to host an interactive character sheet for D&D 5e (2014 rules).
 The front end is HTML+CSS, while the "back end" (run by the browser) is JavaScript and Webassembly (from Rust).
 This back end is predominantly based on the document-level JavaScript that is used in [MPMB's Character Record Sheet](https://github.com/morepurplemorebetter/MPMBs-Character-Record-Sheet).
 
@@ -19,8 +19,18 @@ You will have to run a server to serve the files to your browser.
 Fortunately, this is quite simple, and can be done in multiple ways.
 Here are some of them:
 
+#### Running with Static Web Server (SWS)
+
+This is a blazing fast file server built in Rust.
+You can download it [here](https://static-web-server.net/download-and-install).
+Then, in the downloaded folder, run
+```sh
+static-web-server --port 8080 --root .
+```
+Then, you're ready to [Open the character sheet in your browser](#open-the-character-sheet-in-your-browser).
+
 #### Running with Python
-The easiest way to set up a simple server with Python is to use the built-in python module (in the downloaded folder):
+A very easy (though not quite so secure) way to set up a simple server with Python is to use the built-in python module (inside the downloaded folder):
 ```sh
 python -m http.server 8080
 ```
@@ -41,22 +51,10 @@ http-server
 ```
 Then, you're ready to [Open the character sheet in your browser](#open-the-character-sheet-in-your-browser).
 
-#### Running with Static Web Server (SWS)
-
-This is a blazing fast file server built in Rust.
-You can download it [here] (https://static-web-server.net/download-and-install).
-Then, in the downloaded folder, run
-```sh
-static-web-server --port 8080 --root .
-```
-Then, you're ready to [Open the character sheet in your browser](#open-the-character-sheet-in-your-browser).
-
 #### Open the character sheet in your browser
 
-With the server running, you can open the sheet with any of the following urls on your own device:
+With the server running, you can open the sheet with the following url on your own device:
 - http://localhost:8080
-- http://127.0.0.1:8080
-- http://0.0.0.0:8080
 
 (If you changed the port in the server command, also change it in this url.)
 
@@ -70,7 +68,7 @@ The url for your friends is then:
 
 ### Building from source
 
-This is not necessary when you've downloaded a pre-built binary from the [releases page](https://github.com/SimonDeRidder/Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet/releases), but if you like, you may build the WebAssembly from it's Rust source code.
+This is not necessary when you've downloaded a pre-built binary from the [releases page](https://github.com/SimonDeRidder/Simon-s-html-front-end-for-MPMBs-Character-Record-Sheet/releases), but if you like, you may build the WebAssembly from its Rust source code.
 
 1) Install the Rust ecosystem. The easiest way to do this is with [rustup](https://rustup.rs).
 2) Set WASM as a target with
@@ -92,7 +90,7 @@ Now you're ready to go ahead and [Run](#run).
 
 This web application works with any extra content written for MPMB's Character Record Sheet. You can find such additional content at the [/r/mpmb subreddit](https://www.reddit.com/r/mpmb/). There is also [the MPMB Discord sever](https://discord.gg/Qjq9Z5Q) for discussion and questions.
 
-For syntax to write your own, consult [additional content syntax](https://github.com/morepurplemorebetter/MPMBs-Character-Record-Sheet/tree/master/additional%20content%20syntax).
+For syntax to write your own, consult [additional content syntax](additional%20content%20syntax).
 
 Put the files in the `additional_content`` folder and import them into the sheet using the "Import" button.
 Each file is a complete script. You can add multiple files, but take note that they will be processed in the order they are added.
@@ -100,8 +98,8 @@ Please see the [How-To Guide - Add More Content](https://www.flapkan.com/how-to/
 
 ## Known issues
 
-- No option to host a HTTPS server yet
 - the global buttons are ugly and only in the upper left corner of the stats tab
+- context menus are not scrollable
 
 ## Legal Information
 Simon's HTML front end for MPMB's D&D 5e Character Record Sheet automates some of the administrative tasks around playing the game of Dungeon & Dragons 5th edition &copy; Wizards of the Coast, Inc.
@@ -118,4 +116,4 @@ See the GNU General Public License for more details.
 You can find a copy of the GNU General Public License along with this program.
 If not, see <http://www.gnu.org/licenses/>.
 
-Certain parts of the content are copyright of Wizards of the Coast and are including using the Open Game License version 1.0a.
+This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode.

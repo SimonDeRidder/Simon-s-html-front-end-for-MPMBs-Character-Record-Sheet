@@ -305,6 +305,9 @@ async function ApplyFeatureAttributes(type, fObjName, lvlA, choiceA, forceNonCur
 		// magic item additions
 		if (uObj.magicitemsAdd) processAddMagicItems(addIt, uObj.magicitemsAdd);
 
+		// feat additions
+		if (uObj.featsAdd) await processAddFeats(addIt, uObj.featsAdd, type, tipNmF, uniqueObjNm);
+
 		// options for other class extrachoices
 		if (uObj.bonusClassExtrachoices) processBonusClassExtraChoices(addIt, type, uObj.bonusClassExtrachoices);
 
@@ -828,7 +831,7 @@ async function CreateCurrentSpellsEntry(type, fObjName, aChoice, forceNonCurrent
 			var nameObj = fObjP && !fObj.name ? fObjP : fObj;
 			if (fObj.chooseGear || (fObjP && fObjP.chooseGear)) {
 				// For a chooseGear item, just use its full name to avoid weird names
-				sObj.name = nameObj.name
+				sObj.name = nameObj.name;
 			} else {
 				// Otherwise, use the shortest name
 				sObj.name =  MagicItemGetShortestName(nameObj);
@@ -1167,6 +1170,7 @@ async function processAddArmour(AddRemove, armorAdd, srcNm, prefix="") {
 	if (typeof armorAdd === "string") {
 		armorAdd = { select : armorAdd };
 	}
+	var updateVars = false;
 	srcNm = srcNm ? srcNm.toLowerCase() : 'unknownSource';
 	if (armorAdd.options) {
 		if (!CurrentVars.extraArmourDisplay) CurrentVars.extraArmourDisplay = {};
@@ -1181,6 +1185,25 @@ async function processAddArmour(AddRemove, armorAdd, srcNm, prefix="") {
 		}
 		// if adding, update the dropdown before adding selection
 		if (AddRemove) UpdateDropdown("armour");
+		updateVars = true;
+	}
+	var stealOverrides = ["noStealthDis", "forceStealthDis"];
+	for (var i = 0; i < stealOverrides.length; i++) {
+		var override = stealOverrides[i];
+		if (!armorAdd[override]) continue;
+		if (!CurrentVars["armour_"+override]) CurrentVars["armour_"+override] = {};
+		if (AddRemove) {
+			var exception = armorAdd[override];
+			// make sure this is a regular expression
+			if (exception instanceof RegExp !== true) {
+				exception = RegExp(exception.toString().RegEscape(), "i");
+			}
+			CurrentVars["armour_"+override][srcNm] = exception;
+		} else if (CurrentVars["armour_"+override][srcNm]) {
+			delete CurrentVars["armour_"+override][srcNm];
+			if (!ObjLength(CurrentVars["armour_"+override])) delete CurrentVars["armour_"+override];
+		}
+		updateVars = true;
 	}
 	if (armorAdd.select) {
 		if (!AddRemove) { // remove
@@ -1207,8 +1230,9 @@ async function processAddArmour(AddRemove, armorAdd, srcNm, prefix="") {
 			UpdateDropdown("armour");
 			if (!ObjLength(CurrentVars.extraArmourDisplay)) delete CurrentVars.extraArmourDisplay;
 		}
-		SetStringifieds("vars"); // Save the new settings to a field
 	}
+	// Save the new settings to a field
+	if (updateVars) SetStringifieds("vars");
 }
 
 // set the shield (if more AC than current shield) or remove the shield
@@ -1537,7 +1561,7 @@ function UpdateSheetWeapons() {
 		for (addEval in CurrentEvals.atkAdd) {
 			var evalThing = CurrentEvals.atkAdd[addEval];
 			if (typeof evalThing == 'function') evalThing = evalThing.toSource();
-			if ((/\.level|Proficiency Bonus/).test(evalThing)) {
+			if ((/\.(total)?level|Proficiency Bonus/).test(evalThing)) {
 				isLvlDepAtkAdd = true;
 				break;
 			}
@@ -3033,7 +3057,7 @@ function ParseMagicItemMenu() {
 		var sMainItemName = iObj.sortname ? iObj.sortname : iObj.name;
 		var itemName = amendSrc(RemoveZeroWidths(!sObj ? sMainItemName : sObj.sortname ? sObj.sortname : sObj.name ? sObj.name : sMainItemName + " [" + subItem + "]"), iSrc);
 		var firstLetter = itemName[0].toUpperCase();
-		// If this is a subitem and it has the exact same name as a previously added subitem, we have to make sure it 
+		// If this is a subitem and it has the exact same name as a previously added subitem, we have to make sure it is unique
 		if (sObj && sObj.name && iMenus.ref[itemName]) {
 			itemName = amendSrc(RemoveZeroWidths(sMainItemName + " [" + subItem + "]"), iSrc);
 			firstLetter = itemName[0].toUpperCase();
@@ -3109,7 +3133,7 @@ function ParseMagicItemMenu() {
 				var aSubItem = anItem[aChL];
 				if (!aSubItem || testSource(item + "-" + aChL, aSubItem, "magicitemExcl")) continue;
 				for (var attr in aSubItem) {
-					if (!(/^(description.*|name.*|source|notLegalAL|magicItemTable|storyItemAL|extraTooltip|attunement|weight|prereq.*|allowDuplicates|calculate)$/i).test(attr)) {
+					if (!/^(description.*|name.*|type|source|notLegalAL|magicItemTable|storyItemAL|extraTooltip|attunement|weight|prereq.*|allowDuplicates|calculate)$/i.test(attr)) {
 						justDoMainItem = false;
 						sortItem(item, anItem.choices[c]);
 						break;
@@ -3766,7 +3790,14 @@ async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, c
 	}
 	// get the new name of the magic item
 	var theItemNameCap = theItemName.capitalize();
-	var newMIname = selectedItem ? createString(typeObj.prefixOrSuffix, theItemNameCap, useName) : useVal;
+	var newMIname = useVal;
+	if (selectedItem && typeObj.prefixOrSuffix) {
+		if (isArray(typeObj.prefixOrSuffix)) {
+			newMIname = createString(typeObj.prefixOrSuffix[0], theItemNameCap, typeObj.prefixOrSuffix.slice(1));
+		} else {
+			newMIname = createString(typeObj.prefixOrSuffix, theItemNameCap, useName);
+		}
+	}
 	// See if there is a special string set for how the item should appear on the 1st page
 	if (typeObj.itemName1stPage) {
 		itemToProcess = createString(typeObj.itemName1stPage[0], theItemNameCap, typeObj.itemName1stPage.slice(1));
@@ -3775,15 +3806,21 @@ async function selectMagicItemGearType(AddRemove, FldNmbr, typeObj, oldChoice, c
 	if (!correctingDescrLong) {
 		switch (typeNm) {
 			case "ammunition":
-				processAddAmmo(AddRemove, [[itemToProcess ? itemToProcess : newMIname.replace(/ammunition (\+\d+)/i, "$1").replace(/(\+\d+) *\((.*?)\)/i, "$1 $2"), typeObj.ammoAmount && !isNaN(typeObj.ammoAmount) ? typeObj.ammoAmount : 1]]);
+				var ammoName = itemToProcess ? itemToProcess : newMIname.replace(/ammunition (\+\d+)/i, "$1").replace(/(\+\d+) *\((.*?)\)/i, "$1 $2");
+				processAddAmmo(AddRemove, [[ammoName, typeObj.ammoAmount && !isNaN(typeObj.ammoAmount) ? typeObj.ammoAmount : 1]]);
 				break;
 			case "weapon":
 				var weaponName = itemToProcess ? itemToProcess : newMIname.replace(/weapon (\+\d+)/i, "$1").replace(/(\+\d+) *\((.*?)\)/i, "$1 $2");
-				processAddWeapons(AddRemove, {select : [weaponName], options : [weaponName]});
+				processAddWeapons(AddRemove, {select : [weaponName], options : [weaponName]}, weaponName);
 				break;
 			case "armor":
 				var armourName = itemToProcess ? itemToProcess : newMIname.replace(/armou?r (\+\d+)/i, "$1").replace(/(\+\d+) *\((.*?)\)/i, "$1 $2");
-				await processAddArmour(AddRemove, {select : armourName, options : [armourName]});
+				await processAddArmour(AddRemove, {
+					"select": armourName,
+					"options": [armourName],
+					"noStealthDis": typeObj.noStealthDis,
+					"forceStealthDis": typeObj.forceStealthDis
+				}, armourName);
 				break;
 		}
 	}

@@ -10,12 +10,7 @@ var Base_spellSchoolList = {
 	"Evoc" : "evocation",
 	"Illus" : "illusion",
 	"Necro" : "necromancy",
-	"Trans" : "transmutation",
-	"Avatar" : "avatar",
-	"Awake" : "awakened",
-	"Immor" : "immortal",
-	"Nomad" : "nomad",
-	"Wu Jen" : "wu jen"
+	"Trans" : "transmutation"
 }
 
 var Base_SpellsList = {
@@ -364,10 +359,10 @@ var Base_SpellsList = {
 		components : "V,S",
 		duration : "Conc, 10 min",
 		save : "Dex",
-		description : "100\xD720\xD75ft (l\xD7w\xD7h) wall or 30 rad 20\xD75ft (w\xD7h) ring; 6d10 Slashing dmg; save halves; 3/4 cover",
-		descriptionMetric : "60\xD76\xD71,5m (l\xD7w\xD7h) wall or 9 rad 6\xD71,5m (w\xD7h) ring; 6d10 Slashing dmg; save halves; 3/4 cover",
-		descriptionShorter : typePF ? false : "100|20|5ft (l|w|h) wall or 30|20|5ft (r|w|h) ring; 6d10 Slashing dmg; save half; \u00BEcover",
-		descriptionShorterMetric : typePF ? false : "60|6|1,5m (l|w|h) wall or 9|6|1,5m (r|w|h) ring; 6d10 Slash. dmg; save half; \u00BEcover",
+		description : "100\xD75\xD720ft (l\xD7w\xD7h) wall or 30 rad 5\xD720ft (w\xD7h) ring; 6d10 Slashing dmg; save halves; 3/4 cover",
+		descriptionMetric : "60\xD71,5\xD76m (l\xD7w\xD7h) wall or 9 rad 1,5\xD76m (w\xD7h) ring; 6d10 Slashing dmg; save halves; 3/4 cover",
+		descriptionShorter : typePF ? false : "100|5|20ft (l|w|h) wall or 30|5|20ft (r|w|h) ring; 6d10 Slashing dmg; save half; \u00BEcover",
+		descriptionShorterMetric : typePF ? false : "60|1,5|6m (l|w|h) wall or 9|1,5|6m (r|w|h) ring; 6d10 Slash. dmg; save half; \u00BEcover",
 		descriptionFull : "You create a vertical wall of whirling, razor-sharp blades made of magical energy. The wall appears within range and lasts for the duration. You can make a straight wall up to 100 feet long, 20 feet high, and 5 feet thick, or a ringed wall up to 60 feet in diameter, 20 feet high, and 5 feet thick. The wall provides three-quarters cover to creatures behind it, and its space is difficult terrain." + "\n   " + "When a creature enters the wall's area for the first time on a turn or starts its turn there, the creature must make a Dexterity saving throw. On a failed save, the creature takes 6d10 slashing damage. On a successful save, the creature takes half as much damage."
 	},
 	"bless" : {
@@ -594,8 +589,8 @@ var Base_SpellsList = {
 		components : "V,S",
 		duration : "Conc, 10 min",
 		save : "Con",
-		description : "20-ft rad 5d8+1d8/SL Poison dmg; save halves; move 10 ft/rnd; heavily obscured, difficult terrain",
-		descriptionShorter : "20-ft rad 5d8+1d8/SL Poison dmg; save halves; move 10 ft/rnd; heavily obscured, dif. ter.",
+		description : "20-ft rad, if crea start/enter, 5d8+1d8/SL Poison dmg; save halves; move 10 ft/rnd; heavily obscured",
+		descriptionShorter : "20-ft rad crea start/enter 5d8+1d8/SL Poison dmg; save half; move 10 ft/rnd; heavily obsc.",
 		descriptionFull : "You create a 20-foot-radius sphere of poisonous, yellow-green fog centered on a point you choose within range. The fog spreads around corners. It lasts for the duration or until strong wind disperses the fog, ending the spell. Its area is heavily obscured." + "\n   " + "When a creature enters the spell's area for the first time on a turn or starts its turn there, that creature must make a Constitution saving throw. The creature takes 5d8 poison damage on a failed save, or half as much damage on a successful one. Creatures are affected even if they hold their breath or don't need to breathe." + "\n   " + "The fog moves 10 feet away from you at the start of each of your turns, rolling along the surface of the ground. The vapors, being heavier than air, sink to the lowest level of the land, even pouring down openings." + AtHigherLevels + "When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d8 for each slot level above 5th."
 	},
 	"color spray" : {
@@ -1314,7 +1309,7 @@ var Base_SpellsList = {
 		range : "30 ft",
 		components : "V,S",
 		duration : "Instantaneous",
-		description : "Small nature effect; predict weather, expedite small plant growth, snuff light, harmless sensory effect",
+		description : "Small nature effect; predict weather, hasten tiny plant growth, snuff/light fire, harmless sensory effect",
 		descriptionFull : "Whispering to the spirits of nature, you create one of the following effects within range." + "\n " + "\u2022 You create a tiny, harmless sensory effect that predicts what the weather will be at your location for the next 24 hours. The effect might manifest as a golden orb for clear skies, a cloud for rain, falling snowflakes for snow, and so on. This effect persists for 1 round." + "\n " + "\u2022 You instantly make a flower blossom, a seed pod open, or a leaf bud bloom." + "\n " + "\u2022 You create an instantaneous, harmless sensory effect, such as falling leaves, a puff of wind, the sound of a small animal, or the faint odor of skunk. The effect must fit in a 5-foot cube." + "\n " + "\u2022 You instantly light or snuff out a candle, a torch, or a small campfire."
 	},
 	"earthquake" : {
@@ -1587,7 +1582,7 @@ var Base_SpellsList = {
 		components : "V,S,M\u0192",
 		compMaterial : "A set of divinatory tools - such as bones, ivory sticks, cards, teeth, or carved runes - worth 100 gp and an object from the location you wish to find",
 		duration : "Conc, 1 day",
-		description : "Know the shortest route to a location I am familiar with and are on the same plane with (100gp)",
+		description : "Know the shortest route to a location I am familiar with and on the same plane with (100gp)",
 		descriptionFull : "This spell allows you to find the shortest, most direct physical route to a specific fixed location that you are familiar with on the same plane of existence. If you name a destination on another plan of existence, a destination that moves (such as a mobile fortress), or a destination that isn't specific (such as a green dragon's lair), the spell fails." + "\n   " + "For the duration, as long as you are on the same plane of existence as the destination, you know how far it is and in what direction it lies. While you are traveling there, whenever you are presented with a choice of paths along the way, you automatically determine which path is the shortest and most direct route (but not necessarily the safest route) to the destination."
 	},
 	"find traps" : {
@@ -2088,8 +2083,20 @@ var Base_SpellsList = {
 		components : "V,S,M\u2020",
 		compMaterial : "Herbs, oils, and incense worth at least 1,000 gp, which the spell consumes",
 		duration : "Till dispelled",
-		description : "30-ft rad protected against celestials, elementals, fey, fiend, and undead; add additional effects; see B",
-		descriptionFull : "You touch a point and infuse an area around it with holy (or unholy) power. The area can have a radius up to 60 feet, and the spell fails if the radius includes an area already under the effect a hallow spell. The affected area is subject to the following effects." + "\n   " + "First, celestials, elementals, fey, fiends, and undead can't enter the area, nor can such creatures charm, frighten, or possess creatures within it. Any creature charmed, frightened, or possessed by such a creature is no longer charmed, frightened, or possessed upon entering the area. You can exclude one or more of those types of creatures from this effect." + "\n   " + "Second, you can bind an extra effect to the area. Choose the effect from the following list, or choose an effect offered by the DM. Some of these effects apply to creatures in the area, you can designate whether the effect applies to all creatures, creatures that follow a specific deity or leader, or creatures of a specific sort, such as ores or trolls. When a creature that would be affected enters the spell's area for the first time on a turn or starts its turn there, it can make a Charisma saving throw. On a success, the creature ignores the extra effect until it leaves the area." + "\n   " + toUni("Courage") + ": Affected creatures can't be frightened while in the area." + "\n   " + toUni("Darkness") + ": Darkness fills the area. Normal light, as well as magical light created by spells of a lower level than the slot you used to cast this spell, can't illuminate the area." + "\n   " + toUni("Daylight") + ": Bright light fills the area. Magical darkness created by spells of a lower level than the slot you used to cast this spell can't extinguish the light." + "\n   " + toUni("Energy Protection") + ": Affected creatures in the area have resistance to one damage type of your choice, except for bludgeoning, piercing, or slashing." + "\n   " + toUni("Energy Vulnerability") + ": Affected creatures in the area have vulnerability to one damage type of your choice, except for bludgeoning, piercing, or slashing." + "\n   " + toUni("Everlasting Rest") + ": Dead bodies interred in the area can't be turned into undead." + "\n   " + toUni("Extradimensional Interference") + ": Affected creatures can't move or travel using teleportation or by extradimensional or interplanar means." + "\n   " + toUni("Fear") + ": Affected creatures are frightened while in the area." + "\n   " + toUni("Silence") + ": No sound can emanate from within the area, and no sound can reach into it." + "\n   " + toUni("Tongues") + ": Affected creatures can communicate with any other creature in the area, even if they don't share a common language."
+		description : "60-ft rad protected against celestials, elementals, fey, fiend, and undead; add additional effects; see B",
+		descriptionFull : "You touch a point and infuse an area around it with holy (or unholy) power. The area can have a radius up to 60 feet, and the spell fails if the radius includes an area already under the effect a hallow spell. The affected area is subject to the following effects."+
+		"\n   First, celestials, elementals, fey, fiends, and undead can't enter the area, nor can such creatures charm, frighten, or possess creatures within it. Any creature charmed, frightened, or possessed by such a creature is no longer charmed, frightened, or possessed upon entering the area. You can exclude one or more of those types of creatures from this effect."+
+		"\n   Second, you can bind an extra effect to the area. Choose the effect from the following list, or choose an effect offered by the DM. Some of these effects apply to creatures in the area, you can designate whether the effect applies to all creatures, creatures that follow a specific deity or leader, or creatures of a specific sort, such as ores or trolls. When a creature that would be affected enters the spell's area for the first time on a turn or starts its turn there, it can make a Charisma saving throw. On a success, the creature ignores the extra effect until it leaves the area."+
+		"\n   " + toUni("Courage") + ": Affected creatures can't be frightened while in the area."+
+		"\n   " + toUni("Darkness") + ": Darkness fills the area. Normal light, as well as magical light created by spells of a lower level than the slot you used to cast this spell, can't illuminate the area."+
+		"\n   " + toUni("Daylight") + ": Bright light fills the area. Magical darkness created by spells of a lower level than the slot you used to cast this spell can't extinguish the light."+
+		"\n   " + toUni("Energy Protection") + ": Affected creatures in the area have resistance to one damage type of your choice, except for bludgeoning, piercing, or slashing."+
+		"\n   " + toUni("Energy Vulnerability") + ": Affected creatures in the area have vulnerability to one damage type of your choice, except for bludgeoning, piercing, or slashing."+
+		"\n   " + toUni("Everlasting Rest") + ": Dead bodies interred in the area can't be turned into undead."+
+		"\n   " + toUni("Extradimensional Interference") + ": Affected creatures can't move or travel using teleportation or by extradimensional or interplanar means."+
+		"\n   " + toUni("Fear") + ": Affected creatures are frightened while in the area."+
+		"\n   " + toUni("Silence") + ": No sound can emanate from within the area, and no sound can reach into it."+
+		"\n   " + toUni("Tongues") + ": Affected creatures can communicate with any other creature in the area, even if they don't share a common language."
 	},
 	"hallucinatory terrain" : {
 		name : "Hallucinatory Terrain",
@@ -2609,7 +2616,7 @@ var Base_SpellsList = {
 		compMaterial : "A piece of cured leather",
 		duration : "8 h (D)",
 		description : "1 crea that isn't wearing armor has AC 13 + Dex modifier for the duration; spell ends if it dons armor",
-		descriptionFull : "You touch a willing creature who isn't wearing armor, and a protective magical force surrounds it until the spell ends. The target's base AC becomes 13 + its Dexterity modifier. The spell ends it if the target dons armor or if you dismiss the spell as an action."
+		descriptionFull : "You touch a willing creature who isn't wearing armor, and a protective magical force surrounds it until the spell ends. The target's base AC becomes 13 + its Dexterity modifier. The spell ends if the target dons armor or if you dismiss the spell as an action."
 	},
 	"mage hand" : {
 		name : "Mage Hand",
@@ -2928,7 +2935,7 @@ var Base_SpellsList = {
 		range : "Self",
 		components : "V",
 		duration : "Instantaneous",
-		description : "I teleport 30 feet to a unoccupied space I can see",
+		description : "I teleport 30 feet to an unoccupied space I can see",
 		descriptionFull : "Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space that you can see."
 	},
 	"modify memory" : {
@@ -3066,7 +3073,7 @@ var Base_SpellsList = {
 		components : "V,S,M",
 		compMaterial : "A small square of silk",
 		duration : "24 h",
-		description : "Create a false magic item with chosen properties or shroud a magical item from detection",
+		description : "Divinations detect false information on subject; fake/change/hide magic item; change creature type",
 		descriptionFull : "You place an illusion on a creature or an object you touch so that divination spells reveal false information about it. The target can be a willing creature or an object that isn't being carried or worn by another creature." + "\n   " + "When you cast the spell, choose one or both of the following effects. The effect lasts for the duration. If you cast this spell on the same creature or object every day for 30 days, placing the same effect on it each time, the illusion lasts until it is dispelled." + "\n   " + toUni("False Aura") + ": You change the way the target appears to spells and magical effects, such as detect magic, that detect magical auras. You can make a nonmagical object appear magical, a magical object appear nonmagical, or change the object's magical aura so that it appears to belong to a specific school of magic that you choose. When you use this effect on an object, you can make the false magic apparent to any creature that handles the item." + "\n   " + toUni("Mask") + ": You change the way the target appears to spells and magical effects that detect creature types, such as a paladin's Divine Sense or the trigger of a symbol spell. You choose a creature type and other spells and magical effects treat the target as if it were a creature of that type or of that alignment."
 	},
 	"otiluke's freezing sphere" : {
@@ -3168,7 +3175,7 @@ var Base_SpellsList = {
 		range : "30 ft",
 		components : "V,S",
 		duration : "1 h (D)",
-		description : "Summon quasi-real steed with 100 ft speed (10 mph); I designate rider; spells ends if it takes dmg",
+		description : "Summon quasi-real steed with 100 ft speed (10 mph); I designate rider; spell ends if it takes dmg",
 		descriptionFull : "A Large quasi-real, horse-like creature appears on the ground in an unoccupied space of your choice within range. You decide the creature's appearance, but it is equipped with a saddle, bit, and bridle. Any of the equipment created by the spell vanishes in a puff of smoke if it is carried more than 10 feet away from the steed." + "\n   " + "For the duration, you or a creature you choose can ride the steed. The creature uses the statistics for a riding horse, except it has a speed of 100 feet and can travel 10 miles in an hour, or 13 miles at a fast pace. When the spell ends, the steed gradually fades, giving the rider 1 minute to dismount. The spell ends if you use an action to dismiss it or if the steed takes any damage."
 	},
 	"planar ally" : {
@@ -3890,7 +3897,7 @@ var Base_SpellsList = {
 		time : "1 a",
 		range : "90 ft",
 		components : "V,S,M",
-		compMaterial : "A pinch of find sand, rose petals, or a cricket",
+		compMaterial : "A pinch of fine sand, rose petals, or a cricket",
 		duration : "1 min",
 		description : "20-ft rad 5d8+2d8/SL HP of conscious creatures fall asleep, starting with the lowest current HP crea",
 		descriptionFull : "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures)." + "\n   " + "Starting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature's hit points from the total before moving on to the creature with the next lowest hit points. A creature's hit points must be equal to or less than the remaining total for that creature to be affected." + "\n   " + "Undead and creatures immune to being charmed aren't affected by this spell." + AtHigherLevels + "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."

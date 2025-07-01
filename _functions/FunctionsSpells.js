@@ -158,11 +158,11 @@ function GetSpellObject(theSpl, theCast, firstCol, noOverrides, tipShortDescr) {
 		if (aSpell.descriptionCantripDie) {
 			var cDie = cantripDie[Math.min(CurrentFeats.level, cantripDie.length) - 1];
 			var newCantripDieDescr = aSpell.descriptionCantripDie;
-			var rxCanDie = /`CD([\-+*]*\d*)`/;
+			var rxCanDie = /`CD([\-+*]*\d*\.?\d*)`/;
 			var execCanDie = rxCanDie.exec(newCantripDieDescr);
 			while (execCanDie !== null) {
 				var aDie = execCanDie[1].indexOf("*") !== -1 ? cDie * Number(execCanDie[1].replace("*","")) : cDie + Number(execCanDie[1]);
-				newCantripDieDescr = newCantripDieDescr.replace(execCanDie[0], aDie);
+				newCantripDieDescr = newCantripDieDescr.replace(execCanDie[0], Math.round(aDie));
 				execCanDie = rxCanDie.exec(newCantripDieDescr);
 			}
 			aSpell.description = newCantripDieDescr.replace(/\b0d\d+/g, "0");
@@ -264,8 +264,15 @@ function GetSpellObject(theSpl, theCast, firstCol, noOverrides, tipShortDescr) {
 
 // under certain conditions, the range of a spell might not fit on the colourful sheet
 function fixSpellRangeOverflow(rangeStr) {
-	var testRx = typePF ? /S:\d+[,.]\d+[- /]?m (cone|cube)/i : /S:\d+[,.]?\d+[- /]?m (cone|cube)|S:\d+[,.]\d+[- /]?m rad/i;
-	return (testRx).test(rangeStr) ? rangeStr.trim().replace(/[- /]?m (con|cub)e/i, "m $1").replace(/[- /]?m rad/i, "m rad") : rangeStr;
+	rangeStr = rangeStr.trim();
+	if (What("Unit System") === "metric") {
+		var testRx = typePF ? /S:\d+[,.]\d+[- /]?m (cone|cube)/i : /S:\d+[,.]?\d+[- /]?m (cone|cube|line)|S:\d+[,.]\d+[- /]?m rad/i;
+		if (testRx.test(rangeStr)) rangeStr = rangeStr.replace(/[- /]?m ((con|cub)e|line)/i, "m $1").replace(/[- /]?m rad/i, "m rad");
+	} else if (!typePF) {
+		var testRx = /S:\d+[,.]?\d+[- /]?ft (cone|cube|line)|S:\d+[- /]?miles? rad/i;
+		if (testRx.test(rangeStr)) rangeStr = rangeStr.replace(/[- /]?ft (cone|cube|line)/i, "ft $1").replace(/[- /]?miles? rad/i, "mile rad");
+	}
+	return rangeStr;
 }
 
 // under certain conditions, we want to remove any upcasting from the spell's short description
@@ -459,8 +466,7 @@ function ApplySpell(FldValue, base) {
 			Value(base.replace("remember", "time"), aSpell.time ? aSpell.time : emptyCell, aSpell.timeFull ? aSpell.timeFull : "");
 
 			//set the spell range
-			var spellRange = aSpell.range ? aSpell.range : emptyCell;
-			if (aSpell.range && What("Unit System") === "metric") spellRange = fixSpellRangeOverflow(spellRange);
+			var spellRange = aSpell.range ? fixSpellRangeOverflow(aSpell.range) : emptyCell;
 			Value(base.replace("remember", "range"), spellRange);
 
 			//set the spell components
@@ -748,32 +754,34 @@ function CalcSpellScores(fldName) {
 	};
 
 	var setResults = function(showTheResult) {
-		if (cSpells) cSpells.calcSpellScores = {};
+		if (cSpells) cSpells.calcSpellScores = showTheResult ? {} : undefined;
 		let value = undefined;
 		for (var aType in theResult) {
-			var theR = showTheResult ? theResult[aType] : "", numTot;
+			var theR = showTheResult ? theResult[aType] : "";
+			// add the modifier field value
 			if (showTheResult && (aType !== "prepare" || isPrepareVis)) {
-				// add the modifier field value
 				theR += EvalBonus(What(Fld.replace("spellshead.DINGDONG", "BlueText.spellshead." + aType)), true);
-				numTot = theR;
+				// save number in CurrentSpells
+				if (cSpells) cSpells.calcSpellScores[aType] = theR;
+				// modify for display
 				switch (aType) {
-					case "dc":
+				  case "dc":
 					if (modIpvDC) {
 						theR -= 8;
 					} else {
 						if (typePF) theR = "DC " + theR;
 						break;
 					}
-					case "attack":
+				  case "attack":
 					if (theR >= 0) theR = "+" + theR;
 				}
 			}
+			// show in the field
 			if (aType == fldType) {
 				value = theR;
 			} else {
 				Value(Fld.replace("DINGDONG", aType), theR);
 			}
-			if (cSpells) cSpells.calcSpellScores[aType] = numTot;
 		}
 		return value;
 	}
@@ -792,13 +800,18 @@ function CalcSpellScores(fldName) {
 	// the number of prepared spells
 	var isPrepareVis = isDisplay(Fld.replace("DINGDONG", "prepare")) == display.visible;
 	if (isPrepareVis) {
-		theResult.prepare = theMod;
-		if (cSpells && cSpells.factor && cSpells.factor[0]) {
-			theResult.prepare += Math.floor(cSpells.level / cSpells.factor[0]);
-		} else if (cSpells && cSpells.level) {
-			theResult.prepare += cSpells.level;
+		if (cSpells.known && isArray(cSpells.known.prepared)) {
+			// numbered of prepared spells is not calculated, but given (PHB 2024)
+			theResult.prepare = cSpells.known.prepared[Math.min(cSpells.known.prepared.length, cSpells.level) - 1];
+		} else {
+			theResult.prepare = theMod;
+			if (cSpells && cSpells.factor && cSpells.factor[0]) {
+				theResult.prepare += Math.floor(cSpells.level / cSpells.factor[0]);
+			} else if (cSpells && cSpells.level) {
+				theResult.prepare += cSpells.level;
+			}
+			theResult.prepare = Math.max(1, theResult.prepare);
 		}
-		theResult.prepare = Math.max(1, theResult.prepare);
 	}
 
 	// do custom calculations
@@ -2496,9 +2509,48 @@ function DefineSpellSheetDialogs(force, formHeight) {
 			var abiNm = AbilityScores.names[this.ability - 1];
 			var abiMod = this.fixedPrepMod ? this.fixedPrepMod : What(AbilityScores.abbreviations[this.ability - 1] + " Mod");
 
+			// Get the total amount of spells to prepare from the spell sheet as that takes into account bluetext fields and calcChanges.spellCalc
+			var spCast = CurrentSpells[this.curCast];
+			var calcPrepared = spCast && spCast.calcSpellScores && spCast.calcSpellScores.prepare !== undefined ? spCast.calcSpellScores.prepare : undefined;
+
+			// Calculate how many we expect the calcPrepared to say
+			var expectPrep = Number(this.nmbrPrep) + Number(abiMod);
+			var isFixedPrepNo = spCast.known && isArray(spCast.known.prepared);
+			if (isFixedPrepNo) {
+				// numbered of prepared spells is not calculated, but given (PHB 2024)
+				expectPrep = spCast.known.prepared[Math.min(spCast.known.prepared.length, spCast.level) - 1];
+			}
+			// Get the special bonuses, if any
+			var bonusPrepare = 0;
+			if (calcPrepared !== undefined) {
+				// The difference between the value on the sheet and the expected value
+				bonusPrepare = calcPrepared - expectPrep;
+			} else {
+				// Not calculated yet, so do it here, but this is heavy so avoid when possible
+				bonusPrepare = runSpellCalc("prepare", this.curCast, this.ability, "") + this.offsetSp;
+			}
+
 			// Set the amount of spells that can be prepared
-			this.nmbrSp = Number(this.nmbrPrep) + Number(abiMod);
+			// this.offsetSp is the same as the bluetext field, so included in bonusPrepare
+			this.nmbrSp = expectPrep + bonusPrepare - this.offsetSp;
 			var theSp = this.nmbrSp + this.offsetSp;
+
+			// Now make a string to show how the total prepared is calculated
+			var strPrepTxt = "From level";
+			var strPrepNr  = "";
+			if (isFixedPrepNo) {
+				// fix prep amount (PHB 2024), so set the number to the fixed value
+				strPrepNr = ASround(expectPrep);
+			} else {
+				// not fix prep amount, so add ability modifier
+				strPrepTxt += "\n" + abiNm + " modifier";
+				strPrepNr   = this.nmbrPrep + "\n" + (abiMod < 0 ? "- " : "+ ") + Math.abs(abiMod);
+			}
+			if (bonusPrepare) {
+				strPrepTxt += "\nOther bonuses";
+				strPrepNr  += "\n" + (bonusPrepare < 0 ? "- " : "+ ") + Math.abs(bonusPrepare);
+			}
+			console.println(bonusPrepare+'\n'+strPrepTxt+'\n'+strPrepNr);
 
 			//set the value of various text entries
 			var toEnable = {
@@ -2507,9 +2559,11 @@ function DefineSpellSheetDialogs(force, formHeight) {
 			};
 			var toLoad = {
 				"Hea0" : "Prepared spells for " + this.fullname,
-				"nrLv" : ASround(this.nmbrPrep),
-				"txAb" : abiNm + " modifier",
-				"nrAb" : (abiMod < 0 ? "- " : "+ ") + Math.abs(abiMod),
+				"txPr" : strPrepTxt,
+				"nrPr" : strPrepNr,
+				// "nrLv" : ASround(this.nmbrPrep),
+				// "txAb" : abiNm + " modifier",
+				// "nrAb" : (abiMod < 0 ? "- " : "+ ") + Math.abs(abiMod),
 				"nrTo" : "= " + this.nmbrSp,
 				"SplK" : ASround(theSp),
 				"SpLo" : this.listSp[0]
@@ -2623,36 +2677,39 @@ function DefineSpellSheetDialogs(force, formHeight) {
 								margin_height : -1,
 								elements : [{
 									type : "static_text",
-									item_id : "txLv",
+									item_id : "txPr",
+									alignment : "align_left",
 									char_width : 12,
-									name : "From level"
+									wrap_name : true,
+									name : "From level\nAbility modifier\nOther bonuses"
 								}, {
 									type : "static_text",
-									item_id : "nrLv",
+									item_id : "nrPr",
 									alignment : "align_right",
 									char_width : 4,
+									wrap_name : true,
 									font : "dialog",
 									bold : true,
-									name : "0"
+									name : "1\n+ 0\n+ 0"
 								}]
-							}, {
-								type : "view",
-								align_children : "align_distribute",
-								margin_height : -1,
-								elements : [{
-									type : "static_text",
-									item_id : "txAb",
-									char_width : 12,
-									name : "Ability modifier"
-								}, {
-									type : "static_text",
-									item_id : "nrAb",
-									alignment : "align_right",
-									char_width : 4,
-									font : "dialog",
-									bold : true,
-									name : "+ 0"
-								}]
+							// }, {
+							// 	type : "view",
+							// 	align_children : "align_distribute",
+							// 	margin_height : -1,
+							// 	elements : [{
+							// 		type : "static_text",
+							// 		item_id : "txAb",
+							// 		char_width : 12,
+							// 		name : "Ability modifier"
+							// 	}, {
+							// 		type : "static_text",
+							// 		item_id : "nrAb",
+							// 		alignment : "align_right",
+							// 		char_width : 4,
+							// 		font : "dialog",
+							// 		bold : true,
+							// 		name : "+ 0"
+							// 	}]
 							}, {
 								type : "static_text",
 								alignment : "align_fill",
@@ -3225,7 +3282,7 @@ async function AskUserSpellSheet() {
 
 				//set the previously selected spells and the offset, if any was defined
 				diaPrep.selectSp = spCast.selectPrep ? spCast.selectPrep : [];
-				diaPrep.offsetSp = spCast.blueTxt && spCast.blueTxt.prep ? spCast.blueTxt.prep : 0;
+				diaPrep.offsetSp = spCast.blueTxt && spCast.blueTxt.prep ? Number(spCast.blueTxt.prep) : 0;
 
 				//call the dialog and do something with the results
 				if (await app.execDialog(diaPrep) !== "ok") {
@@ -3493,8 +3550,9 @@ async function GenerateSpellSheet(GoOn) {
 			//first test if there is enough space left on the current page to add what we need to
 			//assume that we need to add at least 10 of the spells, the total of this level of spells, whichever is less
 			// so 3 (divider + title line) + 4 (header, if applicable) + lowest of [10, arrayLength]
+			// Also go to a next page if there is no header or divider left
 			var needSpace = 3 + (start ? 4 : 0) + Math.min(10, spArray.length);
-			if (needSpace > (lineMax - lineCurrent + 1)) await AddPage();
+			if (needSpace > (lineMax - lineCurrent + 1) || headerCurrent > 3 || dividerCurrent > 9) await AddPage();
 
 			//the first spells to add needs a header in front of it
 			if (start) {
@@ -5040,8 +5098,9 @@ async function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 		//first test if there is enough space left on the current page to add what we need to
 		//assume that we need to add at least 10 of the spells, the total of this level of spells, whichever is less
 		// so 3 (divider + title line) + 4 (header, if applicable) + lowest of [10, arrayLength]
+		// Also go to a next page if there is no header or divider left
 		var needSpace = 3 + (start ? 4 : 0) + Math.min(10, spArray.length);
-		if (needSpace > (lineMax - lineCurrent + 1)) await AddPage();
+		if (needSpace > (lineMax - lineCurrent + 1) || headerCurrent > 3 || dividerCurrent > 9) await AddPage();
 
 		//the first spells to add needs a header in front of it
 		if (start) {
@@ -5064,7 +5123,7 @@ async function GenerateCompleteSpellSheet(thisClass, skipdoGoOn) {
 
 		for (var y = 0; y < spArray.length; y++) {
 			aSpell = spArray[y];
-			//check if not at the end of the page and, if so, create a new page
+			//check if not at the end of the page or ran out of headers/dividers and, if so, create a new page
 			if (lineCurrent > lineMax) await AddPage();
 			var toCheck = SpellsList[aSpell] && SpellsList[aSpell].firstCol !== undefined ? "##" : "##checkbox";
 			Value(prefixCurrent + "spells.remember." + lineCurrent, aSpell + toCheck + "##" + thisClass);
@@ -5501,8 +5560,9 @@ async function GenerateSpellSheetWithAll(alphabetical, skipdoGoOn) {
 			//first test if there is enough space left on the current page to add what we need to
 			//assume that we need to add at least 5 of the spells, the total of this level of spells, whichever is less
 			// so 3 (divider + title line) + lowest of [5, arrayLength]
+			// Also go to a next page if there is no header or divider left
 			var needSpace = 3 + Math.min(5, spArray.length);
-			if (needSpace > (lineMax - lineCurrent + 1)) await AddPage();
+			if (needSpace > (lineMax - lineCurrent + 1) || headerCurrent > 3 || dividerCurrent > 9) await AddPage();
 
 			//then add the divider
 			//if this is an alphabetical list, we want only four headers: "cantrips", "spells", "talents", "disciplines"

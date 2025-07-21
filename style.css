@@ -792,6 +792,12 @@ tr.empty-row {
 		background-color: transparent;
 	}
 
+	select.inputfield {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+
 	.pane .checkcircle {
 		border-color: var(--black);
 		background-color: var(--background);
@@ -799,5 +805,10 @@ tr.empty-row {
 
 	.pane .checkcircle:checked {
 		background-color: var(--black);
+		print-color-adjust: exact;
+	}
+
+	.pane .printable-image {
+		print-color-adjust: exact;
 	}
 }

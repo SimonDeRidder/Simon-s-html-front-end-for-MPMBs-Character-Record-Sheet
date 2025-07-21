@@ -449,56 +449,6 @@ this.deletePages = function (nStart /*Number*/, nEnd /*Number*/) {
 }
 
 
-this.getPrintParams = function () /*Object*/ {
-	return {
-		constants: {
-			interactionLevel: { full: 0 },
-			duplexTypes: {
-				DuplexFlipLongEdge: 0,
-				Simplex: 1,
-			}
-		}
-	}
-}
-
-
-this.print_ = function (printOptions /*Object*/) {
-	let pagesIndexesToPrint = [];
-	printOptions.printRange.forEach((printEntry) => {
-		if (!pagesIndexesToPrint.includes(printEntry[0])) {
-			pagesIndexesToPrint.push(printEntry[0]);
-		}
-	});
-
-	let pageIDsToHide = [];
-	let lastToPrint = null;
-	for (let index in globalPageInventory) {
-		if (!pagesIndexesToPrint.includes(Number(index))) {
-			pageIDsToHide.push(globalPageInventory[index].id);
-		} else {
-			lastToPrint = globalPageInventory[index].id;
-		}
-	}
-
-	let tempCssAddition = "@media print {\n";
-	for (let pageID of pageIDsToHide) {
-		tempCssAddition += "\t#" + pageID + " {display: none!important;}\n";
-	}
-	if (lastToPrint != null) {
-		tempCssAddition += "\t#" + lastToPrint + " {break-after: avoid!important;page-break-after: avoid!important;}\n";
-	}
-	tempCssAddition += "}";
-
-	let tempStyleSheet = document.createElement("style");
-	tempStyleSheet.innerText = tempCssAddition;
-	document.head.appendChild(tempStyleSheet);
-
-	window.print();
-
-	tempStyleSheet.remove();
-}
-
-
 function AFNumber_Format(nDec /*int*/, sepStyle /*int*/, negStyle /*int*/, currStyle /*int*/, strCurrency /*str*/, bCurrencyPrepend /*boolean*/) /*str*/ {
 	// nDec = number of decimals
 	// sepStyle = separator style 0 = 1,234.56 / 1 = 1234.56 / 2 = 1.234,56 / 3 = 1234,56 /
@@ -1047,6 +997,7 @@ class AdapterClassFieldReference {
 	buttonSetIcon(icon /*String*/) {
 		this.html_elements[0].style.backgroundImage = "url(" + icon + ")";
 		this.html_elements[0].dataset.customUrl = false;
+		this.html_elements[0].classList.add("printable-image");
 	}
 
 	buttonImportIcon(cPath /*String*/, nPage /*Number*/) {
@@ -1066,6 +1017,7 @@ class AdapterClassFieldReference {
 				reader.onload = function (e) {
 					thisElement.style.backgroundImage = "url(" + reader.result + ")";
 					thisElement.dataset.customUrl = true;
+					thisElement.classList.add("printable-image");
 				};
 				reader.readAsDataURL(elm.files[0]);
 			}
@@ -2118,18 +2070,25 @@ function adapter_helper_load() {
 		let pageAdapter;
 		let pageNum = 1;
 		let templPages = [];
-		for (page_info of pages) { // .sort((a, b) => a.page_number - b.page_number)) {
+		let refPage = null;
+		for (let page_info of pages.sort((a, b) => a.page_number - b.page_number)) { // .sort((a, b) => a.page_number - b.page_number)) {
 			pageAdapter = new AdapterClassPage(page_info.page_id, page_info.page_prefix);
-			if (pageAdapter.isTempl) {
+			if (page_info.page_id == "prefe") {
+				refPage = [pageAdapter, pageNum];
+			} else if (pageAdapter.isTempl) {
 				templPages.push([pageAdapter, pageNum]);
 			} else {
 				await pageAdapter.spawn(nPage = pageNum, bRename = true, bOverlay = false);
 			}
 			pageNum += 1;
 		}
-		// add template pages last so their buttons are in the "right" place
+		// add template pages next so their buttons are in the "right" place
 		for (let pageAdapterInfo of templPages) {
 			await pageAdapterInfo[0].spawn(nPage = pageAdapterInfo[1], bRename = true, bOverlay = false);
+		}
+		// add reference page last
+		if (refPage != null) {
+			await refPage[0].spawn(nPage=refPage[1], bRename = true, bOverlay = false)
 		}
 
 		// set stat page to open by default and open it

@@ -2837,8 +2837,6 @@ function deletePage(fldNm, onTemplate, ignoreError) {
 
 // show/hide a template (AddRemove == undefined) or add/remove template with multiple instances (AddRemove == "Add" | "Remove" | "RemoveAll")
 async function DoTemplate(tempNm, AddRemove, removePrefix, GoOn) {
-	MakeMobileReady(false); // Undo flatten, if needed
-
 	var pageError = false;
 	//make a function for determining the next page to add the template
 	var whatPage = function(templN, prefix) {
@@ -4035,7 +4033,6 @@ function Publish(version, preRelease, build, forPatreon) {
 	tDoc.resetForm(resetFlds);
 	tDoc.getField("Opening Remember").submitName = 1;
 	tDoc.getField("SaveIMG.Patreon").submitName = forPatreon ? "" : "(new Date(0))";
-	if (!minVer) DontPrint("d20warning");
 	DnDlogo();
 	updateVersionBkmrk();
 	tDoc.calculateNow();
@@ -4554,8 +4551,6 @@ function ShowCompanionLayer(prefix, forceShow) {
 	var thermoTxt = thermoM("Changing the visible sections on the companion page...");
 	calcStop();
 
-	MakeMobileReady(false); // Undo flatten, if needed
-
 	prefix = prefix ? prefix : "";
 	var notesFld = prefix + (typePF ? "Cnote.Left" : "Cnote.Right");
 	var fieldVal = What(prefix + "Companion.Layers.Remember");
@@ -4777,10 +4772,6 @@ function CreateBkmrksCompleteAdvLogSheet() {
 				"Text Options" : {
 					cExpr : "await MakeTextMenu_TextOptions();",
 					color : ["RGB", 0.8000030517578125, 0.6666717529296875, 0.1137237548828125]
-				},
-				"Flatten" : {
-					cExpr : "MakeMobileReady();",
-					color : ["RGB", 0.2823486328125, 0.1921539306640625, 0.478424072265625]
 				},
 				"Unit System" : {
 					cExpr : "SetUnitDecimals_Button();",

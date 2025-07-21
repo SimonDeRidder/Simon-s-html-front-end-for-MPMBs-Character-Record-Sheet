@@ -5261,10 +5261,6 @@ function CreateBkmrksCompleteSpellSheet() {
 					cExpr : "await MakeSpellMenu_SpellOptions();",
 					color : ["RGB", 0.2509765625, 0.5176544189453125, 0.67059326171875]
 				},
-				"Flatten" : {
-					cExpr : "MakeMobileReady();",
-					color : ["RGB", 0.2823486328125, 0.1921539306640625, 0.478424072265625]
-				},
 				"Unit System" : {
 					cExpr : "SetUnitDecimals_Button();",
 					color : ["RGB", 0.463, 0.192, 0.467]

@@ -46,8 +46,6 @@ async function Import(type) {
 	var thermoTxt = thermoM("Importing the data...");
 	calcStop();
 
-	MakeMobileReady(false); // Undo flatten, if needed
-
 	templateA = [
 		["Template.extras.AScomp", What("Template.extras.AScomp")],
 		["Template.extras.ASnotes", What("Template.extras.ASnotes")],
@@ -86,8 +84,6 @@ async function Import(type) {
 	ShowHonorSanity();
 
 	thermoM(14/25); //increment the progress dialog's progress
-
-	if (CurrentVars.mobileset) CurrentVars.mobileset.active = false;
 
 	thermoM(15/25); //increment the progress dialog's progress
 

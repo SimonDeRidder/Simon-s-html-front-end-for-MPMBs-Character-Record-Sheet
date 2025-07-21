@@ -114,22 +114,13 @@ function MakeButtons() {
 			});
 			app.addToolButton({
 				cName : "PrintButton",
-				cExec : "PrintButton();",
+				cExec : "window.print();",
 				oIcon : allIcons.print,
 				cTooltext : toUni("Print") + "\nSelect what pages you want to print and open the print dialog.\n\nThe pages you select will be remembered for the next time you press this button.\n\nYou also get an option to hide all fields on the sheet before printing.",
 				nPos : 12,
 				cLabel : "Print"
 			});
 		};
-		app.addToolButton({
-			cName : "MakeMobileReadyButton",
-			cExec : "MakeMobileReady();",
-			oIcon : allIcons.tablet,
-			cTooltext : toUni("Flatten") + "\nSwitch to or from a version of the sheet that is compatible with Acrobat Reader for mobile devices.\nThis flattens all form fields and hides non-printable ones to make the sheet more usable on a phone or tablet.\n\nThe fields used during normal play will stay editable:\n   \u2022  1st page: health, attacks, actions, adv.\/disadv., etc.;\n   \u2022  2nd page: equipment and proficiencies;\n   \u2022  3rd-6th page: all except buttons and portrait\/symbol.",
-			cMarked : "CurrentVars.mobileset ? CurrentVars.mobileset.active : false",
-			nPos : 13,
-			cLabel : "Flatten"
-		});
 		app.addToolButton({
 			cName : "SetUnitDecimalsButton",
 			cExec : "SetUnitDecimals_Button();",
@@ -368,8 +359,6 @@ function ToggleWhiteout(toggle) {
 	var thermoTxt = thermoM((nowWhat ? "Hide" : "Show") + " the text lines for mult-line fields...");
 	calcStop();
 
-	MakeMobileReady(false); // Undo flatten, if needed
-
 	// Add the fields for all the template pages into an array
 	var compTemps = What("Template.extras.AScomp").split(","); // so include the ""
 	var noteTemps = What("Template.extras.ASnotes").split(",").splice(1);
@@ -430,8 +419,6 @@ async function ResetAll(GoOn, noTempl, deleteImports) {
 
 	//make a variable of the current state of location columns in the equipment sections
 	var locColumns = What("Gear Location Remember").split(",");
-
-	MakeMobileReady(false); // Undo flatten, if needed
 
 	thermoM(1/9); //increment the progress dialog's progress
 
@@ -664,7 +651,6 @@ function LayerVisibilityOptions(showMenu, useSelect) {
 		isReset = !showMenu;
 		CurrentVars.vislayers = ["rules", "equipment"];
 	}
-	MakeMobileReady(false); // Undo flatten, if needed
 
 	var possibleOptions = ["notes", "rules", "equipment"];
 	if (!useSelect || useSelect === "justMenu") {
@@ -799,8 +785,6 @@ function ToggleAttacks(Toggle) {
 	var thermoTxt = thermoM("Changing the attacks to " + (Toggle === "Yes" ? "calculated" : "manual") + "...");
 	calcStop();
 
-	MakeMobileReady(false); // Undo flatten, if needed
-
 	CurrentVars.manual.attacks = Toggle;
 	var VisibleHidden = !Toggle ? "Show" : "Hide";
 	var HiddenVisible = !Toggle ? "Hide" : "Show";
@@ -861,8 +845,6 @@ function ToggleBlueText(toggle) {
 	// Start progress bar and stop calculations
 	var thermoTxt = thermoM((nowWhat ? "Showing" : "Hiding") + " the modifier fields...");
 	calcStop();
-
-	MakeMobileReady(false); // Undo flatten, if needed
 
 	var HiddenNoPrint = nowWhat ? "DontPrint" : "Hide";
 
@@ -1124,8 +1106,6 @@ async function ToggleAdventureLeague(Setting) {
 
 	Setting = Setting ? Setting : {};
 	var isBackgrVisible = isTemplVis("ASbackgr");
-
-	MakeMobileReady(false); // Undo flatten, if needed
 
 	//Show the adventurers log, if not already visible
 	if (Setting.allog !== undefined) {
@@ -6563,160 +6543,6 @@ async function processClassFeatureExtraChoiceDependencies(lvlA, aClass, aFeature
 	}
 }
 
-// The print feature button
-async function PrintButton() {
-	var thePageOptions = [
-		"CSfront",
-		"CSback",
-		"ASfront",
-		"ASoverflow",
-		"ASbackgr",
-		"AScomp",
-		"ASnotes",
-		"WSfront",
-		"SSfront",
-		"ALlog"
-	];
-	if (typePF) {
-		thePageOptions.push("PRsheet");
-		SetPrintPages_Dialog.bshowPR = true;
-	}
-
-	var PrintFld = What("Print Remember").split("!#TheListSeparator#!");
-	var PageArray = PrintFld[1] !== "0" ? PrintFld[1].split(",") : null;
-
-	for (var x = 0; x < thePageOptions.length; x++) {
-		//set the check marks in the dialog, depending on previous settings
-		SetPrintPages_Dialog["b" + thePageOptions[x]] = PageArray.indexOf(thePageOptions[x]) !== -1;
-
-		//set whether or not the fields are editable in the dialog (not editable if page is hidden)
-		var isVisible = isTemplVis(thePageOptions[x]);
-		SetPrintPages_Dialog["a" + thePageOptions[x]] = isVisible;
-	}
-
-	if (PrintFld[0] === "true") {
-		SetPrintPages_Dialog["bDupl"] = true;
-	} else {
-		SetPrintPages_Dialog["bDupl"] = false;
-	}
-
-	var theDialog = await app.execDialog(SetPrintPages_Dialog);
-
-	var Proceed = false;
-	switch (theDialog) {
-	 case "ok":
-		Proceed = true;
-	 case "save":
-		var ResultsArray = [0];
-		for (var p = 0; p < thePageOptions.length; p++) {
-			if (SetPrintPages_Dialog["b" + thePageOptions[p]]) {
-				ResultsArray.push(thePageOptions[p]);
-			}
-		}
-		Value("Print Remember", SetPrintPages_Dialog["bDupl"] + "!#TheListSeparator#!" + ResultsArray.toString());
-		if (Proceed) {
-			PrintTheSheet();
-		};
-	 case "cancel":
-		if (SetPrintPages_Dialog.bHide) {
-			await HideShowEverything(false);
-			SetPrintPages_Dialog.bHide = false;
-		}
-	}
-};
-
-//call the print dialog
-function PrintTheSheet() {
-	var PrintFld = What("Print Remember").split("!#TheListSeparator#!");
-	var PageArray = PrintFld[1] !== "0" ? PrintFld[1].split(",") : null;
-	if (PageArray) {
-		var PagesToPrint = [];
-		for (var P = 1; P < PageArray.length; P++) {
-			//in the case of the three extendable types, also go add all the extra sheets
-			if (PageArray[P] === "SSfront") {
-				var prefixArray = What("Template.extras.SSmore").split(",");
-				prefixArray[0] = What("Template.extras.SSfront").split(",")[1];
-				if (!prefixArray[0]) prefixArray.shift();
-			} else if (TemplatesWithExtras.indexOf(PageArray[P]) !== -1) {
-				var prefixArray = What("Template.extras." + PageArray[P]).split(",");
-			} else {
-				var prefixArray = [""];
-			}
-			for (var A = 0; A < prefixArray.length; A++) {
-				var testFld = tDoc.getField(prefixArray[A] + BookMarkList[PageArray[P]]).page;
-				if (isArray(testFld)) {
-					for (var tF = 0; tF < testFld.length; tF++) {
-						if (testFld[tF] !== -1) {
-							PagesToPrint.push([testFld[tF], testFld[tF]]);
-						}
-					}
-				} else if (testFld !== -1) {
-					PagesToPrint.push([testFld, testFld]);
-				}
-			}
-		}
-	}
-	var GoPrint = tDoc.getPrintParams();
-	GoPrint.interactive = GoPrint.constants.interactionLevel.full;
-
-	if (PrintFld[0] === "true") {
-		GoPrint.DuplexType = GoPrint.constants.duplexTypes.DuplexFlipLongEdge;
-	} else {
-		GoPrint.DuplexType = GoPrint.constants.duplexTypes.Simplex;
-	}
-	if (PageArray) {
-		GoPrint.printRange = PagesToPrint;
-	};
-	tDoc.print_(GoPrint);
-};
-
-//Hide (true) or show (false) all the different form fields in the entire sheet
-async function HideShowEverything(toggle) {
-	if (toggle) {
-		// Start progress bar and stop calculations
-		var thermoTxt = thermoM("Hiding all the fields...");
-		calcStop();
-
-		//first undo the visibility of the blue-text fields, if visible
-		ToggleBlueText(false);
-
-		if (FieldsRemember.length) await HideShowEverything(false);
-
-		var exceptionRegex = /(Sheet|Copyright)Information|(Whiteout|Title|^(?!Too).* Text)$|(Whiteout|Image|Text|Line|Display)\.|Circle|Location\.Line|Medium Armor Max Mod|Comp\.Type|Ammo(Right|Left)\.Icon|spellshead\.Box/;
-		for (var F = 0; F < tDoc.numFields; F++) {
-			thermoM(F/tDoc.numFields); //increment the progress dialog's progress
-			var Fname = tDoc.getNthFieldName(F);
-			var Ffield = tDoc.getField(Fname);
-			if ((exceptionRegex).test(Fname)) continue;
-			if (Ffield.page.length) {
-				for (var i = 0; i < Ffield.page.length; i++) {
-					var Fnamei = Fname + "." + i;
-					var Ffieldi = tDoc.getField(Fnamei);
-					if (Ffieldi.display !== 1) {
-						FieldsRemember.push([Fnamei, Ffieldi.display]);
-						Ffieldi.display = 1
-					};
-				};
-			} else if (Ffield.display !== 1) {
-				FieldsRemember.push([Fname, Ffield.display]);
-				Ffield.display = 1;
-			};
-		};
-	} else if (!toggle) {
-		// Start progress bar and stop calculations
-		var thermoTxt = thermoM("Restoring the visibility of all the fields...");
-		calcStop();
-		for (var H = 0; H < FieldsRemember.length; H++) {
-			thermoM(H/FieldsRemember.length); //increment the progress dialog's progress
-			tDoc.getField(FieldsRemember[H][0]).display = FieldsRemember[H][1];
-		};
-		FieldsRemember = [];
-	};
-	// Stop the progress bar and force calculations to start again because this is function is called while a dialog is displayed
-	thermoM(thermoTxt, true);
-	await calcCont(true);
-};
-
 // Calculate the AC (field calculation)
 function CalcAC() {
 	var acFlds = {
@@ -7214,121 +7040,6 @@ function SetRichTextFields(onlyAttackTitles, onlySkills) {
 	for (var A = 0; A < AScompA.length; A++) {
 		tDoc.getField(AScompA[A] + "Comp.eqp.Display.Weighttxt").richValue = rtSpans;
 	}
-}
-
-//make all the fields, with some exceptions, read-only (toggle = true) or editable (toggle = false)
-
-// Make most fields read-only for use with Adobe Acrobat for Mobile Devices
-// toggle = true for making it mobile ready or toggle = false for the other way around
-// If no toggle is defined, do the opposite of the current state
-function MakeMobileReady(toggle) {
-	if (!CurrentVars.mobileset) { // if the variable is not defined yet, define it now
-		CurrentVars.mobileset = {
-			active : false,
-			readonly : [],
-			hidden : []
-		}
-	}
-	if (toggle !== undefined && ((CurrentVars.mobileset.active && toggle) || (!CurrentVars.mobileset.active && !toggle))) return;
-
-	var nowWhat = !CurrentVars.mobileset.active; // Toggle the current state
-
-	// Start progress bar and stop calculations
-	var thermoTxt = thermoM(nowWhat ? "Making the sheet ready for mobile use..." : "Making all form fields editable again...");
-	calcStop();
-
-	if (nowWhat) {
-		//first undo the visibility of the blue-text fields, if visible
-		ToggleBlueText(false);
-
-		CurrentVars.mobileset.readonly = [];
-		CurrentVars.mobileset.hidden = [];
-		var exceptionArray = [
-			"Link to downloadpage",
-			"Link to donation",
-			"Inspiration",
-			"HD1 Used",
-			"HD2 Used",
-			"HD3 Used",
-			"AC during Rest",
-			"Add Experience",
-			"Saving Throw advantages / disadvantages",
-			"Vision",
-			"Speed",
-			"Speed encumbered",
-			"Platinum Pieces",
-			"Gold Pieces",
-			"Electrum Pieces",
-			"Silver Pieces",
-			"Copper Pieces",
-			"Extra.Other Holdings",
-			"AmmoLeftDisplay.Name",
-			"AmmoLeftDisplay.Amount",
-			"AmmoRightDisplay.Name",
-			"AmmoRightDisplay.Amount",
-			"Reaction Used This Round"
-		];
-		var exceptionRegex = /Comp\.Use\.HD\.Used|Comp\.Use\.HP|Cnote\.Left|Cnote\.Right|Comp\.eqp\.Notes|Comp\.img\.Notes|Notes\.Left|Notes\.Right|HP Max|HP Max Current|HP Temp|HP Current|Limited Feature Used | Adv| Dis|AmmoLeft\.|AmmoRight\.|Death Save |\.DeathSave\.|Resistance Damage Type |Adventuring Gear Row |Adventuring Gear Location\.Row |Adventuring Gear Amount |Adventuring Gear Weight |Language |Tool |Valuables|Extra\.Exhaustion Level |Extra\.Condition |Extra\.Gear Row |Extra\.Gear Location\.Row |Extra\.Gear Amount |Extra\.Gear Weight |Extra\.Notes|Background_|SpellSlots\.Checkboxes\.|SpellSlots2\.Checkboxes\./;
-		var tooMuchExceptionRegex = /AC Stealth Disadvantage|button|Attack\.\d+\.Weapon$/i;
-		var totLen = tDoc.numFields;
-		for (var F = 0; F < totLen; F++) {
-			var Fname = tDoc.getNthFieldName(F);
-			if (!Fname) continue;
-			var Ffield = tDoc.getField(Fname);
-
-			// Check if field is not in one of the exceptionlists, but continue if it is in the tooMuchExceptionRegex
-			var isException = !tooMuchExceptionRegex.test(Fname) && (exceptionArray.indexOf(Fname) !== -1 || (/^(Bonus |Re)?action \d+/i).test(Fname) || exceptionRegex.test(Fname));
-			if (CurrentVars.manual.attacks && !isException) isException = (/Attack\./).test(Fname);
-			if (CurrentVars.manual.feats && !isException) isException = (/^(?!.*Button)Feat .+\d+$/).test(Fname);
-			if (CurrentVars.manual.items && !isException) isException = (/^(?!.*Button)Extra\.Magic Item .*\d+$/).test(Fname);
-			if (isException) continue;
-
-			//add fields that are visible and not read-only to array and make them read-only
-			if (Ffield.display === display.visible && Ffield.readonly === false) {
-				CurrentVars.mobileset.readonly.push(Fname);
-				Ffield.readonly = true;
-			}
-			//add fields that are visible but non-printable to an array and make them hidden
-			if (Ffield.display === display.noPrint) {
-				CurrentVars.mobileset.hidden.push(Fname);
-				Hide(Fname);
-			}
-
-			thermoM(F/totLen); // Increment the progress bar
-		};
-
-		// We also have to set all the spell sheet checkboxes back to readable, if they are visible
-		var SSfrontA = What("Template.extras.SSfront").split(",");
-		var SSmoreA = What("Template.extras.SSmore").split(",");
-		SSmoreA[0] = SSfrontA[1];
-		if (!SSmoreA[0]) SSmoreA.shift();
-		for (var SS = 0; SS < SSmoreA.length; SS++) {
-			var maxLine = FieldNumbers.spells[SSfrontA[1] && SSmoreA[SS] === SSfrontA[1] ? 0 : 1];
-			for (var S = 0; S <= maxLine; S++) {
-				var SSbox = tDoc.getField(SSmoreA[SS] + "spells.checkbox." + S);
-				if (SSbox.display === display.visible) SSbox.readonly = false;
-			}
-		}
-		// Hide the D20 warning in the corner so that it won't interfere with the bug in Acrobat Reader for iOS/Android
-		if (tDoc.getField("d20warning")) tDoc.getField("d20warning").rect = [0,0,0,0];
-	} else {
-		var totLen = CurrentVars.mobileset.readonly.length + CurrentVars.mobileset.hidden.length + 1;
-		for (var RO = 0; RO < CurrentVars.mobileset.readonly.length; RO++) {
-			Editable(CurrentVars.mobileset.readonly[RO]);
-			thermoM(RO/totLen); // Increment the progress bar
-		}
-		var strtLen = CurrentVars.mobileset.readonly.length;
-		for (var DP = 0; DP < CurrentVars.mobileset.hidden.length; DP++) {
-			DontPrint(CurrentVars.mobileset.hidden[DP]);
-			thermoM((DP+strtLen)/totLen); // Increment the progress bar
-		}
-		CurrentVars.mobileset.readonly = [];
-		CurrentVars.mobileset.hidden = [];
-	}
-
-	CurrentVars.mobileset.active = nowWhat;
-	SetStringifieds("vars"); // Save the settings to a field
-	thermoM(thermoTxt, true); // Stop progress bar
 }
 
 //Calculate the weight of a column of items in the equipment section [field calculation]
@@ -9902,8 +9613,6 @@ function SetSpellSlotsVisibility() {
 	}
 	if (typePF) return; //don't do this function in the Printer-Friendly version
 	calcStop();
-
-	MakeMobileReady(false); // Undo flatten, if needed
 
 	var toShow = eval_ish(What("SpellSlotsRemember"));
 
